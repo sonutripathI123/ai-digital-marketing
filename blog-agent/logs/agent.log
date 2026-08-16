@@ -1,0 +1,103 @@
+2026-08-05 21:29:01,623  INFO  Writing: doncaster airport transfers (ccm)
+2026-08-05 21:29:10,949  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 400 Bad Request"
+2026-08-05 21:29:10,951  ERROR  Failed on doncaster airport transfers: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdjsupsguRqnkL1ztcsVh'}
+2026-08-05 21:29:10,959  INFO  write run complete. 0 draft(s) created.
+2026-08-06 21:56:44,139  INFO  Writing: docklands to melbourne airport travel time (ccm)
+2026-08-06 21:57:21,666  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-06 21:58:09,355  INFO  Draft created. post_id=20415, featured_media=18996, auto-live at 2026-08-07T16:28:09.355474+00:00
+2026-08-06 21:58:09,361  INFO  write run complete. 1 draft(s) created.
+2026-08-06 23:13:51,231  INFO  Writing: south yarra chauffeur cost to airport (ccm)
+2026-08-06 23:14:39,193  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-06 23:15:30,348  INFO  Draft created. post_id=20418, featured_media=16359, auto-live at 2026-08-07T17:45:30.344937+00:00
+2026-08-06 23:15:30,356  INFO  write run complete. 1 draft(s) created.
+2026-08-06 23:22:45,774  INFO  publish run complete. 0 post(s) went live.
+2026-08-06 23:37:41,137  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 09:56:24,513  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 12:29:21,530  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 13:00:05,338  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 13:29:01,763  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 14:15:00,563  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 14:30:04,497  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 15:00:10,427  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 16:46:42,296  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 09:55:05,589  INFO  Published: docklands to melbourne airport travel time -> https://corporatecarsmelbourne.com.au/docklands-to-melbourne-airport-travel-time/
+2026-08-08 09:55:08,495  INFO  Published: south yarra chauffeur cost to airport -> https://corporatecarsmelbourne.com.au/south-yarra-chauffeur-cost-to-airport/
+2026-08-08 09:55:08,510  INFO  publish run complete. 2 post(s) went live.
+2026-08-08 09:59:26,615  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 10:00:03,159  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 10:59:25,283  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 11:00:06,763  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 11:59:20,994  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 12:00:03,791  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 13:57:31,058  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 13:59:19,822  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 14:00:03,286  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 14:59:24,856  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 15:00:03,270  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 15:59:25,086  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 16:00:06,654  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 10:09:39,794  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 10:12:54,479  INFO  Writing: toorak executive chauffeur what to expect (ccm)
+2026-08-10 10:13:37,572  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-10 10:14:07,478  INFO  Draft created. post_id=20487, featured_media=16356, auto-live at 2026-08-10T04:44:07.475838+00:00
+2026-08-10 10:14:07,502  INFO  write run complete. 1 draft(s) created.
+2026-08-10 10:59:31,910  INFO  Published: toorak executive chauffeur what to expect -> https://corporatecarsmelbourne.com.au/what-to-expect-toorak-chauffeur-experience/
+2026-08-10 10:59:31,915  INFO  publish run complete. 1 post(s) went live.
+2026-08-10 11:00:06,297  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 11:09:29,744  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 11:12:48,718  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 11:59:21,826  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 12:00:05,490  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 12:09:27,736  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 12:12:49,969  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 13:58:32,094  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 14:00:08,303  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 15:00:06,043  INFO  publish run complete. 0 post(s) went live.
+2026-08-12 14:58:29,674  INFO  Writing: best time to leave brighton for melbourne airport (ccm)
+2026-08-12 14:59:45,195  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-12 14:59:45,299  ERROR  Failed on best time to leave brighton for melbourne airport: Unterminated string starting at: line 27 column 19 (char 6594)
+2026-08-12 14:59:45,305  INFO  Writing: ringwood to melbourne airport travel time (ccm)
+2026-08-12 15:00:27,209  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-12 15:00:57,394  INFO  Draft created. post_id=20514, featured_media=18993, auto-live at 2026-08-12T09:30:57.394005+00:00
+2026-08-12 15:00:57,399  INFO  write run complete. 1 draft(s) created.
+2026-08-12 15:28:18,591  INFO  Writing: carlton corporate travel tips (ccm)
+2026-08-12 15:28:58,706  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-12 15:29:17,364  INFO  Draft created. post_id=20515, featured_media=20095, auto-live at 2026-08-12T09:59:17.364901+00:00
+2026-08-12 15:29:17,368  INFO  write run complete. 1 draft(s) created.
+2026-08-12 15:31:21,857  INFO  Writing: fitzroy chauffeur vs rideshare to airport (ccm)
+2026-08-12 15:32:30,584  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-12 15:32:30,622  ERROR  Failed on fitzroy chauffeur vs rideshare to airport: Expecting value: line 50 column 19 (char 7146)
+2026-08-12 15:32:30,629  INFO  Writing: why malvern businesses choose a chauffeur (ccm)
+2026-08-12 15:33:31,595  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-12 15:33:31,599  ERROR  Failed on why malvern businesses choose a chauffeur: Expecting ',' delimiter: line 9 column 2364 (char 2895)
+2026-08-12 15:33:31,604  INFO  Writing: glen waverley to melbourne airport time (ccm)
+2026-08-12 15:34:20,777  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-12 15:34:34,343  INFO  Draft created. post_id=20516, featured_media=18990, auto-live at 2026-08-12T10:04:34.343321+00:00
+2026-08-12 15:34:34,346  INFO  write run complete. 1 draft(s) created.
+2026-08-13 12:09:31,506  INFO  Published: ringwood to melbourne airport travel time -> https://corporatecarsmelbourne.com.au/ringwood-airport-travel-time/
+2026-08-13 12:09:34,626  INFO  Published: carlton corporate travel tips -> https://corporatecarsmelbourne.com.au/corporate-travel-tips-carlton/
+2026-08-13 12:09:37,210  INFO  Published: glen waverley to melbourne airport time -> https://corporatecarsmelbourne.com.au/glen-waverley-to-airport-transfer-time/
+2026-08-13 12:09:37,213  INFO  publish run complete. 3 post(s) went live.
+2026-08-13 13:00:09,195  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 13:01:42,694  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 13:09:08,385  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 14:00:07,147  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 14:01:42,987  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 14:09:28,789  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 14:44:05,481  INFO  Writing: best time to leave brighton for melbourne airport (ccm)
+2026-08-13 14:45:04,871  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-13 14:45:29,318  INFO  Draft created. post_id=20521, featured_media=16362, auto-live at 2026-08-13T09:15:29.317618+00:00
+2026-08-13 14:45:29,325  INFO  write run complete. 1 draft(s) created.
+2026-08-13 14:47:16,800  INFO  Published: best time to leave brighton for melbourne airport -> https://corporatecarsmelbourne.com.au/when-to-leave-brighton-for-melbourne-airport/
+2026-08-13 14:47:16,804  INFO  publish run complete. 1 post(s) went live.
+2026-08-13 15:00:08,548  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 15:01:41,622  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 15:09:17,803  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 16:00:09,494  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 16:47:45,610  INFO  publish run complete. 0 post(s) went live.
+2026-08-15 10:02:04,380  INFO  Writing: fitzroy chauffeur vs rideshare to airport (ccm)
+2026-08-15 10:02:48,013  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-15 10:03:35,963  INFO  Draft created. post_id=20524, featured_media=20102, auto-live at 2026-08-15T04:33:35.963377+00:00
+2026-08-15 10:03:35,966  INFO  write run complete. 1 draft(s) created.
+2026-08-15 11:37:28,854  INFO  Published: fitzroy chauffeur vs rideshare to airport -> https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/
+2026-08-15 11:37:28,868  INFO  publish run complete. 1 post(s) went live.

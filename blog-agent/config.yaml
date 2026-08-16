@@ -1,0 +1,35 @@
+# ---- Global settings ----
+default_model: claude-sonnet-5      # change to claude-opus-4-8 for top quality
+max_tokens: 8000
+review_window_hours: 0             # draft ke baad kitne ghante me auto-live ho
+posts_per_write_run: 1             # ek 'write' run me max kitni posts banao
+
+timezone: Australia/Melbourne       # Sunday guard aur time isi tz me judge hota hai
+skip_sunday: true                   # Sunday ko koi post publish na ho
+
+featured_image:
+  enabled: true
+  extra_search_terms: [chauffeur, mercedes, melbourne, airport]
+  avoid_repeat_last: 12             # pichli N images dobara na chune
+
+google_indexing:
+  enabled: false                    # true karne se pehle README ka setup karo
+  service_account_file: gsc-service-account.json
+
+# ---- Sites ----
+# Har site ka key (upper-cased) env prefix banta hai.
+# e.g. key "opal" -> OPAL_WP_USER, OPAL_WP_APP_PASSWORD in .env
+sites:
+  opal:
+    name: Opal Chauffeurs
+    base_url: https://www.opalchauffeurs.com.au
+    default_category: Airport Transfers
+    internal_links_file: internal_links_opal.csv
+    suburb_pages_file: suburb_pages_opal.csv
+
+  ccm:
+    name: Corporate Cars Melbourne
+    base_url: https://corporatecarsmelbourne.com.au
+    default_category: Chauffeur Services
+    internal_links_file: internal_links_ccm.csv
+    suburb_pages_file: suburb_pages_ccm.csv

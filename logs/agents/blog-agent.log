@@ -1,0 +1,315 @@
+2026-08-14 10:25:24,200 [INFO] [agent:agent.blog-agent] Starting execution for task task-2fdb01b9
+2026-08-14 10:25:24,201 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 10:25:25,577 [WARNING] [agent:agent.blog-agent] Task task-2fdb01b9 attempt 1 failed: Blog Agent CLI execution failed: Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\blog-agent\blog_agent.py", line 28, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'. Retrying.
+2026-08-14 10:25:25,578 [INFO] [agent:agent.blog-agent] Starting execution for task task-2fdb01b9
+2026-08-14 10:25:25,578 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 10:25:26,684 [WARNING] [agent:agent.blog-agent] Task task-2fdb01b9 attempt 2 failed: Blog Agent CLI execution failed: Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\blog-agent\blog_agent.py", line 28, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'. Retrying.
+2026-08-14 10:25:26,687 [INFO] [agent:agent.blog-agent] Starting execution for task task-2fdb01b9
+2026-08-14 10:25:26,687 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 10:25:27,800 [WARNING] [agent:agent.blog-agent] Task task-2fdb01b9 attempt 3 failed: Blog Agent CLI execution failed: Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\blog-agent\blog_agent.py", line 28, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'. Retrying.
+2026-08-14 10:25:27,800 [INFO] [agent:agent.blog-agent] Starting execution for task task-2fdb01b9
+2026-08-14 10:25:27,800 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 10:25:32,045 [ERROR] [agent:agent.blog-agent] Task task-2fdb01b9 permanently failed: Blog Agent CLI execution failed: Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\blog-agent\blog_agent.py", line 28, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'
+2026-08-14 10:25:32,048 [INFO] [agent:agent.blog-agent] Starting execution for task task-df88705e
+2026-08-14 10:25:32,048 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 10:25:33,178 [WARNING] [agent:agent.blog-agent] Task task-df88705e attempt 1 failed: Blog Agent CLI execution failed: Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\blog-agent\blog_agent.py", line 28, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'. Retrying.
+2026-08-14 10:26:36,643 [INFO] [agent:agent.blog-agent] Starting execution for task task-6bac3d51
+2026-08-14 10:26:36,644 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 10:26:41,970 [INFO] [agent:agent.blog-agent] Completed task task-6bac3d51 successfully.
+2026-08-14 10:26:41,975 [INFO] [agent:agent.blog-agent] Starting execution for task task-63083e13
+2026-08-14 10:26:41,975 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 10:26:47,549 [INFO] [agent:agent.blog-agent] Completed task task-63083e13 successfully.
+2026-08-14 12:15:46,714 [INFO] [agent:agent.blog-agent] Starting execution for task task-d5fa9846
+2026-08-14 12:15:46,714 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 12:15:49,034 [INFO] [agent:agent.blog-agent] Completed task task-d5fa9846 successfully.
+2026-08-14 12:15:49,036 [INFO] [agent:agent.blog-agent] Starting execution for task task-314ac0a3
+2026-08-14 12:15:49,036 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 12:15:52,165 [INFO] [agent:agent.blog-agent] Completed task task-314ac0a3 successfully.
+2026-08-14 12:29:41,215 [INFO] [agent:agent.blog-agent] Starting execution for task task-20185ea0
+2026-08-14 12:29:41,215 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 12:29:43,454 [INFO] [agent:agent.blog-agent] Completed task task-20185ea0 successfully.
+2026-08-14 12:29:43,455 [INFO] [agent:agent.blog-agent] Starting execution for task task-45b76d3d
+2026-08-14 12:29:43,455 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 12:29:45,674 [INFO] [agent:agent.blog-agent] Completed task task-45b76d3d successfully.
+2026-08-14 12:35:44,244 [INFO] [agent:agent.blog-agent] Starting execution for task task-5fb50780
+2026-08-14 12:35:44,244 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 12:35:46,022 [INFO] [agent:agent.blog-agent] Completed task task-5fb50780 successfully.
+2026-08-14 12:35:46,023 [INFO] [agent:agent.blog-agent] Starting execution for task task-b700a229
+2026-08-14 12:35:46,023 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 12:35:47,921 [INFO] [agent:agent.blog-agent] Completed task task-b700a229 successfully.
+2026-08-14 13:05:40,859 [INFO] [agent:agent.blog-agent] Starting execution for task task-c988b598
+2026-08-14 13:05:40,859 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:05:42,780 [INFO] [agent:agent.blog-agent] Completed task task-c988b598 successfully.
+2026-08-14 13:05:42,782 [INFO] [agent:agent.blog-agent] Starting execution for task task-22ec45b1
+2026-08-14 13:05:42,782 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:05:44,857 [INFO] [agent:agent.blog-agent] Completed task task-22ec45b1 successfully.
+2026-08-14 13:05:59,988 [INFO] [agent:agent.blog-agent] Starting execution for task task-6ceecd37
+2026-08-14 13:05:59,988 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:06:01,779 [INFO] [agent:agent.blog-agent] Completed task task-6ceecd37 successfully.
+2026-08-14 13:06:19,837 [INFO] [agent:agent.blog-agent] Starting execution for task task-edc77b71
+2026-08-14 13:06:19,838 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:06:23,092 [INFO] [agent:agent.blog-agent] Completed task task-edc77b71 successfully.
+2026-08-14 13:15:49,114 [INFO] [agent:agent.blog-agent] Starting execution for task task-27fb92ce
+2026-08-14 13:15:49,115 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:15:50,946 [INFO] [agent:agent.blog-agent] Completed task task-27fb92ce successfully.
+2026-08-14 13:15:50,947 [INFO] [agent:agent.blog-agent] Starting execution for task task-066ceacb
+2026-08-14 13:15:50,947 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:15:52,703 [INFO] [agent:agent.blog-agent] Completed task task-066ceacb successfully.
+2026-08-14 13:20:08,159 [INFO] [agent:agent.blog-agent] Starting execution for task task-c8873bd1
+2026-08-14 13:20:08,160 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:20:10,275 [INFO] [agent:agent.blog-agent] Completed task task-c8873bd1 successfully.
+2026-08-14 13:20:10,275 [INFO] [agent:agent.blog-agent] Starting execution for task task-fab6f342
+2026-08-14 13:20:10,275 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:20:12,227 [INFO] [agent:agent.blog-agent] Completed task task-fab6f342 successfully.
+2026-08-14 13:22:01,798 [INFO] [agent:agent.blog-agent] Starting execution for task task-cc8e99f0
+2026-08-14 13:22:01,799 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:22:03,978 [INFO] [agent:agent.blog-agent] Completed task task-cc8e99f0 successfully.
+2026-08-14 13:22:03,979 [INFO] [agent:agent.blog-agent] Starting execution for task task-7261c19a
+2026-08-14 13:22:03,979 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:22:06,051 [INFO] [agent:agent.blog-agent] Completed task task-7261c19a successfully.
+2026-08-14 13:24:57,685 [INFO] [agent:agent.blog-agent] Starting execution for task task-30a94b92
+2026-08-14 13:24:57,686 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:24:59,380 [INFO] [agent:agent.blog-agent] Completed task task-30a94b92 successfully.
+2026-08-14 13:24:59,381 [INFO] [agent:agent.blog-agent] Starting execution for task task-503b9e20
+2026-08-14 13:24:59,381 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:25:01,276 [INFO] [agent:agent.blog-agent] Completed task task-503b9e20 successfully.
+2026-08-14 13:28:34,168 [INFO] [agent:agent.blog-agent] Starting execution for task task-26ca0d15
+2026-08-14 13:28:34,170 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:28:39,653 [INFO] [agent:agent.blog-agent] Completed task task-26ca0d15 successfully.
+2026-08-14 13:28:39,657 [INFO] [agent:agent.blog-agent] Starting execution for task task-4bc73953
+2026-08-14 13:28:39,658 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:28:44,886 [INFO] [agent:agent.blog-agent] Completed task task-4bc73953 successfully.
+2026-08-14 13:36:07,235 [INFO] [agent:agent.blog-agent] Starting execution for task task-d885d5b7
+2026-08-14 13:36:07,236 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:36:12,608 [INFO] [agent:agent.blog-agent] Completed task task-d885d5b7 successfully.
+2026-08-14 13:36:12,610 [INFO] [agent:agent.blog-agent] Starting execution for task task-9102826d
+2026-08-14 13:36:12,610 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:36:17,930 [INFO] [agent:agent.blog-agent] Completed task task-9102826d successfully.
+2026-08-14 13:39:01,261 [INFO] [agent:agent.blog-agent] Starting execution for task task-0b73c4b7
+2026-08-14 13:39:01,264 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:39:06,711 [INFO] [agent:agent.blog-agent] Completed task task-0b73c4b7 successfully.
+2026-08-14 13:39:06,717 [INFO] [agent:agent.blog-agent] Starting execution for task task-1e20e449
+2026-08-14 13:39:06,717 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:39:12,220 [INFO] [agent:agent.blog-agent] Completed task task-1e20e449 successfully.
+2026-08-14 13:41:40,520 [INFO] [agent:agent.blog-agent] Starting execution for task task-47e43d4e
+2026-08-14 13:41:40,522 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:41:47,771 [INFO] [agent:agent.blog-agent] Completed task task-47e43d4e successfully.
+2026-08-14 13:41:47,775 [INFO] [agent:agent.blog-agent] Starting execution for task task-6d99e71e
+2026-08-14 13:41:47,777 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:41:53,329 [INFO] [agent:agent.blog-agent] Completed task task-6d99e71e successfully.
+2026-08-14 13:43:50,622 [INFO] [agent:agent.blog-agent] Starting execution for task task-cfe0f719
+2026-08-14 13:43:50,623 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:43:55,787 [INFO] [agent:agent.blog-agent] Completed task task-cfe0f719 successfully.
+2026-08-14 13:43:55,792 [INFO] [agent:agent.blog-agent] Starting execution for task task-871a4b3d
+2026-08-14 13:43:55,792 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:44:01,371 [INFO] [agent:agent.blog-agent] Completed task task-871a4b3d successfully.
+2026-08-14 13:46:25,885 [INFO] [agent:agent.blog-agent] Starting execution for task task-28bd624c
+2026-08-14 13:46:25,885 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:46:31,248 [INFO] [agent:agent.blog-agent] Completed task task-28bd624c successfully.
+2026-08-14 13:46:31,255 [INFO] [agent:agent.blog-agent] Starting execution for task task-507919e6
+2026-08-14 13:46:31,255 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:46:36,416 [INFO] [agent:agent.blog-agent] Completed task task-507919e6 successfully.
+2026-08-14 13:48:55,183 [INFO] [agent:agent.blog-agent] Starting execution for task task-49d46cc7
+2026-08-14 13:48:55,183 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:49:00,532 [INFO] [agent:agent.blog-agent] Completed task task-49d46cc7 successfully.
+2026-08-14 13:49:00,534 [INFO] [agent:agent.blog-agent] Starting execution for task task-b6d143a6
+2026-08-14 13:49:00,534 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 13:49:06,228 [INFO] [agent:agent.blog-agent] Completed task task-b6d143a6 successfully.
+2026-08-14 14:40:18,169 [INFO] [agent:agent.blog-agent] Starting execution for task task-2aecbd20
+2026-08-14 14:40:18,170 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 14:40:24,841 [INFO] [agent:agent.blog-agent] Completed task task-2aecbd20 successfully.
+2026-08-14 14:40:24,845 [INFO] [agent:agent.blog-agent] Starting execution for task task-f49982aa
+2026-08-14 14:40:24,846 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 14:40:30,075 [INFO] [agent:agent.blog-agent] Completed task task-f49982aa successfully.
+2026-08-14 14:43:10,457 [INFO] [agent:agent.blog-agent] Starting execution for task task-ad8a09f4
+2026-08-14 14:43:10,459 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 14:43:16,122 [INFO] [agent:agent.blog-agent] Completed task task-ad8a09f4 successfully.
+2026-08-14 14:43:16,126 [INFO] [agent:agent.blog-agent] Starting execution for task task-bd331066
+2026-08-14 14:43:16,126 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 14:43:21,509 [INFO] [agent:agent.blog-agent] Completed task task-bd331066 successfully.
+2026-08-14 14:46:25,181 [INFO] [agent:agent.blog-agent] Starting execution for task task-fd7cca11
+2026-08-14 14:46:25,182 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 14:46:30,698 [INFO] [agent:agent.blog-agent] Completed task task-fd7cca11 successfully.
+2026-08-14 14:46:30,708 [INFO] [agent:agent.blog-agent] Starting execution for task task-fd0f6af6
+2026-08-14 14:46:30,708 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 14:46:36,152 [INFO] [agent:agent.blog-agent] Completed task task-fd0f6af6 successfully.
+2026-08-14 14:56:30,396 [INFO] [agent:agent.blog-agent] Starting execution for task task-90fd8fea
+2026-08-14 14:56:30,398 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 14:56:35,695 [INFO] [agent:agent.blog-agent] Completed task task-90fd8fea successfully.
+2026-08-14 14:56:35,697 [INFO] [agent:agent.blog-agent] Starting execution for task task-d57f9d9e
+2026-08-14 14:56:35,697 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-14 14:56:41,020 [INFO] [agent:agent.blog-agent] Completed task task-d57f9d9e successfully.
+2026-08-15 09:33:50,587 [INFO] [agent:agent.blog-agent] Starting execution for task task-4588e9aa
+2026-08-15 09:33:50,596 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 09:33:53,205 [INFO] [agent:agent.blog-agent] Completed task task-4588e9aa successfully.
+2026-08-15 09:44:39,500 [INFO] [agent:agent.blog-agent] Starting execution for task task-209291e3
+2026-08-15 09:44:39,500 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 09:44:42,608 [INFO] [agent:agent.blog-agent] Completed task task-209291e3 successfully.
+2026-08-15 11:48:54,828 [INFO] [agent:agent.blog-agent] Starting execution for task task-d95a14f9
+2026-08-15 11:48:54,830 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 11:49:01,049 [INFO] [agent:agent.blog-agent] Completed task task-d95a14f9 successfully.
+2026-08-15 18:37:04,804 [INFO] [agent:agent.blog-agent] Starting execution for task task-46e672d4
+2026-08-15 18:37:04,808 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 18:37:07,354 [INFO] [agent:agent.blog-agent] Starting execution for task task-46e672d4
+2026-08-15 18:37:07,357 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 18:37:24,970 [INFO] [agent:agent.blog-agent] Completed task task-46e672d4 successfully.
+2026-08-15 18:37:24,978 [INFO] [agent:agent.blog-agent] Completed task task-46e672d4 successfully.
+2026-08-15 19:10:58,114 [INFO] [agent:agent.blog-agent] Starting execution for task task-2716fbb8
+2026-08-15 19:10:58,115 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 19:11:00,641 [INFO] [agent:agent.blog-agent] Completed task task-2716fbb8 successfully.
+2026-08-15 19:11:00,677 [INFO] [agent:agent.blog-agent] Starting execution for task task-c2ad661b
+2026-08-15 19:11:00,678 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 19:11:02,334 [INFO] [agent:agent.blog-agent] Completed task task-c2ad661b successfully.
+2026-08-15 19:11:34,800 [INFO] [agent:agent.blog-agent] Starting execution for task task-1fec6719
+2026-08-15 19:11:34,803 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 19:11:36,451 [INFO] [agent:agent.blog-agent] Completed task task-1fec6719 successfully.
+2026-08-15 19:11:36,481 [INFO] [agent:agent.blog-agent] Starting execution for task task-dbd876e9
+2026-08-15 19:11:36,482 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 19:11:38,086 [INFO] [agent:agent.blog-agent] Completed task task-dbd876e9 successfully.
+2026-08-15 19:18:21,262 [INFO] [agent:agent.blog-agent] Starting execution for task task-012a5bb4
+2026-08-15 19:18:21,263 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 19:18:23,671 [INFO] [agent:agent.blog-agent] Completed task task-012a5bb4 successfully.
+2026-08-15 19:18:23,703 [INFO] [agent:agent.blog-agent] Starting execution for task task-eea2c2ce
+2026-08-15 19:18:23,703 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 19:18:25,306 [INFO] [agent:agent.blog-agent] Completed task task-eea2c2ce successfully.
+2026-08-15 20:30:24,277 [INFO] [agent:agent.blog-agent] Starting execution for task task-0b132d5f
+2026-08-15 20:30:24,279 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 20:30:26,642 [INFO] [agent:agent.blog-agent] Completed task task-0b132d5f successfully.
+2026-08-15 20:30:26,679 [INFO] [agent:agent.blog-agent] Starting execution for task task-ff163f21
+2026-08-15 20:30:26,679 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 20:30:28,274 [INFO] [agent:agent.blog-agent] Completed task task-ff163f21 successfully.
+2026-08-15 21:01:39,329 [INFO] [agent:agent.blog-agent] Starting execution for task task-bee8596a
+2026-08-15 21:01:39,333 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 21:01:46,815 [INFO] [agent:agent.blog-agent] Completed task task-bee8596a successfully.
+2026-08-15 21:01:46,921 [INFO] [agent:agent.blog-agent] Starting execution for task task-35617655
+2026-08-15 21:01:46,921 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-15 21:01:51,579 [INFO] [agent:agent.blog-agent] Completed task task-35617655 successfully.
+2026-08-16 09:16:25,480 [INFO] [agent:agent.blog-agent] Starting execution for task task-e5aa07b5
+2026-08-16 09:16:25,485 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:16:29,918 [INFO] [agent:agent.blog-agent] Completed task task-e5aa07b5 successfully.
+2026-08-16 09:16:30,005 [INFO] [agent:agent.blog-agent] Starting execution for task task-927775d5
+2026-08-16 09:16:30,005 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:16:34,251 [INFO] [agent:agent.blog-agent] Completed task task-927775d5 successfully.
+2026-08-16 09:18:24,576 [INFO] [agent:agent.blog-agent] Starting execution for task task-4b69416d
+2026-08-16 09:18:24,576 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:18:28,955 [INFO] [agent:agent.blog-agent] Completed task task-4b69416d successfully.
+2026-08-16 09:18:29,732 [INFO] [agent:agent.blog-agent] Starting execution for task task-489d1c81
+2026-08-16 09:18:29,733 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:18:34,036 [INFO] [agent:agent.blog-agent] Completed task task-489d1c81 successfully.
+2026-08-16 09:18:34,134 [INFO] [agent:agent.blog-agent] Starting execution for task task-2551415e
+2026-08-16 09:18:34,135 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:18:38,299 [INFO] [agent:agent.blog-agent] Completed task task-2551415e successfully.
+2026-08-16 09:21:11,152 [INFO] [agent:agent.blog-agent] Starting execution for task task-daff62c3
+2026-08-16 09:21:11,153 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:21:15,023 [INFO] [agent:agent.blog-agent] Completed task task-daff62c3 successfully.
+2026-08-16 09:21:15,951 [INFO] [agent:agent.blog-agent] Starting execution for task task-c974a498
+2026-08-16 09:21:15,952 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:21:20,246 [INFO] [agent:agent.blog-agent] Completed task task-c974a498 successfully.
+2026-08-16 09:21:20,348 [INFO] [agent:agent.blog-agent] Starting execution for task task-07028188
+2026-08-16 09:21:20,348 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:21:24,450 [INFO] [agent:agent.blog-agent] Completed task task-07028188 successfully.
+2026-08-16 09:21:43,574 [INFO] [agent:agent.blog-agent] Starting execution for task task-c2ad661b
+2026-08-16 09:21:43,574 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:21:47,742 [INFO] [agent:agent.blog-agent] Completed task task-c2ad661b successfully.
+2026-08-16 09:21:59,104 [INFO] [agent:agent.blog-agent] Starting execution for task task-dca7fa76
+2026-08-16 09:21:59,106 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:03,134 [INFO] [agent:agent.blog-agent] Completed task task-dca7fa76 successfully.
+2026-08-16 09:22:03,134 [INFO] [agent:agent.blog-agent] Starting execution for task task-dbd876e9
+2026-08-16 09:22:03,134 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:06,778 [INFO] [agent:agent.blog-agent] Completed task task-dbd876e9 successfully.
+2026-08-16 09:22:06,778 [INFO] [agent:agent.blog-agent] Starting execution for task task-eafa617f
+2026-08-16 09:22:06,778 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:11,813 [INFO] [agent:agent.blog-agent] Completed task task-eafa617f successfully.
+2026-08-16 09:22:11,814 [INFO] [agent:agent.blog-agent] Starting execution for task task-eea2c2ce
+2026-08-16 09:22:11,816 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:16,683 [INFO] [agent:agent.blog-agent] Completed task task-eea2c2ce successfully.
+2026-08-16 09:22:16,683 [INFO] [agent:agent.blog-agent] Starting execution for task task-67fbb7e7
+2026-08-16 09:22:16,685 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:21,891 [INFO] [agent:agent.blog-agent] Completed task task-67fbb7e7 successfully.
+2026-08-16 09:22:21,891 [INFO] [agent:agent.blog-agent] Starting execution for task task-ff163f21
+2026-08-16 09:22:21,895 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:27,060 [INFO] [agent:agent.blog-agent] Completed task task-ff163f21 successfully.
+2026-08-16 09:22:27,060 [INFO] [agent:agent.blog-agent] Starting execution for task task-2de2d539
+2026-08-16 09:22:27,067 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:32,093 [INFO] [agent:agent.blog-agent] Completed task task-2de2d539 successfully.
+2026-08-16 09:22:32,093 [INFO] [agent:agent.blog-agent] Starting execution for task task-927775d5
+2026-08-16 09:22:32,093 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:36,655 [INFO] [agent:agent.blog-agent] Completed task task-927775d5 successfully.
+2026-08-16 09:22:36,663 [INFO] [agent:agent.blog-agent] Starting execution for task task-80f4ecdc
+2026-08-16 09:22:36,663 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:40,885 [INFO] [agent:agent.blog-agent] Completed task task-80f4ecdc successfully.
+2026-08-16 09:22:40,893 [INFO] [agent:agent.blog-agent] Starting execution for task task-2551415e
+2026-08-16 09:22:40,895 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:46,263 [INFO] [agent:agent.blog-agent] Completed task task-2551415e successfully.
+2026-08-16 09:22:46,263 [INFO] [agent:agent.blog-agent] Starting execution for task task-046254df
+2026-08-16 09:22:46,263 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:22:51,255 [INFO] [agent:agent.blog-agent] Completed task task-046254df successfully.
+2026-08-16 09:25:19,205 [INFO] [agent:agent.blog-agent] Starting execution for task task-c6102c0b
+2026-08-16 09:25:19,206 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:25:23,415 [INFO] [agent:agent.blog-agent] Completed task task-c6102c0b successfully.
+2026-08-16 09:26:03,988 [INFO] [agent:agent.blog-agent] Starting execution for task task-c2ad661b
+2026-08-16 09:26:03,988 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:09,278 [INFO] [agent:agent.blog-agent] Completed task task-c2ad661b successfully.
+2026-08-16 09:26:09,278 [INFO] [agent:agent.blog-agent] Starting execution for task task-dca7fa76
+2026-08-16 09:26:09,278 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:14,289 [INFO] [agent:agent.blog-agent] Completed task task-dca7fa76 successfully.
+2026-08-16 09:26:14,289 [INFO] [agent:agent.blog-agent] Starting execution for task task-dbd876e9
+2026-08-16 09:26:14,289 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:19,554 [INFO] [agent:agent.blog-agent] Completed task task-dbd876e9 successfully.
+2026-08-16 09:26:19,554 [INFO] [agent:agent.blog-agent] Starting execution for task task-eafa617f
+2026-08-16 09:26:19,554 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:24,646 [INFO] [agent:agent.blog-agent] Completed task task-eafa617f successfully.
+2026-08-16 09:26:24,647 [INFO] [agent:agent.blog-agent] Starting execution for task task-eea2c2ce
+2026-08-16 09:26:24,648 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:29,462 [INFO] [agent:agent.blog-agent] Completed task task-eea2c2ce successfully.
+2026-08-16 09:26:29,462 [INFO] [agent:agent.blog-agent] Starting execution for task task-67fbb7e7
+2026-08-16 09:26:29,465 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:34,724 [INFO] [agent:agent.blog-agent] Completed task task-67fbb7e7 successfully.
+2026-08-16 09:26:34,726 [INFO] [agent:agent.blog-agent] Starting execution for task task-ff163f21
+2026-08-16 09:26:34,728 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:39,480 [INFO] [agent:agent.blog-agent] Completed task task-ff163f21 successfully.
+2026-08-16 09:26:39,480 [INFO] [agent:agent.blog-agent] Starting execution for task task-2de2d539
+2026-08-16 09:26:39,484 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:44,648 [INFO] [agent:agent.blog-agent] Completed task task-2de2d539 successfully.
+2026-08-16 09:26:44,648 [INFO] [agent:agent.blog-agent] Starting execution for task task-927775d5
+2026-08-16 09:26:44,652 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:49,740 [INFO] [agent:agent.blog-agent] Completed task task-927775d5 successfully.
+2026-08-16 09:26:49,747 [INFO] [agent:agent.blog-agent] Starting execution for task task-80f4ecdc
+2026-08-16 09:26:49,747 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:54,804 [INFO] [agent:agent.blog-agent] Completed task task-80f4ecdc successfully.
+2026-08-16 09:26:54,804 [INFO] [agent:agent.blog-agent] Starting execution for task task-2551415e
+2026-08-16 09:26:54,804 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:26:59,800 [INFO] [agent:agent.blog-agent] Completed task task-2551415e successfully.
+2026-08-16 09:26:59,800 [INFO] [agent:agent.blog-agent] Starting execution for task task-046254df
+2026-08-16 09:26:59,800 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:27:04,636 [INFO] [agent:agent.blog-agent] Completed task task-046254df successfully.
+2026-08-16 09:27:04,636 [INFO] [agent:agent.blog-agent] Starting execution for task task-07028188
+2026-08-16 09:27:04,645 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:27:09,770 [INFO] [agent:agent.blog-agent] Completed task task-07028188 successfully.
+2026-08-16 09:27:09,770 [INFO] [agent:agent.blog-agent] Starting execution for task task-b4643d5f
+2026-08-16 09:27:09,770 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:27:15,219 [INFO] [agent:agent.blog-agent] Completed task task-b4643d5f successfully.
+2026-08-16 09:44:20,977 [INFO] [agent:agent.blog-agent] Starting execution for task task-e9cfa63f
+2026-08-16 09:44:20,978 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:44:25,636 [INFO] [agent:agent.blog-agent] Completed task task-e9cfa63f successfully.
+2026-08-16 09:44:40,992 [INFO] [agent:agent.blog-agent] Starting execution for task task-3c89e998
+2026-08-16 09:44:40,992 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:44:45,521 [INFO] [agent:agent.blog-agent] Completed task task-3c89e998 successfully.
+2026-08-16 09:44:45,645 [INFO] [agent:agent.blog-agent] Starting execution for task task-28597de6
+2026-08-16 09:44:45,645 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+2026-08-16 09:44:50,689 [INFO] [agent:agent.blog-agent] Completed task task-28597de6 successfully.

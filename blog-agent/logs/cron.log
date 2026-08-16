@@ -1,0 +1,126 @@
+2026-08-06 23:13:51,231  INFO  Writing: south yarra chauffeur cost to airport (ccm)
+2026-08-06 23:14:39,193  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-06 23:15:30,348  INFO  Draft created. post_id=20418, featured_media=16359, auto-live at 2026-08-07T17:45:30.344937+00:00
+2026-08-06 23:15:30,356  INFO  write run complete. 1 draft(s) created.
+2026-08-06 23:22:45,774  INFO  publish run complete. 0 post(s) went live.
+2026-08-06 23:37:41,137  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 09:56:24,513  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 12:29:21,530  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 13:00:05,338  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 13:29:01,763  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 14:15:00,563  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 14:30:04,497  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 15:00:10,427  INFO  publish run complete. 0 post(s) went live.
+2026-08-07 16:46:42,296  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 09:55:05,589  INFO  Published: docklands to melbourne airport travel time -> https://corporatecarsmelbourne.com.au/docklands-to-melbourne-airport-travel-time/
+2026-08-08 09:55:08,495  INFO  Published: south yarra chauffeur cost to airport -> https://corporatecarsmelbourne.com.au/south-yarra-chauffeur-cost-to-airport/
+2026-08-08 09:55:08,510  INFO  publish run complete. 2 post(s) went live.
+2026-08-08 09:59:26,615  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 10:00:03,159  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 10:59:25,283  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 11:00:06,763  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 11:59:20,994  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 12:00:03,791  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 13:57:31,058  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 13:59:19,822  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 14:00:03,286  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 14:59:24,856  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 15:00:03,270  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 15:59:25,086  INFO  publish run complete. 0 post(s) went live.
+2026-08-08 16:00:06,654  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 10:09:39,794  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 10:12:54,479  INFO  Writing: toorak executive chauffeur what to expect (ccm)
+2026-08-10 10:13:37,572  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-10 10:14:07,478  INFO  Draft created. post_id=20487, featured_media=16356, auto-live at 2026-08-10T04:44:07.475838+00:00
+2026-08-10 10:14:07,502  INFO  write run complete. 1 draft(s) created.
+2026-08-10 10:59:31,910  INFO  Published: toorak executive chauffeur what to expect -> https://corporatecarsmelbourne.com.au/what-to-expect-toorak-chauffeur-experience/
+2026-08-10 10:59:31,915  INFO  publish run complete. 1 post(s) went live.
+2026-08-10 11:00:06,297  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 11:09:29,744  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 11:12:48,718  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 11:59:21,826  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 12:00:05,490  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 12:09:27,736  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 12:12:49,969  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 13:58:32,094  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 14:00:08,303  INFO  publish run complete. 0 post(s) went live.
+2026-08-10 15:00:06,043  INFO  publish run complete. 0 post(s) went live.
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\blog-agent\blog_agent.py", line 27, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+2026-08-13 12:09:31,506  INFO  Published: ringwood to melbourne airport travel time -> https://corporatecarsmelbourne.com.au/ringwood-airport-travel-time/
+2026-08-13 12:09:34,626  INFO  Published: carlton corporate travel tips -> https://corporatecarsmelbourne.com.au/corporate-travel-tips-carlton/
+2026-08-13 12:09:37,210  INFO  Published: glen waverley to melbourne airport time -> https://corporatecarsmelbourne.com.au/glen-waverley-to-airport-transfer-time/
+2026-08-13 12:09:37,213  INFO  publish run complete. 3 post(s) went live.
+2026-08-13 13:00:09,195  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 13:01:42,694  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 13:09:08,385  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 14:00:07,147  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 14:01:42,987  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 14:09:28,789  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 14:44:05,481  INFO  Writing: best time to leave brighton for melbourne airport (ccm)
+2026-08-13 14:45:04,871  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-13 14:45:29,318  INFO  Draft created. post_id=20521, featured_media=16362, auto-live at 2026-08-13T09:15:29.317618+00:00
+2026-08-13 14:45:29,325  INFO  write run complete. 1 draft(s) created.
+2026-08-13 15:00:08,548  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 15:01:41,622  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 15:09:17,803  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 16:00:09,494  INFO  publish run complete. 0 post(s) went live.
+2026-08-13 16:47:45,610  INFO  publish run complete. 0 post(s) went live.

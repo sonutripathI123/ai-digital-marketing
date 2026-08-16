@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  ai-marketing-dashboard:
+    build: .
+    container_name: ai-digital-marketing-os
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - ADS_LIVE_EXECUTION_ENABLED=false
+      - ALLOW_LIVE_PUBLISHING=false
+      - DEFAULT_AI_PROVIDER=anthropic
+    volumes:
+      - ./logs:/app/logs
+      - ./config:/app/config
+      - ./blog-agent/topics.csv:/app/blog-agent/topics.csv

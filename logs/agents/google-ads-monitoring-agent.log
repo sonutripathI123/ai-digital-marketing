@@ -1,0 +1,138 @@
+2026-08-14 13:41:40,321 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-526c8c58
+2026-08-14 13:41:40,322 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:41:40,322 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-526c8c58 successfully.
+2026-08-14 13:41:40,330 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-03303140
+2026-08-14 13:41:40,331 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:41:40,332 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-03303140 successfully.
+2026-08-14 13:41:40,333 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:41:40,335 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-14 13:41:40,335 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-14 13:43:50,406 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-0a03a866
+2026-08-14 13:43:50,406 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:43:50,406 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-0a03a866 successfully.
+2026-08-14 13:43:50,413 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-da63c301
+2026-08-14 13:43:50,413 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:43:50,414 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-da63c301 successfully.
+2026-08-14 13:43:50,415 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:43:50,417 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-14 13:43:50,418 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-14 13:46:25,633 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-ef5aec8e
+2026-08-14 13:46:25,634 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:46:25,634 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-ef5aec8e successfully.
+2026-08-14 13:46:25,641 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-082861c8
+2026-08-14 13:46:25,641 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:46:25,642 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-082861c8 successfully.
+2026-08-14 13:46:25,643 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:46:25,644 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-14 13:46:25,644 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-14 13:48:54,905 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-34190bd0
+2026-08-14 13:48:54,907 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:48:54,907 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-34190bd0 successfully.
+2026-08-14 13:48:54,913 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-d129b418
+2026-08-14 13:48:54,913 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:48:54,913 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-d129b418 successfully.
+2026-08-14 13:48:54,913 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 13:48:54,913 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-14 13:48:54,913 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-14 14:40:17,870 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-7ef4b2db
+2026-08-14 14:40:17,870 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:40:17,877 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-7ef4b2db successfully.
+2026-08-14 14:40:17,886 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-e904b162
+2026-08-14 14:40:17,886 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:40:17,886 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-e904b162 successfully.
+2026-08-14 14:40:17,889 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:40:17,890 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-14 14:40:17,891 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-14 14:43:10,135 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-0b2ba4f5
+2026-08-14 14:43:10,136 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:43:10,137 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-0b2ba4f5 successfully.
+2026-08-14 14:43:10,143 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-7c015338
+2026-08-14 14:43:10,143 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:43:10,143 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-7c015338 successfully.
+2026-08-14 14:43:10,144 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:43:10,146 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-14 14:43:10,146 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-14 14:46:24,788 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-1decd9c9
+2026-08-14 14:46:24,790 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:46:24,790 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-1decd9c9 successfully.
+2026-08-14 14:46:24,794 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-a20e65bc
+2026-08-14 14:46:24,797 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:46:24,798 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-a20e65bc successfully.
+2026-08-14 14:46:24,800 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:46:24,800 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-14 14:46:24,800 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-14 14:56:30,020 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-a93ff352
+2026-08-14 14:56:30,022 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:56:30,022 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-a93ff352 successfully.
+2026-08-14 14:56:30,030 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-7063549c
+2026-08-14 14:56:30,030 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:56:30,030 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-7063549c successfully.
+2026-08-14 14:56:30,032 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-14 14:56:30,033 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-14 14:56:30,034 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-15 11:57:44,999 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-d08a6e1d
+2026-08-15 11:57:45,001 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor, account='123-456-7890', live_enabled=False
+2026-08-15 11:57:45,001 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-d08a6e1d successfully.
+2026-08-15 19:10:51,405 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-64a19a97
+2026-08-15 19:10:51,406 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 19:10:51,406 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-64a19a97 successfully.
+2026-08-15 19:10:51,424 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-ae56a7b3
+2026-08-15 19:10:51,424 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 19:10:51,424 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-ae56a7b3 successfully.
+2026-08-15 19:10:51,438 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 19:10:51,440 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-15 19:10:51,440 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-15 19:11:29,432 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-13220d6d
+2026-08-15 19:11:29,432 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 19:11:29,433 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-13220d6d successfully.
+2026-08-15 19:11:29,458 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-196ea0c1
+2026-08-15 19:11:29,458 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 19:11:29,458 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-196ea0c1 successfully.
+2026-08-15 19:11:29,474 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 19:11:29,477 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-15 19:11:29,477 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-15 19:18:15,855 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-73b2c258
+2026-08-15 19:18:15,856 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 19:18:15,856 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-73b2c258 successfully.
+2026-08-15 19:18:15,878 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-8db9986e
+2026-08-15 19:18:15,878 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 19:18:15,879 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-8db9986e successfully.
+2026-08-15 19:18:15,895 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 19:18:15,899 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-15 19:18:15,899 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-15 20:30:00,833 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-265ea425
+2026-08-15 20:30:00,833 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 20:30:00,833 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-265ea425 successfully.
+2026-08-15 20:30:00,869 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-555dfa01
+2026-08-15 20:30:00,869 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 20:30:00,869 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-555dfa01 successfully.
+2026-08-15 20:30:00,881 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 20:30:00,886 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-15 20:30:00,886 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-15 21:01:24,086 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-ae04e093
+2026-08-15 21:01:24,087 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 21:01:24,087 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-ae04e093 successfully.
+2026-08-15 21:01:24,183 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-eabdfd69
+2026-08-15 21:01:24,186 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 21:01:24,186 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-eabdfd69 successfully.
+2026-08-15 21:01:24,225 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-15 21:01:24,246 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-15 21:01:24,246 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-16 09:16:16,908 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-1b6ce218
+2026-08-16 09:16:16,910 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-16 09:16:16,910 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-1b6ce218 successfully.
+2026-08-16 09:16:17,066 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-98add35c
+2026-08-16 09:16:17,067 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-16 09:16:17,067 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-98add35c successfully.
+2026-08-16 09:16:17,105 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-16 09:16:17,116 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-16 09:16:17,116 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-16 09:44:33,824 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-bd9ec29c
+2026-08-16 09:44:33,825 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-16 09:44:33,825 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-bd9ec29c successfully.
+2026-08-16 09:44:33,918 [INFO] [agent:agent.google-ads-monitoring-agent] Starting execution for task task-736ab1e9
+2026-08-16 09:44:33,918 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-16 09:44:33,919 [INFO] [agent:agent.google-ads-monitoring-agent] Completed task task-736ab1e9 successfully.
+2026-08-16 09:44:33,987 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='123-456-7890', live_enabled=False
+2026-08-16 09:44:34,004 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
+2026-08-16 09:44:34,005 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)

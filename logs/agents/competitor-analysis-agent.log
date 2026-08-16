@@ -1,0 +1,159 @@
+2026-08-14 13:20:04,212 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-3ba9b8fe
+2026-08-14 13:20:04,212 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:20:04,212 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-3ba9b8fe successfully.
+2026-08-14 13:20:04,215 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-49952afd
+2026-08-14 13:20:04,216 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:20:04,216 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-49952afd successfully.
+2026-08-14 13:20:04,217 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 13:21:58,426 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-7210b999
+2026-08-14 13:21:58,427 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:21:58,428 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-7210b999 successfully.
+2026-08-14 13:21:58,430 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-e47caf74
+2026-08-14 13:21:58,430 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:21:58,430 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-e47caf74 successfully.
+2026-08-14 13:21:58,431 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 13:24:53,875 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-47da7fbe
+2026-08-14 13:24:53,876 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:24:53,876 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-47da7fbe successfully.
+2026-08-14 13:24:53,879 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-d992c9d6
+2026-08-14 13:24:53,879 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:24:53,879 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-d992c9d6 successfully.
+2026-08-14 13:24:53,879 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 13:28:24,728 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-77e974da
+2026-08-14 13:28:24,730 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:28:24,730 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-77e974da successfully.
+2026-08-14 13:28:24,738 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-9f92e5eb
+2026-08-14 13:28:24,739 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:28:24,739 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-9f92e5eb successfully.
+2026-08-14 13:28:24,741 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 13:35:57,823 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-fd9ca657
+2026-08-14 13:35:57,825 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:35:57,825 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-fd9ca657 successfully.
+2026-08-14 13:35:57,832 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-9b72dff3
+2026-08-14 13:35:57,832 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:35:57,832 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-9b72dff3 successfully.
+2026-08-14 13:35:57,834 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 13:38:51,731 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-db9c1dc9
+2026-08-14 13:38:51,734 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:38:51,734 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-db9c1dc9 successfully.
+2026-08-14 13:38:51,741 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-b84fe974
+2026-08-14 13:38:51,741 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:38:51,742 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-b84fe974 successfully.
+2026-08-14 13:38:51,744 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 13:41:30,247 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-98c4530f
+2026-08-14 13:41:30,252 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:41:30,253 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-98c4530f successfully.
+2026-08-14 13:41:30,263 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-d3dd48f6
+2026-08-14 13:41:30,263 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:41:30,264 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-d3dd48f6 successfully.
+2026-08-14 13:41:30,265 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 13:43:42,327 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-729bc53f
+2026-08-14 13:43:42,327 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:43:42,328 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-729bc53f successfully.
+2026-08-14 13:43:42,337 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-fa3cbd8a
+2026-08-14 13:43:42,338 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:43:42,338 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-fa3cbd8a successfully.
+2026-08-14 13:43:42,340 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 13:46:17,776 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-10554e4e
+2026-08-14 13:46:17,777 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:46:17,778 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-10554e4e successfully.
+2026-08-14 13:46:17,786 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-b22ab95b
+2026-08-14 13:46:17,787 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:46:17,787 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-b22ab95b successfully.
+2026-08-14 13:46:17,788 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 13:48:47,134 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-dce35b46
+2026-08-14 13:48:47,135 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 13:48:47,136 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-dce35b46 successfully.
+2026-08-14 13:48:47,146 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-527d776b
+2026-08-14 13:48:47,146 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 13:48:47,146 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-527d776b successfully.
+2026-08-14 13:48:47,147 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 14:40:04,284 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-87f441ba
+2026-08-14 14:40:04,286 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 14:40:04,286 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-87f441ba successfully.
+2026-08-14 14:40:04,294 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-2a132414
+2026-08-14 14:40:04,294 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 14:40:04,295 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-2a132414 successfully.
+2026-08-14 14:40:04,296 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 14:43:00,757 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-80396dd6
+2026-08-14 14:43:00,761 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 14:43:00,762 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-80396dd6 successfully.
+2026-08-14 14:43:00,770 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-347f92a2
+2026-08-14 14:43:00,771 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 14:43:00,771 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-347f92a2 successfully.
+2026-08-14 14:43:00,773 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 14:46:15,034 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-987ffac2
+2026-08-14 14:46:15,034 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 14:46:15,035 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-987ffac2 successfully.
+2026-08-14 14:46:15,042 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-ccd4c58e
+2026-08-14 14:46:15,043 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 14:46:15,043 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-ccd4c58e successfully.
+2026-08-14 14:46:15,045 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 14:56:20,553 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-4a217969
+2026-08-14 14:56:20,553 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-14 14:56:20,553 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-4a217969 successfully.
+2026-08-14 14:56:20,563 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-d90130c8
+2026-08-14 14:56:20,564 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 14:56:20,564 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-d90130c8 successfully.
+2026-08-14 14:56:20,565 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-14 16:09:35,344 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-dd54ca3d
+2026-08-14 16:09:35,347 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 16:09:35,347 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-dd54ca3d successfully.
+2026-08-14 16:11:45,138 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-d5505061
+2026-08-14 16:11:45,139 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-14 16:11:45,140 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-d5505061 successfully.
+2026-08-15 11:49:35,636 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-0eb28715
+2026-08-15 11:49:35,655 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-15 11:49:35,655 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-0eb28715 successfully.
+2026-08-15 11:50:13,522 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-b42a5454
+2026-08-15 11:50:13,522 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-15 11:50:13,523 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-b42a5454 successfully.
+2026-08-15 19:10:44,988 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-7606b7da
+2026-08-15 19:10:44,989 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-15 19:10:44,989 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-7606b7da successfully.
+2026-08-15 19:10:45,013 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-f8665c83
+2026-08-15 19:10:45,013 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-15 19:10:45,013 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-f8665c83 successfully.
+2026-08-15 19:10:45,031 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-15 19:11:26,611 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-2ae17b8a
+2026-08-15 19:11:26,611 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-15 19:11:26,612 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-2ae17b8a successfully.
+2026-08-15 19:11:26,631 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-bf646442
+2026-08-15 19:11:26,631 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-15 19:11:26,631 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-bf646442 successfully.
+2026-08-15 19:11:26,644 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-15 19:18:11,427 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-b0a77758
+2026-08-15 19:18:11,427 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-15 19:18:11,428 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-b0a77758 successfully.
+2026-08-15 19:18:11,455 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-ee3a6bcc
+2026-08-15 19:18:11,455 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-15 19:18:11,455 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-ee3a6bcc successfully.
+2026-08-15 19:18:11,469 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-15 20:29:55,126 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-d33cfad9
+2026-08-15 20:29:55,128 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-15 20:29:55,128 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-d33cfad9 successfully.
+2026-08-15 20:29:55,162 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-25a8d210
+2026-08-15 20:29:55,162 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-15 20:29:55,162 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-25a8d210 successfully.
+2026-08-15 20:29:55,178 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-15 21:01:11,005 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-deef2f54
+2026-08-15 21:01:11,007 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-15 21:01:11,007 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-deef2f54 successfully.
+2026-08-15 21:01:11,134 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-dcb6cfff
+2026-08-15 21:01:11,136 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-15 21:01:11,136 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-dcb6cfff successfully.
+2026-08-15 21:01:11,200 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-16 09:16:01,561 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-be88ec8b
+2026-08-16 09:16:01,563 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-16 09:16:01,564 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-be88ec8b successfully.
+2026-08-16 09:16:01,649 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-97c25e3b
+2026-08-16 09:16:01,649 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-16 09:16:01,649 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-97c25e3b successfully.
+2026-08-16 09:16:01,715 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
+2026-08-16 09:44:20,712 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-0112b66c
+2026-08-16 09:44:20,712 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['luxurydriver.com']
+2026-08-16 09:44:20,712 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-0112b66c successfully.
+2026-08-16 09:44:20,815 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-31133bc4
+2026-08-16 09:44:20,816 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='corporate chauffeur melbourne', competitors=['melbournechauffeurs.example.com', 'luxurydriver.example.com']
+2026-08-16 09:44:20,816 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-31133bc4 successfully.
+2026-08-16 09:44:20,858 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']

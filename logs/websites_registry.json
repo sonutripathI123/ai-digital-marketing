@@ -1,0 +1,53 @@
+[
+  {
+    "site_id": "ccm",
+    "name": "Corporate Cars Melbourne",
+    "domain": "https://corporatecarsmelbourne.com.au",
+    "location": "Melbourne & Tullamarine, VIC",
+    "niche": "Executive Airport Transfers & Corporate Chauffeur",
+    "default_category": "Chauffeur Services",
+    "gsc_site_url": "https://corporatecarsmelbourne.com.au",
+    "ga4_property_id": "corporate-cars-melbourne-ga4",
+    "google_ads_id": "ccm-gads-482",
+    "meta_ads_id": "ccm-meta-891",
+    "facebook_url": "https://facebook.com/corporatecarsmelbourne",
+    "instagram_url": "https://instagram.com/corporatecarsmelbourne",
+    "linkedin_url": "https://linkedin.com/company/corporatecarsmelbourne",
+    "is_active": true,
+    "color_accent": "#06b6d4"
+  },
+  {
+    "site_id": "opal",
+    "name": "Opal Chauffeurs",
+    "domain": "https://www.opalchauffeurs.com.au",
+    "location": "Melbourne Metropolitan & Regional VIC",
+    "niche": "Luxury Private Driver & Premium Chauffeur Cars",
+    "default_category": "Airport Transfers",
+    "gsc_site_url": "https://www.opalchauffeurs.com.au",
+    "ga4_property_id": "opal-chauffeurs-ga4",
+    "google_ads_id": "opal-gads-104",
+    "meta_ads_id": "opal-meta-552",
+    "facebook_url": "https://facebook.com/opalchauffeurs",
+    "instagram_url": "https://instagram.com/opalchauffeurs",
+    "linkedin_url": "https://linkedin.com/company/opalchauffeurs",
+    "is_active": true,
+    "color_accent": "#a855f7"
+  },
+  {
+    "site_id": "test-sydney-transfers",
+    "name": "Sydney Luxury Transfers",
+    "domain": "https://sydneytransfers.example.com",
+    "location": "Sydney, NSW",
+    "niche": "Executive Airport Transfers",
+    "default_category": "Chauffeur Services",
+    "gsc_site_url": "https://sydneytransfers.example.com",
+    "ga4_property_id": null,
+    "google_ads_id": null,
+    "meta_ads_id": null,
+    "facebook_url": null,
+    "instagram_url": null,
+    "linkedin_url": null,
+    "is_active": true,
+    "color_accent": "#10b981"
+  }
+]

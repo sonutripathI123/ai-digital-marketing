@@ -1,0 +1,97 @@
+2026-08-14 14:40:18,030 [INFO] [agent:agent.reputation-agent] Starting execution for task task-d236466d
+2026-08-14 14:40:18,031 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-14 14:40:18,031 [INFO] [agent:agent.reputation-agent] Completed task task-d236466d successfully.
+2026-08-14 14:40:18,038 [INFO] [agent:agent.reputation-agent] Starting execution for task task-e9637e9a
+2026-08-14 14:40:18,038 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 14:40:18,039 [INFO] [agent:agent.reputation-agent] Completed task task-e9637e9a successfully.
+2026-08-14 14:40:18,039 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-14 14:40:18,041 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 14:43:10,317 [INFO] [agent:agent.reputation-agent] Starting execution for task task-2374a1ea
+2026-08-14 14:43:10,319 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-14 14:43:10,319 [INFO] [agent:agent.reputation-agent] Completed task task-2374a1ea successfully.
+2026-08-14 14:43:10,324 [INFO] [agent:agent.reputation-agent] Starting execution for task task-5dd629b0
+2026-08-14 14:43:10,324 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 14:43:10,324 [INFO] [agent:agent.reputation-agent] Completed task task-5dd629b0 successfully.
+2026-08-14 14:43:10,325 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-14 14:43:10,327 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 14:46:25,035 [INFO] [agent:agent.reputation-agent] Starting execution for task task-33b2638f
+2026-08-14 14:46:25,036 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-14 14:46:25,036 [INFO] [agent:agent.reputation-agent] Completed task task-33b2638f successfully.
+2026-08-14 14:46:25,042 [INFO] [agent:agent.reputation-agent] Starting execution for task task-c746d4d4
+2026-08-14 14:46:25,042 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 14:46:25,042 [INFO] [agent:agent.reputation-agent] Completed task task-c746d4d4 successfully.
+2026-08-14 14:46:25,043 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-14 14:46:25,045 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 14:56:30,257 [INFO] [agent:agent.reputation-agent] Starting execution for task task-8f090dfc
+2026-08-14 14:56:30,259 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-14 14:56:30,259 [INFO] [agent:agent.reputation-agent] Completed task task-8f090dfc successfully.
+2026-08-14 14:56:30,264 [INFO] [agent:agent.reputation-agent] Starting execution for task task-b0b11349
+2026-08-14 14:56:30,266 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 14:56:30,266 [INFO] [agent:agent.reputation-agent] Completed task task-b0b11349 successfully.
+2026-08-14 14:56:30,266 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-14 14:56:30,268 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 16:09:35,353 [INFO] [agent:agent.reputation-agent] Starting execution for task task-bdaf8a48
+2026-08-14 16:09:35,355 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 16:09:35,355 [INFO] [agent:agent.reputation-agent] Completed task task-bdaf8a48 successfully.
+2026-08-14 16:11:45,224 [INFO] [agent:agent.reputation-agent] Starting execution for task task-89b663a5
+2026-08-14 16:11:45,228 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-14 16:11:45,228 [INFO] [agent:agent.reputation-agent] Completed task task-89b663a5 successfully.
+2026-08-15 11:57:45,115 [INFO] [agent:agent.reputation-agent] Starting execution for task task-3a8331e0
+2026-08-15 11:57:45,116 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=reviews, platform='google', rating=5
+2026-08-15 11:57:45,117 [INFO] [agent:agent.reputation-agent] Completed task task-3a8331e0 successfully.
+2026-08-15 19:10:57,814 [INFO] [agent:agent.reputation-agent] Starting execution for task task-cef34bc9
+2026-08-15 19:10:57,814 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-15 19:10:57,815 [INFO] [agent:agent.reputation-agent] Completed task task-cef34bc9 successfully.
+2026-08-15 19:10:57,837 [INFO] [agent:agent.reputation-agent] Starting execution for task task-1ea0633e
+2026-08-15 19:10:57,837 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-15 19:10:57,837 [INFO] [agent:agent.reputation-agent] Completed task task-1ea0633e successfully.
+2026-08-15 19:10:57,855 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-15 19:10:57,858 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-15 19:11:34,448 [INFO] [agent:agent.reputation-agent] Starting execution for task task-296ce6c1
+2026-08-15 19:11:34,448 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-15 19:11:34,448 [INFO] [agent:agent.reputation-agent] Completed task task-296ce6c1 successfully.
+2026-08-15 19:11:34,482 [INFO] [agent:agent.reputation-agent] Starting execution for task task-9e66d068
+2026-08-15 19:11:34,482 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-15 19:11:34,482 [INFO] [agent:agent.reputation-agent] Completed task task-9e66d068 successfully.
+2026-08-15 19:11:34,495 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-15 19:11:34,497 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-15 19:18:20,891 [INFO] [agent:agent.reputation-agent] Starting execution for task task-547b1848
+2026-08-15 19:18:20,892 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-15 19:18:20,892 [INFO] [agent:agent.reputation-agent] Completed task task-547b1848 successfully.
+2026-08-15 19:18:20,921 [INFO] [agent:agent.reputation-agent] Starting execution for task task-f176c464
+2026-08-15 19:18:20,921 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-15 19:18:20,921 [INFO] [agent:agent.reputation-agent] Completed task task-f176c464 successfully.
+2026-08-15 19:18:20,936 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-15 19:18:20,938 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-15 20:30:23,845 [INFO] [agent:agent.reputation-agent] Starting execution for task task-e557f6f1
+2026-08-15 20:30:23,845 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-15 20:30:23,845 [INFO] [agent:agent.reputation-agent] Completed task task-e557f6f1 successfully.
+2026-08-15 20:30:23,887 [INFO] [agent:agent.reputation-agent] Starting execution for task task-835fc00c
+2026-08-15 20:30:23,887 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-15 20:30:23,887 [INFO] [agent:agent.reputation-agent] Completed task task-835fc00c successfully.
+2026-08-15 20:30:23,907 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-15 20:30:23,912 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-15 21:01:37,945 [INFO] [agent:agent.reputation-agent] Starting execution for task task-bfc4f6a8
+2026-08-15 21:01:37,946 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-15 21:01:37,946 [INFO] [agent:agent.reputation-agent] Completed task task-bfc4f6a8 successfully.
+2026-08-15 21:01:38,062 [INFO] [agent:agent.reputation-agent] Starting execution for task task-80d17e2f
+2026-08-15 21:01:38,063 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-15 21:01:38,063 [INFO] [agent:agent.reputation-agent] Completed task task-80d17e2f successfully.
+2026-08-15 21:01:38,121 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-15 21:01:38,132 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-16 09:16:24,092 [INFO] [agent:agent.reputation-agent] Starting execution for task task-c687b195
+2026-08-16 09:16:24,093 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-16 09:16:24,094 [INFO] [agent:agent.reputation-agent] Completed task task-c687b195 successfully.
+2026-08-16 09:16:24,315 [INFO] [agent:agent.reputation-agent] Starting execution for task task-eb3e738f
+2026-08-16 09:16:24,316 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-16 09:16:24,316 [INFO] [agent:agent.reputation-agent] Completed task task-eb3e738f successfully.
+2026-08-16 09:16:24,385 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-16 09:16:24,402 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-16 09:44:39,580 [INFO] [agent:agent.reputation-agent] Starting execution for task task-6565a5a7
+2026-08-16 09:44:39,581 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='trustpilot', rating=5
+2026-08-16 09:44:39,581 [INFO] [agent:agent.reputation-agent] Completed task task-6565a5a7 successfully.
+2026-08-16 09:44:39,700 [INFO] [agent:agent.reputation-agent] Starting execution for task task-fd51bf3a
+2026-08-16 09:44:39,700 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5
+2026-08-16 09:44:39,700 [INFO] [agent:agent.reputation-agent] Completed task task-fd51bf3a successfully.
+2026-08-16 09:44:39,754 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=draft_reply, platform='google', rating=5
+2026-08-16 09:44:39,770 [INFO] [agent:agent.reputation-agent] Executing ReviewReputationAgent task: action=fetch_reviews, platform='google', rating=5

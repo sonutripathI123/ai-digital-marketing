@@ -1,0 +1,79 @@
+"""
+Unit & Integration Tests for Agent #6: SEO Audit Agent (`seo-audit-agent`).
+"""
+
+import unittest
+from fastapi.testclient import TestClient
+
+from agents.seo_audit_agent import SEOAuditAgent
+from core.ai_layer.router import ModelRouter
+from core.models.task import AgentTask, TaskStatus
+from core.orchestrator.master import MasterOrchestrator
+from dashboard.api import app
+
+
+class TestSEOAuditAgent(unittest.TestCase):
+    def setUp(self):
+        self.router = ModelRouter()
+        self.orchestrator = MasterOrchestrator(router=self.router)
+        self.agent = SEOAuditAgent()
+        self.orchestrator.register_agent(self.agent)
+        self.client = TestClient(app)
+
+    def test_agent_metadata(self):
+        meta = self.agent.metadata
+        self.assertEqual(meta.agent_id, "seo-audit-agent")
+        self.assertEqual(meta.name, "SEO Audit Agent")
+        self.assertEqual(meta.category, "SEO & Content")
+        self.assertTrue(meta.enabled)
+        self.assertIn("audit_page", meta.supported_actions)
+
+    def test_run_task_rule_based(self):
+        task = AgentTask(
+            task_id="test-audit-1",
+            agent_id="seo-audit-agent",
+            task_type="audit_page",
+            input_data={
+                "action": "audit_page",
+                "url": "https://corporatecarsmelbourne.com.au/services",
+                "use_ai": False
+            }
+        )
+        res = self.agent.run_task(task, self.router)
+        self.assertIn("output", res)
+        output = res["output"]
+        self.assertEqual(output["audited_url"], "https://corporatecarsmelbourne.com.au/services")
+        self.assertGreater(output["overall_seo_health_score"], 0)
+        self.assertIn("audit_findings", output)
+        self.assertIn("issues_summary", output)
+
+    def test_orchestrator_execution(self):
+        task = self.orchestrator.create_task(
+            agent_id="seo-audit-agent",
+            task_type="audit_page",
+            input_data={"url": "https://corporatecarsmelbourne.com.au"},
+            requires_approval=False
+        )
+        completed_task = self.orchestrator.execute_task(task.task_id)
+        self.assertEqual(completed_task.status, TaskStatus.COMPLETED)
+        self.assertIn("overall_seo_health_score", completed_task.output_data)
+
+    def test_fastapi_endpoints(self):
+        resp_create = self.client.post("/api/tasks/create", json={
+            "agent_id": "seo-audit-agent",
+            "task_type": "audit_page",
+            "input_data": {"url": "https://corporatecarsmelbourne.com.au/contact"},
+            "requires_approval": False
+        })
+        self.assertEqual(resp_create.status_code, 200)
+        task_id = resp_create.json()["task"]["task_id"]
+
+        resp_exec = self.client.post(f"/api/tasks/execute/{task_id}")
+        self.assertEqual(resp_exec.status_code, 200)
+        data = resp_exec.json()
+        self.assertEqual(data["task"]["status"], "COMPLETED")
+        self.assertEqual(data["task"]["agent_id"], "seo-audit-agent")
+
+
+if __name__ == "__main__":
+    unittest.main()

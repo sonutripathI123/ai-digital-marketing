@@ -1,0 +1,373 @@
+{
+  "step1_keywords": {
+    "action": "research",
+    "business_or_service": "Chauffeur Service",
+    "seed_keyword": "corporate chauffeur melbourne",
+    "target_location": "Melbourne CBD",
+    "primary_keyword": "corporate chauffeur melbourne Melbourne CBD",
+    "search_intent": "Transactional / Commercial",
+    "recommended_content_type": "Suburb Landing Page / Service Pillar Post",
+    "keyword_clusters": {
+      "Airport Transfers": [
+        "airport transfer Tullamarine",
+        "airport transfer Avalon",
+        "airport transfer Melbourne CBD"
+      ],
+      "Corporate Travel": [
+        "corporate chauffeur Melbourne CBD",
+        "corporate chauffeur South Yarra",
+        "corporate chauffeur Docklands"
+      ],
+      "Event & Wedding": [
+        "wedding car hire Toorak",
+        "wedding car hire St Kilda",
+        "wedding car hire Yarra Valley"
+      ]
+    },
+    "expanded_opportunities_count": 15,
+    "top_keyword_variations": [
+      {
+        "keyword": "chauffeur service Melbourne CBD",
+        "location": "Melbourne CBD",
+        "intent": "Transactional",
+        "cluster": "Chauffeur_Service",
+        "priority": "HIGH"
+      },
+      {
+        "keyword": "corporate car hire Melbourne CBD",
+        "location": "Melbourne CBD",
+        "intent": "Transactional",
+        "cluster": "Corporate_Car_Hire",
+        "priority": "HIGH"
+      },
+      {
+        "keyword": "airport transfer Melbourne CBD",
+        "location": "Melbourne CBD",
+        "intent": "Commercial",
+        "cluster": "Airport_Transfer",
+        "priority": "HIGH"
+      },
+      {
+        "keyword": "chauffeur service South Yarra",
+        "location": "South Yarra",
+        "intent": "Transactional",
+        "cluster": "Chauffeur_Service",
+        "priority": "MEDIUM"
+      },
+      {
+        "keyword": "corporate car hire South Yarra",
+        "location": "South Yarra",
+        "intent": "Transactional",
+        "cluster": "Corporate_Car_Hire",
+        "priority": "MEDIUM"
+      },
+      {
+        "keyword": "airport transfer South Yarra",
+        "location": "South Yarra",
+        "intent": "Commercial",
+        "cluster": "Airport_Transfer",
+        "priority": "MEDIUM"
+      },
+      {
+        "keyword": "chauffeur service Tullamarine Airport",
+        "location": "Tullamarine Airport",
+        "intent": "Transactional",
+        "cluster": "Chauffeur_Service",
+        "priority": "HIGH"
+      },
+      {
+        "keyword": "corporate car hire Tullamarine Airport",
+        "location": "Tullamarine Airport",
+        "intent": "Transactional",
+        "cluster": "Corporate_Car_Hire",
+        "priority": "HIGH"
+      },
+      {
+        "keyword": "airport transfer Tullamarine Airport",
+        "location": "Tullamarine Airport",
+        "intent": "Commercial",
+        "cluster": "Airport_Transfer",
+        "priority": "HIGH"
+      },
+      {
+        "keyword": "chauffeur service St Kilda",
+        "location": "St Kilda",
+        "intent": "Transactional",
+        "cluster": "Chauffeur_Service",
+        "priority": "MEDIUM"
+      }
+    ],
+    "actionable_recommendations": [
+      "Target 'corporate chauffeur melbourne Melbourne CBD' as the primary H1 title for core landing page.",
+      "Create dedicated suburb-level landing pages for Tullamarine Airport and Melbourne CBD.",
+      "Include 'luxury private driver' in meta descriptions to capture transactional intent."
+    ]
+  },
+  "step2_competitors": {
+    "action": "analyze",
+    "target_keyword": "corporate chauffeur melbourne",
+    "location": "Melbourne",
+    "competitors_analyzed_count": 2,
+    "competitor_insights": [
+      {
+        "competitor_url": "melbournechauffeurs.example.com",
+        "domain_authority_estimate": "Medium-High",
+        "content_depth_score": 78,
+        "targeted_keywords": [
+          "corporate chauffeur melbourne",
+          "airport transfer Melbourne",
+          "luxury car hire"
+        ],
+        "content_gaps": [
+          "No dedicated suburb landing pages for Tullamarine or South Yarra",
+          "Missing transparent pricing calculator or estimate guide",
+          "Lacks Schema.org PrivateChauffeurService structured markup"
+        ],
+        "positioning_strengths": "Strong brand presence for event transport",
+        "weaknesses": "Slow mobile load time and generic meta descriptions"
+      },
+      {
+        "competitor_url": "luxurydriver.example.com",
+        "domain_authority_estimate": "Medium-High",
+        "content_depth_score": 78,
+        "targeted_keywords": [
+          "corporate chauffeur melbourne",
+          "airport transfer Melbourne",
+          "luxury car hire"
+        ],
+        "content_gaps": [
+          "No dedicated suburb landing pages for Tullamarine or South Yarra",
+          "Missing transparent pricing calculator or estimate guide",
+          "Lacks Schema.org PrivateChauffeurService structured markup"
+        ],
+        "positioning_strengths": "Strong brand presence for event transport",
+        "weaknesses": "Slow mobile load time and generic meta descriptions"
+      }
+    ],
+    "identified_content_gaps_count": 6,
+    "actionable_recommendations": [
+      "Create specialized landing page targeting 'corporate chauffeur melbourne' with local suburb subheadings.",
+      "Publish a detailed Melbourne Airport Chauffeur Pickup Guide to capture high-intent search traffic.",
+      "Implement LocalBusiness & Service Schema markup to gain rich snippet features in Google Search results."
+    ]
+  },
+  "step3_brief": {
+    "action": "create_brief",
+    "target_keyword": "corporate chauffeur melbourne",
+    "target_location": "Melbourne CBD",
+    "target_audience": "Corporate Travelers & Event Planners",
+    "recommended_word_count": "1,200 - 1,500 words",
+    "search_intent": "Transactional / Commercial",
+    "title_suggestions": [
+      "Ultimate Guide to Corporate Chauffeur Melbourne in Melbourne CBD",
+      "Why Premium Corporate Chauffeur Melbourne is Essential for Corporate Travel",
+      "Top Benefits of Hiring a Corporate Chauffeur Melbourne in Melbourne CBD"
+    ],
+    "secondary_keywords": [
+      "airport transfer Melbourne CBD",
+      "luxury private driver",
+      "executive car hire"
+    ],
+    "structured_outline": [
+      {
+        "heading": "1. Introduction to Corporate Chauffeur Melbourne",
+        "level": "H2",
+        "key_points": [
+          "Problem statement",
+          "Why luxury transport matters"
+        ]
+      },
+      {
+        "heading": "2. Key Benefits of Professional Corporate Chauffeurs",
+        "level": "H2",
+        "key_points": [
+          "Punctuality",
+          "Privacy & Comfort",
+          "Flight Tracking"
+        ]
+      },
+      {
+        "heading": "3. Airport Transfers & Executive Routes in Melbourne CBD",
+        "level": "H2",
+        "key_points": [
+          "Tullamarine Airport pickups",
+          "CBD hotel transfers"
+        ]
+      },
+      {
+        "heading": "4. How to Book Your Dedicated Chauffeur Service",
+        "level": "H2",
+        "key_points": [
+          "Online reservation",
+          "Corporate account options"
+        ]
+      },
+      {
+        "heading": "5. Conclusion & Call to Action",
+        "level": "H2",
+        "key_points": [
+          "Summary",
+          "Book Now CTA"
+        ]
+      }
+    ],
+    "internal_linking_recommendations": [
+      "/services/airport-transfers (Anchor: 'airport transfer Melbourne CBD')",
+      "/fleet/executive-sedans (Anchor: 'executive car hire')"
+    ],
+    "call_to_action": "Reserve your premium Melbourne chauffeur online today or contact our 24/7 corporate desk.",
+    "seo_requirements": [
+      "Include primary keyword in H1 and first 100 words.",
+      "Maintain 1.5% keyword density for secondary terms.",
+      "Add alt text for featured vehicle images."
+    ]
+  },
+  "step4_lead": {
+    "action": "process_lead",
+    "processed_lead": {
+      "lead_id": "lead-1001",
+      "client_name": "Corporate Executive",
+      "service_type": "Airport Transfer",
+      "estimated_value_usd": 250.0,
+      "lead_score": 85,
+      "tier": "HIGH_PRIORITY_HOT_LEAD"
+    },
+    "pipeline_summary": {
+      "active_leads": 2,
+      "total_pipeline_value_usd": 1850.0,
+      "avg_lead_score": 91.5
+    },
+    "recent_leads": [
+      {
+        "lead_id": "lead-1001",
+        "client_name": "James Thornton (BHP Group)",
+        "email": "j.thornton@example.com",
+        "phone": "+61 412 345 678",
+        "service_type": "Corporate Account Booking",
+        "route": "Melbourne CBD -> Tullamarine Airport (Weekly Recurring)",
+        "estimated_value_usd": 1200.0,
+        "lead_score": 95,
+        "tier": "VIP_CORPORATE_ACCOUNT",
+        "status": "DRAFT_QUOTE_READY"
+      },
+      {
+        "lead_id": "lead-1002",
+        "client_name": "Emma Watson",
+        "email": "emma.w@example.com",
+        "phone": "+61 498 765 432",
+        "service_type": "Wedding Chauffeur",
+        "route": "Yarra Valley Wineries",
+        "estimated_value_usd": 650.0,
+        "lead_score": 88,
+        "tier": "HIGH_PRIORITY_HOT_LEAD",
+        "status": "QUALIFIED"
+      }
+    ],
+    "actionable_recommendations": [
+      "1. Send custom corporate quote to James Thornton (BHP Group) - high-value account ($1,200/mo).",
+      "2. Follow up on weekend wedding car inquiry."
+    ]
+  },
+  "step5_reviews": {
+    "action": "fetch_reviews",
+    "platform_filter": "google",
+    "reputation_overview": {
+      "average_rating": 4.8,
+      "total_reviews": 142,
+      "five_star_count": 124,
+      "four_star_count": 14,
+      "three_star_and_below_count": 4,
+      "sentiment_breakdown": {
+        "positive_percent": 91.5,
+        "neutral_percent": 5.6,
+        "negative_percent": 2.9
+      }
+    },
+    "recent_reviews": [
+      {
+        "id": "rev-101",
+        "platform": "Google Business Profile",
+        "author": "David Miller",
+        "rating": 5,
+        "sentiment": "POSITIVE",
+        "text": "Exceptional chauffeur service! Driver arrived 10 minutes early for our Tullamarine airport transfer. Immaculate Mercedes S-Class.",
+        "status": "RESPONDED",
+        "response": "Thank you David! Delighted to provide top-tier corporate chauffeur service."
+      },
+      {
+        "id": "rev-102",
+        "platform": "TripAdvisor",
+        "author": "Sarah Jenkins",
+        "rating": 5,
+        "sentiment": "POSITIVE",
+        "text": "Booked corporate travel for 8 executives during Melbourne Tech Week. Professional, punctual, and easy billing.",
+        "status": "DRAFTED",
+        "draft_response": "Hi Sarah, thank you for trusting Corporate Cars Melbourne for your executive team travel! We look forward to serving you again."
+      },
+      {
+        "id": "rev-103",
+        "platform": "Trustpilot",
+        "author": "Michael Chang",
+        "rating": 3,
+        "sentiment": "NEUTRAL",
+        "text": "Vehicle was clean and driver friendly, but flight tracking took 15 mins to confirm delay update.",
+        "status": "NEEDS_APPROVAL",
+        "draft_response": "Dear Michael, thank you for your feedback. We appreciate your kind words about our driver and vehicle. We are optimizing our automated flight tracking system to ensure real-time dispatch updates. Please contact management at info@corporatecarsmelbourne.com.au so we can ensure your next ride is seamless."
+      }
+    ],
+    "actionable_recommendations": [
+      "1. Respond to rev-103 (3-star review) to address flight tracking feedback.",
+      "2. Maintain active review collection requests post-ride via SMS/Email."
+    ]
+  },
+  "step6_report": {
+    "action": "generate_report",
+    "reporting_period": "August 2026",
+    "report_format": "markdown",
+    "executive_summary": "Monthly Performance Executive Summary (August 2026):\n- Total Marketing Revenue Generated: $12,800.00 AUD from 42 inbound leads.\n- Paid Ads ROI: $3,340.50 ad spend generated 150 conversions with a 4.23x Blended ROAS.\n- Organic Search Growth: 3,480 organic search clicks (+14.2% MoM) driven by 14 newly published blog posts.\n- Brand Reputation: Maintained 4.8-star average rating with 91.5% positive sentiment.",
+    "channel_performance": {
+      "seo_and_content": {
+        "gsc_clicks": 3480,
+        "gsc_impressions": 84200,
+        "avg_position": 11.4,
+        "ga4_sessions": 5120,
+        "ga4_conversions": 168,
+        "blogs_published": 14
+      },
+      "paid_advertising": {
+        "google_ads_spend_usd": 2220.5,
+        "google_ads_conversions": 100,
+        "google_ads_roas": 4.47,
+        "meta_ads_spend_usd": 1120.0,
+        "meta_ads_conversions": 50,
+        "meta_ads_roas": 3.75,
+        "combined_ad_spend_usd": 3340.5,
+        "combined_blended_roas": 4.23
+      },
+      "organic_social": {
+        "total_followers": 13950,
+        "net_follower_growth": 417,
+        "total_impressions": 65000,
+        "total_engagements": 3700,
+        "avg_engagement_rate_percent": 5.77
+      },
+      "reputation_and_reviews": {
+        "average_rating": 4.8,
+        "total_reviews": 142,
+        "positive_sentiment_percent": 91.5
+      },
+      "sales_and_leads": {
+        "total_inbound_leads": 42,
+        "qualified_corporate_accounts": 18,
+        "total_pipeline_value_usd": 18400.0,
+        "closed_won_revenue_usd": 12800.0
+      }
+    },
+    "top_strategic_recommendations": [
+      "1. Double down on high-ROAS Google Ads campaigns (Airport Transfers - 4.8x ROAS).",
+      "2. Expand suburban chauffeur SEO coverage for South Yarra, Toorak, and Brighton.",
+      "3. Continue active post-ride review collection to maintain >90% positive sentiment.",
+      "4. Streamline lead response time via automated executive quotation drafts."
+    ]
+  }
+}

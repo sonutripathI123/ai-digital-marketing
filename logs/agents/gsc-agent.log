@@ -1,0 +1,164 @@
+2026-08-14 13:36:07,089 [INFO] [agent:agent.gsc-agent] Starting execution for task task-25086f06
+2026-08-14 13:36:07,089 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:36:07,090 [INFO] [agent:agent.gsc-agent] Completed task task-25086f06 successfully.
+2026-08-14 13:36:07,097 [INFO] [agent:agent.gsc-agent] Starting execution for task task-0be02fbf
+2026-08-14 13:36:07,097 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:36:07,098 [INFO] [agent:agent.gsc-agent] Completed task task-0be02fbf successfully.
+2026-08-14 13:36:07,100 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:39:01,122 [INFO] [agent:agent.gsc-agent] Starting execution for task task-8bffc8f7
+2026-08-14 13:39:01,124 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:39:01,125 [INFO] [agent:agent.gsc-agent] Completed task task-8bffc8f7 successfully.
+2026-08-14 13:39:01,133 [INFO] [agent:agent.gsc-agent] Starting execution for task task-6223e379
+2026-08-14 13:39:01,133 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:39:01,133 [INFO] [agent:agent.gsc-agent] Completed task task-6223e379 successfully.
+2026-08-14 13:39:01,134 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:41:40,355 [INFO] [agent:agent.gsc-agent] Starting execution for task task-894657c3
+2026-08-14 13:41:40,356 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:41:40,357 [INFO] [agent:agent.gsc-agent] Completed task task-894657c3 successfully.
+2026-08-14 13:41:40,364 [INFO] [agent:agent.gsc-agent] Starting execution for task task-b4c195cb
+2026-08-14 13:41:40,365 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:41:40,366 [INFO] [agent:agent.gsc-agent] Completed task task-b4c195cb successfully.
+2026-08-14 13:41:40,367 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:43:50,479 [INFO] [agent:agent.gsc-agent] Starting execution for task task-613ba78a
+2026-08-14 13:43:50,480 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:43:50,481 [INFO] [agent:agent.gsc-agent] Completed task task-613ba78a successfully.
+2026-08-14 13:43:50,489 [INFO] [agent:agent.gsc-agent] Starting execution for task task-4c986e94
+2026-08-14 13:43:50,489 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:43:50,489 [INFO] [agent:agent.gsc-agent] Completed task task-4c986e94 successfully.
+2026-08-14 13:43:50,491 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:46:25,701 [INFO] [agent:agent.gsc-agent] Starting execution for task task-2f6588dd
+2026-08-14 13:46:25,702 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:46:25,702 [INFO] [agent:agent.gsc-agent] Completed task task-2f6588dd successfully.
+2026-08-14 13:46:25,709 [INFO] [agent:agent.gsc-agent] Starting execution for task task-b511e4dd
+2026-08-14 13:46:25,709 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:46:25,709 [INFO] [agent:agent.gsc-agent] Completed task task-b511e4dd successfully.
+2026-08-14 13:46:25,711 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:48:54,976 [INFO] [agent:agent.gsc-agent] Starting execution for task task-59fa4364
+2026-08-14 13:48:54,977 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:48:54,977 [INFO] [agent:agent.gsc-agent] Completed task task-59fa4364 successfully.
+2026-08-14 13:48:54,983 [INFO] [agent:agent.gsc-agent] Starting execution for task task-7e0ee7d7
+2026-08-14 13:48:54,983 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 13:48:54,984 [INFO] [agent:agent.gsc-agent] Completed task task-7e0ee7d7 successfully.
+2026-08-14 13:48:54,986 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:40:17,939 [INFO] [agent:agent.gsc-agent] Starting execution for task task-ea4cd9e7
+2026-08-14 14:40:17,940 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:40:17,940 [INFO] [agent:agent.gsc-agent] Completed task task-ea4cd9e7 successfully.
+2026-08-14 14:40:17,946 [INFO] [agent:agent.gsc-agent] Starting execution for task task-8965c15e
+2026-08-14 14:40:17,946 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:40:17,946 [INFO] [agent:agent.gsc-agent] Completed task task-8965c15e successfully.
+2026-08-14 14:40:17,947 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:43:10,194 [INFO] [agent:agent.gsc-agent] Starting execution for task task-a2127f84
+2026-08-14 14:43:10,195 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:43:10,196 [INFO] [agent:agent.gsc-agent] Completed task task-a2127f84 successfully.
+2026-08-14 14:43:10,203 [INFO] [agent:agent.gsc-agent] Starting execution for task task-081a80d2
+2026-08-14 14:43:10,204 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:43:10,204 [INFO] [agent:agent.gsc-agent] Completed task task-081a80d2 successfully.
+2026-08-14 14:43:10,205 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:46:24,850 [INFO] [agent:agent.gsc-agent] Starting execution for task task-c77b5c16
+2026-08-14 14:46:24,865 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:46:24,865 [INFO] [agent:agent.gsc-agent] Completed task task-c77b5c16 successfully.
+2026-08-14 14:46:24,869 [INFO] [agent:agent.gsc-agent] Starting execution for task task-2a4eec3f
+2026-08-14 14:46:24,871 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:46:24,871 [INFO] [agent:agent.gsc-agent] Completed task task-2a4eec3f successfully.
+2026-08-14 14:46:24,871 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:56:30,087 [INFO] [agent:agent.gsc-agent] Starting execution for task task-e550014b
+2026-08-14 14:56:30,089 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:56:30,091 [INFO] [agent:agent.gsc-agent] Completed task task-e550014b successfully.
+2026-08-14 14:56:30,099 [INFO] [agent:agent.gsc-agent] Starting execution for task task-fa0a012b
+2026-08-14 14:56:30,099 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-14 14:56:30,099 [INFO] [agent:agent.gsc-agent] Completed task task-fa0a012b successfully.
+2026-08-14 14:56:30,101 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 11:57:44,945 [INFO] [agent:agent.gsc-agent] Starting execution for task task-29c02b61
+2026-08-15 11:57:44,948 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=query_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 11:57:44,948 [INFO] [agent:agent.gsc-agent] Completed task task-29c02b61 successfully.
+2026-08-15 18:07:49,394 [INFO] [agent:agent.gsc-agent] Starting execution for task task-ac01d011
+2026-08-15 18:07:49,396 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:07:49,398 [INFO] [agent:agent.gsc-agent] Completed task task-ac01d011 successfully.
+2026-08-15 18:08:46,657 [INFO] [agent:agent.gsc-agent] Starting execution for task task-509cd353
+2026-08-15 18:08:46,657 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:08:46,658 [WARNING] [agent:agent.gsc-agent] Task task-509cd353 attempt 1 failed: name 'Path' is not defined. Retrying.
+2026-08-15 18:08:46,658 [INFO] [agent:agent.gsc-agent] Starting execution for task task-509cd353
+2026-08-15 18:08:46,659 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:08:46,659 [WARNING] [agent:agent.gsc-agent] Task task-509cd353 attempt 2 failed: name 'Path' is not defined. Retrying.
+2026-08-15 18:08:46,659 [INFO] [agent:agent.gsc-agent] Starting execution for task task-509cd353
+2026-08-15 18:08:46,660 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:08:46,661 [WARNING] [agent:agent.gsc-agent] Task task-509cd353 attempt 3 failed: name 'Path' is not defined. Retrying.
+2026-08-15 18:08:46,661 [INFO] [agent:agent.gsc-agent] Starting execution for task task-509cd353
+2026-08-15 18:08:46,662 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:08:46,662 [ERROR] [agent:agent.gsc-agent] Task task-509cd353 permanently failed: name 'Path' is not defined
+2026-08-15 18:09:02,564 [INFO] [agent:agent.gsc-agent] Starting execution for task task-e341a2fb
+2026-08-15 18:09:02,565 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:09:02,565 [WARNING] [agent:agent.gsc-agent] Task task-e341a2fb attempt 1 failed: name 'Path' is not defined. Retrying.
+2026-08-15 18:09:02,565 [INFO] [agent:agent.gsc-agent] Starting execution for task task-e341a2fb
+2026-08-15 18:09:02,565 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:09:02,566 [WARNING] [agent:agent.gsc-agent] Task task-e341a2fb attempt 2 failed: name 'Path' is not defined. Retrying.
+2026-08-15 18:09:02,566 [INFO] [agent:agent.gsc-agent] Starting execution for task task-e341a2fb
+2026-08-15 18:09:02,566 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:09:02,567 [WARNING] [agent:agent.gsc-agent] Task task-e341a2fb attempt 3 failed: name 'Path' is not defined. Retrying.
+2026-08-15 18:09:02,567 [INFO] [agent:agent.gsc-agent] Starting execution for task task-e341a2fb
+2026-08-15 18:09:02,567 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:09:02,568 [ERROR] [agent:agent.gsc-agent] Task task-e341a2fb permanently failed: name 'Path' is not defined
+2026-08-15 18:09:14,594 [INFO] [agent:agent.gsc-agent] Starting execution for task task-f68e3095
+2026-08-15 18:09:14,594 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:09:14,594 [WARNING] [agent:agent.gsc-agent] Task task-f68e3095 attempt 1 failed: name 'Path' is not defined. Retrying.
+2026-08-15 18:09:14,594 [INFO] [agent:agent.gsc-agent] Starting execution for task task-f68e3095
+2026-08-15 18:09:14,594 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:09:14,595 [WARNING] [agent:agent.gsc-agent] Task task-f68e3095 attempt 2 failed: name 'Path' is not defined. Retrying.
+2026-08-15 18:09:14,595 [INFO] [agent:agent.gsc-agent] Starting execution for task task-f68e3095
+2026-08-15 18:09:14,596 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:09:14,596 [WARNING] [agent:agent.gsc-agent] Task task-f68e3095 attempt 3 failed: name 'Path' is not defined. Retrying.
+2026-08-15 18:09:14,597 [INFO] [agent:agent.gsc-agent] Starting execution for task task-f68e3095
+2026-08-15 18:09:14,597 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:09:14,597 [ERROR] [agent:agent.gsc-agent] Task task-f68e3095 permanently failed: name 'Path' is not defined
+2026-08-15 18:10:11,319 [INFO] [agent:agent.gsc-agent] Starting execution for task task-1ff19be5
+2026-08-15 18:10:11,319 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au/', date_range='last_28_days'
+2026-08-15 18:10:14,826 [INFO] [agent:agent.gsc-agent] Completed task task-1ff19be5 successfully.
+2026-08-15 19:10:51,526 [INFO] [agent:agent.gsc-agent] Starting execution for task task-4ed3bb44
+2026-08-15 19:10:51,527 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 19:10:53,820 [INFO] [agent:agent.gsc-agent] Completed task task-4ed3bb44 successfully.
+2026-08-15 19:10:53,850 [INFO] [agent:agent.gsc-agent] Starting execution for task task-1740e413
+2026-08-15 19:10:53,850 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 19:10:55,748 [INFO] [agent:agent.gsc-agent] Completed task task-1740e413 successfully.
+2026-08-15 19:10:55,767 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 19:11:29,562 [INFO] [agent:agent.gsc-agent] Starting execution for task task-0dfe6f23
+2026-08-15 19:11:29,563 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 19:11:31,182 [INFO] [agent:agent.gsc-agent] Completed task task-0dfe6f23 successfully.
+2026-08-15 19:11:31,262 [INFO] [agent:agent.gsc-agent] Starting execution for task task-8e40de13
+2026-08-15 19:11:31,262 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 19:11:32,424 [INFO] [agent:agent.gsc-agent] Completed task task-8e40de13 successfully.
+2026-08-15 19:11:32,438 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 19:18:15,984 [INFO] [agent:agent.gsc-agent] Starting execution for task task-567b3ad7
+2026-08-15 19:18:15,984 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 19:18:17,811 [INFO] [agent:agent.gsc-agent] Completed task task-567b3ad7 successfully.
+2026-08-15 19:18:17,843 [INFO] [agent:agent.gsc-agent] Starting execution for task task-f524b60c
+2026-08-15 19:18:17,843 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 19:18:19,047 [INFO] [agent:agent.gsc-agent] Completed task task-f524b60c successfully.
+2026-08-15 19:18:19,075 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 20:30:00,980 [INFO] [agent:agent.gsc-agent] Starting execution for task task-5a43fbdd
+2026-08-15 20:30:00,980 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 20:30:19,975 [INFO] [agent:agent.gsc-agent] Completed task task-5a43fbdd successfully.
+2026-08-15 20:30:20,024 [INFO] [agent:agent.gsc-agent] Starting execution for task task-a912ccba
+2026-08-15 20:30:20,025 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 20:30:22,001 [INFO] [agent:agent.gsc-agent] Completed task task-a912ccba successfully.
+2026-08-15 20:30:22,051 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 21:01:24,563 [INFO] [agent:agent.gsc-agent] Starting execution for task task-c2cb7d2a
+2026-08-15 21:01:24,564 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 21:01:31,133 [INFO] [agent:agent.gsc-agent] Completed task task-c2cb7d2a successfully.
+2026-08-15 21:01:31,249 [INFO] [agent:agent.gsc-agent] Starting execution for task task-39d51618
+2026-08-15 21:01:31,252 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-15 21:01:34,204 [INFO] [agent:agent.gsc-agent] Completed task task-39d51618 successfully.
+2026-08-15 21:01:34,279 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 09:16:17,416 [INFO] [agent:agent.gsc-agent] Starting execution for task task-eb47a17c
+2026-08-16 09:16:17,418 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 09:16:19,228 [INFO] [agent:agent.gsc-agent] Completed task task-eb47a17c successfully.
+2026-08-16 09:16:19,477 [INFO] [agent:agent.gsc-agent] Starting execution for task task-159dda7d
+2026-08-16 09:16:19,477 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 09:16:21,254 [INFO] [agent:agent.gsc-agent] Completed task task-159dda7d successfully.
+2026-08-16 09:16:21,291 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 09:44:34,644 [INFO] [agent:agent.gsc-agent] Starting execution for task task-d159dbcf
+2026-08-16 09:44:34,644 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 09:44:36,040 [INFO] [agent:agent.gsc-agent] Completed task task-d159dbcf successfully.
+2026-08-16 09:44:36,159 [INFO] [agent:agent.gsc-agent] Starting execution for task task-602e6545
+2026-08-16 09:44:36,160 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 09:44:37,179 [INFO] [agent:agent.gsc-agent] Completed task task-602e6545 successfully.
+2026-08-16 09:44:37,233 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'

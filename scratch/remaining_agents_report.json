@@ -1,0 +1,556 @@
+[
+  {
+    "num": 8,
+    "agent_id": "gsc-agent",
+    "name": "Google Search Console Agent",
+    "task_id": "task-29c02b61",
+    "status": "COMPLETED",
+    "output_summary": {
+      "action": "query_performance",
+      "site_url": "https://corporatecarsmelbourne.com.au",
+      "date_range": "last_28_days",
+      "performance_summary": {
+        "total_clicks": 1005,
+        "total_impressions": 16500,
+        "average_ctr_percent": 5.72,
+        "average_position": 4.7
+      },
+      "top_queries": [
+        {
+          "query": "corporate chauffeur melbourne",
+          "clicks": 420,
+          "impressions": 5800,
+          "ctr": 7.24,
+          "position": 2.1
+        },
+        {
+          "query": "melbourne airport chauffeur transfer",
+          "clicks": 310,
+          "impressions": 4600,
+          "ctr": 6.74,
+          "position": 3.4
+        },
+        {
+          "query": "luxury private driver south yarra",
+          "clicks": 180,
+          "impressions": 3200,
+          "ctr": 5.625,
+          "position": 4.8
+        },
+        {
+          "query": "wedding car hire melbourne cbd",
+          "clicks": 95,
+          "impressions": 2900,
+          "ctr": 3.28,
+          "position": 8.5
+        }
+      ],
+      "quick_win_opportunities": [
+        {
+          "query": "wedding car hire melbourne cbd",
+          "impressions": 2900,
+          "current_position": 8.5,
+          "current_ctr": 3.28,
+          "potential_win": "High \u2014 Move from Page 2 (Pos 8.5) to Top 3 for +200 monthly clicks",
+          "recommendation": "Update H2 headings and add dedicated wedding car fleet images with alt tags."
+        },
+        {
+          "query": "tullamarine corporate car service",
+          "impressions": 1850,
+          "current_position": 11.2,
+          "current_ctr": 1.84,
+          "potential_win": "Quick Win \u2014 Position 11.2 (Top of Page 2). Add internal links from blog pillar.",
+          "recommendation": "Internal Linking Agent can pair this query with /services/airport-transfers."
+        }
+      ],
+      "actionable_insights": [
+        "1. Focus content optimization on 'wedding car hire melbourne cbd' (High impression volume at pos 8.5).",
+        "2. Create internal link cluster pointing to Airport Transfers page to push 'tullamarine corporate car service' to Page 1."
+      ]
+    }
+  },
+  {
+    "num": 9,
+    "agent_id": "ga4-reporting-agent",
+    "name": "GA4 Analytics Agent",
+    "task_id": "task-0f6a2bbc",
+    "status": "COMPLETED",
+    "output_summary": {
+      "action": "traffic_report",
+      "property_name": "Corporate Cars Melbourne GA4",
+      "date_range": "last_30_days",
+      "overview_metrics": {
+        "total_users": 3160,
+        "total_sessions": 4230,
+        "total_conversions": 233,
+        "average_engagement_rate": "64.2%",
+        "conversion_rate": "5.51%"
+      },
+      "acquisition_channel_breakdown": [
+        {
+          "channel": "Organic Search",
+          "users": 1840,
+          "sessions": 2450,
+          "engagement_rate": 68.4,
+          "conversions": 142
+        },
+        {
+          "channel": "Direct Traffic",
+          "users": 620,
+          "sessions": 890,
+          "engagement_rate": 72.1,
+          "conversions": 58
+        },
+        {
+          "channel": "Organic Social",
+          "users": 410,
+          "sessions": 530,
+          "engagement_rate": 55.2,
+          "conversions": 19
+        },
+        {
+          "channel": "Referral",
+          "users": 290,
+          "sessions": 360,
+          "engagement_rate": 61.0,
+          "conversions": 14
+        }
+      ],
+      "top_landing_pages": [
+        {
+          "page": "/services/airport-transfers",
+          "sessions": 980,
+          "engagement_time_sec": 145,
+          "conversions": 84
+        },
+        {
+          "page": "/",
+          "sessions": 850,
+          "engagement_time_sec": 110,
+          "conversions": 45
+        },
+        {
+          "page": "/services/corporate-chauffeur",
+          "sessions": 620,
+          "engagement_time_sec": 160,
+          "conversions": 62
+        },
+        {
+          "page": "/suburbs/south-yarra-chauffeur",
+          "sessions": 320,
+          "engagement_time_sec": 130,
+          "conversions": 21
+        }
+      ],
+      "actionable_insights": [
+        "1. Organic Search drives 58% of total conversions with a high 68.4% engagement rate.",
+        "2. '/services/airport-transfers' is the top converting landing page (84 conversions).",
+        "3. Social traffic has room for growth \u2014 increase call-to-actions on Instagram/LinkedIn posts."
+      ]
+    }
+  },
+  {
+    "num": 10,
+    "agent_id": "google-ads-monitoring-agent",
+    "name": "Google Ads Monitoring Agent",
+    "task_id": "task-d08a6e1d",
+    "status": "COMPLETED",
+    "output_summary": {
+      "action": "monitor",
+      "account_id": "123-456-7890",
+      "date_range": "last_30_days",
+      "safety_guard_status": "PROTECTED (ADS_LIVE_EXECUTION_ENABLED=False)",
+      "account_summary": {
+        "total_spend_usd": 2220.5,
+        "total_impressions": 25700,
+        "total_clicks": 1270,
+        "avg_ctr_percent": 4.94,
+        "avg_cpc_usd": 1.75,
+        "total_conversions": 100,
+        "avg_cpa_usd": 22.2
+      },
+      "campaign_performance": [
+        {
+          "campaign_name": "Search - Corporate Chauffeur Melbourne",
+          "status": "ACTIVE",
+          "daily_budget_usd": 50.0,
+          "spend_usd": 1240.5,
+          "impressions": 14200,
+          "clicks": 680,
+          "ctr_percent": 4.79,
+          "avg_cpc_usd": 1.82,
+          "conversions": 52,
+          "cpa_usd": 23.85,
+          "roas_ratio": 4.15
+        },
+        {
+          "campaign_name": "Search - Airport Transfers Tullamarine",
+          "status": "ACTIVE",
+          "daily_budget_usd": 40.0,
+          "spend_usd": 980.0,
+          "impressions": 11500,
+          "clicks": 590,
+          "ctr_percent": 5.13,
+          "avg_cpc_usd": 1.66,
+          "conversions": 48,
+          "cpa_usd": 20.41,
+          "roas_ratio": 4.8
+        }
+      ],
+      "detected_anomalies": [
+        {
+          "campaign": "Search - Corporate Chauffeur Melbourne",
+          "metric": "CPC",
+          "finding": "CPC increased by +12% on weekends due to competitive bidding.",
+          "severity": "LOW"
+        }
+      ],
+      "actionable_recommendations": [
+        "1. Maintain current Airport Transfers budget (High ROAS 4.8x).",
+        "2. Review Optimization Agent suggestions for negative keyword additions."
+      ]
+    }
+  },
+  {
+    "num": 11,
+    "agent_id": "google-ads-optimization-agent",
+    "name": "Google Ads Optimization Agent",
+    "task_id": "task-fbc98e75",
+    "status": "COMPLETED",
+    "output_summary": {
+      "action": "optimize",
+      "account_id": "123-456-7890",
+      "optimization_goal": "reduce_cpa",
+      "approval_status": "RECOMMENDED (Requires Human Approval for Live Apply)",
+      "safety_guard_status": "PROTECTED (ADS_LIVE_EXECUTION_ENABLED=False)",
+      "recommended_negative_keywords": [
+        "cheap car rental",
+        "taxi cab fare",
+        "bus timetable",
+        "uber driver salary",
+        "self drive rental"
+      ],
+      "proposed_bid_adjustments": [
+        {
+          "campaign": "Search - Airport Transfers",
+          "device": "Mobile",
+          "adjustment": "+15%",
+          "reason": "Mobile conversion rate is 8.4% vs Desktop 5.1%"
+        },
+        {
+          "campaign": "Search - Corporate Chauffeur",
+          "location": "Tullamarine",
+          "adjustment": "+10%",
+          "reason": "High intent airport pickup traffic"
+        }
+      ],
+      "proposed_budget_shifts": [
+        {
+          "from_campaign": "Search - Generic Transport",
+          "to_campaign": "Search - Airport Transfers",
+          "amount_usd": 15.0,
+          "expected_impact": "+6 monthly conversions"
+        }
+      ],
+      "estimated_monthly_savings_usd": 185.0,
+      "estimated_conversion_lift_percent": 12.5,
+      "actionable_next_steps": [
+        "1. Approve addition of 5 negative keywords to prevent irrelevant click spend.",
+        "2. Approve +15% mobile bid adjustment on Airport Transfers campaign.",
+        "3. Reallocate $15/day budget from Generic to Airport Transfers."
+      ]
+    }
+  },
+  {
+    "num": 12,
+    "agent_id": "meta-ads-monitoring-agent",
+    "name": "Meta Ads Monitoring Agent",
+    "task_id": "task-8ff5398b",
+    "status": "COMPLETED",
+    "output_summary": {
+      "action": "monitor",
+      "ad_account_id": "act_987654321",
+      "date_range": "last_30_days",
+      "safety_guard_status": "PROTECTED (ADS_LIVE_EXECUTION_ENABLED=False)",
+      "account_summary": {
+        "total_spend_usd": 1120.0,
+        "total_impressions": 70500,
+        "total_reach": 44000,
+        "avg_frequency": 1.6,
+        "total_clicks": 950,
+        "avg_ctr_percent": 1.35,
+        "avg_cpc_usd": 1.18,
+        "total_conversions": 50,
+        "avg_cpa_usd": 22.4
+      },
+      "placement_performance": [
+        {
+          "platform": "Instagram Feed & Stories",
+          "campaign_name": "IG - Executive Chauffeur Branding",
+          "spend_usd": 640.0,
+          "impressions": 38500,
+          "reach": 24200,
+          "frequency": 1.59,
+          "cpm_usd": 16.62,
+          "clicks": 540,
+          "ctr_percent": 1.4,
+          "cpc_usd": 1.19,
+          "conversions": 28,
+          "cpa_usd": 22.86,
+          "roas_ratio": 3.65
+        },
+        {
+          "platform": "Facebook News Feed",
+          "campaign_name": "FB - Corporate Event Transport",
+          "spend_usd": 480.0,
+          "impressions": 32000,
+          "reach": 19800,
+          "frequency": 1.62,
+          "cpm_usd": 15.0,
+          "clicks": 410,
+          "ctr_percent": 1.28,
+          "cpc_usd": 1.17,
+          "conversions": 22,
+          "cpa_usd": 21.81,
+          "roas_ratio": 3.9
+        }
+      ],
+      "ad_fatigue_warning": "None. Frequency is healthy at < 2.0.",
+      "actionable_recommendations": [
+        "1. Instagram Stories placements show high engagement; consider allocating 60% of creative budget to 9:16 vertical video.",
+        "2. Maintain active audience exclusions to prevent ad fatigue."
+      ]
+    }
+  },
+  {
+    "num": 13,
+    "agent_id": "social-analytics-agent",
+    "name": "Social Media Analytics Agent",
+    "task_id": "task-e67a267f",
+    "status": "COMPLETED",
+    "output_summary": {
+      "action": "analyze_performance",
+      "selected_platform": "all",
+      "date_range": "last_30_days",
+      "overall_summary": {
+        "total_followers": 13950,
+        "total_impressions": 65000,
+        "total_engagements": 3700,
+        "total_outbound_clicks": 590,
+        "avg_engagement_rate_percent": 5.77
+      },
+      "platform_breakdown": [
+        {
+          "platform": "instagram",
+          "followers": 4820,
+          "net_follower_growth": 145,
+          "impressions": 28400,
+          "reach": 18200,
+          "engagements": 1640,
+          "engagement_rate_percent": 5.77,
+          "clicks": 210,
+          "best_post": "#25 - Luxury Airport Transfer Reel (1,240 likes, 85 saves)",
+          "worst_post": "#18 - Generic Fleet Maintenance Graphic (12 likes)"
+        },
+        {
+          "platform": "facebook",
+          "followers": 6150,
+          "net_follower_growth": 92,
+          "impressions": 22100,
+          "reach": 14900,
+          "engagements": 1120,
+          "engagement_rate_percent": 5.06,
+          "clicks": 185,
+          "best_post": "#30 - Melbourne Cup Corporate Transport Special (48 shares)",
+          "worst_post": "#12 - Suburb Highlight Text Post (8 likes)"
+        },
+        {
+          "platform": "linkedin",
+          "followers": 2980,
+          "net_follower_growth": 180,
+          "impressions": 14500,
+          "reach": 9800,
+          "engagements": 940,
+          "engagement_rate_percent": 6.48,
+          "clicks": 195,
+          "best_post": "#28 - Executive Travel Trends Article (65 comments, 12 reposts)",
+          "worst_post": "#14 - Weekend Holiday Greeting (15 likes)"
+        }
+      ],
+      "actionable_recommendations": [
+        "1. Instagram Reels and video content yield 3x higher engagement than static graphics.",
+        "2. LinkedIn executive leadership articles drive highest B2B website clicks (195 clicks).",
+        "3. Double down on airport transfer reels and corporate event transportation topics."
+      ]
+    }
+  },
+  {
+    "num": 14,
+    "agent_id": "reputation-agent",
+    "name": "Review & Reputation Agent",
+    "task_id": "task-3a8331e0",
+    "status": "COMPLETED",
+    "output_summary": {
+      "action": "reviews",
+      "platform_filter": "google",
+      "reputation_overview": {
+        "average_rating": 4.8,
+        "total_reviews": 142,
+        "five_star_count": 124,
+        "four_star_count": 14,
+        "three_star_and_below_count": 4,
+        "sentiment_breakdown": {
+          "positive_percent": 91.5,
+          "neutral_percent": 5.6,
+          "negative_percent": 2.9
+        }
+      },
+      "recent_reviews": [
+        {
+          "id": "rev-101",
+          "platform": "Google Business Profile",
+          "author": "David Miller",
+          "rating": 5,
+          "sentiment": "POSITIVE",
+          "text": "Exceptional chauffeur service! Driver arrived 10 minutes early for our Tullamarine airport transfer. Immaculate Mercedes S-Class.",
+          "status": "RESPONDED",
+          "response": "Thank you David! Delighted to provide top-tier corporate chauffeur service."
+        },
+        {
+          "id": "rev-102",
+          "platform": "TripAdvisor",
+          "author": "Sarah Jenkins",
+          "rating": 5,
+          "sentiment": "POSITIVE",
+          "text": "Booked corporate travel for 8 executives during Melbourne Tech Week. Professional, punctual, and easy billing.",
+          "status": "DRAFTED",
+          "draft_response": "Hi Sarah, thank you for trusting Corporate Cars Melbourne for your executive team travel! We look forward to serving you again."
+        },
+        {
+          "id": "rev-103",
+          "platform": "Trustpilot",
+          "author": "Michael Chang",
+          "rating": 3,
+          "sentiment": "NEUTRAL",
+          "text": "Vehicle was clean and driver friendly, but flight tracking took 15 mins to confirm delay update.",
+          "status": "NEEDS_APPROVAL",
+          "draft_response": "Dear Michael, thank you for your feedback. We appreciate your kind words about our driver and vehicle. We are optimizing our automated flight tracking system to ensure real-time dispatch updates. Please contact management at info@corporatecarsmelbourne.com.au so we can ensure your next ride is seamless."
+        }
+      ],
+      "actionable_recommendations": [
+        "1. Respond to rev-103 (3-star review) to address flight tracking feedback.",
+        "2. Maintain active review collection requests post-ride via SMS/Email."
+      ]
+    }
+  },
+  {
+    "num": 15,
+    "agent_id": "lead-management-agent",
+    "name": "Lead Management CRM Agent",
+    "task_id": "task-1382c77e",
+    "status": "COMPLETED",
+    "output_summary": {
+      "action": "score_lead",
+      "processed_lead": {
+        "lead_id": "lead-1001",
+        "client_name": "Corporate Executive",
+        "service_type": "Airport Transfer",
+        "estimated_value_usd": 250.0,
+        "lead_score": 85,
+        "tier": "HIGH_PRIORITY_HOT_LEAD"
+      },
+      "pipeline_summary": {
+        "active_leads": 2,
+        "total_pipeline_value_usd": 1850.0,
+        "avg_lead_score": 91.5
+      },
+      "recent_leads": [
+        {
+          "lead_id": "lead-1001",
+          "client_name": "James Thornton (BHP Group)",
+          "email": "j.thornton@example.com",
+          "phone": "+61 412 345 678",
+          "service_type": "Corporate Account Booking",
+          "route": "Melbourne CBD -> Tullamarine Airport (Weekly Recurring)",
+          "estimated_value_usd": 1200.0,
+          "lead_score": 95,
+          "tier": "VIP_CORPORATE_ACCOUNT",
+          "status": "DRAFT_QUOTE_READY"
+        },
+        {
+          "lead_id": "lead-1002",
+          "client_name": "Emma Watson",
+          "email": "emma.w@example.com",
+          "phone": "+61 498 765 432",
+          "service_type": "Wedding Chauffeur",
+          "route": "Yarra Valley Wineries",
+          "estimated_value_usd": 650.0,
+          "lead_score": 88,
+          "tier": "HIGH_PRIORITY_HOT_LEAD",
+          "status": "QUALIFIED"
+        }
+      ],
+      "actionable_recommendations": [
+        "1. Send custom corporate quote to James Thornton (BHP Group) - high-value account ($1,200/mo).",
+        "2. Follow up on weekend wedding car inquiry."
+      ]
+    }
+  },
+  {
+    "num": 16,
+    "agent_id": "monthly-report-agent",
+    "name": "Monthly Executive Report Agent",
+    "task_id": "task-4fe1500a",
+    "status": "COMPLETED",
+    "output_summary": {
+      "action": "generate_report",
+      "reporting_period": "August 2026",
+      "report_format": "markdown",
+      "executive_summary": "Monthly Performance Executive Summary (August 2026):\n- Total Marketing Revenue Generated: $12,800.00 AUD from 42 inbound leads.\n- Paid Ads ROI: $3,340.50 ad spend generated 150 conversions with a 4.23x Blended ROAS.\n- Organic Search Growth: 3,480 organic search clicks (+14.2% MoM) driven by 14 newly published blog posts.\n- Brand Reputation: Maintained 4.8-star average rating with 91.5% positive sentiment.",
+      "channel_performance": {
+        "seo_and_content": {
+          "gsc_clicks": 3480,
+          "gsc_impressions": 84200,
+          "avg_position": 11.4,
+          "ga4_sessions": 5120,
+          "ga4_conversions": 168,
+          "blogs_published": 14
+        },
+        "paid_advertising": {
+          "google_ads_spend_usd": 2220.5,
+          "google_ads_conversions": 100,
+          "google_ads_roas": 4.47,
+          "meta_ads_spend_usd": 1120.0,
+          "meta_ads_conversions": 50,
+          "meta_ads_roas": 3.75,
+          "combined_ad_spend_usd": 3340.5,
+          "combined_blended_roas": 4.23
+        },
+        "organic_social": {
+          "total_followers": 13950,
+          "net_follower_growth": 417,
+          "total_impressions": 65000,
+          "total_engagements": 3700,
+          "avg_engagement_rate_percent": 5.77
+        },
+        "reputation_and_reviews": {
+          "average_rating": 4.8,
+          "total_reviews": 142,
+          "positive_sentiment_percent": 91.5
+        },
+        "sales_and_leads": {
+          "total_inbound_leads": 42,
+          "qualified_corporate_accounts": 18,
+          "total_pipeline_value_usd": 18400.0,
+          "closed_won_revenue_usd": 12800.0
+        }
+      },
+      "top_strategic_recommendations": [
+        "1. Double down on high-ROAS Google Ads campaigns (Airport Transfers - 4.8x ROAS).",
+        "2. Expand suburban chauffeur SEO coverage for South Yarra, Toorak, and Brighton.",
+        "3. Continue active post-ride review collection to maintain >90% positive sentiment.",
+        "4. Streamline lead response time via automated executive quotation drafts."
+      ]
+    }
+  }
+]

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Digital Marketing Command Center — Corporate Cars Melbourne</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/styles.css?v=2.1.0">
+</head>
+<body>
+  <!-- Full-Screen Ambient Luxury Background Overlay -->
+  <div id="ambient-bg-layer"></div>
+  <div id="ambient-canvas-container">
+    <canvas id="ambient-canvas"></canvas>
+  </div>
+
+  <div id="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar">
+      <div>
+        <div class="brand-header">
+          <div class="brand-icon">
+            <i class="fa-solid fa-car-rear"></i>
+          </div>
+          <div>
+            <div class="brand-title">Corporate Cars</div>
+            <div class="brand-subtitle" id="brand-agents-count">AI MARKETING OS</div>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <a class="nav-item active" data-view="overview">
+            <i class="fa-solid fa-chart-pie"></i> System Overview
+          </a>
+          <a class="nav-item" data-view="agents">
+            <i class="fa-solid fa-network-wired"></i> Sub-Agents (<span id="nav-agents-count">--</span>)
+          </a>
+          <a class="nav-item" data-view="tasks">
+            <i class="fa-solid fa-list-check"></i> Task Execution
+          </a>
+          <a class="nav-item" data-view="approvals">
+            <i class="fa-solid fa-user-check"></i> Approval Queue
+          </a>
+          <a class="nav-item" data-view="scheduler">
+            <i class="fa-regular fa-calendar-check"></i> Job Scheduler
+          </a>
+          <a class="nav-item" data-view="ai-usage">
+            <i class="fa-solid fa-bolt"></i> AI Model Router
+          </a>
+          <a class="nav-item" data-view="logs">
+            <i class="fa-solid fa-terminal"></i> Central Logs
+          </a>
+          <a class="nav-item" data-view="errors">
+            <i class="fa-solid fa-triangle-exclamation"></i> Error Tracing
+          </a>
+          <a class="nav-item" data-view="audit">
+            <i class="fa-solid fa-shield-halved"></i> Audit Trail
+          </a>
+          <a class="nav-item" data-view="health">
+            <i class="fa-solid fa-heart-pulse"></i> System Health
+          </a>
+          <a class="nav-item" data-view="settings">
+            <i class="fa-solid fa-sliders"></i> Settings
+          </a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="ads-guard-badge">
+          <i class="fa-solid fa-shield-cat"></i>
+          <span>ADS LIVE EXECUTION: DISABLED</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Container -->
+    <main id="main-container">
+      <!-- Top Header Bar -->
+      <header id="top-header">
+        <div class="header-title-group">
+          <h1 id="page-title">System Overview & 3D Telemetry</h1>
+        </div>
+
+        <div class="header-actions">
+          <!-- Multi-Website Switcher Dropdown -->
+          <div class="website-switcher-dropdown" id="website-switcher-wrap">
+            <button class="website-selector-btn" id="website-dropdown-btn" type="button" title="Switch active website context">
+              <span class="site-dot" id="active-site-dot" style="background:#06b6d4;"></span>
+              <i class="fa-solid fa-globe" style="color:var(--accent-cyan);"></i>
+              <span class="active-site-name" id="active-site-name">Corporate Cars Melb</span>
+              <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+            </button>
+            <div class="website-dropdown-menu" id="website-dropdown-menu">
+              <div class="dropdown-header">
+                <span>SELECT ACTIVE WEBSITE</span>
+                <span class="badge badge-info" id="dropdown-sites-count">2 Sites</span>
+              </div>
+              <div class="dropdown-site-list" id="dropdown-site-list">
+                <!-- Dynamically populated from /api/websites -->
+              </div>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-add-btn" id="open-add-website-modal-btn" type="button">
+                <i class="fa-solid fa-plus-circle" style="color:var(--accent-cyan);"></i>
+                <span>Add New Website...</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="live-time-badge" id="live-time">UTC --:--:--</div>
+          <button class="btn btn-secondary" id="refresh-btn">
+            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+          </button>
+          <button class="btn btn-primary" id="open-create-task-modal">
+            <i class="fa-solid fa-plus"></i> New Task
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Page Workspace -->
+      <div id="workspace">
+        <!-- 1. Overview Page -->
+        <section class="page-view active" id="view-overview">
+          <!-- 3D AI Car Telemetry Hero Visualizer Banner -->
+          <div class="cyber-core-banner">
+            <div class="cyber-core-info">
+              <div class="cyber-badge-tag"><i class="fa-solid fa-bolt"></i> AI CYBER SCANNER ACTIVE</div>
+              <h3>
+                <i class="fa-solid fa-car" style="color: var(--accent-cyan);"></i>
+                Master Orchestrator — Corporate Cars AI Telemetry
+              </h3>
+              <p id="cyber-hero-desc">Autonomous AI Marketing Operating System controlling SEO, Google Ads, Meta Ads, Social Media, Reviews, and Corporate Lead Pipeline for Corporate Cars Melbourne.</p>
+              <div class="cyber-status-nodes">
+                <span class="status-node-chip green"><span class="pulse-dot green"></span> Master Core: ONLINE</span>
+                <span class="status-node-chip cyan"><span class="pulse-dot cyan"></span> <span id="cyber-node-agents-count">--</span> Sub-Agents Active</span>
+                <span class="status-node-chip red"><span class="pulse-dot red"></span> Safety Guard: ACTIVE</span>
+              </div>
+            </div>
+            <div class="cyber-core-canvas-wrap">
+              <canvas id="cyber-core-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Top Metrics Cards Grid -->
+          <div class="metrics-grid" id="overview-metrics">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Interactive Telemetry Charts Grid -->
+          <div class="charts-grid-container">
+            <div class="table-container chart-card">
+              <div class="chart-header">
+                <h4 style="font-size: 14px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid fa-chart-area" style="color: var(--accent-cyan);"></i> System Activity & AI Token Usage Telemetry
+                </h4>
+                <span class="badge badge-info">Real-Time Streams</span>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="activityChart"></canvas>
+              </div>
+            </div>
+
+            <div class="table-container chart-card">
+              <div class="chart-header">
+                <h4 style="font-size: 14px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid fa-chart-pie" style="color: var(--accent-purple);"></i> Agent Category Distribution
+                </h4>
+              </div>
+              <div class="chart-wrapper" style="display: flex; align-items: center; justify-content: center;">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+            <div>
+              <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-robot" style="color: var(--accent-cyan);"></i> Active Sub-Agents Overview
+              </h2>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Agent</th>
+                      <th>Category</th>
+                      <th>Status</th>
+                      <th>Supported Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="overview-agents-table"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div>
+              <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-shield-halved" style="color: var(--accent-purple);"></i> Live System Audit Log
+              </h2>
+              <div class="table-container" style="max-height: 420px; overflow-y: auto;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Agent</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="overview-audit-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Agents Page -->
+        <section class="page-view" id="view-agents">
+          <div class="agents-grid" id="agents-grid">
+            <!-- Dynamically populated from backend -->
+          </div>
+        </section>
+
+        <!-- 3. Tasks Page -->
+        <section class="page-view" id="view-tasks">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Task ID</th>
+                  <th>Agent</th>
+                  <th>Task Type</th>
+                  <th>Status</th>
+                  <th>Approval State</th>
+                  <th>Model Used</th>
+                  <th>Cost (USD)</th>
+                  <th>Created At</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tasks-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 4. Approvals Page -->
+        <section class="page-view" id="view-approvals">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="font-size: 14px; color: var(--text-secondary);">
+              Review and authorize tasks requiring human gatekeeper intervention.
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-primary btn-sm" onclick="approveAllTasks()" style="background:linear-gradient(135deg, #059669, #10b981); border:none; box-shadow:0 0 15px rgba(16,185,129,0.3);">
+                <i class="fa-solid fa-check-double"></i> Approve All
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="rejectAllTasks()" style="color:#ef4444; border-color:rgba(239,68,68,0.4);">
+                <i class="fa-solid fa-ban"></i> Reject All
+              </button>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Task ID</th>
+                  <th>Agent ID</th>
+                  <th>Task Type</th>
+                  <th>Priority</th>
+                  <th>Input Data</th>
+                  <th>Requested At</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="approvals-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 5. Scheduler Page -->
+        <section class="page-view" id="view-scheduler">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Job ID</th>
+                  <th>Agent</th>
+                  <th>Cron Expression</th>
+                  <th>Action</th>
+                  <th>Enabled</th>
+                  <th>Next Run (UTC)</th>
+                </tr>
+              </thead>
+              <tbody id="scheduler-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 6. AI Usage Page -->
+        <section class="page-view" id="view-ai-usage">
+          <div class="metrics-grid" id="ai-metrics-grid"></div>
+
+          <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 16px;">Model Router Cost Breakdown</h2>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Model Name</th>
+                  <th>Total Calls</th>
+                  <th>Estimated Cost / 1k Tokens</th>
+                  <th>Router Priority</th>
+                </tr>
+              </thead>
+              <tbody id="ai-models-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 7. Logs Page -->
+        <section class="page-view" id="view-logs">
+          <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+            <select class="form-control" id="logs-agent-filter" style="width: 280px;">
+              <option value="central">Central System Log</option>
+              <option value="blog-agent">blog-agent.log</option>
+              <option value="corporate-cars-social-agent">corporate-cars-social-agent.log</option>
+            </select>
+          </div>
+          <div class="terminal-log-box" id="logs-content">
+            Loading logs...
+          </div>
+        </section>
+
+        <!-- 8. Errors Page -->
+        <section class="page-view" id="view-errors">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Task ID</th>
+                  <th>Agent ID</th>
+                  <th>Retry Count</th>
+                  <th>Error Message</th>
+                  <th>Failed At</th>
+                </tr>
+              </thead>
+              <tbody id="errors-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 9. Audit Trail Page -->
+        <section class="page-view" id="view-audit">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Event ID</th>
+                  <th>Timestamp</th>
+                  <th>Agent ID</th>
+                  <th>Action</th>
+                  <th>User ID</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="audit-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 10. System Health Page -->
+        <section class="page-view" id="view-health">
+          <div class="metrics-grid" id="health-grid"></div>
+        </section>
+
+        <!-- 11. Settings Page -->
+        <section class="page-view" id="view-settings">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Integration / Feature</th>
+                  <th>Configuration Status</th>
+                  <th>Execution Mode</th>
+                  <th>Safety Flag</th>
+                </tr>
+              </thead>
+              <tbody id="settings-table"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Create Task Modal -->
+  <div class="modal-overlay" id="create-task-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2><i class="fa-solid fa-plus-circle" style="color:var(--accent-cyan);"></i> Queue New Agent Task</h2>
+        <button class="close-btn" onclick="closeModal('create-task-modal')">&times;</button>
+      </div>
+      <form id="create-task-form">
+        <div class="form-group">
+          <label>Target Website</label>
+          <select class="form-control" id="task-website-select">
+            <!-- Populated dynamically from API -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Target Agent</label>
+          <select class="form-control" id="task-agent-select" required>
+            <!-- Populated dynamically from API -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Task Action</label>
+          <input type="text" class="form-control" id="task-action-select" placeholder="e.g. status, research, analyze, monitor_performance" required value="status">
+        </div>
+        <div class="form-group">
+          <label>Requires Human Approval?</label>
+          <select class="form-control" id="task-approval-select">
+            <option value="false">No (Direct Execution)</option>
+            <option value="true">Yes (Pause for Approval)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select class="form-control" id="task-priority-select">
+            <option value="NORMAL">NORMAL</option>
+            <option value="HIGH">HIGH</option>
+            <option value="URGENT">URGENT</option>
+          </select>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('create-task-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Task Detail Modal -->
+  <div class="modal-overlay" id="task-detail-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="detail-task-id">Task Details</h2>
+        <button class="close-btn" onclick="closeModal('task-detail-modal')">&times;</button>
+      </div>
+      <div id="task-detail-content" style="font-size: 13px;"></div>
+    </div>
+  </div>
+
+  <!-- Agent Live Performance Report Modal -->
+  <div class="modal-overlay" id="agent-report-modal">
+    <div class="modal-card" style="max-width: 960px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h2 id="agent-report-title" style="font-size: 20px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-chart-line" style="color: var(--accent-cyan);"></i> Agent Performance Report
+          </h2>
+          <div id="agent-report-subtitle" style="font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 4px;"></div>
+        </div>
+        <button class="close-btn" onclick="closeModal('agent-report-modal')">&times;</button>
+      </div>
+      <div id="agent-report-content" style="font-size: 13px; max-height: 72vh; overflow-y: auto; padding-right: 4px;"></div>
+    </div>
+  </div>
+
+  <!-- Custom Site Outreach / Link Builder Modal -->
+  <div class="modal-overlay" id="custom-outreach-modal">
+    <div class="modal-card" style="max-width: 650px; width: 92%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 18px;">
+        <div>
+          <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-link" style="color: var(--accent-cyan);"></i> Custom Website Outreach & Backlink Builder
+          </h2>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Input custom target websites to automatically generate contextual editorial backlinks for Corporate Cars Melbourne.
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('custom-outreach-modal')">&times;</button>
+      </div>
+      <form onsubmit="submitCustomOutreach(event)">
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+            Target Websites / Directory URLs (Enter 1 or multiple, newline/comma separated):
+          </label>
+          <textarea id="outreach-target-websites" class="form-input" rows="4" style="width: 100%; resize: vertical; font-family: var(--font-mono); font-size: 12px;" placeholder="https://melbournetravelblog.com/top-chauffeurs&#10;https://executiveau.com/transport&#10;https://vicbusinessguide.com.au" required></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+            Target Destination Landing Page (on Corporate Cars Melbourne):
+          </label>
+          <select id="outreach-landing-page" class="form-input" style="width: 100%;">
+            <option value="https://corporatecarsmelbourne.com.au/">Homepage (https://corporatecarsmelbourne.com.au/)</option>
+            <option value="https://corporatecarsmelbourne.com.au/services/airport-transfers">Airport Transfers (/services/airport-transfers)</option>
+            <option value="https://corporatecarsmelbourne.com.au/services/corporate-transfers">Corporate Transfers (/services/corporate-transfers)</option>
+            <option value="https://corporatecarsmelbourne.com.au/services/wedding-car-hire">Wedding Car Hire (/services/wedding-car-hire)</option>
+            <option value="https://corporatecarsmelbourne.com.au/fleet">Luxury Fleet (/fleet)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+            Desired Anchor Text:
+          </label>
+          <input type="text" id="outreach-anchor-text" class="form-input" style="width: 100%;" value="Corporate Cars Melbourne" placeholder="e.g. Melbourne Chauffeur Service, Corporate Cars Melbourne, Executive Airport Transfer" required />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+            Topic / Article Context (Optional):
+          </label>
+          <input type="text" id="outreach-topic" class="form-input" style="width: 100%;" value="Luxury Chauffeur & Executive Airport Transfers Melbourne" placeholder="e.g. Tullamarine Airport Transfers vs Rideshare, Corporate Travel" />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="outreach-use-ai" checked style="accent-color: var(--accent-cyan);" />
+          <label for="outreach-use-ai" style="font-size: 12px; color: var(--text-secondary); cursor: pointer;">
+            Use AI Model Router to craft contextual high-relevance backlink snippet
+          </label>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('custom-outreach-modal')">Cancel</button>
+          <button type="submit" id="btn-submit-outreach" class="btn btn-primary" style="background: linear-gradient(135deg, var(--accent-cyan), #0284c7);">
+            <i class="fa-solid fa-bolt"></i> Generate Contextual Backlinks
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Competitor Ad Spy & Intelligence Modal -->
+  <div class="modal-overlay" id="competitor-ad-spy-modal">
+    <div class="modal-card" style="max-width: 1050px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 19px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-crosshairs" style="color: #ef4444;"></i> Competitor Ad Spy & Intelligence Engine
+          </h2>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Paste any Melbourne chauffeur competitor URL to extract their live Google Ads, Meta Ads (FB & IG), targeted keywords, and AI counter-strategies.
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('competitor-ad-spy-modal')">&times;</button>
+      </div>
+
+      <!-- Competitor URL Input Bar -->
+      <form onsubmit="submitCompetitorAdSpy(event)" style="background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+        <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 12px; align-items: flex-end;">
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Competitor Website URL:
+            </label>
+            <input type="text" id="spy-competitor-url" class="form-input" style="width: 100%; font-family: var(--font-mono); font-size: 12.5px;" value="https://chauffeurcarsmelbourne.com.au/" placeholder="https://competitor-chauffeur.com.au" required />
+          </div>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Target Location:
+            </label>
+            <input type="text" id="spy-location" class="form-input" style="width: 100%;" value="Melbourne, Victoria" />
+          </div>
+          <button type="submit" id="btn-submit-ad-spy" class="btn btn-primary" style="background: linear-gradient(135deg, #ef4444, #f97316); border: none; font-weight: 700; padding: 10px 20px;">
+            <i class="fa-solid fa-magnifying-glass"></i> Spy Ads Now
+          </button>
+        </div>
+      </form>
+
+      <!-- Results Container -->
+      <div id="spy-results-container" style="max-height: 68vh; overflow-y: auto; padding-right: 4px;">
+        <div style="text-align: center; color: var(--text-muted); padding: 40px;">
+          <i class="fa-solid fa-radar" style="font-size: 32px; color: rgba(239,68,68,0.4); margin-bottom: 12px; display: block;"></i>
+          Enter a competitor website URL above and click <strong>"Spy Ads Now"</strong> to extract their live Google & Meta campaigns.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deep Ad Copy & Keyword Inspector Modal -->
+  <div class="modal-overlay" id="ad-inspector-modal" style="z-index: 1100;">
+    <div class="modal-card" style="max-width: 900px; width: 95%; max-height: 90vh;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h2 id="inspector-modal-title" style="font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-layer-group" style="color: var(--accent-cyan);"></i> Ad Intelligence Deep Inspector
+          </h2>
+          <div id="inspector-modal-subtitle" style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Detailed breakdown of targeted bidding keywords, headings, descriptions, sitelinks, assets, and value hooks.
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('ad-inspector-modal')">&times;</button>
+      </div>
+
+      <div id="ad-inspector-content" style="max-height: 72vh; overflow-y: auto; padding-right: 6px;">
+        <!-- Injected dynamically by inspectGoogleAd / inspectMetaAd -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Website Profile Modal -->
+  <div class="modal-overlay" id="add-website-modal" style="z-index: 1200;">
+    <div class="modal-card" style="max-width: 580px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 18px;">
+        <div>
+          <h2 style="font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-globe" style="color: var(--accent-cyan);"></i> Add New Website / Brand
+          </h2>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Connect a new chauffeur or business website to all 18 autonomous marketing agents.
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('add-website-modal')">&times;</button>
+      </div>
+
+      <form id="add-website-form" onsubmit="submitAddNewWebsite(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div>
+            <label class="form-label" for="new-site-id">Site Slug / ID *</label>
+            <input type="text" class="form-control" id="new-site-id" placeholder="e.g. sydney-cars" required pattern="[a-z0-9\-]+" title="Lowercase letters, numbers and hyphens only">
+          </div>
+          <div>
+            <label class="form-label" for="new-site-color">Brand Color Theme</label>
+            <select class="form-control" id="new-site-color">
+              <option value="#06b6d4">Cyan (Corporate Luxury)</option>
+              <option value="#a855f7">Purple (Premium Opal)</option>
+              <option value="#10b981">Emerald Green (Executive)</option>
+              <option value="#f59e0b">Amber Gold (VIP Royal)</option>
+              <option value="#ef4444">Crimson Red (Elite Express)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="new-site-name">Brand / Business Name *</label>
+          <input type="text" class="form-control" id="new-site-name" placeholder="e.g. Sydney Executive Chauffeurs" required>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="new-site-domain">Primary Domain URL *</label>
+          <input type="url" class="form-control" id="new-site-domain" placeholder="https://www.sydneyexecutivechauffeurs.com.au" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div>
+            <label class="form-label" for="new-site-location">Operating Location *</label>
+            <input type="text" class="form-control" id="new-site-location" placeholder="e.g. Sydney & Mascot, NSW" required>
+          </div>
+          <div>
+            <label class="form-label" for="new-site-category">Default WP Category</label>
+            <input type="text" class="form-control" id="new-site-category" placeholder="Chauffeur Services">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label class="form-label" for="new-site-niche">Core Services & Value Proposition</label>
+          <input type="text" class="form-control" id="new-site-niche" placeholder="Executive Airport Transfers, Corporate Travel & Private Driver">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('add-website-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="background:linear-gradient(135deg, #06b6d4, #3b82f6);">
+            <i class="fa-solid fa-plus-circle"></i> Register Website & Switch
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v=3.0.0"></script>
+</body>
+</html>
