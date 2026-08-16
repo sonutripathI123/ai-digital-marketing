@@ -19,6 +19,13 @@ from config.settings import ROOT_DIR
 
 logger = get_agent_logger("internal-linking-agent")
 
+DEFAULT_SITE_PILLARS = [
+    {"title": "Airport Transfers", "url": "/services/airport-transfers"},
+    {"title": "Corporate Chauffeur", "url": "/services/corporate-transfers"},
+    {"title": "Wedding Car Hire", "url": "/services/wedding-car-hire"},
+    {"title": "Luxury Fleet", "url": "/fleet"}
+]
+
 def load_real_indexed_pages():
     csv_file = Path(ROOT_DIR) / "blog-agent" / "all_pages_ccm.csv"
     pages = []

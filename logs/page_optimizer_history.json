@@ -1,0 +1,991 @@
+[
+  {
+    "id": "audit-20260816124222",
+    "url": "https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/",
+    "focus_keyword": "chauffeur vs rideshare melbourne",
+    "score": 80,
+    "grade": "B+",
+    "brand": "Corporate Cars Melbourne",
+    "audited_at": "16 Aug 2026 12:42",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/",
+      "focus_keyword": "chauffeur vs rideshare melbourne",
+      "location": "Melbourne, Victoria",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "overall_health_score": 80,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 75,
+        "heading_hierarchy": 85,
+        "helpful_content": 78,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Chauffeur vs Rideshare Airport: Fitzroy Guide",
+        "title_length": 45,
+        "meta_description": "Chauffeur vs rideshare airport transfers from Fitzroy compared, covering cost, comfort and reliability to help you choose the best option.",
+        "current_h1": "Chauffeur vs Rideshare to the Airport: Fitzroy Guide",
+        "total_h2_count": 8,
+        "current_word_count": 824,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": true,
+        "has_canonical": true
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Chauffeur Vs Rideshare Melbourne in Melbourne, Victoria | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Chauffeur Vs Rideshare Melbourne Outperforms Standard Rideshare in Melbourne, Victoria",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, Victoria Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, Victoria chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, Victoria Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [
+        {
+          "level": "MEDIUM",
+          "item": "Word Count Below Top Competitor Average",
+          "fix": "Expand from 824 to ~1,250 words by adding an Executive Chauffeur Comparison section."
+        }
+      ],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Corporate Cars Melbourne\",\n  \"url\": \"https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne & Tullamarine, VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, Victoria\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Chauffeur Vs Rideshare Melbourne in Melbourne, Victoria | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:42:22 UTC"
+    }
+  },
+  {
+    "id": "audit-20260816124220",
+    "url": "https://www.opalchauffeurs.com.au/services/airport-transfers/",
+    "focus_keyword": "airport transfers melbourne",
+    "score": 79,
+    "grade": "B+",
+    "brand": "Opal Chauffeurs",
+    "audited_at": "16 Aug 2026 12:42",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://www.opalchauffeurs.com.au/services/airport-transfers/",
+      "focus_keyword": "airport transfers melbourne",
+      "location": "Melbourne, Victoria",
+      "target_brand": "Opal Chauffeurs",
+      "target_domain": "https://www.opalchauffeurs.com.au",
+      "overall_health_score": 79,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 50,
+        "heading_hierarchy": 85,
+        "helpful_content": 92,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Airport Transfers - Opal Chauffeurs",
+        "title_length": 35,
+        "meta_description": "Premium airport transfer service across Australia. Luxury vehicles, 24/7 availability, flight tracking &amp; professional chauffeurs. Book your ride today!",
+        "current_h1": "Airport Transfer Service",
+        "total_h2_count": 10,
+        "current_word_count": 2030,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": true,
+        "has_canonical": true
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Airport Transfers Melbourne in Melbourne, Victoria | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Airport Transfers Melbourne Outperforms Standard Rideshare in Melbourne, Victoria",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, Victoria Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, Victoria chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://www.opalchauffeurs.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, Victoria Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://www.opalchauffeurs.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://www.opalchauffeurs.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Opal Chauffeurs\",\n  \"url\": \"https://www.opalchauffeurs.com.au/services/airport-transfers/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne Metropolitan & Regional VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, Victoria\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Airport Transfers Melbourne in Melbourne, Victoria | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:42:20 UTC"
+    }
+  },
+  {
+    "id": "audit-20260816124214",
+    "url": "https://corporatecarsmelbourne.com.au/chauffeur-melbourne-airport/",
+    "focus_keyword": "melbourne airport chauffeur",
+    "score": 80,
+    "grade": "B+",
+    "brand": "Corporate Cars Melbourne",
+    "audited_at": "16 Aug 2026 12:42",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/chauffeur-melbourne-airport/",
+      "focus_keyword": "melbourne airport chauffeur",
+      "location": "Melbourne, VIC",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "overall_health_score": 80,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 75,
+        "heading_hierarchy": 85,
+        "helpful_content": 78,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Melbourne Airport Chauffeur | Premium Chauffeur Service Melbourne, VIC | Corporate Cars Melbourne",
+        "title_length": 97,
+        "meta_description": "Experience executive melbourne airport chauffeur in Melbourne, VIC with Corporate Cars Melbourne. Punctual, luxury vehicles and 24/7 flight tracking. Book online now.",
+        "current_h1": "Melbourne Airport Chauffeur in Melbourne, VIC",
+        "total_h2_count": 4,
+        "current_word_count": 840,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": false,
+        "has_canonical": false
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Melbourne Airport Chauffeur in Melbourne, VIC | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Melbourne Airport Chauffeur Outperforms Standard Rideshare in Melbourne, VIC",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, VIC Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, VIC chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, VIC Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [
+        {
+          "level": "MEDIUM",
+          "item": "Word Count Below Top Competitor Average",
+          "fix": "Expand from 840 to ~1,250 words by adding an Executive Chauffeur Comparison section."
+        }
+      ],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Corporate Cars Melbourne\",\n  \"url\": \"https://corporatecarsmelbourne.com.au/chauffeur-melbourne-airport/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne & Tullamarine, VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, VIC\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Melbourne Airport Chauffeur in Melbourne, VIC | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:42:14 UTC"
+    }
+  },
+  {
+    "id": "audit-20260816122602",
+    "url": "https://corporatecarsmelbourne.com.au/",
+    "focus_keyword": "corporate chauffeur melbourne & tullamarine, vic",
+    "score": 84,
+    "grade": "B+",
+    "brand": "Corporate Cars Melbourne",
+    "audited_at": "16 Aug 2026 12:26",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/",
+      "focus_keyword": "corporate chauffeur melbourne & tullamarine, vic",
+      "location": "Melbourne & Tullamarine, VIC",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "overall_health_score": 84,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 75,
+        "heading_hierarchy": 85,
+        "helpful_content": 92,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Corporate Cars Melbourne | #1 Executive Chauffeur Service",
+        "title_length": 57,
+        "meta_description": "Looking for premium corporate cars in Melbourne? We offer executive chauffeur hire, airport transfers &amp; corporate travel with luxury vehicles. Book online 24/7.",
+        "current_h1": "Corporate Chauffeur Services in Melbourne for Every Occasion",
+        "total_h2_count": 9,
+        "current_word_count": 1514,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": true,
+        "has_canonical": true
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Corporate Chauffeur Melbourne & Tullamarine, Vic in Melbourne & Tullamarine, VIC | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Corporate Chauffeur Melbourne & Tullamarine, Vic Outperforms Standard Rideshare in Melbourne & Tullamarine, VIC",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne & Tullamarine, VIC Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne & Tullamarine, VIC chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne & Tullamarine, VIC Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Corporate Cars Melbourne\",\n  \"url\": \"https://corporatecarsmelbourne.com.au/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne & Tullamarine, VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne & Tullamarine, VIC\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Corporate Chauffeur Melbourne & Tullamarine, Vic in Melbourne & Tullamarine, VIC | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:25:55 UTC",
+      "ai_summary": ""
+    }
+  },
+  {
+    "id": "audit-20260816122437",
+    "url": "https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/",
+    "focus_keyword": "chauffeur vs rideshare melbourne",
+    "score": 80,
+    "grade": "B+",
+    "brand": "Corporate Cars Melbourne",
+    "audited_at": "16 Aug 2026 12:24",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/",
+      "focus_keyword": "chauffeur vs rideshare melbourne",
+      "location": "Melbourne, VIC",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "overall_health_score": 80,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 75,
+        "heading_hierarchy": 85,
+        "helpful_content": 78,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Chauffeur vs Rideshare Airport: Fitzroy Guide",
+        "title_length": 45,
+        "meta_description": "Chauffeur vs rideshare airport transfers from Fitzroy compared, covering cost, comfort and reliability to help you choose the best option.",
+        "current_h1": "Chauffeur vs Rideshare to the Airport: Fitzroy Guide",
+        "total_h2_count": 8,
+        "current_word_count": 824,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": true,
+        "has_canonical": true
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Chauffeur Vs Rideshare Melbourne in Melbourne, VIC | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Chauffeur Vs Rideshare Melbourne Outperforms Standard Rideshare in Melbourne, VIC",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, VIC Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, VIC chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, VIC Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [
+        {
+          "level": "MEDIUM",
+          "item": "Word Count Below Top Competitor Average",
+          "fix": "Expand from 824 to ~1,250 words by adding an Executive Chauffeur Comparison section."
+        }
+      ],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Corporate Cars Melbourne\",\n  \"url\": \"https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne & Tullamarine, VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, VIC\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Chauffeur Vs Rideshare Melbourne in Melbourne, VIC | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:24:37 UTC"
+    }
+  },
+  {
+    "id": "audit-20260816121615",
+    "url": "https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/",
+    "focus_keyword": "chauffeur vs rideshare melbourne",
+    "score": 80,
+    "grade": "B+",
+    "brand": "Corporate Cars Melbourne",
+    "audited_at": "16 Aug 2026 12:16",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/",
+      "focus_keyword": "chauffeur vs rideshare melbourne",
+      "location": "Melbourne, Victoria",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "overall_health_score": 80,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 75,
+        "heading_hierarchy": 85,
+        "helpful_content": 78,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Chauffeur vs Rideshare Airport: Fitzroy Guide",
+        "title_length": 45,
+        "meta_description": "Chauffeur vs rideshare airport transfers from Fitzroy compared, covering cost, comfort and reliability to help you choose the best option.",
+        "current_h1": "Chauffeur vs Rideshare to the Airport: Fitzroy Guide",
+        "total_h2_count": 8,
+        "current_word_count": 824,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": true,
+        "has_canonical": true
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Chauffeur Vs Rideshare Melbourne in Melbourne, Victoria | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Chauffeur Vs Rideshare Melbourne Outperforms Standard Rideshare in Melbourne, Victoria",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, Victoria Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, Victoria chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, Victoria Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [
+        {
+          "level": "MEDIUM",
+          "item": "Word Count Below Top Competitor Average",
+          "fix": "Expand from 824 to ~1,250 words by adding an Executive Chauffeur Comparison section."
+        }
+      ],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Corporate Cars Melbourne\",\n  \"url\": \"https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne & Tullamarine, VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, Victoria\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Chauffeur Vs Rideshare Melbourne in Melbourne, Victoria | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:16:15 UTC"
+    }
+  },
+  {
+    "id": "audit-20260816121613",
+    "url": "https://www.opalchauffeurs.com.au/services/airport-transfers/",
+    "focus_keyword": "airport transfers melbourne",
+    "score": 79,
+    "grade": "B+",
+    "brand": "Opal Chauffeurs",
+    "audited_at": "16 Aug 2026 12:16",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://www.opalchauffeurs.com.au/services/airport-transfers/",
+      "focus_keyword": "airport transfers melbourne",
+      "location": "Melbourne, Victoria",
+      "target_brand": "Opal Chauffeurs",
+      "target_domain": "https://www.opalchauffeurs.com.au",
+      "overall_health_score": 79,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 50,
+        "heading_hierarchy": 85,
+        "helpful_content": 92,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Airport Transfers - Opal Chauffeurs",
+        "title_length": 35,
+        "meta_description": "Premium airport transfer service across Australia. Luxury vehicles, 24/7 availability, flight tracking &amp; professional chauffeurs. Book your ride today!",
+        "current_h1": "Airport Transfer Service",
+        "total_h2_count": 10,
+        "current_word_count": 2030,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": true,
+        "has_canonical": true
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Airport Transfers Melbourne in Melbourne, Victoria | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Airport Transfers Melbourne Outperforms Standard Rideshare in Melbourne, Victoria",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, Victoria Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, Victoria chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://www.opalchauffeurs.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, Victoria Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://www.opalchauffeurs.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://www.opalchauffeurs.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Opal Chauffeurs\",\n  \"url\": \"https://www.opalchauffeurs.com.au/services/airport-transfers/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne Metropolitan & Regional VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, Victoria\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Airport Transfers Melbourne in Melbourne, Victoria | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:16:13 UTC"
+    }
+  },
+  {
+    "id": "audit-20260816121607",
+    "url": "https://corporatecarsmelbourne.com.au/chauffeur-melbourne-airport/",
+    "focus_keyword": "melbourne airport chauffeur",
+    "score": 80,
+    "grade": "B+",
+    "brand": "Corporate Cars Melbourne",
+    "audited_at": "16 Aug 2026 12:16",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/chauffeur-melbourne-airport/",
+      "focus_keyword": "melbourne airport chauffeur",
+      "location": "Melbourne, VIC",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "overall_health_score": 80,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 75,
+        "heading_hierarchy": 85,
+        "helpful_content": 78,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Melbourne Airport Chauffeur | Premium Chauffeur Service Melbourne, VIC | Corporate Cars Melbourne",
+        "title_length": 97,
+        "meta_description": "Experience executive melbourne airport chauffeur in Melbourne, VIC with Corporate Cars Melbourne. Punctual, luxury vehicles and 24/7 flight tracking. Book online now.",
+        "current_h1": "Melbourne Airport Chauffeur in Melbourne, VIC",
+        "total_h2_count": 4,
+        "current_word_count": 840,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": false,
+        "has_canonical": false
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Melbourne Airport Chauffeur in Melbourne, VIC | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Melbourne Airport Chauffeur Outperforms Standard Rideshare in Melbourne, VIC",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, VIC Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, VIC chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, VIC Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [
+        {
+          "level": "MEDIUM",
+          "item": "Word Count Below Top Competitor Average",
+          "fix": "Expand from 840 to ~1,250 words by adding an Executive Chauffeur Comparison section."
+        }
+      ],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Corporate Cars Melbourne\",\n  \"url\": \"https://corporatecarsmelbourne.com.au/chauffeur-melbourne-airport/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne & Tullamarine, VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, VIC\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Melbourne Airport Chauffeur in Melbourne, VIC | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:16:07 UTC"
+    }
+  },
+  {
+    "id": "audit-20260816121525",
+    "url": "https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/",
+    "focus_keyword": "chauffeur vs rideshare melbourne",
+    "score": 80,
+    "grade": "B+",
+    "brand": "Corporate Cars Melbourne",
+    "audited_at": "16 Aug 2026 12:15",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/",
+      "focus_keyword": "chauffeur vs rideshare melbourne",
+      "location": "Melbourne, Victoria",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "overall_health_score": 80,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 75,
+        "heading_hierarchy": 85,
+        "helpful_content": 78,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Chauffeur vs Rideshare Airport: Fitzroy Guide",
+        "title_length": 45,
+        "meta_description": "Chauffeur vs rideshare airport transfers from Fitzroy compared, covering cost, comfort and reliability to help you choose the best option.",
+        "current_h1": "Chauffeur vs Rideshare to the Airport: Fitzroy Guide",
+        "total_h2_count": 8,
+        "current_word_count": 824,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": true,
+        "has_canonical": true
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Chauffeur Vs Rideshare Melbourne in Melbourne, Victoria | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Chauffeur Vs Rideshare Melbourne Outperforms Standard Rideshare in Melbourne, Victoria",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, Victoria Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, Victoria chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, Victoria Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [
+        {
+          "level": "MEDIUM",
+          "item": "Word Count Below Top Competitor Average",
+          "fix": "Expand from 824 to ~1,250 words by adding an Executive Chauffeur Comparison section."
+        }
+      ],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Corporate Cars Melbourne\",\n  \"url\": \"https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne & Tullamarine, VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, Victoria\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Chauffeur Vs Rideshare Melbourne in Melbourne, Victoria | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:15:25 UTC"
+    }
+  },
+  {
+    "id": "audit-20260816121522",
+    "url": "https://www.opalchauffeurs.com.au/services/airport-transfers/",
+    "focus_keyword": "airport transfers melbourne",
+    "score": 79,
+    "grade": "B+",
+    "brand": "Opal Chauffeurs",
+    "audited_at": "16 Aug 2026 12:15",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://www.opalchauffeurs.com.au/services/airport-transfers/",
+      "focus_keyword": "airport transfers melbourne",
+      "location": "Melbourne, Victoria",
+      "target_brand": "Opal Chauffeurs",
+      "target_domain": "https://www.opalchauffeurs.com.au",
+      "overall_health_score": 79,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 50,
+        "heading_hierarchy": 85,
+        "helpful_content": 92,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Airport Transfers - Opal Chauffeurs",
+        "title_length": 35,
+        "meta_description": "Premium airport transfer service across Australia. Luxury vehicles, 24/7 availability, flight tracking &amp; professional chauffeurs. Book your ride today!",
+        "current_h1": "Airport Transfer Service",
+        "total_h2_count": 10,
+        "current_word_count": 2030,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": true,
+        "has_canonical": true
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Airport Transfers Melbourne in Melbourne, Victoria | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Airport Transfers Melbourne Outperforms Standard Rideshare in Melbourne, Victoria",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, Victoria Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, Victoria chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://www.opalchauffeurs.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, Victoria Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://www.opalchauffeurs.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://www.opalchauffeurs.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Opal Chauffeurs\",\n  \"url\": \"https://www.opalchauffeurs.com.au/services/airport-transfers/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne Metropolitan & Regional VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, Victoria\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Airport Transfers Melbourne in Melbourne, Victoria | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:15:22 UTC"
+    }
+  },
+  {
+    "id": "audit-20260816121511",
+    "url": "https://corporatecarsmelbourne.com.au/chauffeur-melbourne-airport/",
+    "focus_keyword": "melbourne airport chauffeur",
+    "score": 80,
+    "grade": "B+",
+    "brand": "Corporate Cars Melbourne",
+    "audited_at": "16 Aug 2026 12:15",
+    "data": {
+      "action": "audit_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/chauffeur-melbourne-airport/",
+      "focus_keyword": "melbourne airport chauffeur",
+      "location": "Melbourne, VIC",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "overall_health_score": 80,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 75,
+        "heading_hierarchy": 85,
+        "helpful_content": 78,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Melbourne Airport Chauffeur | Premium Chauffeur Service Melbourne, VIC | Corporate Cars Melbourne",
+        "title_length": 97,
+        "meta_description": "Experience executive melbourne airport chauffeur in Melbourne, VIC with Corporate Cars Melbourne. Punctual, luxury vehicles and 24/7 flight tracking. Book online now.",
+        "current_h1": "Melbourne Airport Chauffeur in Melbourne, VIC",
+        "total_h2_count": 4,
+        "current_word_count": 840,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": false,
+        "has_canonical": false
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Melbourne Airport Chauffeur in Melbourne, VIC | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Melbourne Airport Chauffeur Outperforms Standard Rideshare in Melbourne, VIC",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne, VIC Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne, VIC chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne, VIC Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [
+        {
+          "level": "MEDIUM",
+          "item": "Word Count Below Top Competitor Average",
+          "fix": "Expand from 840 to ~1,250 words by adding an Executive Chauffeur Comparison section."
+        }
+      ],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Corporate Cars Melbourne\",\n  \"url\": \"https://corporatecarsmelbourne.com.au/chauffeur-melbourne-airport/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne & Tullamarine, VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne, VIC\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Melbourne Airport Chauffeur in Melbourne, VIC | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-16 12:15:11 UTC"
+    }
+  }
+]

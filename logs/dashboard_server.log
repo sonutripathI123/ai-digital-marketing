@@ -1,0 +1,118 @@
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-16 16:55:00,002 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-16 16:55:00,010 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-16 16:55:00,010 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-16 16:55:00,010 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+INFO:     Started server process [11756]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:61454 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60217 - "GET /static/styles.css?v=2.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51562 - "GET /static/app.js?v=3.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51562 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51562 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60217 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60217 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51562 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65339 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65339 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57211 - "GET /static/app.js?v=3.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62669 - "GET /api/tasks?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62669 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59129 - "GET /api/schedules HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52018 - "GET /api/ai-usage HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62648 - "GET /?_reload=1786879574865 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62648 - "GET /static/styles.css?v=2.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59351 - "GET /static/app.js?v=3.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59351 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63452 - "GET /static/app.js?v=3.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59351 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62648 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59351 - "GET /api/ai-usage HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62648 - "GET /api/logs?agent_id=central HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62648 - "GET /api/errors HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62648 - "GET /api/audit-trail?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50876 - "GET /api/health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63827 - "GET /api/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54182 - "GET /api/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54182 - "GET /api/overview?site_id=opal HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61803 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51173 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51173 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55612 - "GET /api/agents/seo-keyword-agent/report?site_id=opal HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56429 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53553 - "GET /?_reload=1786881135738 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53464 - "GET /static/app.js?v=3.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53553 - "GET /static/styles.css?v=2.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53553 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53553 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53464 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53553 - "GET /api/agents?site_id=opal HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53464 - "GET /?_reload=1786881139126 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53464 - "GET /static/styles.css?v=2.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53553 - "GET /static/app.js?v=3.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64077 - "GET /static/app.js?v=3.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53553 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53553 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53464 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53464 - "GET /api/agents?site_id=opal HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56462 - "GET /api/ai-usage HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59707 - "GET /api/ai-usage HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59707 - "GET /?_reload=1786881693907 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59707 - "GET /static/styles.css?v=2.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58764 - "GET /static/app.js?v=3.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58764 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54494 - "GET /static/app.js?v=3.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58764 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59707 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58764 - "GET /api/ai-usage HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55565 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55565 - "GET /?_reload=1786882743652 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55565 - "GET /static/styles.css?v=2.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /static/app.js?v=3.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55565 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /static/app.js?v=3.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /?_reload=1786882750594 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /static/styles.css?v=2.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /static/app.js?v=3.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /?_reload=1786882750594 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /static/app.js?v=3.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63751 - "GET /static/styles.css?v=2.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61294 - "GET /static/app.js?v=3.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55781 - "GET /static/app.js?v=3.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51901 - "GET /?_reload=1786882844106 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51901 - "GET /static/styles.css?v=2.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49694 - "GET /static/app.js?v=3.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49694 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49694 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51901 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49694 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59141 - "GET /static/app.js?v=3.1.0 HTTP/1.1" 200 OK

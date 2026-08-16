@@ -85,3 +85,41 @@
 2026-08-16 09:44:40,858 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
 2026-08-16 09:44:40,861 [INFO] [agent:agent.social-analytics-agent] Completed task task-e221d920 successfully.
 2026-08-16 09:44:40,926 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-16 16:45:22,467 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-2aa98675
+2026-08-16 16:45:22,469 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-16 16:45:22,471 [INFO] [agent:agent.social-analytics-agent] Completed task task-2aa98675 successfully.
+2026-08-16 16:45:22,604 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-219605e3
+2026-08-16 16:45:22,606 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-16 16:45:22,606 [INFO] [agent:agent.social-analytics-agent] Completed task task-219605e3 successfully.
+2026-08-16 16:45:22,653 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-16 17:21:33,915 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-131eb5e6
+2026-08-16 17:21:33,918 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-16 17:21:33,919 [INFO] [agent:agent.social-analytics-agent] Completed task task-131eb5e6 successfully.
+2026-08-16 17:21:34,052 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-cff6b7ac
+2026-08-16 17:21:34,052 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-16 17:21:34,053 [INFO] [agent:agent.social-analytics-agent] Completed task task-cff6b7ac successfully.
+2026-08-16 17:21:34,128 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-16 17:29:28,278 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-c2b9b32b
+2026-08-16 17:29:28,283 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-16 17:29:28,283 [INFO] [agent:agent.social-analytics-agent] Completed task task-c2b9b32b successfully.
+2026-08-16 17:35:24,296 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-293741d7
+2026-08-16 17:35:24,297 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-16 17:35:24,297 [INFO] [agent:agent.social-analytics-agent] Completed task task-293741d7 successfully.
+2026-08-16 17:35:24,455 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-e3054b21
+2026-08-16 17:35:24,456 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-16 17:35:24,457 [INFO] [agent:agent.social-analytics-agent] Completed task task-e3054b21 successfully.
+2026-08-16 17:35:24,535 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-16 17:46:17,847 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-9254986a
+2026-08-16 17:46:17,848 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-16 17:46:17,849 [INFO] [agent:agent.social-analytics-agent] Completed task task-9254986a successfully.
+2026-08-16 17:46:18,020 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-859d4783
+2026-08-16 17:46:18,025 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-16 17:46:18,026 [INFO] [agent:agent.social-analytics-agent] Completed task task-859d4783 successfully.
+2026-08-16 17:46:18,106 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-16 18:12:25,011 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-6e6920c9
+2026-08-16 18:12:25,013 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-16 18:12:25,013 [INFO] [agent:agent.social-analytics-agent] Completed task task-6e6920c9 successfully.
+2026-08-16 18:12:25,179 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-1d098f3a
+2026-08-16 18:12:25,180 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-16 18:12:25,180 [INFO] [agent:agent.social-analytics-agent] Completed task task-1d098f3a successfully.
+2026-08-16 18:12:25,237 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'

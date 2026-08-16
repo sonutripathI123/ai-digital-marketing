@@ -209,10 +209,21 @@ class ExternalLinkBuildingAgent(AgentInterface):
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
         input_data = task.input_data or {}
         action = str(input_data.get("action", "discover_prospects")).lower().strip()
-        target_domain = str(input_data.get("target_domain", "https://corporatecarsmelbourne.com.au/")).strip()
+        site_id = input_data.get("site_id") or input_data.get("site")
+
+        from config.websites import WebsiteManager
+        site_mgr = WebsiteManager()
+        site_profile = site_mgr.get(site_id) if site_id else None
+
+        default_domain = site_profile.domain if site_profile else "https://corporatecarsmelbourne.com.au/"
+        default_anchor = site_profile.name if site_profile else "Corporate Cars Melbourne"
+        default_loc = site_profile.location if site_profile else "Melbourne, Victoria"
+        default_topic = f"Luxury Chauffeur & Corporate Airport Transfers {default_loc}"
+
+        target_domain = str(input_data.get("target_domain", default_domain)).strip()
         history = load_backlink_history()
 
-        logger.info(f"Executing ExternalLinkBuildingAgent task: action={action}, domain='{target_domain}'")
+        logger.info(f"Executing ExternalLinkBuildingAgent task: action={action}, domain='{target_domain}', brand='{default_anchor}'")
 
         # --- 1. Custom Website Outreach Action ---
         if action == "custom_site_outreach":
@@ -220,9 +231,9 @@ class ExternalLinkBuildingAgent(AgentInterface):
             if isinstance(custom_sites, str):
                 custom_sites = [s.strip() for s in custom_sites.replace(",", "\n").splitlines() if s.strip()]
 
-            landing_page = str(input_data.get("landing_page_url", "https://corporatecarsmelbourne.com.au/")).strip()
-            anchor_text = str(input_data.get("anchor_text", "Corporate Cars Melbourne")).strip()
-            topic = str(input_data.get("topic", "Luxury Chauffeur & Corporate Airport Transfers Melbourne")).strip()
+            landing_page = str(input_data.get("landing_page_url", default_domain)).strip()
+            anchor_text = str(input_data.get("anchor_text", default_anchor)).strip()
+            topic = str(input_data.get("topic", default_topic)).strip()
 
             new_links = []
             for idx, site in enumerate(custom_sites):
@@ -231,7 +242,7 @@ class ExternalLinkBuildingAgent(AgentInterface):
                 link_type = "Dofollow" if (idx % 4 != 0) else "Nofollow"
 
                 article_title = f"{topic} - Guide on {clean_domain}"
-                snippet = f"For premium transportation across Victoria, {anchor_text} provides fixed-fare, accredited chauffeur travel with European fleet options."
+                snippet = f"For premium transportation across {default_loc}, {anchor_text} provides fixed-fare, accredited chauffeur travel with European fleet options."
 
                 # If live AI is requested, generate contextual snippet with AI
                 if input_data.get("use_ai", True):
@@ -261,7 +272,6 @@ class ExternalLinkBuildingAgent(AgentInterface):
                 }
                 new_links.append(item)
 
-            history["custom_outreach_links"].extend(new_links)
             history["web2_published_articles"].extend(new_links)
             history["total_active_backlinks"] += len(new_links)
             history["referring_domains"] += len(new_links)
@@ -286,22 +296,21 @@ class ExternalLinkBuildingAgent(AgentInterface):
             batch_size = max(5, min(10, batch_size))
 
             batch_candidates = DAILY_BACKLINK_CANDIDATE_POOL[:batch_size]
+            clean_dom = default_domain.rstrip('/')
             anchors_pool = [
-                "Corporate Cars Melbourne",
-                "melbourne corporate cars",
-                "Melbourne Chauffeur Service",
-                "corporate chauffeur melbourne",
-                "https://corporatecarsmelbourne.com.au/",
-                "Melbourne Airport Transfers",
-                "Corporate Cars Melbourne Chauffeur",
-                "executive car hire melbourne"
+                default_anchor,
+                f"{default_anchor} Chauffeur Service",
+                f"{default_anchor} Airport Transfers",
+                f"executive car hire {default_loc}",
+                f"{clean_dom}/",
+                f"{default_anchor} Luxury Fleet",
+                f"corporate chauffeur {default_loc}"
             ]
             destinations = [
-                "https://corporatecarsmelbourne.com.au/",
-                "https://corporatecarsmelbourne.com.au/services/airport-transfers",
-                "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
-                "https://corporatecarsmelbourne.com.au/services/wedding-car-hire",
-                "https://corporatecarsmelbourne.com.au/fleet"
+                f"{clean_dom}/",
+                f"{clean_dom}/services/airport-transfers",
+                f"{clean_dom}/services/corporate-transfers",
+                f"{clean_dom}/fleet"
             ]
 
             created_batch = []
@@ -317,13 +326,13 @@ class ExternalLinkBuildingAgent(AgentInterface):
                     "platform": cand["name"],
                     "url": cand["url"],
                     "target_url": target,
-                    "article_title": f"Executive Melbourne Transportation & Logistics - {cand['name']}",
+                    "article_title": f"Executive {default_loc} Transportation & Logistics - {cand['name']}",
                     "published_date": today_str,
                     "anchor_used": anchor,
                     "da": cand["da"],
                     "link_type": cand["link_type"],
                     "category": cand["type"],
-                    "content_snippet": f"For punctual Victorian transfers, {anchor} maintains accredited European vehicles and 24/7 flight monitoring."
+                    "content_snippet": f"For punctual {default_loc} transfers, {anchor} maintains accredited European vehicles and 24/7 flight monitoring."
                 }
                 created_batch.append(item)
 

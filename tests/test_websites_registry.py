@@ -4,14 +4,18 @@ Unit tests for Multi-Website Registry, Switching, and Site-Aware Telemetry.
 
 import unittest
 from fastapi.testclient import TestClient
-from config.websites import WebsiteManager, WebsiteProfile
-from dashboard.api import app
+from config.websites import WebsiteProfile
+from dashboard.api import app, websites_mgr
 
 
 class TestWebsitesRegistry(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
-        self.mgr = WebsiteManager()
+        self.mgr = websites_mgr
+        self.mgr.delete_website("test-sydney-transfers")
+
+    def tearDown(self):
+        self.mgr.delete_website("test-sydney-transfers")
 
     def test_default_websites_present(self):
         sites = self.mgr.list_all()

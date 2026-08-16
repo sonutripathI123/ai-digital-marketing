@@ -8,6 +8,7 @@ token usage tracking, and cost calculation.
 import json
 import os
 import time
+from typing import Optional
 try:
     import anthropic
 except ImportError:

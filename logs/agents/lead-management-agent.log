@@ -87,3 +87,46 @@
 2026-08-16 09:44:38,835 [INFO] [agent:agent.lead-management-agent] Completed task task-4c8e7e91 successfully.
 2026-08-16 09:44:38,885 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=draft_followup, lead_id='lead-1001', service='Corporate Chauffeur'
 2026-08-16 09:44:38,899 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 16:45:19,863 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-30e69c63
+2026-08-16 16:45:19,867 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 16:45:19,867 [INFO] [agent:agent.lead-management-agent] Completed task task-30e69c63 successfully.
+2026-08-16 16:45:20,006 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-86d2b2c3
+2026-08-16 16:45:20,008 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 16:45:20,008 [INFO] [agent:agent.lead-management-agent] Completed task task-86d2b2c3 successfully.
+2026-08-16 16:45:20,082 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=draft_followup, lead_id='lead-1001', service='Corporate Chauffeur'
+2026-08-16 16:45:20,177 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:21:31,198 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-8ea6581a
+2026-08-16 17:21:31,199 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:21:31,199 [INFO] [agent:agent.lead-management-agent] Completed task task-8ea6581a successfully.
+2026-08-16 17:21:31,333 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-8d1adbb3
+2026-08-16 17:21:31,340 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:21:31,340 [INFO] [agent:agent.lead-management-agent] Completed task task-8d1adbb3 successfully.
+2026-08-16 17:21:31,482 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=draft_followup, lead_id='lead-1001', service='Corporate Chauffeur'
+2026-08-16 17:21:31,504 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:29:28,425 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-edb0f612
+2026-08-16 17:29:28,432 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:29:28,432 [INFO] [agent:agent.lead-management-agent] Completed task task-edb0f612 successfully.
+2026-08-16 17:35:21,262 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-8cc145de
+2026-08-16 17:35:21,262 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:35:21,262 [INFO] [agent:agent.lead-management-agent] Completed task task-8cc145de successfully.
+2026-08-16 17:35:21,428 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-fb8dd958
+2026-08-16 17:35:21,430 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:35:21,430 [INFO] [agent:agent.lead-management-agent] Completed task task-fb8dd958 successfully.
+2026-08-16 17:35:21,507 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=draft_followup, lead_id='lead-1001', service='Corporate Chauffeur'
+2026-08-16 17:35:21,530 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:46:04,657 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-aba45ce7
+2026-08-16 17:46:04,658 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:46:04,659 [INFO] [agent:agent.lead-management-agent] Completed task task-aba45ce7 successfully.
+2026-08-16 17:46:04,829 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-8b42d254
+2026-08-16 17:46:04,832 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 17:46:04,832 [INFO] [agent:agent.lead-management-agent] Completed task task-8b42d254 successfully.
+2026-08-16 17:46:04,920 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=draft_followup, lead_id='lead-1001', service='Corporate Chauffeur'
+2026-08-16 17:46:04,980 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 18:12:11,871 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-26da562c
+2026-08-16 18:12:11,872 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 18:12:11,872 [INFO] [agent:agent.lead-management-agent] Completed task task-26da562c successfully.
+2026-08-16 18:12:12,033 [INFO] [agent:agent.lead-management-agent] Starting execution for task task-203f0c61
+2026-08-16 18:12:12,038 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-16 18:12:12,038 [INFO] [agent:agent.lead-management-agent] Completed task task-203f0c61 successfully.
+2026-08-16 18:12:12,098 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=draft_followup, lead_id='lead-1001', service='Corporate Chauffeur'
+2026-08-16 18:12:12,114 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'

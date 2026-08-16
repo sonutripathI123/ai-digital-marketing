@@ -73,18 +73,23 @@ function initNavigation() {
 }
 
 function getTitleForView(view) {
+  const activeSite = allWebsitesList.find(s => s.site_id === currentSiteId);
+  const siteSuffix = currentSiteId === 'all'
+    ? ' (Portfolio View)'
+    : (activeSite ? ` — ${activeSite.name}` : '');
+
   const titles = {
-    'overview': 'System Overview & 3D Telemetry',
-    'agents': '15-Agent Operating System Registry',
-    'tasks': 'Task Queue & Execution Pipeline',
-    'approvals': 'Human Approval Queue',
-    'scheduler': 'Automated Cron Job Scheduler',
-    'ai-usage': 'AI Model Router & Cost Analytics',
-    'logs': 'Structured Execution Logs',
-    'errors': 'Error Tracing & Recovery',
-    'audit': 'Immutable System Audit Trail',
-    'health': 'System Health & Diagnostics',
-    'settings': 'Command Center Configuration'
+    'overview': `System Overview & 3D Telemetry${siteSuffix}`,
+    'agents': `18-Agent Operating System Registry${siteSuffix}`,
+    'tasks': `Task Queue & Execution Pipeline${siteSuffix}`,
+    'approvals': `Human Approval Queue${siteSuffix}`,
+    'scheduler': `Automated Cron Job Scheduler${siteSuffix}`,
+    'ai-usage': `AI Model Router & Cost Analytics${siteSuffix}`,
+    'logs': `Structured Execution Logs${siteSuffix}`,
+    'errors': `Error Tracing & Recovery${siteSuffix}`,
+    'audit': `Immutable System Audit Trail${siteSuffix}`,
+    'health': `System Health & Diagnostics${siteSuffix}`,
+    'settings': `Command Center Configuration${siteSuffix}`
   };
   return titles[view] || 'Dashboard';
 }
@@ -230,6 +235,13 @@ function updateWebsiteHeaderUI() {
   const nameEl = document.getElementById('active-site-name');
   const dotEl = document.getElementById('active-site-dot');
   const heroDesc = document.getElementById('cyber-hero-desc');
+  const pageTitleEl = document.getElementById('page-title');
+  const sidebarBrandTitle = document.querySelector('.brand-title');
+  const heroH3 = document.querySelector('.cyber-core-info h3');
+
+  if (pageTitleEl) {
+    pageTitleEl.textContent = getTitleForView(activeView);
+  }
 
   if (currentSiteId === 'all') {
     if (nameEl) nameEl.textContent = 'All Websites (Portfolio)';
@@ -237,6 +249,8 @@ function updateWebsiteHeaderUI() {
       dotEl.style.background = '#10b981';
       dotEl.style.boxShadow = '0 0 8px #10b981';
     }
+    if (sidebarBrandTitle) sidebarBrandTitle.textContent = 'Portfolio OS';
+    if (heroH3) heroH3.innerHTML = '<i class="fa-solid fa-car" style="color: var(--accent-cyan);"></i> Master Orchestrator — Multi-Brand AI Telemetry';
     if (heroDesc) heroDesc.textContent = 'Multi-Tenant Portfolio Aggregator controlling SEO, Google Ads, Meta Ads, Social Media, and Leads across all connected websites.';
   } else {
     const activeSite = allWebsitesList.find(s => s.site_id === currentSiteId) || allWebsitesList[0];
@@ -246,7 +260,19 @@ function updateWebsiteHeaderUI() {
         dotEl.style.background = activeSite.color_accent || '#06b6d4';
         dotEl.style.boxShadow = `0 0 8px ${activeSite.color_accent || '#06b6d4'}`;
       }
+      if (sidebarBrandTitle) sidebarBrandTitle.textContent = activeSite.name.length > 18 ? activeSite.name.substring(0, 16) + '..' : activeSite.name;
+      if (heroH3) heroH3.innerHTML = `<i class="fa-solid fa-car" style="color: ${activeSite.color_accent || 'var(--accent-cyan)'};"></i> Master Orchestrator — ${activeSite.name} AI Telemetry`;
       if (heroDesc) heroDesc.textContent = `Autonomous 18-Agent Marketing Operating System controlling SEO, Ads, Social Media, and Leads for ${activeSite.name} (${activeSite.location}).`;
+
+      // Update Modal default target URLs & Anchor text
+      const outreachLanding = document.getElementById('outreach-landing-page');
+      const outreachAnchor = document.getElementById('outreach-anchor-text');
+      if (outreachLanding) {
+        outreachLanding.value = activeSite.domain.endsWith('/') ? activeSite.domain : activeSite.domain + '/';
+      }
+      if (outreachAnchor) {
+        outreachAnchor.value = activeSite.name;
+      }
     }
   }
 }
@@ -475,6 +501,7 @@ function loadCurrentView(view) {
     case 'errors': loadErrors(); break;
     case 'audit': loadAuditTrail(); break;
     case 'health': loadHealth(); break;
+    case 'page-doctor': loadPageDoctorView(); break;
     case 'settings': loadSettings(); break;
   }
 }
@@ -485,7 +512,7 @@ async function loadOverview() {
   try {
     const [overviewRes, agentsRes, auditRes] = await Promise.all([
       fetch(`/api/overview?site_id=${currentSiteId}`),
-      fetch('/api/agents'),
+      fetch(`/api/agents?site_id=${encodeURIComponent(currentSiteId)}`),
       fetch('/api/audit-trail?limit=10')
     ]);
 
@@ -668,7 +695,7 @@ function initDashboardCharts(agentsList) {
 
 async function loadAgents() {
   try {
-    const res = await fetch('/api/agents');
+    const res = await fetch(`/api/agents?site_id=${encodeURIComponent(currentSiteId)}`);
     const data = await res.json();
     const grid = document.getElementById('agents-grid');
 
@@ -714,6 +741,11 @@ async function loadAgents() {
                 <i class="fa-solid fa-crosshairs"></i> Spy Ads
               </button>
             ` : ''}
+            ${a.agent_id === 'page-optimizer-agent' ? `
+              <button class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, #10b981, #059669); font-weight:700; border:none; box-shadow:0 0 12px rgba(16,185,129,0.5); color:#fff;" onclick="openPageOptimizerModal()" title="Audit any page URL with Google Algorithm">
+                <i class="fa-solid fa-stethoscope"></i> Audit Page
+              </button>
+            ` : ''}
             <button class="btn btn-secondary btn-sm" style="color:var(--accent-cyan); border-color:rgba(6,182,212,0.4);" onclick="viewAgentReport('${a.agent_id}')">
               <i class="fa-solid fa-chart-line"></i> Report
             </button>
@@ -751,6 +783,8 @@ function getIconForAgent(agentId) {
     'seo-keyword-agent': 'fa-solid fa-key',
     'competitor-analysis-agent': 'fa-solid fa-user-secret',
     'competitor-ad-spy-agent': 'fa-solid fa-crosshairs',
+    'page-optimizer-agent': 'fa-solid fa-stethoscope',
+    'external-link-building-agent': 'fa-solid fa-link-slash',
     'seo-content-brief-agent': 'fa-solid fa-file-contract',
     'internal-linking-agent': 'fa-solid fa-link',
     'seo-audit-agent': 'fa-solid fa-magnifying-glass-chart',
@@ -775,12 +809,13 @@ async function runAgentTask(agentId, action) {
       body: JSON.stringify({
         agent_id: agentId,
         task_type: action,
-        input_data: { action: action },
+        input_data: { action: action, site_id: currentSiteId, site: currentSiteId },
+        site_id: currentSiteId,
         requires_approval: false
       })
     });
     const data = await res.json();
-    alert(`Task created for ${agentId} (${data.task.task_id}).`);
+    alert(`Task created for ${agentId} on website [${currentSiteId}] (${data.task.task_id}).`);
     loadCurrentView(activeView);
   } catch (err) {
     alert(`Failed to create task: ${err}`);
@@ -808,7 +843,7 @@ async function viewAgentReport(agentId) {
     document.getElementById('agent-report-title').innerHTML = `
       <i class="${getIconForAgent(agentId)}" style="color:var(--accent-cyan);"></i> ${data.name} Performance Report
     `;
-    document.getElementById('agent-report-subtitle').textContent = `Category: ${data.category} | Total Completed Tasks: ${data.completed_tasks_count}`;
+    document.getElementById('agent-report-subtitle').textContent = `Active Website: ${data.site_name} (${data.site_domain}) | Category: ${data.category} | Total Completed Tasks: ${data.completed_tasks_count}`;
 
     const container = document.getElementById('agent-report-content');
 
@@ -829,16 +864,16 @@ async function viewAgentReport(agentId) {
 
         <div style="background:linear-gradient(135deg, rgba(16,185,129,0.15), rgba(6,182,212,0.15)); border:1px solid rgba(16,185,129,0.4); padding:18px; border-radius:14px; margin-bottom:20px;">
           <div style="font-size:12px; font-weight:800; color:#10b581; text-transform:uppercase; letter-spacing:0.5px; display:flex; align-items:center; gap:8px;">
-            <i class="fa-solid fa-calendar-day"></i> Next Scheduled Blog Post (Scheduled for Tomorrow 09:00 AM Melbourne Time)
+            <i class="fa-solid fa-calendar-day"></i> Next Scheduled Blog Post (Scheduled for Tomorrow 09:00 AM Local Time)
           </div>
           <div style="font-size:16px; font-weight:800; color:#fff; margin-top:8px;">"${nextP.title}"</div>
           <div style="display:flex; gap:16px; font-size:12px; color:var(--text-secondary); margin-top:6px;">
             <span><strong>Target Keyword:</strong> <code style="color:var(--accent-cyan);">${nextP.keyword}</code></span>
-            <span><strong>Suburb:</strong> ${nextP.suburb}</span>
+            <span><strong>Suburb / Area:</strong> ${nextP.suburb}</span>
           </div>
         </div>
 
-        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:12px;">Date-Wise Published Blog History:</h3>
+        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:12px;">Date-Wise Published Blog History for ${data.site_name}:</h3>
         <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; margin-bottom:20px;">
           <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
             <thead>
@@ -867,7 +902,7 @@ async function viewAgentReport(agentId) {
         </div>
 
         <div style="background:rgba(30,41,59,0.5); border:1px solid var(--glass-border); padding:16px; border-radius:12px;">
-          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">Strategic Blog Recommendations:</div>
+          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">Strategic Blog Recommendations for ${data.site_name}:</div>
           ${(bm.recommendations || []).map(r => `<div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;">-> ${r}</div>`).join('')}
         </div>
       `;
@@ -892,7 +927,7 @@ async function viewAgentReport(agentId) {
           </div>
         </div>
 
-        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-square-check" style="color:var(--status-success);"></i> Date-Wise Published Social Posts History:</h3>
+        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-square-check" style="color:var(--status-success);"></i> Date-Wise Published Social Posts History for ${data.site_name}:</h3>
         <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; margin-bottom:20px;">
           <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
             <thead>
@@ -918,7 +953,7 @@ async function viewAgentReport(agentId) {
           </table>
         </div>
 
-        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-clock"></i> Next Scheduled Social Posts (Melbourne Time):</h3>
+        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-clock"></i> Next Scheduled Social Posts (${data.site_name}):</h3>
         <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">
           ${(sm.next_scheduled_posts || []).map(sp => `
             <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); padding:12px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
@@ -932,7 +967,7 @@ async function viewAgentReport(agentId) {
         </div>
 
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
-          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;"><i class="fa-solid fa-lightbulb"></i> Weekly AI Social Recommendations:</div>
+          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;"><i class="fa-solid fa-lightbulb"></i> Weekly AI Social Recommendations for ${data.site_name}:</div>
           ${(sm.weekly_recommendations || []).map(r => `<div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;">-> ${r}</div>`).join('')}
         </div>
       `;
@@ -943,7 +978,7 @@ async function viewAgentReport(agentId) {
         <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(6,182,212,0.06); border:1px solid rgba(6,182,212,0.25); padding:14px 18px; border-radius:14px; margin-bottom:20px;">
           <div>
             <div style="font-size:13px; font-weight:800; color:var(--accent-cyan);"><i class="fa-solid fa-network-wired"></i> Autonomous External Backlink & Outreach Engine</div>
-            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Target: <strong>https://corporatecarsmelbourne.com.au/</strong> (Melbourne, Australia)</div>
+            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Target: <strong>${data.site_domain}</strong> (${data.site_name})</div>
           </div>
           <div style="display:flex; gap:10px;">
             <button class="btn btn-primary btn-sm" onclick="openCustomOutreachModal()" style="font-size:12px; padding:8px 16px; background:linear-gradient(135deg, var(--accent-cyan), #0284c7);">
@@ -974,7 +1009,7 @@ async function viewAgentReport(agentId) {
           </div>
         </div>
 
-        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-building-columns" style="color:var(--accent-cyan);"></i> Australian Local Directory Citations (NAP Backlinks):</h3>
+        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-building-columns" style="color:var(--accent-cyan);"></i> Directory Citations (NAP Backlinks for ${data.site_name}):</h3>
         <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; margin-bottom:20px;">
           <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
             <thead>
@@ -1000,10 +1035,10 @@ async function viewAgentReport(agentId) {
                   </td>
                   <td style="padding:10px 14px;">
                     <a href="${c.target_url}" target="_blank" style="color:var(--accent-purple); text-decoration:none; font-family:var(--font-mono); font-size:11px;">
-                      <i class="fa-solid fa-link"></i> ${c.target_url.replace('https://corporatecarsmelbourne.com.au', '') || '/'}
+                      <i class="fa-solid fa-link"></i> ${c.target_url.replace(data.site_domain, '') || '/'}
                     </a>
                   </td>
-                  <td style="padding:10px 14px; font-weight:600; color:#38bdf8;">${c.anchor_used || 'Corporate Cars Melbourne'}</td>
+                  <td style="padding:10px 14px; font-weight:600; color:#38bdf8;">${c.anchor_used || data.site_name}</td>
                   <td style="padding:10px 14px;"><span class="badge badge-success">${c.status}</span></td>
                   <td style="padding:10px 14px; font-weight:700; color:var(--accent-purple);">${c.link_type}</td>
                 </tr>
@@ -1042,10 +1077,10 @@ async function viewAgentReport(agentId) {
                   </td>
                   <td style="padding:10px 14px;">
                     <a href="${w.target_url}" target="_blank" style="color:var(--accent-purple); text-decoration:none; font-family:var(--font-mono); font-size:11px;">
-                      <i class="fa-solid fa-link"></i> ${w.target_url.replace('https://corporatecarsmelbourne.com.au', '') || '/'}
+                      <i class="fa-solid fa-link"></i> ${w.target_url.replace(data.site_domain, '') || '/'}
                     </a>
                   </td>
-                  <td style="padding:10px 14px; color:#38bdf8; font-family:var(--font-mono); font-weight:700;">${w.anchor_used}</td>
+                  <td style="padding:10px 14px; color:#38bdf8; font-family:var(--font-mono); font-weight:700;">${w.anchor_used || data.site_name}</td>
                   <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--accent-cyan);">DA ${w.da}</td>
                   <td style="padding:10px 14px; font-weight:700; color:var(--accent-purple);">${w.link_type}</td>
                   <td style="padding:10px 14px; font-size:11px; font-family:var(--font-mono);">${w.published_date}</td>
@@ -1056,20 +1091,78 @@ async function viewAgentReport(agentId) {
         </div>
 
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
-          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;"><i class="fa-solid fa-lightbulb"></i> Off-Page Backlink Strategy Recommendations:</div>
+          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;"><i class="fa-solid fa-lightbulb"></i> Off-Page Backlink Strategy Recommendations for ${data.site_name}:</div>
           ${(elm.recommendations || []).map(r => `<div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;">-> ${r}</div>`).join('')}
+        </div>
+      `;
+    } else if (agentId === 'page-optimizer-agent' && data.page_optimizer_metrics) {
+      const pom = data.page_optimizer_metrics;
+      const latest = pom.latest_audit ? pom.latest_audit.data : null;
+      container.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); padding:16px 20px; border-radius:14px; margin-bottom:20px;">
+          <div>
+            <div style="font-size:14px; font-weight:800; color:#10b981; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-stethoscope"></i> Google Algorithm Page SEO Doctor
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:3px;">
+              Auditing against Google E-E-A-T, Helpful Content (HCU), Heading Structure, and Schema.org.
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openPageOptimizerModal()" style="background:linear-gradient(135deg, #10b981, #059669); font-size:12px; font-weight:700; padding:8px 18px; border:none;">
+            <i class="fa-solid fa-plus-circle"></i> + Audit New Webpage
+          </button>
+        </div>
+
+        ${latest ? `
+          <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:18px; border-radius:14px; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <div>
+                <span class="badge badge-info" style="font-size:11px;">LATEST AUDIT REPORT</span>
+                <h3 style="font-size:14px; font-weight:800; color:#fff; margin-top:6px; font-family:var(--font-mono);">${latest.audited_url}</h3>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:28px; font-weight:800; color:#10b981; font-family:var(--font-mono);">${latest.overall_health_score} / 100</div>
+                <span class="badge badge-success" style="font-weight:800;">Grade: ${latest.grade}</span>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:14px;">
+              <div style="background:rgba(30,41,59,0.6); padding:12px; border-radius:10px;">
+                <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Focus Keyword</div>
+                <div style="font-size:13px; font-weight:700; color:var(--accent-cyan); margin-top:2px;">${latest.focus_keyword}</div>
+              </div>
+              <div style="background:rgba(30,41,59,0.6); padding:12px; border-radius:10px;">
+                <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Word Count</div>
+                <div style="font-size:13px; font-weight:700; color:#fff; margin-top:2px;">${latest.on_page_metrics.current_word_count} words <span style="font-size:10px; color:var(--text-muted);">(Rec: ${latest.on_page_metrics.recommended_word_count})</span></div>
+              </div>
+              <div style="background:rgba(30,41,59,0.6); padding:12px; border-radius:10px;">
+                <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Schema Status</div>
+                <div style="font-size:13px; font-weight:700; color:${latest.on_page_metrics.has_schema_markup ? '#10b981' : '#f59e0b'}; margin-top:2px;">${latest.on_page_metrics.has_schema_markup ? 'Installed' : 'Needs JSON-LD Markup'}</div>
+              </div>
+            </div>
+
+            <div style="background:rgba(30,41,59,0.4); padding:14px; border-radius:10px; border-left:3px solid #10b981;">
+              <div style="font-size:11.5px; font-weight:800; color:#10b981; text-transform:uppercase; margin-bottom:6px;">Executive Google Action Checklist:</div>
+              ${(latest.executive_action_checklist || []).map(item => `<div style="font-size:12px; color:var(--text-secondary); margin-bottom:3px;">${item}</div>`).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
+          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">Standard Google Algorithm Compliance Tips for ${data.site_name}:</div>
+          ${(pom.recommendations || []).map(r => `<div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;">-> ${r}</div>`).join('')}
         </div>
       `;
     } else {
       const dm = data.domain_metrics || {};
       container.innerHTML = `
         <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); padding:18px; border-radius:14px; margin-bottom:18px;">
-          <div style="font-size:12px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:8px;">Recent Execution Outputs:</div>
+          <div style="font-size:12px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:8px;">Recent Execution Outputs (${data.site_name}):</div>
           <pre style="background:#030712; padding:14px; border-radius:10px; color:#38bdf8; font-family:var(--font-mono); font-size:12px; max-height:280px; overflow-y:auto; white-space:pre-wrap; word-break:break-word;">${JSON.stringify(dm.latest_findings || {}, null, 2)}</pre>
         </div>
 
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
-          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">Domain Recommendations:</div>
+          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">Domain Recommendations for ${data.site_name}:</div>
           ${(dm.recommendations || []).map(r => `<div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;">-> ${r}</div>`).join('')}
         </div>
       `;
@@ -1280,6 +1373,8 @@ async function loadScheduler() {
 
 async function loadAIUsage() {
   try {
+    await loadAIProviders();
+
     const res = await fetch('/api/ai-usage');
     const data = await res.json();
 
@@ -1385,7 +1480,7 @@ async function loadAuditTrail() {
         <td><span class="action-chip">${e.agent_id}</span></td>
         <td><strong>${e.action}</strong></td>
         <td>${e.user_id}</td>
-        <td style="font-size:11px; font-family:var(--font-mono);">${JSON.stringify(e.details)}</td>
+        <td style="font-family:var(--font-mono); font-size:11px;">${JSON.stringify(e.details)}</td>
       </tr>
     `).join('');
   } catch (err) {
@@ -1401,7 +1496,7 @@ async function loadHealth() {
     const metricsHtml = `
       <div class="metric-card">
         <div class="metric-card-header">
-          <div class="metric-label">Overall System Health</div>
+          <div class="metric-label">System Health Status</div>
           <div class="metric-icon-box" style="background:rgba(16, 185, 129, 0.2); color:var(--status-success);">
             <i class="fa-solid fa-heart-pulse"></i>
           </div>
@@ -1442,14 +1537,39 @@ async function loadSettings() {
     const data = await res.json();
     const tbody = document.getElementById('settings-table');
 
-    tbody.innerHTML = data.settings.map(s => `
-      <tr>
-        <td><strong>${s.feature}</strong></td>
-        <td><span class="badge ${s.status === 'CONFIGURED' ? 'badge-success' : 'badge-warning'}">${s.status}</span></td>
-        <td style="font-family:var(--font-mono); font-size:12px;">${s.mode}</td>
-        <td><span class="badge badge-info">${s.flag}</span></td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = data.settings.map(s => {
+      const isAIProvider = s.feature.includes('API') || s.feature.includes('Claude') || s.feature.includes('Gemini') || s.feature.includes('OpenAI') || s.feature.includes('DeepSeek') || s.feature.includes('Groq') || s.feature.includes('Custom');
+      let provId = 'anthropic';
+      if (s.feature.includes('Gemini')) provId = 'gemini';
+      else if (s.feature.includes('OpenAI')) provId = 'openai';
+      else if (s.feature.includes('DeepSeek')) provId = 'deepseek';
+      else if (s.feature.includes('Groq')) provId = 'groq';
+      else if (s.feature.includes('Custom')) provId = 'custom';
+
+      return `
+        <tr>
+          <td>
+            <strong>${s.feature}</strong>
+          </td>
+          <td>
+            <span class="badge ${s.status === 'ACTIVE_PRIMARY' ? 'badge-success' : (s.status === 'CONFIGURED' ? 'badge-info' : 'badge-warning')}" style="${s.status === 'ACTIVE_PRIMARY' ? 'background:linear-gradient(135deg,#10b981,#059669); color:#fff; font-weight:800;' : ''}">
+              ${s.status}
+            </span>
+          </td>
+          <td style="font-family:var(--font-mono); font-size:12px;">${s.mode}</td>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px; justify-content:space-between;">
+              <span class="badge badge-info">${s.flag}</span>
+              ${isAIProvider ? `
+                <button class="btn btn-secondary btn-sm" onclick="openConfigureAIModal('${provId}')" style="font-size:11px; padding:3px 10px; color:var(--accent-purple); border-color:rgba(168,85,247,0.4);">
+                  <i class="fa-solid fa-key"></i> Key Vault
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
   } catch (err) {
     console.error('Failed to load settings:', err);
   }
@@ -1504,9 +1624,14 @@ async function submitCustomOutreach(e) {
     return;
   }
   const sites = sitesInput.split(/[\n,]+/).map(s => s.trim()).filter(s => s.length > 0);
-  const landingPage = document.getElementById('outreach-landing-page').value.trim() || 'https://corporatecarsmelbourne.com.au/';
-  const anchorText = document.getElementById('outreach-anchor-text').value.trim() || 'Corporate Cars Melbourne';
-  const topic = document.getElementById('outreach-topic').value.trim() || 'Luxury Chauffeur & Executive Airport Transfers Melbourne';
+  const activeSite = allWebsitesList.find(s => s.site_id === currentSiteId);
+  const defaultDomain = activeSite ? (activeSite.domain.endsWith('/') ? activeSite.domain : activeSite.domain + '/') : 'https://corporatecarsmelbourne.com.au/';
+  const defaultAnchor = activeSite ? activeSite.name : 'Corporate Cars Melbourne';
+  const defaultTopic = activeSite ? `Luxury Chauffeur & Executive Airport Transfers ${activeSite.location}` : 'Luxury Chauffeur & Executive Airport Transfers Melbourne';
+
+  const landingPage = document.getElementById('outreach-landing-page').value.trim() || defaultDomain;
+  const anchorText = document.getElementById('outreach-anchor-text').value.trim() || defaultAnchor;
+  const topic = document.getElementById('outreach-topic').value.trim() || defaultTopic;
   const useAi = document.getElementById('outreach-use-ai') ? document.getElementById('outreach-use-ai').checked : true;
 
   const btn = document.getElementById('btn-submit-outreach');
@@ -1597,7 +1722,8 @@ async function submitCompetitorAdSpy(e) {
       body: JSON.stringify({
         competitor_url: url,
         location: location,
-        use_ai: true
+        use_ai: true,
+        site_id: currentSiteId
       })
     });
     const data = await res.json();
@@ -1630,6 +1756,8 @@ function renderCompetitorAdSpyResults(report) {
   const gAds = g.ad_variations || [];
   const mAds = m.active_ads || [];
   const kwList = g.targeted_keywords || [];
+  const activeSite = allWebsitesList.find(s => s.site_id === currentSiteId);
+  const targetBrand = report.target_brand || (activeSite ? activeSite.name : 'Our Brand');
 
   const html = `
     <!-- Top Summary Banner with Official Live Verification Badges -->
@@ -1780,7 +1908,7 @@ function renderCompetitorAdSpyResults(report) {
     <!-- Section 3: AI Counter-Attack Strategy -->
     <div style="background:linear-gradient(135deg, rgba(168,85,247,0.12), rgba(6,182,212,0.08)); border:1px solid rgba(168,85,247,0.4); padding:20px; border-radius:14px;">
       <h3 style="font-size:16px; font-weight:800; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-        <i class="fa-solid fa-shield-halved" style="color:var(--accent-purple);"></i> SECTION 3: Winning Counter-Attack Strategy for Corporate Cars Melbourne
+        <i class="fa-solid fa-shield-halved" style="color:var(--accent-purple);"></i> SECTION 3: Winning Counter-Attack Strategy for ${targetBrand}
       </h3>
 
       <!-- Vulnerabilities -->
@@ -2130,6 +2258,834 @@ function copyToClipboard(text, btnId) {
   });
 }
 
+/* --- Page SEO Doctor & Google Algorithm Optimizer Handlers --- */
+
+function openPageOptimizerModal(defaultUrl) {
+  const urlInput = document.getElementById('page-opt-url');
+  const locInput = document.getElementById('page-opt-location');
+  const activeSite = allWebsitesList.find(s => s.site_id === currentSiteId);
+
+  if (urlInput) {
+    if (defaultUrl) {
+      urlInput.value = defaultUrl;
+    } else if (activeSite) {
+      urlInput.value = activeSite.domain.endsWith('/') ? activeSite.domain : activeSite.domain + '/';
+    }
+  }
+  if (locInput && activeSite) {
+    locInput.value = activeSite.location;
+  }
+  openModal('page-optimizer-modal');
+}
+
+function setSamplePageUrl() {
+  const activeSite = allWebsitesList.find(s => s.site_id === currentSiteId);
+  const urlInput = document.getElementById('page-opt-url');
+  const kwInput = document.getElementById('page-opt-keyword');
+  if (activeSite && activeSite.site_id === 'opal') {
+    if (urlInput) urlInput.value = 'https://www.opalchauffeurs.com.au/services/airport-transfers/';
+    if (kwInput) kwInput.value = 'airport chauffeur transfer melbourne';
+  } else {
+    if (urlInput) urlInput.value = 'https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/';
+    if (kwInput) kwInput.value = 'chauffeur vs rideshare melbourne airport';
+  }
+}
+
+async function submitPageOptimizerAudit(e) {
+  if (e) e.preventDefault();
+  const url = document.getElementById('page-opt-url').value.trim();
+  if (!url) {
+    alert('Please enter a valid webpage URL to audit.');
+    return;
+  }
+
+  const focusKeyword = document.getElementById('page-opt-keyword').value.trim();
+  const location = document.getElementById('page-opt-location').value.trim() || 'Melbourne, VIC';
+  const useAi = document.getElementById('page-opt-use-ai') ? document.getElementById('page-opt-use-ai').checked : true;
+
+  const btn = document.getElementById('btn-submit-page-opt');
+  const originalBtnText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Auditing Google Algorithms...';
+
+  const container = document.getElementById('page-opt-results-container');
+  container.innerHTML = `
+    <div style="text-align: center; padding: 50px 20px; color: var(--text-muted);">
+      <div style="font-size: 38px; color: #10b981; margin-bottom: 16px;">
+        <i class="fa-solid fa-stethoscope fa-spin"></i>
+      </div>
+      <h3 style="font-size: 16px; color: #fff; font-weight: 800; margin-bottom: 6px;">
+        Analyzing Page & Checking Google 2026 Ranking Factors...
+      </h3>
+      <div style="font-size: 12.5px; color: var(--text-secondary); max-width: 500px; margin: 0 auto;">
+        Testing E-E-A-T signals, Helpful Content (HCU) depth, Semantic Headings (H1/H2/H3), Internal links, and Schema.org rich snippets.
+      </div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch('/api/agents/page-optimizer/audit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        url: url,
+        focus_keyword: focusKeyword,
+        location: location,
+        use_ai: useAi,
+        site_id: currentSiteId
+      })
+    });
+
+    const data = await res.json();
+    btn.disabled = false;
+    btn.innerHTML = originalBtnText;
+
+    if (!res.ok || data.status === 'error') {
+      container.innerHTML = `
+        <div style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); padding: 18px; border-radius: 12px; color: #f87171;">
+          <strong>Audit Failed:</strong> ${data.detail || data.message || 'Error executing page audit.'}
+        </div>
+      `;
+      return;
+    }
+
+    renderPageOptimizerAuditResults(data.output);
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = originalBtnText;
+    container.innerHTML = `
+      <div style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); padding: 18px; border-radius: 12px; color: #f87171;">
+        <strong>Network Error:</strong> ${err.message}
+      </div>
+    `;
+  }
+}
+
+function renderPageOptimizerAuditResults(report) {
+  window.currentPageOptimizerReport = report;
+  const container = document.getElementById('page-opt-results-container');
+  if (!container) return;
+
+  const score = report.overall_health_score || 78;
+  const grade = report.grade || 'B+';
+  const scores = report.algorithm_scores || {};
+  const op = report.on_page_metrics || {};
+  const headings = report.optimized_headings_recommendations || {};
+  const links = report.internal_linking_recommendations || [];
+  const checklist = report.executive_action_checklist || [];
+  const schemaCode = report.ready_to_paste_schema_json || '';
+
+  const scoreColor = score >= 85 ? '#10b981' : (score >= 70 ? '#06b6d4' : (score >= 55 ? '#f59e0b' : '#ef4444'));
+
+  const html = `
+    <!-- Top Hero Banner -->
+    <div style="background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.9)); border: 1px solid var(--glass-border); padding: 22px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+        <div style="flex: 1; min-width: 280px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span class="badge badge-success" style="font-size: 11px; padding: 4px 10px;">
+              <i class="fa-solid fa-circle-check"></i> GOOGLE ALGORITHM AUDIT COMPLETED
+            </span>
+            <span style="font-size: 11.5px; color: var(--text-muted); font-family: var(--font-mono);">${report.audited_at}</span>
+          </div>
+          <h2 style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; word-break: break-all;">
+            <a href="${report.audited_url}" target="_blank" style="color: #fff; text-decoration: none;">
+              ${report.audited_url} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px; color: var(--accent-cyan);"></i>
+            </a>
+          </h2>
+          <div style="display: flex; gap: 14px; font-size: 12px; color: var(--text-secondary); margin-top: 8px; flex-wrap: wrap;">
+            <span><strong>Focus Keyword:</strong> <code style="color: var(--accent-cyan); font-weight: 700;">${report.focus_keyword}</code></span>
+            <span><strong>Target Brand:</strong> ${report.target_brand}</span>
+            <span><strong>Market:</strong> ${report.location}</span>
+          </div>
+        </div>
+
+        <!-- Health Score Ring Card -->
+        <div style="background: rgba(15,23,42,0.8); border: 2px solid ${scoreColor}; padding: 14px 22px; border-radius: 14px; text-align: center; min-width: 140px; box-shadow: 0 0 20px rgba(16,185,129,0.2);">
+          <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Google Health Score</div>
+          <div style="font-size: 36px; font-weight: 900; color: ${scoreColor}; font-family: var(--font-mono); line-height: 1.1; margin: 4px 0;">
+            ${score}<span style="font-size: 16px; color: var(--text-muted);">/100</span>
+          </div>
+          <span class="badge" style="background: ${scoreColor}; color: #000; font-weight: 800; font-size: 11px;">GRADE ${grade}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 Algorithm Pillars Breakdown Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 22px;">
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Title & SERP Snippet</div>
+        <div style="font-size: 22px; font-weight: 800; color: #06b6d4; font-family: var(--font-mono); margin-top: 4px;">${scores.title_and_meta || 85}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${op.title_length || 58} Chars</div>
+      </div>
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Heading Hierarchy</div>
+        <div style="font-size: 22px; font-weight: 800; color: #a855f7; font-family: var(--font-mono); margin-top: 4px;">${scores.heading_hierarchy || 85}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">1 H1 · ${op.total_h2_count || 4} H2s</div>
+      </div>
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Helpful Content (HCU)</div>
+        <div style="font-size: 22px; font-weight: 800; color: #10b981; font-family: var(--font-mono); margin-top: 4px;">${scores.helpful_content || 82}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${op.current_word_count || 840} Words</div>
+      </div>
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Google E-E-A-T</div>
+        <div style="font-size: 22px; font-weight: 800; color: #f59e0b; font-family: var(--font-mono); margin-top: 4px;">${scores.eeat_trust || 80}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Trust & Accreditation</div>
+      </div>
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Internal Link Graph</div>
+        <div style="font-size: 22px; font-weight: 800; color: #38bdf8; font-family: var(--font-mono); margin-top: 4px;">${scores.internal_linking || 85}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">3 Silo Links Ready</div>
+      </div>
+    </div>
+
+    <!-- Executive Action Checklist Banner -->
+    <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.3); padding: 18px; border-radius: 14px; margin-bottom: 22px;">
+      <div style="font-size: 13px; font-weight: 800; color: #10b981; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-list-check"></i> Prioritized Google Action Checklist (Apply to Page Now):
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        ${checklist.map(item => `
+          <div style="font-size: 13px; color: #f1f5f9; display: flex; align-items: flex-start; gap: 8px;">
+            <i class="fa-solid fa-circle-arrow-right" style="color: #10b981; margin-top: 3px;"></i>
+            <span>${item}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Tabbed Analysis Sections -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 22px;">
+      <!-- Column 1: Heading Optimizer -->
+      <div style="background: rgba(15,23,42,0.7); border: 1px solid var(--glass-border); padding: 18px; border-radius: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 14px; font-weight: 800; color: #a855f7; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-heading"></i> Optimized Heading Hierarchy
+          </h3>
+          <button id="btn-copy-h1" class="btn btn-secondary btn-sm" onclick="copyToClipboard('${(headings.proposed_h1 || '').replace(/'/g, "\\'")}', 'btn-copy-h1')" style="font-size: 11px;">
+            <i class="fa-solid fa-copy"></i> Copy H1
+          </button>
+        </div>
+
+        <div style="background: rgba(30,41,59,0.7); border-left: 3px solid #a855f7; padding: 10px 14px; border-radius: 6px; margin-bottom: 14px;">
+          <div style="font-size: 10.5px; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Recommended H1 Tag</div>
+          <div style="font-size: 13.5px; font-weight: 800; color: #fff; margin-top: 2px;">${headings.proposed_h1 || 'Optimized H1'}</div>
+        </div>
+
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Structured H2 Subsections (Helpful Content Depth):</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
+          ${(headings.proposed_h2_sections || []).map(h2 => `
+            <div style="background: rgba(30,41,59,0.5); padding: 8px 12px; border-radius: 6px; font-size: 12px; color: #cbd5e1;">
+              <strong>H2:</strong> ${h2}
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">H3 FAQ Questions (Featured Snippet Hooks):</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          ${(headings.proposed_h3_faqs || []).map(faq => `
+            <div style="background: rgba(30,41,59,0.3); padding: 6px 10px; border-radius: 6px; font-size: 11.5px; color: var(--accent-cyan);">
+              <i class="fa-solid fa-question-circle"></i> ${faq}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Column 2: Contextual Internal Links -->
+      <div style="background: rgba(15,23,42,0.7); border: 1px solid var(--glass-border); padding: 18px; border-radius: 14px;">
+        <h3 style="font-size: 14px; font-weight: 800; color: #06b6d4; display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-link"></i> Ready-to-Insert Internal Linking Silos
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+          ${links.map((lnk, idx) => `
+            <div style="background: rgba(30,41,59,0.6); border: 1px solid rgba(6,182,212,0.2); padding: 12px; border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span class="badge ${lnk.importance === 'HIGH' ? 'badge-success' : 'badge-info'}" style="font-size: 10px;">${lnk.importance} PRIORITY</span>
+                <button id="btn-copy-lnk-${idx}" class="btn btn-secondary btn-sm" onclick="copyToClipboard('<a href=&quot;${lnk.target_url}&quot;>${lnk.recommended_anchor}</a>', 'btn-copy-lnk-${idx}')" style="font-size: 10.5px; padding: 2px 8px;">
+                  <i class="fa-solid fa-copy"></i> Copy HTML
+                </button>
+              </div>
+              <div style="font-size: 12.5px; color: #fff;"><strong>Anchor Text:</strong> <span style="color: var(--accent-cyan); font-weight: 700;">"${lnk.recommended_anchor}"</span></div>
+              <div style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-top: 2px;">-> ${lnk.target_url}</div>
+              <div style="font-size: 11px; color: #94a3b8; margin-top: 4px; font-style: italic;">${lnk.context}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="background: rgba(245,158,11,0.08); border-left: 3px solid #f59e0b; padding: 10px 12px; border-radius: 6px;">
+          <div style="font-size: 11px; font-weight: 800; color: #f59e0b; text-transform: uppercase;">Google E-E-A-T Trust Signal Note:</div>
+          <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+            Include verified commercial accreditation and direct chauffeur dispatch contact details on this page to boost Google organic ranking authority.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ready-to-Paste JSON-LD Schema Section -->
+    <div style="background: rgba(15,23,42,0.85); border: 1px solid var(--glass-border); padding: 18px; border-radius: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div>
+          <h3 style="font-size: 14px; font-weight: 800; color: #10b981; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-code"></i> Ready-to-Paste LocalBusiness & Chauffeur JSON-LD Schema
+          </h3>
+          <div style="font-size: 11.5px; color: var(--text-muted);">Paste this script into WordPress Header/Footer or HTML head tag for rich snippets in Google Search results.</div>
+        </div>
+        <button id="btn-copy-schema-code" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 700;" onclick="copyToClipboard(\`<script type=&quot;application/ld+json&quot;>\n${schemaCode}\n</script>\`, 'btn-copy-schema-code')">
+          <i class="fa-solid fa-copy"></i> Copy Schema Code
+        </button>
+      </div>
+
+      <pre style="background: #030712; padding: 14px; border-radius: 8px; color: #38bdf8; font-family: var(--font-mono); font-size: 12px; max-height: 240px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">&lt;script type="application/ld+json"&gt;
+${schemaCode}
+&lt;/script&gt;</pre>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+function loadPageDoctorView() {
+  const urlInput = document.getElementById('page-opt-view-url');
+  const locInput = document.getElementById('page-opt-view-location');
+  const activeSite = allWebsitesList.find(s => s.site_id === currentSiteId);
+
+  if (urlInput && activeSite) {
+    urlInput.value = activeSite.domain.endsWith('/') ? activeSite.domain : activeSite.domain + '/';
+  }
+  if (locInput && activeSite) {
+    locInput.value = activeSite.location;
+  }
+}
+
+async function submitPageOptimizerAuditView(e) {
+  if (e) e.preventDefault();
+  const url = document.getElementById('page-opt-view-url').value.trim();
+  if (!url) {
+    alert('Please enter a valid webpage URL to audit.');
+    return;
+  }
+
+  const focusKeyword = document.getElementById('page-opt-view-keyword').value.trim();
+  const location = document.getElementById('page-opt-view-location').value.trim() || 'Melbourne, VIC';
+  const useAi = document.getElementById('page-opt-view-use-ai') ? document.getElementById('page-opt-view-use-ai').checked : true;
+
+  const btn = document.getElementById('btn-submit-page-opt-view');
+  const originalBtnText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Auditing Google Algorithms...';
+
+  const container = document.getElementById('page-opt-view-results-container');
+  container.innerHTML = `
+    <div style="text-align: center; padding: 50px 20px; color: var(--text-muted);">
+      <div style="font-size: 38px; color: #10b981; margin-bottom: 16px;">
+        <i class="fa-solid fa-stethoscope fa-spin"></i>
+      </div>
+      <h3 style="font-size: 16px; color: #fff; font-weight: 800; margin-bottom: 6px;">
+        Analyzing Page & Checking Google 2026 Ranking Factors...
+      </h3>
+      <div style="font-size: 12.5px; color: var(--text-secondary); max-width: 500px; margin: 0 auto;">
+        Testing E-E-A-T signals, Helpful Content (HCU) depth, Semantic Headings (H1/H2/H3), Internal links, and Schema.org rich snippets.
+      </div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch('/api/agents/page-optimizer/audit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        url: url,
+        focus_keyword: focusKeyword,
+        location: location,
+        use_ai: useAi,
+        site_id: currentSiteId
+      })
+    });
+
+    const data = await res.json();
+    btn.disabled = false;
+    btn.innerHTML = originalBtnText;
+
+    if (!res.ok || data.status === 'error') {
+      container.innerHTML = `
+        <div style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); padding: 18px; border-radius: 12px; color: #f87171;">
+          <strong>Audit Failed:</strong> ${data.detail || data.message || 'Error executing page audit.'}
+        </div>
+      `;
+      return;
+    }
+
+    renderPageOptimizerAuditResultsCustom(data.output, 'page-opt-view-results-container');
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = originalBtnText;
+    container.innerHTML = `
+      <div style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); padding: 18px; border-radius: 12px; color: #f87171;">
+        <strong>Network Error:</strong> ${err.message}
+      </div>
+    `;
+  }
+}
+
+function renderPageOptimizerAuditResultsCustom(report, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const score = report.overall_health_score || 78;
+  const grade = report.grade || 'B+';
+  const scores = report.algorithm_scores || {};
+  const op = report.on_page_metrics || {};
+  const headings = report.optimized_headings_recommendations || {};
+  const links = report.internal_linking_recommendations || [];
+  const checklist = report.executive_action_checklist || [];
+  const schemaCode = report.ready_to_paste_schema_json || '';
+
+  const scoreColor = score >= 85 ? '#10b981' : (score >= 70 ? '#06b6d4' : (score >= 55 ? '#f59e0b' : '#ef4444'));
+
+  const html = `
+    <!-- Top Hero Banner -->
+    <div style="background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.9)); border: 1px solid var(--glass-border); padding: 22px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+        <div style="flex: 1; min-width: 280px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span class="badge badge-success" style="font-size: 11px; padding: 4px 10px;">
+              <i class="fa-solid fa-circle-check"></i> GOOGLE ALGORITHM AUDIT COMPLETED
+            </span>
+            <span style="font-size: 11.5px; color: var(--text-muted); font-family: var(--font-mono);">${report.audited_at}</span>
+          </div>
+          <h2 style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; word-break: break-all;">
+            <a href="${report.audited_url}" target="_blank" style="color: #fff; text-decoration: none;">
+              ${report.audited_url} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px; color: var(--accent-cyan);"></i>
+            </a>
+          </h2>
+          <div style="display: flex; gap: 14px; font-size: 12px; color: var(--text-secondary); margin-top: 8px; flex-wrap: wrap;">
+            <span><strong>Focus Keyword:</strong> <code style="color: var(--accent-cyan); font-weight: 700;">${report.focus_keyword}</code></span>
+            <span><strong>Target Brand:</strong> ${report.target_brand}</span>
+            <span><strong>Market:</strong> ${report.location}</span>
+          </div>
+        </div>
+
+        <!-- Health Score Ring Card -->
+        <div style="background: rgba(15,23,42,0.8); border: 2px solid ${scoreColor}; padding: 14px 22px; border-radius: 14px; text-align: center; min-width: 140px; box-shadow: 0 0 20px rgba(16,185,129,0.2);">
+          <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Google Health Score</div>
+          <div style="font-size: 36px; font-weight: 900; color: ${scoreColor}; font-family: var(--font-mono); line-height: 1.1; margin: 4px 0;">
+            ${score}<span style="font-size: 16px; color: var(--text-muted);">/100</span>
+          </div>
+          <span class="badge" style="background: ${scoreColor}; color: #000; font-weight: 800; font-size: 11px;">GRADE ${grade}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 Algorithm Pillars Breakdown Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 22px;">
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Title & SERP Snippet</div>
+        <div style="font-size: 22px; font-weight: 800; color: #06b6d4; font-family: var(--font-mono); margin-top: 4px;">${scores.title_and_meta || 85}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${op.title_length || 58} Chars</div>
+      </div>
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Heading Hierarchy</div>
+        <div style="font-size: 22px; font-weight: 800; color: #a855f7; font-family: var(--font-mono); margin-top: 4px;">${scores.heading_hierarchy || 85}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">1 H1 · ${op.total_h2_count || 4} H2s</div>
+      </div>
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Helpful Content (HCU)</div>
+        <div style="font-size: 22px; font-weight: 800; color: #10b981; font-family: var(--font-mono); margin-top: 4px;">${scores.helpful_content || 82}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${op.current_word_count || 840} Words</div>
+      </div>
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Google E-E-A-T</div>
+        <div style="font-size: 22px; font-weight: 800; color: #f59e0b; font-family: var(--font-mono); margin-top: 4px;">${scores.eeat_trust || 80}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Trust & Accreditation</div>
+      </div>
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Internal Link Graph</div>
+        <div style="font-size: 22px; font-weight: 800; color: #38bdf8; font-family: var(--font-mono); margin-top: 4px;">${scores.internal_linking || 85}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">3 Silo Links Ready</div>
+      </div>
+    </div>
+
+    <!-- Executive Action Checklist Banner -->
+    <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.3); padding: 18px; border-radius: 14px; margin-bottom: 22px;">
+      <div style="font-size: 13px; font-weight: 800; color: #10b981; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-list-check"></i> Prioritized Google Action Checklist (Apply to Page Now):
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        ${checklist.map(item => `
+          <div style="font-size: 13px; color: #f1f5f9; display: flex; align-items: flex-start; gap: 8px;">
+            <i class="fa-solid fa-circle-arrow-right" style="color: #10b981; margin-top: 3px;"></i>
+            <span>${item}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Tabbed Analysis Sections -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 22px;">
+      <!-- Column 1: Heading Optimizer -->
+      <div style="background: rgba(15,23,42,0.7); border: 1px solid var(--glass-border); padding: 18px; border-radius: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 14px; font-weight: 800; color: #a855f7; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-heading"></i> Optimized Heading Hierarchy
+          </h3>
+          <button id="btn-copy-h1-v" class="btn btn-secondary btn-sm" onclick="copyToClipboard('${(headings.proposed_h1 || '').replace(/'/g, "\\'")}', 'btn-copy-h1-v')" style="font-size: 11px;">
+            <i class="fa-solid fa-copy"></i> Copy H1
+          </button>
+        </div>
+
+        <div style="background: rgba(30,41,59,0.7); border-left: 3px solid #a855f7; padding: 10px 14px; border-radius: 6px; margin-bottom: 14px;">
+          <div style="font-size: 10.5px; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Recommended H1 Tag</div>
+          <div style="font-size: 13.5px; font-weight: 800; color: #fff; margin-top: 2px;">${headings.proposed_h1 || 'Optimized H1'}</div>
+        </div>
+
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Structured H2 Subsections (Helpful Content Depth):</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
+          ${(headings.proposed_h2_sections || []).map(h2 => `
+            <div style="background: rgba(30,41,59,0.5); padding: 8px 12px; border-radius: 6px; font-size: 12px; color: #cbd5e1;">
+              <strong>H2:</strong> ${h2}
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">H3 FAQ Questions (Featured Snippet Hooks):</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          ${(headings.proposed_h3_faqs || []).map(faq => `
+            <div style="background: rgba(30,41,59,0.3); padding: 6px 10px; border-radius: 6px; font-size: 11.5px; color: var(--accent-cyan);">
+              <i class="fa-solid fa-question-circle"></i> ${faq}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Column 2: Contextual Internal Links -->
+      <div style="background: rgba(15,23,42,0.7); border: 1px solid var(--glass-border); padding: 18px; border-radius: 14px;">
+        <h3 style="font-size: 14px; font-weight: 800; color: #06b6d4; display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-link"></i> Ready-to-Insert Internal Linking Silos
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+          ${links.map((lnk, idx) => `
+            <div style="background: rgba(30,41,59,0.6); border: 1px solid rgba(6,182,212,0.2); padding: 12px; border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span class="badge ${lnk.importance === 'HIGH' ? 'badge-success' : 'badge-info'}" style="font-size: 10px;">${lnk.importance} PRIORITY</span>
+                <button id="btn-copy-lnk-v-${idx}" class="btn btn-secondary btn-sm" onclick="copyToClipboard('<a href=&quot;${lnk.target_url}&quot;>${lnk.recommended_anchor}</a>', 'btn-copy-lnk-v-${idx}')" style="font-size: 10.5px; padding: 2px 8px;">
+                  <i class="fa-solid fa-copy"></i> Copy HTML
+                </button>
+              </div>
+              <div style="font-size: 12.5px; color: #fff;"><strong>Anchor Text:</strong> <span style="color: var(--accent-cyan); font-weight: 700;">"${lnk.recommended_anchor}"</span></div>
+              <div style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-top: 2px;">-> ${lnk.target_url}</div>
+              <div style="font-size: 11px; color: #94a3b8; margin-top: 4px; font-style: italic;">${lnk.context}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="background: rgba(245,158,11,0.08); border-left: 3px solid #f59e0b; padding: 10px 12px; border-radius: 6px;">
+          <div style="font-size: 11px; font-weight: 800; color: #f59e0b; text-transform: uppercase;">Google E-E-A-T Trust Signal Note:</div>
+          <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+            Include verified commercial accreditation and direct chauffeur dispatch contact details on this page to boost Google organic ranking authority.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ready-to-Paste JSON-LD Schema Section -->
+    <div style="background: rgba(15,23,42,0.85); border: 1px solid var(--glass-border); padding: 18px; border-radius: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div>
+          <h3 style="font-size: 14px; font-weight: 800; color: #10b981; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-code"></i> Ready-to-Paste LocalBusiness & Chauffeur JSON-LD Schema
+          </h3>
+          <div style="font-size: 11.5px; color: var(--text-muted);">Paste this script into WordPress Header/Footer or HTML head tag for rich snippets in Google Search results.</div>
+        </div>
+        <button id="btn-copy-schema-code-v" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 700;" onclick="copyToClipboard(\`<script type=&quot;application/ld+json&quot;>\n${schemaCode}\n</script>\`, 'btn-copy-schema-code-v')">
+          <i class="fa-solid fa-copy"></i> Copy Schema Code
+        </button>
+      </div>
+
+      <pre style="background: #030712; padding: 14px; border-radius: 8px; color: #38bdf8; font-family: var(--font-mono); font-size: 12px; max-height: 240px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">&lt;script type="application/ld+json"&gt;
+${schemaCode}
+&lt;/script&gt;</pre>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+/* --- Multi-Provider AI Intelligence Hub & API Key Vault Handlers --- */
+
+async function loadAIProviders() {
+  const grid = document.getElementById('ai-providers-grid');
+  if (!grid) return;
+
+  try {
+    const res = await fetch('/api/ai/providers');
+    const data = await res.json();
+    if (!data.providers || data.providers.length === 0) return;
+
+    grid.innerHTML = data.providers.map(p => {
+      const isPrimary = p.is_primary;
+      const isConfigured = p.is_configured;
+      const cardBorder = isPrimary ? 'border: 2px solid var(--accent-purple); box-shadow: 0 0 16px rgba(168,85,247,0.3);' : (isConfigured ? 'border: 1px solid rgba(6,182,212,0.3);' : 'border: 1px solid var(--glass-border); opacity: 0.85;');
+
+      return `
+        <div style="background: rgba(15,23,42,0.75); padding: 18px; border-radius: 14px; ${cardBorder} display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(30,41,59,0.8); display: flex; align-items: center; justify-content: center; font-size: 16px; color: ${isPrimary ? 'var(--accent-purple)' : (isConfigured ? 'var(--accent-cyan)' : 'var(--text-muted)')};">
+                  <i class="${p.icon}"></i>
+                </div>
+                <div>
+                  <h3 style="font-size: 14.5px; font-weight: 800; color: #fff;">${p.name}</h3>
+                  <div style="font-size: 11px; color: var(--text-muted);">${p.badge}</div>
+                </div>
+              </div>
+              <span class="badge ${isPrimary ? 'badge-success' : (isConfigured ? 'badge-info' : 'badge-warning')}" style="${isPrimary ? 'background: linear-gradient(135deg, #a855f7, #ec4899); color: #fff; font-weight: 800;' : ''}">
+                ${isPrimary ? 'ACTIVE PRIMARY' : (isConfigured ? 'CONFIGURED' : 'NOT CONFIGURED')}
+              </span>
+            </div>
+
+            <!-- API Key Preview Box -->
+            <div style="background: rgba(30,41,59,0.6); padding: 8px 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 11.5px; color: ${isConfigured ? '#38bdf8' : 'var(--text-muted)'}; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span><i class="fa-solid fa-lock" style="font-size: 10px; margin-right: 6px;"></i> ${p.masked_key}</span>
+              <span style="font-size: 10px; color: var(--text-muted);">${p.env_var}</span>
+            </div>
+
+            <!-- Supported Models Tags -->
+            <div style="margin-bottom: 14px;">
+              <div style="font-size: 10.5px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Supported Models:</div>
+              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                ${p.supported_models.map(m => `
+                  <span class="action-chip" style="font-size: 10px; padding: 2px 6px; font-family: var(--font-mono);">${m}</span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div style="display: flex; gap: 8px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; margin-top: 8px;">
+            <button class="btn btn-secondary btn-sm" onclick="openConfigureAIModal('${p.id}')" style="flex: 1; font-size: 11.5px; font-weight: 700; color: #fff; border-color: rgba(255,255,255,0.15);">
+              <i class="fa-solid fa-key"></i> ${isConfigured ? 'Update Key' : 'Add Key'}
+            </button>
+            ${!isPrimary ? `
+              <button class="btn btn-primary btn-sm" onclick="setPrimaryAIProvider('${p.id}')" style="font-size: 11.5px; font-weight: 700; background: linear-gradient(135deg, var(--accent-purple), #ec4899); border: none;">
+                <i class="fa-solid fa-check"></i> Set Primary
+              </button>
+            ` : `
+              <span style="font-size: 11px; font-weight: 800; color: #10b981; display: flex; align-items: center; gap: 4px; padding: 0 8px;">
+                <i class="fa-solid fa-circle-check"></i> Current Default
+              </span>
+            `}
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error('Failed to load AI providers:', err);
+  }
+}
+
+function openConfigureAIModal(providerId) {
+  const provSelect = document.getElementById('ai-modal-provider');
+  const keyInput = document.getElementById('ai-modal-api-key');
+  const modelInput = document.getElementById('ai-modal-model');
+  const outputBox = document.getElementById('ai-modal-test-output');
+
+  if (outputBox) {
+    outputBox.style.display = 'none';
+    outputBox.textContent = '';
+  }
+  if (keyInput) keyInput.value = '';
+
+  if (provSelect && providerId) {
+    provSelect.value = providerId;
+  }
+  handleAIProviderChange();
+  openModal('configure-ai-provider-modal');
+}
+
+function handleAIProviderChange() {
+  const prov = document.getElementById('ai-modal-provider').value;
+  const keyInput = document.getElementById('ai-modal-api-key');
+  const modelInput = document.getElementById('ai-modal-model');
+  const urlWrap = document.getElementById('ai-modal-base-url-wrap');
+
+  const defaultModels = {
+    'anthropic': 'claude-3-5-sonnet-20241022',
+    'gemini': 'gemini-2.5-flash',
+    'openai': 'gpt-4o',
+    'deepseek': 'deepseek-chat',
+    'groq': 'llama-3.3-70b-versatile',
+    'custom': 'mistral-large-latest'
+  };
+
+  const placeholders = {
+    'anthropic': 'sk-ant-api03-...',
+    'gemini': 'AIzaSy...',
+    'openai': 'sk-proj-...',
+    'deepseek': 'sk-...',
+    'groq': 'gsk_...',
+    'custom': 'Enter API key or leave blank for local Ollama'
+  };
+
+  if (modelInput) modelInput.value = defaultModels[prov] || '';
+  if (keyInput) keyInput.placeholder = placeholders[prov] || 'Enter API Key';
+  if (urlWrap) {
+    urlWrap.style.display = (prov === 'custom') ? 'block' : 'none';
+  }
+}
+
+function toggleAPIKeyVisibility() {
+  const input = document.getElementById('ai-modal-api-key');
+  const icon = document.getElementById('eye-icon-ai-key');
+  if (!input) return;
+
+  if (input.type === 'password') {
+    input.type = 'text';
+    if (icon) icon.className = 'fa-solid fa-eye-slash';
+  } else {
+    input.type = 'password';
+    if (icon) icon.className = 'fa-solid fa-eye';
+  }
+}
+
+async function testCurrentAIKey() {
+  const prov = document.getElementById('ai-modal-provider').value;
+  const key = document.getElementById('ai-modal-api-key').value.trim();
+  const url = document.getElementById('ai-modal-base-url') ? document.getElementById('ai-modal-base-url').value.trim() : null;
+  const outputBox = document.getElementById('ai-modal-test-output');
+  const btn = document.getElementById('btn-test-ai-key');
+
+  if (!key && prov !== 'custom') {
+    alert('Please enter an API key to test.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Validating...';
+
+  try {
+    const res = await fetch('/api/ai/providers/test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        provider: prov,
+        api_key: key,
+        custom_base_url: url
+      })
+    });
+    const data = await res.json();
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-plug"></i> Test Connection';
+
+    if (outputBox) {
+      outputBox.style.display = 'block';
+      if (data.status === 'success') {
+        outputBox.style.background = 'rgba(16,185,129,0.15)';
+        outputBox.style.border = '1px solid #10b981';
+        outputBox.style.color = '#10b981';
+        outputBox.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${data.message}`;
+      } else if (data.status === 'warning') {
+        outputBox.style.background = 'rgba(245,158,11,0.15)';
+        outputBox.style.border = '1px solid #f59e0b';
+        outputBox.style.color = '#fbbf24';
+        outputBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${data.message}`;
+      } else {
+        outputBox.style.background = 'rgba(239,68,68,0.15)';
+        outputBox.style.border = '1px solid #ef4444';
+        outputBox.style.color = '#f87171';
+        outputBox.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> ${data.message}`;
+      }
+    }
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-plug"></i> Test Connection';
+    if (outputBox) {
+      outputBox.style.display = 'block';
+      outputBox.style.background = 'rgba(239,68,68,0.15)';
+      outputBox.style.border = '1px solid #ef4444';
+      outputBox.style.color = '#f87171';
+      outputBox.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Network test error: ${err.message}`;
+    }
+  }
+}
+
+async function submitSaveAIProviderKey(e) {
+  if (e) e.preventDefault();
+
+  const prov = document.getElementById('ai-modal-provider').value;
+  const key = document.getElementById('ai-modal-api-key').value.trim();
+  const baseUrl = document.getElementById('ai-modal-base-url') ? document.getElementById('ai-modal-base-url').value.trim() : null;
+  const model = document.getElementById('ai-modal-model').value.trim();
+  const isPrimary = document.getElementById('ai-modal-is-primary').checked;
+
+  if (!key && prov !== 'custom') {
+    alert('Please enter an API key to save.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-save-ai-key');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+  try {
+    const res = await fetch('/api/ai/providers/save-key', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        provider: prov,
+        api_key: key,
+        custom_base_url: baseUrl,
+        default_model: model,
+        is_primary: isPrimary
+      })
+    });
+
+    const data = await res.json();
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save & Activate';
+
+    if (!res.ok || data.status === 'error') {
+      alert(`Failed to save key: ${data.detail || data.message || 'Error'}`);
+      return;
+    }
+
+    closeModal('configure-ai-provider-modal');
+    alert(`Success! ${prov.toUpperCase()} API key saved and activated in AI Model Router.`);
+
+    await loadAIProviders();
+    if (activeView === 'settings') await loadSettings();
+    if (activeView === 'ai-usage') await loadAIUsage();
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save & Activate';
+    alert(`Failed to save key: ${err.message}`);
+  }
+}
+
+async function setPrimaryAIProvider(provId) {
+  if (!confirm(`Switch default AI Engine to ${provId.toUpperCase()}?`)) return;
+
+  try {
+    const res = await fetch('/api/ai/providers/set-primary', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ provider: provId })
+    });
+    const data = await res.json();
+    if (!res.ok || data.status === 'error') {
+      alert(`Error: ${data.detail || data.message}`);
+      return;
+    }
+
+    alert(`Default AI Provider switched to ${provId.toUpperCase()}!`);
+    await loadAIProviders();
+    if (activeView === 'settings') await loadSettings();
+  } catch (err) {
+    alert(`Failed to switch provider: ${err.message}`);
+  }
+}
+
 // Global scope bindings for inline HTML onclick handlers
 window.openModal = openModal;
 window.closeModal = closeModal;
@@ -2140,7 +3096,22 @@ window.openCompetitorAdSpyModal = openCompetitorAdSpyModal;
 window.submitCompetitorAdSpy = submitCompetitorAdSpy;
 window.inspectGoogleAd = inspectGoogleAd;
 window.inspectMetaAd = inspectMetaAd;
+window.openPageOptimizerModal = openPageOptimizerModal;
+window.setSamplePageUrl = setSamplePageUrl;
+window.submitPageOptimizerAudit = submitPageOptimizerAudit;
+window.loadPageDoctorView = loadPageDoctorView;
+window.submitPageOptimizerAuditView = submitPageOptimizerAuditView;
+window.openConfigureAIModal = openConfigureAIModal;
+window.handleAIProviderChange = handleAIProviderChange;
+window.toggleAPIKeyVisibility = toggleAPIKeyVisibility;
+window.testCurrentAIKey = testCurrentAIKey;
+window.submitSaveAIProviderKey = submitSaveAIProviderKey;
+window.setPrimaryAIProvider = setPrimaryAIProvider;
+window.loadAIProviders = loadAIProviders;
 window.copyToClipboard = copyToClipboard;
+
+
+
 
 
 

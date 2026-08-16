@@ -72,26 +72,34 @@ class CompetitorAdSpyAgent(AgentInterface):
         raw_url = str(input_data.get("competitor_url", "https://chauffeurcarsmelbourne.com.au/")).strip()
         location = str(input_data.get("location", "Melbourne, Victoria")).strip()
         use_ai = bool(input_data.get("use_ai", True))
+        site_id = input_data.get("site_id") or input_data.get("site")
+
+        from config.websites import WebsiteManager
+        site_mgr = WebsiteManager()
+        site_profile = site_mgr.get(site_id) if site_id else None
+        target_brand = site_profile.name if site_profile else "Corporate Cars Melbourne"
+        target_domain = site_profile.domain if site_profile else "https://corporatecarsmelbourne.com.au"
+        target_loc = site_profile.location if site_profile else location
 
         parsed_url = urlparse(raw_url if "://" in raw_url else f"https://{raw_url}")
         clean_domain = parsed_url.netloc or parsed_url.path
         brand_name = clean_domain.replace("www.", "").split(".")[0].replace("-", " ").title()
 
-        logger.info(f"Executing CompetitorAdSpyAgent: action={action}, competitor='{clean_domain}', location='{location}'")
+        logger.info(f"Executing CompetitorAdSpyAgent: action={action}, competitor='{clean_domain}', brand='{target_brand}', location='{target_loc}'")
 
         meta_library_url = f"https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q={clean_domain}&search_type=keyword_unordered&media_type=all"
         google_transparency_url = f"https://adstransparency.google.com/?region=AU&domain={clean_domain}"
 
         # 1. Base Intelligence Templates with official live URLs
-        google_ads_data = self._generate_google_ads_intelligence(clean_domain, brand_name, location)
+        google_ads_data = self._generate_google_ads_intelligence(clean_domain, brand_name, target_loc)
         google_ads_data["official_transparency_url"] = google_transparency_url
         google_ads_data["data_source"] = "Google Ads Transparency Center (AU) & Live SERP Query"
 
-        meta_ads_data = self._generate_meta_ads_intelligence(clean_domain, brand_name, location)
+        meta_ads_data = self._generate_meta_ads_intelligence(clean_domain, brand_name, target_loc)
         meta_ads_data["official_ad_library_url"] = meta_library_url
         meta_ads_data["data_source"] = "Meta Ad Library (Facebook & Instagram Australia Public Database)"
 
-        counter_strategy = self._generate_default_counter_strategy(clean_domain, brand_name)
+        counter_strategy = self._generate_default_counter_strategy(clean_domain, brand_name, target_brand, target_domain, target_loc)
 
         model_used = "live-transparency-crawler+ai-router"
         tokens_used = 0
@@ -101,15 +109,15 @@ class CompetitorAdSpyAgent(AgentInterface):
         if use_ai:
             try:
                 ai_prompt = f"""You are an elite Digital Ads Intelligence Analyst.
-Analyze this Melbourne chauffeur competitor:
+Analyze this {target_loc} chauffeur competitor:
 Competitor Domain: {clean_domain}
 Brand Name: {brand_name}
-Target Market: {location}
+Target Market: {target_loc}
 
 1. Provide 2 realistic, high-converting Google Search Ads (Headlines 1-3, Descriptions 1-2, Display URL, Sitelinks) they run.
 2. List 6 targeted high-intent bidding keywords with match type, estimated CPC ($AUD), and intent.
 3. Provide 2 Meta Ads (Facebook & Instagram) with Primary Text, Hook, Headline, Creative Type, and CTA.
-4. Craft 1 WINNING Counter-Ad Strategy for our brand 'Corporate Cars Melbourne' (https://corporatecarsmelbourne.com.au/) highlighting fixed transparent pricing, Mercedes V-Class / S-Class fleet, 24/7 flight tracking, and punctuality guarantee.
+4. Craft 1 WINNING Counter-Ad Strategy for our brand '{target_brand}' ({target_domain}) highlighting fixed transparent pricing, premium chauffeur fleet, 24/7 flight tracking, and punctuality guarantee in {target_loc}.
 
 Respond with valid JSON containing keys:
 "google_ads", "targeted_keywords", "meta_ads", "counter_strategy", "competitor_vulnerabilities"
@@ -145,8 +153,10 @@ Respond with valid JSON containing keys:
             "competitor_url": raw_url,
             "competitor_domain": clean_domain,
             "competitor_brand": brand_name,
+            "target_brand": target_brand,
+            "target_domain": target_domain,
             "analyzed_at": datetime.now().isoformat(),
-            "location": location,
+            "location": target_loc,
             "official_verification_links": {
                 "meta_ad_library": meta_library_url,
                 "google_ads_transparency": google_transparency_url
@@ -252,27 +262,35 @@ Respond with valid JSON containing keys:
             ]
         }
 
-    def _generate_default_counter_strategy(self, domain: str, brand: str) -> Dict[str, Any]:
-        """Generates superior counter-ad copy for Corporate Cars Melbourne."""
+    def _generate_default_counter_strategy(
+        self,
+        domain: str,
+        brand: str,
+        target_brand: str = "Corporate Cars Melbourne",
+        target_domain: str = "https://corporatecarsmelbourne.com.au",
+        target_loc: str = "Melbourne, Victoria"
+    ) -> Dict[str, Any]:
+        """Generates superior counter-ad copy customized for the active brand and website."""
+        clean_target_domain = target_domain.rstrip('/')
         return {
             "vulnerabilities_in_competitor_ads": [
                 f"{brand} does not highlight guaranteed on-time arrival refund policies.",
                 "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
-                "Their Google Ads lack deep suburb-specific sitelinks for affluent areas (Toorak, Brighton, Kew)."
+                f"Their Google Ads lack deep localized sitelinks for affluent areas in {target_loc}."
             ],
             "recommended_counter_google_ad": {
-                "headline_1": "Melbourne Chauffeur From $95 | Corporate Cars",
+                "headline_1": f"{target_brand} | Fixed Rates From $95",
                 "headline_2": "100% On-Time Guarantee | No Surge Fares",
-                "headline_3": "Mercedes S-Class & V-Class 24/7",
-                "description_1": "Why gamble with rideshares? Corporate Cars Melbourne provides fixed transparent fares, VIP flight tracking & European luxury.",
-                "description_2": "Instant online quote in 30 seconds. Licensed Victorian chauffeurs ready at Tullamarine & Avalon airports.",
-                "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers"
+                "headline_3": "Luxury Chauffeur Fleet 24/7",
+                "description_1": f"Why gamble with rideshares? {target_brand} provides fixed transparent fares, VIP flight tracking & European luxury.",
+                "description_2": f"Instant online quote in 30 seconds. Licensed accredited chauffeurs ready across {target_loc}.",
+                "target_url": f"{clean_target_domain}/services/airport-transfers"
             },
             "recommended_counter_meta_ad": {
-                "hook": "Tired of unpredictable airport rideshares? Experience true Melbourne luxury for fixed rates.",
-                "primary_text": "Say goodbye to airport surge pricing and cancelled rides. Corporate Cars Melbourne delivers executive chauffeur travel at transparent fixed rates.\n\n🏆 The Corporate Cars Difference:\n• 100% On-Time Guarantee\n• Live flight telemetry tracking\n• Pristine Mercedes-Benz fleet\n• Professional, suited Victorian chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
-                "headline": "Melbourne Airport Transfers From $95 — Book in 60s",
+                "hook": f"Tired of unpredictable rideshares in {target_loc}? Experience true luxury with {target_brand} at fixed rates.",
+                "primary_text": f"Say goodbye to surge pricing and cancelled rides. {target_brand} delivers executive chauffeur travel at transparent fixed rates.\n\n🏆 The {target_brand} Difference:\n• 100% On-Time Guarantee\n• Live flight telemetry tracking\n• Pristine European luxury fleet\n• Professional, suited accredited chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
+                "headline": f"{target_brand} Airport Transfers — Book in 60s",
                 "call_to_action": "Book Now",
-                "target_url": "https://corporatecarsmelbourne.com.au/"
+                "target_url": f"{clean_target_domain}/"
             }
         }

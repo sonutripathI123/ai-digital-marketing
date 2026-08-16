@@ -46,13 +46,29 @@ MODEL_CONFIG: Dict[str, Dict[str, Any]] = {
 
 # Estimated Token Cost Table per 1,000 tokens (USD)
 TOKEN_PRICING: Dict[str, Dict[str, float]] = {
+    # Anthropic
     "claude-3-5-haiku-20241022": {"input": 0.0008, "output": 0.0040},
     "claude-3-5-sonnet-20241022": {"input": 0.0030, "output": 0.0150},
     "claude-3-7-sonnet-20250219": {"input": 0.0030, "output": 0.0150},
     "claude-3-opus-20240229": {"input": 0.0150, "output": 0.0750},
+    # Google Gemini
     "gemini-2.5-flash": {"input": 0.00015, "output": 0.0006},
     "gemini-1.5-pro": {"input": 0.00125, "output": 0.0050},
     "gemini-2.0-flash-thinking": {"input": 0.00015, "output": 0.0006},
+    # OpenAI
+    "gpt-4o": {"input": 0.0025, "output": 0.0100},
+    "gpt-4o-mini": {"input": 0.00015, "output": 0.0006},
+    "o1": {"input": 0.0150, "output": 0.0600},
+    "o3-mini": {"input": 0.0011, "output": 0.0044},
+    # DeepSeek
+    "deepseek-chat": {"input": 0.00014, "output": 0.00028},
+    "deepseek-reasoner": {"input": 0.00055, "output": 0.00219},
+    # Groq (Llama / Mixtral)
+    "llama-3.3-70b-versatile": {"input": 0.00059, "output": 0.00079},
+    "llama-3.1-8b-instant": {"input": 0.00005, "output": 0.00008},
+    "mixtral-8x7b-32768": {"input": 0.00024, "output": 0.00024},
+    # Mistral / Custom
+    "mistral-large-latest": {"input": 0.0020, "output": 0.0060},
     "mock-model": {"input": 0.0, "output": 0.0},
 }
 

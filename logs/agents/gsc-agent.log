@@ -162,3 +162,45 @@
 2026-08-16 09:44:36,160 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
 2026-08-16 09:44:37,179 [INFO] [agent:agent.gsc-agent] Completed task task-602e6545 successfully.
 2026-08-16 09:44:37,233 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 16:45:09,956 [INFO] [agent:agent.gsc-agent] Starting execution for task task-0b5b1e0c
+2026-08-16 16:45:09,958 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 16:45:13,031 [INFO] [agent:agent.gsc-agent] Completed task task-0b5b1e0c successfully.
+2026-08-16 16:45:13,293 [INFO] [agent:agent.gsc-agent] Starting execution for task task-72818149
+2026-08-16 16:45:13,295 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 16:45:16,055 [INFO] [agent:agent.gsc-agent] Completed task task-72818149 successfully.
+2026-08-16 16:45:16,115 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:20:25,148 [INFO] [agent:agent.gsc-agent] Starting execution for task task-c0bc27dc
+2026-08-16 17:20:25,149 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:20:47,107 [WARNING] [agent:agent.gsc-agent] Failed to fetch live GSC API data: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+2026-08-16 17:20:47,107 [INFO] [agent:agent.gsc-agent] Completed task task-c0bc27dc successfully.
+2026-08-16 17:20:47,296 [INFO] [agent:agent.gsc-agent] Starting execution for task task-0f084710
+2026-08-16 17:20:47,296 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:21:08,904 [WARNING] [agent:agent.gsc-agent] Failed to fetch live GSC API data: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+2026-08-16 17:21:08,905 [INFO] [agent:agent.gsc-agent] Completed task task-0f084710 successfully.
+2026-08-16 17:21:08,965 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:21:30,653 [WARNING] [agent:agent.gsc-agent] Failed to fetch live GSC API data: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+2026-08-16 17:29:05,184 [INFO] [agent:agent.gsc-agent] Starting execution for task task-0fc47295
+2026-08-16 17:29:05,188 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:29:27,655 [WARNING] [agent:agent.gsc-agent] Failed to fetch live GSC API data: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+2026-08-16 17:29:27,655 [INFO] [agent:agent.gsc-agent] Completed task task-0fc47295 successfully.
+2026-08-16 17:35:11,231 [INFO] [agent:agent.gsc-agent] Starting execution for task task-aa14c063
+2026-08-16 17:35:11,232 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:35:15,107 [INFO] [agent:agent.gsc-agent] Completed task task-aa14c063 successfully.
+2026-08-16 17:35:15,343 [INFO] [agent:agent.gsc-agent] Starting execution for task task-89877167
+2026-08-16 17:35:15,343 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:35:18,234 [INFO] [agent:agent.gsc-agent] Completed task task-89877167 successfully.
+2026-08-16 17:35:18,306 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:45:55,189 [INFO] [agent:agent.gsc-agent] Starting execution for task task-79bc3d34
+2026-08-16 17:45:55,191 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:45:58,925 [INFO] [agent:agent.gsc-agent] Completed task task-79bc3d34 successfully.
+2026-08-16 17:45:59,121 [INFO] [agent:agent.gsc-agent] Starting execution for task task-0e82c952
+2026-08-16 17:45:59,121 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 17:46:01,548 [INFO] [agent:agent.gsc-agent] Completed task task-0e82c952 successfully.
+2026-08-16 17:46:01,622 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 18:12:03,679 [INFO] [agent:agent.gsc-agent] Starting execution for task task-c58ca01d
+2026-08-16 18:12:03,680 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 18:12:06,270 [INFO] [agent:agent.gsc-agent] Completed task task-c58ca01d successfully.
+2026-08-16 18:12:06,463 [INFO] [agent:agent.gsc-agent] Starting execution for task task-2abd5c41
+2026-08-16 18:12:06,470 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'
+2026-08-16 18:12:08,619 [INFO] [agent:agent.gsc-agent] Completed task task-2abd5c41 successfully.
+2026-08-16 18:12:08,697 [INFO] [agent:agent.gsc-agent] Executing GSCAgent task: action=fetch_performance, site_url='https://corporatecarsmelbourne.com.au', date_range='last_28_days'

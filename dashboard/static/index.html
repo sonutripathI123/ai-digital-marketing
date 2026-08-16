@@ -63,6 +63,9 @@
           <a class="nav-item" data-view="health">
             <i class="fa-solid fa-heart-pulse"></i> System Health
           </a>
+          <a class="nav-item" data-view="page-doctor">
+            <i class="fa-solid fa-stethoscope" style="color:#10b981;"></i> Page SEO Doctor
+          </a>
           <a class="nav-item" data-view="settings">
             <i class="fa-solid fa-sliders"></i> Settings
           </a>
@@ -111,6 +114,9 @@
           </div>
 
           <div class="live-time-badge" id="live-time">UTC --:--:--</div>
+          <button class="btn btn-secondary" onclick="openPageOptimizerModal()" style="border-color:rgba(16,185,129,0.4); color:#10b981; font-weight:700;">
+            <i class="fa-solid fa-stethoscope"></i> Page Doctor
+          </button>
           <button class="btn btn-secondary" id="refresh-btn">
             <i class="fa-solid fa-arrows-rotate"></i> Refresh
           </button>
@@ -298,9 +304,30 @@
 
         <!-- 6. AI Usage Page -->
         <section class="page-view" id="view-ai-usage">
+          <!-- Top AI Providers Hub Header -->
+          <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px 20px; border-radius:14px; margin-bottom:20px;">
+            <div>
+              <h2 style="font-size:16px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-microchip" style="color:var(--accent-purple);"></i> Multi-Provider AI Intelligence Hub & API Vault
+              </h2>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:3px;">
+                Hot-swap AI engines (Anthropic Claude, Google Gemini, OpenAI, DeepSeek, Groq Cloud, Ollama/Custom) with zero downtime.
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="openConfigureAIModal()" style="background:linear-gradient(135deg, var(--accent-purple), #ec4899); border:none; font-weight:700; padding:9px 18px;">
+              <i class="fa-solid fa-key"></i> + Add / Configure AI API Key
+            </button>
+          </div>
+
+          <!-- Interactive Multi-Provider Cards Grid -->
+          <div id="ai-providers-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:24px;">
+            <!-- Populated dynamically via loadAIProviders() -->
+          </div>
+
+          <!-- AI Usage Metrics Grid -->
           <div class="metrics-grid" id="ai-metrics-grid"></div>
 
-          <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 16px;">Model Router Cost Breakdown</h2>
+          <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 16px; margin-top:24px;">Model Router Cost & Inference Telemetry</h2>
           <div class="table-container">
             <table class="data-table">
               <thead>
@@ -374,6 +401,20 @@
 
         <!-- 11. Settings Page -->
         <section class="page-view" id="view-settings">
+          <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px 20px; border-radius:14px; margin-bottom:20px;">
+            <div>
+              <h2 style="font-size:16px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-sliders" style="color:var(--accent-cyan);"></i> Command Center Configuration & API Vault
+              </h2>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:3px;">
+                Manage AI API keys, Advertising safety guards, WordPress REST endpoints, and Service Accounts.
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="openConfigureAIModal()" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); border:none; font-weight:700; padding:9px 18px;">
+              <i class="fa-solid fa-plus-circle"></i> + Add / Update API Key
+            </button>
+          </div>
+
           <div class="table-container">
             <table class="data-table">
               <thead>
@@ -386,6 +427,58 @@
               </thead>
               <tbody id="settings-table"></tbody>
             </table>
+          </div>
+        </section>
+
+        <!-- 12. Page SEO Doctor Full View -->
+        <section class="page-view" id="view-page-doctor">
+          <div style="background:rgba(15,23,42,0.7); border:1px solid var(--glass-border); border-radius:14px; padding:20px; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+              <div>
+                <h2 style="font-size:18px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
+                  <i class="fa-solid fa-stethoscope" style="color:#10b981;"></i> Page SEO Doctor & Google Algorithm Optimizer
+                </h2>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                  Audit any live webpage URL against Google E-E-A-T, Helpful Content (HCU), Heading Structure (H1/H2/H3), and Schema.org rich snippets.
+                </div>
+              </div>
+            </div>
+
+            <!-- Full-view Form -->
+            <form onsubmit="submitPageOptimizerAuditView(event)" style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px; border-radius:12px; margin-bottom:18px;">
+              <div style="display:grid; grid-template-columns:2fr 1fr 1fr auto; gap:12px; align-items:flex-end;">
+                <div>
+                  <label style="display:block; font-size:11.5px; font-weight:700; color:var(--text-secondary); margin-bottom:6px;">Webpage URL to Audit:</label>
+                  <input type="text" id="page-opt-view-url" class="form-input" style="width:100%; font-family:var(--font-mono); font-size:12.5px;" value="https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/" placeholder="https://yourwebsite.com.au/landing-page/" required />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11.5px; font-weight:700; color:var(--text-secondary); margin-bottom:6px;">Focus Keyword (Optional):</label>
+                  <input type="text" id="page-opt-view-keyword" class="form-input" style="width:100%;" placeholder="e.g. airport transfer melbourne" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11.5px; font-weight:700; color:var(--text-secondary); margin-bottom:6px;">Market / Location:</label>
+                  <input type="text" id="page-opt-view-location" class="form-input" style="width:100%;" value="Melbourne, VIC" />
+                </div>
+                <button type="submit" id="btn-submit-page-opt-view" class="btn btn-primary" style="background:linear-gradient(135deg, #10b981, #059669); border:none; font-weight:700; padding:10px 22px; white-space:nowrap;">
+                  <i class="fa-solid fa-bolt"></i> Audit Page
+                </button>
+              </div>
+              <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <input type="checkbox" id="page-opt-view-use-ai" checked style="accent-color:#10b981;" />
+                  <label for="page-opt-view-use-ai" style="font-size:11.5px; color:var(--text-muted); cursor:pointer;">
+                    Enable AI Model Router for semantic LSI clustering & Google HCU content enhancements
+                  </label>
+                </div>
+              </div>
+            </form>
+
+            <div id="page-opt-view-results-container">
+              <div style="text-align:center; color:var(--text-muted); padding:40px;">
+                <i class="fa-solid fa-stethoscope" style="font-size:36px; color:rgba(16,185,129,0.4); margin-bottom:12px; display:block;"></i>
+                Enter any webpage URL above and click <strong>"Audit Page"</strong> to run a real-time Google Algorithm SEO Health Check.
+              </div>
+            </div>
           </div>
         </section>
       </div>
@@ -668,6 +761,144 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=3.0.0"></script>
+  <!-- Page SEO Doctor & Google Algorithm Optimizer Modal -->
+  <div class="modal-overlay" id="page-optimizer-modal" style="z-index: 1250;">
+    <div class="modal-card" style="max-width: 1050px; width: 95%; max-height: 92vh;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 19px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-stethoscope" style="color: #10b981;"></i> Page SEO Doctor & Google Algorithm Optimizer
+          </h2>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Audit any live page URL against Google's latest algorithm updates (E-E-A-T, Helpful Content/HCU, Semantic Headings H1/H2/H3, Internal Links & Schema.org).
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('page-optimizer-modal')">&times;</button>
+      </div>
+
+      <!-- URL & Target Input Bar -->
+      <form onsubmit="submitPageOptimizerAudit(event)" style="background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); padding: 16px; border-radius: 12px; margin-bottom: 18px;">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 12px; align-items: flex-end;">
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Webpage URL to Audit:
+            </label>
+            <input type="text" id="page-opt-url" class="form-input" style="width: 100%; font-family: var(--font-mono); font-size: 12.5px;" value="https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/" placeholder="https://yourwebsite.com.au/landing-page/" required />
+          </div>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Focus Keyword (Optional):
+            </label>
+            <input type="text" id="page-opt-keyword" class="form-input" style="width: 100%;" placeholder="e.g. airport transfer melbourne" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Market / Location:
+            </label>
+            <input type="text" id="page-opt-location" class="form-input" style="width: 100%;" value="Melbourne, VIC" />
+          </div>
+          <button type="submit" id="btn-submit-page-opt" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 700; padding: 10px 20px; white-space: nowrap;">
+            <i class="fa-solid fa-bolt"></i> Audit Page
+          </button>
+        </div>
+        <div style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="page-opt-use-ai" checked style="accent-color: #10b981;" />
+            <label for="page-opt-use-ai" style="font-size: 11.5px; color: var(--text-muted); cursor: pointer;">
+              Enable AI Model Router for semantic LSI clustering & Google HCU content enhancements
+            </label>
+          </div>
+          <div style="font-size: 11px; color: var(--accent-cyan); cursor: pointer;" onclick="setSamplePageUrl()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Use sample URL
+          </div>
+        </div>
+      </form>
+
+      <!-- Audit Results Container -->
+      <div id="page-opt-results-container" style="max-height: 68vh; overflow-y: auto; padding-right: 4px;">
+        <div style="text-align: center; color: var(--text-muted); padding: 40px;">
+          <i class="fa-solid fa-stethoscope" style="font-size: 32px; color: rgba(16,185,129,0.4); margin-bottom: 12px; display: block;"></i>
+          Enter any page URL above and click <strong>"Audit Page"</strong> to run a real-time Google Algorithm SEO Health Check.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Configure AI Provider & API Key Modal -->
+  <div class="modal-overlay" id="configure-ai-provider-modal" style="z-index: 1300;">
+    <div class="modal-card" style="max-width: 600px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 16px;">
+        <h2 style="font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-key" style="color: var(--accent-purple);"></i> Configure AI Provider & API Key Vault
+        </h2>
+        <button class="close-btn" onclick="closeModal('configure-ai-provider-modal')">&times;</button>
+      </div>
+
+      <form id="configure-ai-provider-form" onsubmit="submitSaveAIProviderKey(event)">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Select AI Provider</label>
+          <select class="form-control" id="ai-modal-provider" onchange="handleAIProviderChange()" style="width: 100%; font-weight: 600;">
+            <option value="anthropic">Anthropic Claude (Claude 3.5 Sonnet / 3.7 / Haiku)</option>
+            <option value="gemini">Google Gemini (Gemini 2.5 Flash / 1.5 Pro)</option>
+            <option value="openai">OpenAI (GPT-4o / GPT-4o-mini / o3-mini)</option>
+            <option value="deepseek">DeepSeek AI (DeepSeek-V3 / DeepSeek-R1)</option>
+            <option value="groq">Groq Cloud (Ultra-Fast Llama 3.3 70B)</option>
+            <option value="custom">Custom / Ollama / Mistral / Self-Hosted</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+            API Key Secret <span style="font-size: 10.5px; color: var(--text-muted);">(Encrypted & Saved to Local Vault)</span>
+          </label>
+          <div style="position: relative;">
+            <input type="password" class="form-control" id="ai-modal-api-key" placeholder="Enter API Key (e.g. sk-... or AIza...)" style="width: 100%; padding-right: 40px; font-family: var(--font-mono); font-size: 13px;" required />
+            <button type="button" onclick="toggleAPIKeyVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;">
+              <i class="fa-solid fa-eye" id="eye-icon-ai-key"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group" id="ai-modal-base-url-wrap" style="margin-bottom: 14px; display: none;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+            Custom Base URL (For Ollama, Localhost, or OpenRouter)
+          </label>
+          <input type="text" class="form-control" id="ai-modal-base-url" placeholder="http://localhost:11434/v1" style="width: 100%; font-family: var(--font-mono); font-size: 12px;" />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Preferred Default Model</label>
+          <input type="text" class="form-control" id="ai-modal-model" placeholder="e.g. claude-3-5-sonnet-20241022 or gpt-4o" style="width: 100%; font-family: var(--font-mono); font-size: 12px;" />
+        </div>
+
+        <div style="background: rgba(30,41,59,0.5); border: 1px solid var(--glass-border); padding: 12px 14px; border-radius: 10px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="ai-modal-is-primary" style="accent-color: var(--accent-purple); width: 16px; height: 16px; cursor: pointer;" />
+            <label for="ai-modal-is-primary" style="font-size: 12.5px; font-weight: 700; color: #fff; cursor: pointer;">
+              Set as Active Primary AI Engine
+            </label>
+          </div>
+          <span class="badge badge-info" style="font-size: 10.5px;">Auto-Routing</span>
+        </div>
+
+        <!-- Connection Test Result Output Box -->
+        <div id="ai-modal-test-output" style="display: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; margin-bottom: 16px;"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="testCurrentAIKey()" id="btn-test-ai-key" style="font-size: 12px;">
+            <i class="fa-solid fa-plug"></i> Test Connection
+          </button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('configure-ai-provider-modal')">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-save-ai-key" style="background: linear-gradient(135deg, var(--accent-purple), #ec4899); border: none; font-weight: 700;">
+              <i class="fa-solid fa-save"></i> Save & Activate
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v=3.2.0"></script>
 </body>
 </html>

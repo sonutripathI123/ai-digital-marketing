@@ -118,3 +118,51 @@
 2026-08-16 09:44:39,202 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
 2026-08-16 09:44:39,219 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=create_meta_campaign, ad_account='act_987654321', live_enabled=False
 2026-08-16 09:44:39,219 [WARNING] [agent:agent.meta-ads-monitoring-agent] Blocked live Meta mutation request 'create_meta_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-16 16:45:20,297 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-6a3e5e99
+2026-08-16 16:45:20,298 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 16:45:20,299 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-6a3e5e99 successfully.
+2026-08-16 16:45:20,406 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-73c736a1
+2026-08-16 16:45:20,408 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 16:45:20,408 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-73c736a1 successfully.
+2026-08-16 16:45:20,463 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 16:45:20,479 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=create_meta_campaign, ad_account='act_987654321', live_enabled=False
+2026-08-16 16:45:20,479 [WARNING] [agent:agent.meta-ads-monitoring-agent] Blocked live Meta mutation request 'create_meta_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-16 17:21:31,723 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-9a089290
+2026-08-16 17:21:31,724 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:21:31,724 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-9a089290 successfully.
+2026-08-16 17:21:31,861 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-564f8522
+2026-08-16 17:21:31,862 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:21:31,862 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-564f8522 successfully.
+2026-08-16 17:21:31,917 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:21:31,931 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=create_meta_campaign, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:21:31,934 [WARNING] [agent:agent.meta-ads-monitoring-agent] Blocked live Meta mutation request 'create_meta_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-16 17:29:28,204 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-cc889da4
+2026-08-16 17:29:28,204 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:29:28,208 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-cc889da4 successfully.
+2026-08-16 17:35:21,674 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-31a77ad9
+2026-08-16 17:35:21,675 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:35:21,675 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-31a77ad9 successfully.
+2026-08-16 17:35:21,820 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-3a04e9b4
+2026-08-16 17:35:21,821 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:35:21,821 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-3a04e9b4 successfully.
+2026-08-16 17:35:21,896 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:35:21,921 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=create_meta_campaign, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:35:21,922 [WARNING] [agent:agent.meta-ads-monitoring-agent] Blocked live Meta mutation request 'create_meta_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-16 17:46:05,105 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-4d82cda2
+2026-08-16 17:46:05,105 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:46:05,106 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-4d82cda2 successfully.
+2026-08-16 17:46:05,286 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-b5895e4e
+2026-08-16 17:46:05,286 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:46:05,288 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-b5895e4e successfully.
+2026-08-16 17:46:05,350 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:46:05,373 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=create_meta_campaign, ad_account='act_987654321', live_enabled=False
+2026-08-16 17:46:05,374 [WARNING] [agent:agent.meta-ads-monitoring-agent] Blocked live Meta mutation request 'create_meta_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-08-16 18:12:12,361 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-b7f885a7
+2026-08-16 18:12:12,363 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 18:12:12,363 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-b7f885a7 successfully.
+2026-08-16 18:12:12,533 [INFO] [agent:agent.meta-ads-monitoring-agent] Starting execution for task task-258fc354
+2026-08-16 18:12:12,539 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 18:12:12,540 [INFO] [agent:agent.meta-ads-monitoring-agent] Completed task task-258fc354 successfully.
+2026-08-16 18:12:12,599 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=monitor_performance, ad_account='act_987654321', live_enabled=False
+2026-08-16 18:12:12,623 [INFO] [agent:agent.meta-ads-monitoring-agent] Executing MetaAdsMonitoringAgent task: action=create_meta_campaign, ad_account='act_987654321', live_enabled=False
+2026-08-16 18:12:12,624 [WARNING] [agent:agent.meta-ads-monitoring-agent] Blocked live Meta mutation request 'create_meta_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)

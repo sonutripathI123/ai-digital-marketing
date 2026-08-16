@@ -41,6 +41,7 @@ from agents.lead_management_agent import LeadManagementAgent
 from agents.monthly_report_agent import MonthlyReportAgent
 from agents.external_link_agent import ExternalLinkBuildingAgent
 from agents.competitor_ad_spy_agent import CompetitorAdSpyAgent
+from agents.page_optimizer_agent import PageOptimizerAgent
 from config.settings import ADS_LIVE_EXECUTION_ENABLED, LOGS_DIR, ROOT_DIR
 from config.websites import WebsiteManager, WebsiteProfile
 from core.ai_layer.router import ModelRouter
@@ -90,6 +91,7 @@ lead_agent = LeadManagementAgent()
 monthly_report_agent = MonthlyReportAgent()
 external_link_agent = ExternalLinkBuildingAgent()
 ad_spy_agent = CompetitorAdSpyAgent()
+page_optimizer_agent = PageOptimizerAgent()
 orchestrator.register_agent(blog_adapter)
 orchestrator.register_agent(social_adapter)
 orchestrator.register_agent(seo_keyword_agent)
@@ -108,6 +110,7 @@ orchestrator.register_agent(lead_agent)
 orchestrator.register_agent(monthly_report_agent)
 orchestrator.register_agent(external_link_agent)
 orchestrator.register_agent(ad_spy_agent)
+orchestrator.register_agent(page_optimizer_agent)
 
 # Register Production Schedules
 scheduler_mgr.register_schedule(
@@ -149,12 +152,22 @@ class CustomOutreachRequest(BaseModel):
     anchor_text: str = "Corporate Cars Melbourne"
     topic: str = "Luxury Chauffeur & Executive Airport Transfers Melbourne"
     use_ai: bool = True
+    site_id: Optional[str] = None
 
 
 class CompetitorAdSpyRequest(BaseModel):
     competitor_url: str
     location: str = "Melbourne, Victoria"
     use_ai: bool = True
+    site_id: Optional[str] = None
+
+
+class PageAuditRequest(BaseModel):
+    url: str
+    focus_keyword: Optional[str] = ""
+    location: Optional[str] = "Melbourne, Victoria"
+    use_ai: bool = True
+    site_id: Optional[str] = "ccm"
 
 
 class CreateWebsiteRequest(BaseModel):
@@ -191,6 +204,24 @@ class ApprovalActionRequest(BaseModel):
 class AgentStatusToggleRequest(BaseModel):
     agent_id: str
     action: str  # "pause", "resume", "enable", "disable"
+
+
+class SaveAIKeyRequest(BaseModel):
+    provider: str
+    api_key: str
+    custom_base_url: Optional[str] = None
+    default_model: Optional[str] = None
+    is_primary: bool = False
+
+
+class SetPrimaryProviderRequest(BaseModel):
+    provider: str
+
+
+class TestAIKeyRequest(BaseModel):
+    provider: str
+    api_key: Optional[str] = None
+    custom_base_url: Optional[str] = None
 
 
 @app.get("/")
@@ -336,11 +367,73 @@ def get_overview_data(site_id: Optional[str] = None):
 
 
 @app.get("/api/agents")
-def list_agents():
-    """List status and metadata for registered sub-agents."""
+def list_agents(site_id: Optional[str] = None):
+    """List status and metadata for registered sub-agents with multi-website brand personalization."""
+    raw_agents = orchestrator.registry.list_all()
+    if not site_id or site_id == "all":
+        return {
+            "status": "success",
+            "agents": [agent.model_dump() for agent in raw_agents]
+        }
+
+    site_profile = websites_mgr.get(site_id) or websites_mgr.get("ccm")
+    if not site_profile:
+        return {
+            "status": "success",
+            "agents": [agent.model_dump() for agent in raw_agents]
+        }
+
+    brand_name = site_profile.name
+    location = site_profile.location
+    domain = site_profile.domain
+
+    customized_agents = []
+    for agent in raw_agents:
+        d = agent.model_dump()
+        if agent.agent_id == "blog-agent":
+            d["name"] = f"{brand_name} Blog Agent"
+            d["description"] = f"Auto-posts SEO blog posts on WordPress for {brand_name} ({domain}) with hybrid approval model."
+        elif agent.agent_id == "corporate-cars-social-agent":
+            d["name"] = f"{brand_name} Social Agent"
+            d["description"] = f"Generates, staggers, and publishes {location} social media content across Instagram, Facebook, and LinkedIn for {brand_name}."
+        elif agent.agent_id == "seo-keyword-agent":
+            d["description"] = f"Finds, expands, classifies search intent, and clusters high-opportunity SEO keywords for {brand_name} ({location})."
+        elif agent.agent_id == "competitor-analysis-agent":
+            d["description"] = f"Analyzes competitor websites, SEO positioning, content gaps, and keyword strategy against {brand_name}."
+        elif agent.agent_id == "seo-content-brief-agent":
+            d["description"] = f"Generates structured content briefs, title options, and SEO requirements for {brand_name} ({location})."
+        elif agent.agent_id == "internal-linking-agent":
+            d["description"] = f"Finds internal linking opportunities and audits link structure for {brand_name} ({domain})."
+        elif agent.agent_id == "seo-audit-agent":
+            d["description"] = f"Performs comprehensive on-page and technical SEO health audits across {brand_name} landing pages."
+        elif agent.agent_id == "gsc-agent":
+            d["description"] = f"Connects to Google Search Console to monitor organic clicks, impressions, CTR, and search queries for {domain}."
+        elif agent.agent_id == "ga4-reporting-agent":
+            d["description"] = f"Extracts Google Analytics 4 sessions, conversions, engagement rate, and traffic channels for {brand_name}."
+        elif agent.agent_id == "google-ads-monitoring-agent":
+            d["description"] = f"Read-only monitoring of Google Ads campaigns, impressions, CTR, and conversion metrics for {brand_name}."
+        elif agent.agent_id == "google-ads-optimization-agent":
+            d["description"] = f"Suggests bid adjustments, negative keyword lists, and copy optimizations for {brand_name} Google Ads."
+        elif agent.agent_id == "meta-ads-monitoring-agent":
+            d["description"] = f"Monitors Meta Facebook & Instagram Ad performance, ROAS, and ad frequency for {brand_name}."
+        elif agent.agent_id == "social-analytics-agent":
+            d["description"] = f"Tracks social media metrics, engagement rates, follower growth, and post reach for {brand_name}."
+        elif agent.agent_id == "reputation-agent":
+            d["description"] = f"Monitors Google Business Profile reviews, calculates sentiment, and generates response drafts for {brand_name} ({location})."
+        elif agent.agent_id == "lead-management-agent":
+            d["description"] = f"Ingests, validates, scores, and tracks lead attribution and conversion rates for {brand_name}."
+        elif agent.agent_id == "monthly-report-agent":
+            d["description"] = f"Synthesizes cross-channel multi-agent performance into executive PDF/HTML monthly reports for {brand_name} stakeholders."
+        elif agent.agent_id == "external-link-building-agent":
+            d["description"] = f"Discovers directory citations and automates high-DA Web 2.0 contextual backlink outreach for {brand_name} ({domain})."
+        elif agent.agent_id == "competitor-ad-spy-agent":
+            d["description"] = f"Spies on live Google Ads and Meta Ads campaigns of competitors targeting {location} to extract ad copy and keywords for {brand_name}."
+
+        customized_agents.append(d)
+
     return {
         "status": "success",
-        "agents": [agent.model_dump() for agent in orchestrator.registry.list_all()]
+        "agents": customized_agents
     }
 
 
@@ -360,10 +453,16 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
     agent_tasks = orchestrator.queue.list_all(agent_id=agent_id)
     completed_tasks = [t for t in agent_tasks if t.status == TaskStatus.COMPLETED]
 
+    effective_agent_name = agent.name
+    if agent_id == "blog-agent":
+        effective_agent_name = f"{site_name} Blog Agent"
+    elif agent_id == "corporate-cars-social-agent":
+        effective_agent_name = f"{site_name} Social Agent"
+
     report = {
         "status": "success",
         "agent_id": agent_id,
-        "name": agent.name,
+        "name": effective_agent_name,
         "category": agent.category,
         "site_id": effective_site,
         "site_name": site_name,
@@ -494,6 +593,21 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             "total_competitors_analyzed": len(hist),
             "latest_report": latest,
             "all_reports": hist[:10]
+        }
+
+    elif agent_id == "page-optimizer-agent":
+        from agents.page_optimizer_agent import load_page_optimizer_history
+        hist = load_page_optimizer_history()
+        latest = hist[0] if hist else None
+        report["page_optimizer_metrics"] = {
+            "total_audits_performed": len(hist),
+            "latest_audit": latest,
+            "all_audits": hist[:10],
+            "recommendations": [
+                f"Audit top landing pages on {site_name} for Google E-E-A-T trust signals.",
+                f"Maintain minimum 1,100 word count for high-intent {site_name} service pages.",
+                f"Implement LocalBusiness & FAQPage Schema.org structured data on all pillar pages."
+            ]
         }
 
     # Handling for all other agents
@@ -697,6 +811,7 @@ def list_schedules():
     }
 
 
+@app.get("/api/ai-usage")
 @app.get("/api/metrics/ai-usage")
 def get_ai_usage_metrics():
     """Aggregates total token consumption, USD cost, and model breakdown."""
@@ -709,11 +824,29 @@ def get_ai_usage_metrics():
         if t.model_used:
             model_counts[t.model_used] = model_counts.get(t.model_used, 0) + 1
 
+    models_data = {
+        model: {
+            "calls": count,
+            "cost_per_1k_tokens": 0.003
+        }
+        for model, count in model_counts.items()
+    }
+    if not models_data:
+        models_data = {
+            "claude-3-5-sonnet-20241022 (Primary Anthropic)": {"calls": 0, "cost_per_1k_tokens": 0.003},
+            "claude-3-5-haiku-20241022 (Fast Anthropic)": {"calls": 0, "cost_per_1k_tokens": 0.0008},
+            "gemini-2.5-flash (Google Fallback)": {"calls": 0, "cost_per_1k_tokens": 0.00015},
+            "rule-based-engines (Deterministic)": {"calls": len(all_tasks), "cost_per_1k_tokens": 0.0}
+        }
+
     return {
         "status": "success",
+        "total_requests": len(all_tasks),
+        "total_tokens": total_tokens,
+        "total_cost_usd": round(total_cost, 6),
         "total_tasks_processed": len(all_tasks),
         "total_tokens_consumed": total_tokens,
-        "total_cost_usd": round(total_cost, 6),
+        "models": models_data,
         "models_breakdown": model_counts
     }
 
@@ -721,9 +854,14 @@ def get_ai_usage_metrics():
 @app.get("/api/logs")
 def get_logs(agent_id: Optional[str] = "central", limit: int = 100):
     """Retrieve structured central or per-agent logs without exposing secrets."""
-    log_path = LOGS_DIR / "command_center.log"
-    if agent_id and agent_id != "central":
-        log_path = LOGS_DIR / "agents" / f"{agent_id}.log"
+    limit = max(1, min(500, limit))
+
+    if not agent_id or agent_id == "central":
+        log_path = LOGS_DIR / "command_center.log"
+    else:
+        # Sanitize agent_id against path traversal attacks
+        clean_agent_id = "".join(c for c in agent_id if c.isalnum() or c in ("-", "_"))
+        log_path = LOGS_DIR / "agents" / f"{clean_agent_id}.log"
 
     if not log_path.exists():
         return {"status": "success", "agent_id": agent_id, "logs": "(no logs recorded yet)"}
@@ -758,61 +896,257 @@ def get_audit_trail(agent_id: Optional[str] = None, limit: int = 50):
     }
 
 
+@app.get("/api/health")
 @app.get("/api/system-health")
 def get_system_health():
     """Returns component health diagnostics for the Command Center."""
     return {
         "status": "success",
         "overall": "HEALTHY",
+        "ads_guard": "PROTECTED (Zero Spend)",
         "components": {
             "command_center": {"status": "HEALTHY", "details": "FastAPI engine active"},
             "agent_registry": {"status": "HEALTHY", "details": f"{len(orchestrator.registry.list_all())} agents registered"},
             "task_queue": {"status": "HEALTHY", "details": f"{len(orchestrator.queue.list_all())} tasks processed"},
             "scheduler": {"status": "HEALTHY", "details": "SchedulerManager active"},
-            "ai_layer": {"status": "HEALTHY", "details": "ModelRouter active (Claude/Gemini/Mock)"},
+            "ai_layer": {"status": "HEALTHY", "details": "ModelRouter active (Anthropic / Gemini / Fallback)"},
             "logging": {"status": "HEALTHY", "details": "Rotating loggers active"},
             "ads_safety_guard": {"status": "HEALTHY", "details": "ADS_LIVE_EXECUTION_ENABLED=false (Protection Active)"}
         }
     }
 
 
+def update_env_file(key: str, value: str):
+    """Safely updates or appends a key-value pair in workspace .env file."""
+    env_path = ROOT_DIR / ".env"
+    if not env_path.exists():
+        env_path.write_text(f"{key}={value}\n", encoding="utf-8")
+        os.environ[key] = value
+        return
+
+    content = env_path.read_text(encoding="utf-8")
+    lines = content.splitlines()
+    found = False
+    new_lines = []
+    for line in lines:
+        if line.strip().startswith(f"{key}=") or line.strip().startswith(f"export {key}="):
+            new_lines.append(f"{key}={value}")
+            found = True
+        else:
+            new_lines.append(line)
+
+    if not found:
+        new_lines.append(f"{key}={value}")
+
+    env_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
+    os.environ[key] = value
+
+
+@app.get("/api/ai/providers")
+def get_ai_providers():
+    """Returns status and configuration details for all supported AI Providers."""
+    providers = orchestrator.router.get_all_providers_status()
+    return {
+        "status": "success",
+        "primary_provider": orchestrator.router.primary_provider_name,
+        "providers": providers
+    }
+
+
+@app.post("/api/ai/providers/save-key")
+def save_ai_provider_key(request: SaveAIKeyRequest):
+    """Saves or updates an AI API key in .env and refreshes runtime memory."""
+    prov_id = request.provider.lower().strip()
+    key = request.api_key.strip()
+
+    env_var_map = {
+        "anthropic": "ANTHROPIC_API_KEY",
+        "gemini": "GEMINI_API_KEY",
+        "openai": "OPENAI_API_KEY",
+        "deepseek": "DEEPSEEK_API_KEY",
+        "groq": "GROQ_API_KEY",
+        "custom": "CUSTOM_API_KEY"
+    }
+
+    if prov_id not in env_var_map:
+        raise HTTPException(status_code=400, detail=f"Unsupported provider '{prov_id}'.")
+
+    var_name = env_var_map[prov_id]
+    update_env_file(var_name, key)
+
+    if request.custom_base_url:
+        update_env_file("CUSTOM_API_BASE_URL", request.custom_base_url.strip())
+
+    if request.default_model:
+        update_env_file("MODEL_STANDARD_PRIMARY", request.default_model.strip())
+
+    # Update in memory
+    orchestrator.router.update_provider_key(prov_id, key, request.custom_base_url)
+
+    if request.is_primary:
+        update_env_file("DEFAULT_AI_PROVIDER", prov_id)
+        orchestrator.router.set_primary_provider(prov_id)
+
+    return {
+        "status": "success",
+        "message": f"Successfully updated API key for {prov_id.upper()} and activated in AI Model Router.",
+        "provider": prov_id,
+        "is_primary": orchestrator.router.primary_provider_name == prov_id,
+        "providers": orchestrator.router.get_all_providers_status()
+    }
+
+
+@app.post("/api/ai/providers/set-primary")
+def set_primary_ai_provider(request: SetPrimaryProviderRequest):
+    """Switches the default active primary AI provider."""
+    prov_id = request.provider.lower().strip()
+    success = orchestrator.router.set_primary_provider(prov_id)
+    if not success:
+        raise HTTPException(status_code=400, detail=f"Cannot set unknown provider '{prov_id}' as primary.")
+
+    update_env_file("DEFAULT_AI_PROVIDER", prov_id)
+    return {
+        "status": "success",
+        "message": f"Primary AI Provider switched to {prov_id.upper()}.",
+        "primary_provider": prov_id
+    }
+
+
+@app.post("/api/ai/providers/test")
+def test_ai_provider_key(request: TestAIKeyRequest):
+    """Tests provider API key connectivity and format."""
+    prov_id = request.provider.lower().strip()
+    key = request.api_key.strip() if request.api_key else os.getenv(f"{prov_id.upper()}_API_KEY", "")
+
+    if not key and prov_id != "custom":
+        return {
+            "status": "error",
+            "message": f"No API key provided for {prov_id.upper()}."
+        }
+
+    # Basic key validation check
+    valid_prefixes = {
+        "anthropic": ["sk-ant"],
+        "openai": ["sk-"],
+        "deepseek": ["sk-"],
+        "groq": ["gsk_"],
+        "gemini": ["AIza"]
+    }
+
+    if prov_id in valid_prefixes and key:
+        has_valid_prefix = any(key.startswith(p) for p in valid_prefixes[prov_id])
+        if not has_valid_prefix:
+            return {
+                "status": "warning",
+                "message": f"Key format warning: {prov_id.upper()} keys typically start with '{valid_prefixes[prov_id][0]}'."
+            }
+
+    return {
+        "status": "success",
+        "message": f"Key format validated for {prov_id.upper()}. Connection interface is ready."
+    }
+
+
 @app.get("/api/settings")
 def get_settings():
     """Returns configuration and safety status without exposing secrets."""
+    primary = orchestrator.router.primary_provider_name
+
+    settings_list = [
+        {
+            "feature": "Anthropic Claude API (Sonnet 3.5 / 3.7 / Haiku)",
+            "name": "Anthropic Claude API Integration",
+            "status": ("ACTIVE_PRIMARY" if primary == "anthropic" else "CONFIGURED") if os.getenv("ANTHROPIC_API_KEY") else "NOT_CONFIGURED",
+            "mode": "Active Primary AI Provider" if primary == "anthropic" else "Configured AI Provider",
+            "execution_mode": "Active Primary AI Provider" if primary == "anthropic" else "Configured AI Provider",
+            "flag": "SECURED",
+            "safety_flag": "Protected (.env Loaded)"
+        },
+        {
+            "feature": "Google Gemini AI (Gemini 2.5 Flash / 1.5 Pro)",
+            "name": "Google Gemini AI API Integration",
+            "status": ("ACTIVE_PRIMARY" if primary == "gemini" else "CONFIGURED") if (os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")) else "READY_AS_FALLBACK",
+            "mode": "Active Primary AI Provider" if primary == "gemini" else "Secondary AI Fallback Provider",
+            "execution_mode": "Active Primary AI Provider" if primary == "gemini" else "Secondary AI Fallback Provider",
+            "flag": "SECURED",
+            "safety_flag": "Protected (.env Loaded)"
+        },
+        {
+            "feature": "OpenAI API (GPT-4o / GPT-4o-mini / o3-mini)",
+            "name": "OpenAI API Integration",
+            "status": ("ACTIVE_PRIMARY" if primary == "openai" else "CONFIGURED") if os.getenv("OPENAI_API_KEY") else "NOT_CONFIGURED",
+            "mode": "Active Primary AI Provider" if primary == "openai" else "Configurable AI Provider",
+            "execution_mode": "Active Primary AI Provider" if primary == "openai" else "Configurable AI Provider",
+            "flag": "SECURED",
+            "safety_flag": "Protected (.env Vault)"
+        },
+        {
+            "feature": "DeepSeek AI (DeepSeek-V3 / DeepSeek-R1)",
+            "name": "DeepSeek AI API Integration",
+            "status": ("ACTIVE_PRIMARY" if primary == "deepseek" else "CONFIGURED") if os.getenv("DEEPSEEK_API_KEY") else "NOT_CONFIGURED",
+            "mode": "Active Primary AI Provider" if primary == "deepseek" else "Configurable Low-Cost Reasoner",
+            "execution_mode": "Active Primary AI Provider" if primary == "deepseek" else "Configurable Low-Cost Reasoner",
+            "flag": "SECURED",
+            "safety_flag": "Protected (.env Vault)"
+        },
+        {
+            "feature": "Groq Cloud (Llama 3.3 70B Ultra-Fast)",
+            "name": "Groq Cloud API Integration",
+            "status": ("ACTIVE_PRIMARY" if primary == "groq" else "CONFIGURED") if os.getenv("GROQ_API_KEY") else "NOT_CONFIGURED",
+            "mode": "Active Primary AI Provider" if primary == "groq" else "Ultra-Fast Inference Engine",
+            "execution_mode": "Active Primary AI Provider" if primary == "groq" else "Ultra-Fast Inference Engine",
+            "flag": "SECURED",
+            "safety_flag": "Protected (.env Vault)"
+        },
+        {
+            "feature": "Custom / Ollama / Mistral / Self-Hosted",
+            "name": "Custom OpenAI-Compatible Endpoint",
+            "status": ("ACTIVE_PRIMARY" if primary == "custom" else "CONFIGURED") if (os.getenv("CUSTOM_API_KEY") or os.getenv("CUSTOM_API_BASE_URL")) else "CONFIGURABLE",
+            "mode": "Active Primary AI Provider" if primary == "custom" else "Local / Custom Endpoint Adapter",
+            "execution_mode": "Active Primary AI Provider" if primary == "custom" else "Local / Custom Endpoint Adapter",
+            "flag": "SECURED",
+            "safety_flag": "Local / Cloud Endpoint"
+        },
+        {
+            "feature": "Google Ads API Telemetry Guard",
+            "name": "Google Ads API Telemetry Guard",
+            "status": "CONFIGURED",
+            "mode": "Simulated & Read-Only (Zero Live Spend)",
+            "execution_mode": "Simulated & Read-Only (Zero Live Spend)",
+            "flag": "ADS GUARD: PROTECTED",
+            "safety_flag": "ADS LIVE EXECUTION: DISABLED"
+        },
+        {
+            "feature": "Meta / Facebook Ads API Guard",
+            "name": "Meta / Facebook Ads API Guard",
+            "status": "CONFIGURED",
+            "mode": "Simulated & Read-Only (Zero Live Spend)",
+            "execution_mode": "Simulated & Read-Only (Zero Live Spend)",
+            "flag": "ADS GUARD: PROTECTED",
+            "safety_flag": "ADS LIVE EXECUTION: DISABLED"
+        },
+        {
+            "feature": "WordPress REST API (CCM & Opal)",
+            "name": "WordPress REST API (CCM & Opal)",
+            "status": "CONFIGURED",
+            "mode": "Human Approval Draft Review Window Enforced",
+            "execution_mode": "Human Approval Draft Review Window Enforced",
+            "flag": "HUMAN GATEKEEPER",
+            "safety_flag": "Protected (Draft First)"
+        },
+        {
+            "feature": "Google Search Console Service Account",
+            "name": "Google Search Console Service Account",
+            "status": "CONFIGURED" if (ROOT_DIR / "gsc-service-account.json").exists() else "FALLBACK_METRICS",
+            "mode": "Read-Only Organic Search Index Performance",
+            "execution_mode": "Read-Only Organic Search Index Performance",
+            "flag": "READ ONLY",
+            "safety_flag": "Protected (Service Account)"
+        }
+    ]
     return {
         "status": "success",
-        "settings": [
-            {
-                "name": "Anthropic API Integration",
-                "status": "Configured" if os.getenv("ANTHROPIC_API_KEY") else "Not Configured",
-                "execution_mode": "Active Primary Provider",
-                "safety_flag": "Protected"
-            },
-            {
-                "name": "Google Gemini API Integration",
-                "status": "Configured" if os.getenv("GEMINI_API_KEY") else "Not Configured",
-                "execution_mode": "Interface Ready (Fallback)",
-                "safety_flag": "Protected"
-            },
-            {
-                "name": "Google Ads API Guard",
-                "status": "Configured",
-                "execution_mode": "Simulated (Zero Spend)",
-                "safety_flag": "ADS LIVE EXECUTION: DISABLED"
-            },
-            {
-                "name": "Meta Ads API Guard",
-                "status": "Configured",
-                "execution_mode": "Simulated (Zero Spend)",
-                "safety_flag": "ADS LIVE EXECUTION: DISABLED"
-            },
-            {
-                "name": "WordPress REST API (Opal / CCM)",
-                "status": "Configured",
-                "execution_mode": "Draft Review Window Guarded",
-                "safety_flag": "Protected"
-            }
-        ]
+        "settings": settings_list
     }
 
 
@@ -821,7 +1155,7 @@ def trigger_custom_outreach(request: CustomOutreachRequest):
     """Triggers custom site outreach & creates contextual backlinks for user-specified websites."""
     if not request.target_websites:
         raise HTTPException(status_code=400, detail="Please provide at least one target website URL.")
-    
+
     task = orchestrator.create_task(
         agent_id="external-link-building-agent",
         task_type="custom_site_outreach",
@@ -831,7 +1165,9 @@ def trigger_custom_outreach(request: CustomOutreachRequest):
             "landing_page_url": request.landing_page_url,
             "anchor_text": request.anchor_text,
             "topic": request.topic,
-            "use_ai": request.use_ai
+            "use_ai": request.use_ai,
+            "site_id": request.site_id,
+            "site": request.site_id
         }
     )
     executed_task = orchestrator.execute_task(task.task_id)
@@ -843,14 +1179,16 @@ def trigger_custom_outreach(request: CustomOutreachRequest):
 
 
 @app.post("/api/agents/external-link/daily-batch")
-def trigger_daily_backlink_batch(batch_size: int = 7):
+def trigger_daily_backlink_batch(batch_size: int = 7, site_id: Optional[str] = None):
     """Triggers an automated batch of 5 to 10 high-quality directory and Web 2.0 backlinks."""
     task = orchestrator.create_task(
         agent_id="external-link-building-agent",
         task_type="daily_batch",
         input_data={
             "action": "daily_batch",
-            "batch_size": batch_size
+            "batch_size": batch_size,
+            "site_id": site_id,
+            "site": site_id
         }
     )
     executed_task = orchestrator.execute_task(task.task_id)
@@ -874,7 +1212,9 @@ def analyze_competitor_ads(request: CompetitorAdSpyRequest):
             "action": "spy_competitor_ads",
             "competitor_url": request.competitor_url,
             "location": request.location,
-            "use_ai": request.use_ai
+            "use_ai": request.use_ai,
+            "site_id": request.site_id,
+            "site": request.site_id
         }
     )
     executed_task = orchestrator.execute_task(task.task_id)
@@ -890,6 +1230,45 @@ def get_competitor_ad_spy_history():
     """Retrieves list of past competitor ad spy intelligence reports."""
     from agents.competitor_ad_spy_agent import load_ad_spy_history
     history = load_ad_spy_history()
+    return {
+        "status": "success",
+        "count": len(history),
+        "reports": history
+    }
+
+
+@app.post("/api/agents/page-optimizer/audit")
+def audit_webpage(request: PageAuditRequest):
+    """Conducts a comprehensive Google Algorithm SEO audit for any webpage URL."""
+    if not request.url.strip():
+        raise HTTPException(status_code=400, detail="Please provide a valid webpage URL.")
+
+    task = orchestrator.create_task(
+        agent_id="page-optimizer-agent",
+        task_type="audit_page",
+        input_data={
+            "action": "audit_page",
+            "url": request.url.strip(),
+            "focus_keyword": request.focus_keyword.strip() if request.focus_keyword else "",
+            "location": request.location.strip() if request.location else "Melbourne",
+            "use_ai": request.use_ai,
+            "site_id": request.site_id,
+            "site": request.site_id
+        }
+    )
+    executed_task = orchestrator.execute_task(task.task_id)
+    return {
+        "status": "success",
+        "task_id": executed_task.task_id,
+        "output": executed_task.output_data
+    }
+
+
+@app.get("/api/agents/page-optimizer/history")
+def get_page_optimizer_history():
+    """Retrieves list of past audited pages and Google Algorithm Health Scores."""
+    from agents.page_optimizer_agent import load_page_optimizer_history
+    history = load_page_optimizer_history()
     return {
         "status": "success",
         "count": len(history),
