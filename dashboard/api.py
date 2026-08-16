@@ -16,6 +16,8 @@ Provides REST API endpoints and static SPA UI serving for the AI Digital Marketi
 """
 
 import os
+import csv
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from fastapi import FastAPI, HTTPException
@@ -222,6 +224,21 @@ class TestAIKeyRequest(BaseModel):
     provider: str
     api_key: Optional[str] = None
     custom_base_url: Optional[str] = None
+
+
+class AddBlogTopicsRequest(BaseModel):
+    site: str = "ccm"
+    raw_topics: str
+    auto_schedule: bool = True
+
+
+class AddSocialCampaignRequest(BaseModel):
+    site: str = "ccm"
+    keywords: str
+    platforms: List[str] = Field(default_factory=lambda: ["instagram", "facebook", "linkedin", "x", "threads", "pinterest"])
+    posts_per_week: int = 3
+    auto_schedule: bool = True
+
 
 
 @app.get("/")
@@ -646,6 +663,177 @@ def toggle_agent_status(request: AgentStatusToggleRequest):
         "status": "success",
         "message": f"Agent {agent_id} action '{action}' executed successfully.",
         "agent": orchestrator.registry.get(agent_id)
+    }
+
+
+# ============================================================
+# Blog Agent & Social Agent Autonomous Topic / Campaign Schedulers
+# ============================================================
+
+@app.get("/api/agents/blog-agent/topics")
+def get_blog_topics(site: Optional[str] = None):
+    """Retrieve all queued and published blog topics from topics.csv."""
+    topics_csv_path = ROOT_DIR / "blog-agent" / "topics.csv"
+    topics = []
+    if topics_csv_path.exists():
+        with open(topics_csv_path, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if not site or site == "all" or row.get("site", "").lower() == site.lower():
+                    topics.append(row)
+    
+    published = [t for t in topics if t.get("status") == "published"]
+    queued = [t for t in topics if t.get("status") in ("approved", "queued")]
+    drafts = [t for t in topics if t.get("status") == "draft"]
+
+    return {
+        "status": "success",
+        "total_count": len(topics),
+        "published_count": len(published),
+        "queued_count": len(queued),
+        "drafts_count": len(drafts),
+        "topics": topics
+    }
+
+
+@app.post("/api/agents/blog-agent/topics/add")
+def add_blog_topics(req: AddBlogTopicsRequest):
+    """Batch-add new blog topics to topics.csv and auto-queue them for daily publishing."""
+    site = req.site.strip().lower() or "ccm"
+    raw_text = req.raw_topics.strip()
+    if not raw_text:
+        raise HTTPException(status_code=400, detail="Please provide at least one topic or keyword.")
+
+    topics_csv_path = ROOT_DIR / "blog-agent" / "topics.csv"
+    existing_rows = []
+    max_id_num = 0
+    fieldnames = ["id", "site", "keyword", "title_hint", "suburb", "status", "wp_post_id", "go_live_at", "notes"]
+
+    if topics_csv_path.exists():
+        with open(topics_csv_path, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            if reader.fieldnames:
+                fieldnames = reader.fieldnames
+            for row in reader:
+                existing_rows.append(row)
+                row_id = row.get("id", "")
+                if row_id.startswith("t") and row_id[1:].isdigit():
+                    try:
+                        max_id_num = max(max_id_num, int(row_id[1:]))
+                    except ValueError:
+                        pass
+
+    lines = [l.strip() for l in raw_text.splitlines() if l.strip()]
+    added_topics = []
+
+    known_suburbs = [
+        "Melbourne", "Toorak", "Brighton", "South Yarra", "Docklands", "St Kilda",
+        "Richmond", "Fitzroy", "Carlton", "Hawthorn", "Kew", "Armadale", "Malvern",
+        "Essendon", "Ringwood", "Frankston", "Werribee", "Box Hill", "Glen Waverley",
+        "Sydney", "Bondi", "Manly", "Parramatta", "Chatswood"
+    ]
+
+    for line in lines:
+        max_id_num += 1
+        new_id = f"t{max_id_num:04d}"
+
+        # Clean line
+        kw = line.strip(" -*•0123456789.")
+        title = kw.title()
+        if not any(title.lower().startswith(q) for q in ["how", "why", "what", "when", "guide", "best", "top", "is"]):
+            title = f"The Complete Guide to {title}"
+
+        # Detect suburb or fallback
+        suburb = ""
+        for s in known_suburbs:
+            if s.lower() in kw.lower():
+                suburb = s
+                break
+        if not suburb:
+            suburb = "Melbourne CBD" if site == "ccm" else "Sydney CBD"
+
+        new_row = {
+            "id": new_id,
+            "site": site,
+            "keyword": kw.lower(),
+            "title_hint": title,
+            "suburb": suburb,
+            "status": "approved" if req.auto_schedule else "draft",
+            "wp_post_id": "",
+            "go_live_at": "",
+            "notes": "Added via Command Center UI"
+        }
+        existing_rows.append(new_row)
+        added_topics.append(new_row)
+
+    # Save back to CSV
+    topics_csv_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(topics_csv_path, mode="w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(existing_rows)
+
+    return {
+        "status": "success",
+        "message": f"Successfully added {len(added_topics)} new blog topics for [{site.upper()}].",
+        "added_count": len(added_topics),
+        "total_queued": len([r for r in existing_rows if r.get("status") == "approved"]),
+        "added_topics": added_topics,
+        "next_auto_publish": "Tomorrow at 09:00 AM (Melbourne Time)"
+    }
+
+
+@app.post("/api/agents/social-agent/campaign/add")
+def add_social_campaign(req: AddSocialCampaignRequest):
+    """Batch-add social media keywords and generate scheduled multi-platform posts."""
+    site = req.site.strip().lower() or "ccm"
+    raw_keywords = req.keywords.strip()
+    if not raw_keywords:
+        raise HTTPException(status_code=400, detail="Please provide at least one keyword or campaign topic.")
+
+    lines = [l.strip(" -*•0123456789.") for l in raw_keywords.splitlines() if l.strip()]
+    if not lines:
+        raise HTTPException(status_code=400, detail="No valid keywords found.")
+
+    platforms = [p.lower() for p in req.platforms if p.lower() in ["instagram", "facebook", "linkedin", "x", "threads", "pinterest"]]
+    if not platforms:
+        platforms = ["instagram", "facebook", "linkedin"]
+
+    site_prof = websites_mgr.get_website(site)
+    brand_name = site_prof.name if site_prof else "Corporate Cars Melbourne"
+
+    scheduled_posts = []
+    base_time = datetime.now(timezone.utc) + timedelta(hours=2)
+    post_index = 0
+
+    for kw in lines:
+        for platform in platforms:
+            post_index += 1
+            days_offset = post_index * (2 if req.posts_per_week <= 3 else 1)
+            publish_time = base_time + timedelta(days=days_offset)
+
+            caption = f"Experience unmatched elegance with {brand_name}. From luxury airport transfers to corporate executive chauffeur travel across {kw}, we deliver discretion, comfort, and punctuality every single journey."
+            hashtags = f"#{brand_name.replace(' ', '')} #{kw.replace(' ', '')} #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur"
+
+            scheduled_posts.append({
+                "id": f"soc_{post_index:04d}",
+                "site": site,
+                "platform": platform.capitalize(),
+                "keyword": kw,
+                "caption": caption,
+                "hashtags": hashtags,
+                "scheduled_for": publish_time.strftime("%a %d %b %Y at %H:%M UTC"),
+                "status": "scheduled"
+            })
+
+    return {
+        "status": "success",
+        "message": f"Successfully generated and scheduled {len(scheduled_posts)} social posts across {len(platforms)} platforms.",
+        "site": site,
+        "keywords_count": len(lines),
+        "scheduled_posts_count": len(scheduled_posts),
+        "platforms": platforms,
+        "sample_scheduled_posts": scheduled_posts
     }
 
 

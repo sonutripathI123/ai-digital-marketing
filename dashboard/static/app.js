@@ -785,6 +785,16 @@ async function loadAgents() {
         <div class="agent-footer">
           <span class="badge ${a.enabled ? 'badge-success' : 'badge-danger'}">${a.enabled ? (a.paused ? 'PAUSED' : 'ACTIVE') : 'DISABLED'}</span>
           <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; align-items:center;">
+            ${a.agent_id === 'blog-agent' ? `
+              <button class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); font-weight:700; border:none; box-shadow:0 0 12px rgba(6,182,212,0.5); color:#fff;" onclick="openAddBlogTopicsModal('${currentSiteId}')" title="Add new blog topics and auto-schedule">
+                <i class="fa-solid fa-plus"></i> Add Topics
+              </button>
+            ` : ''}
+            ${a.agent_id === 'corporate-cars-social-agent' ? `
+              <button class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, var(--accent-purple), #ec4899); font-weight:700; border:none; box-shadow:0 0 12px rgba(168,85,247,0.5); color:#fff;" onclick="openAddSocialCampaignModal('${currentSiteId}')" title="Add social keywords and auto-generate campaign">
+                <i class="fa-solid fa-plus"></i> Add Keywords
+              </button>
+            ` : ''}
             ${a.agent_id === 'external-link-building-agent' ? `
               <button class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); font-weight:700; border:none; box-shadow:0 0 12px rgba(6,182,212,0.5); color:#fff;" onclick="openCustomOutreachModal()" title="Manually add custom websites to create backlinks">
                 <i class="fa-solid fa-plus"></i> Add Sites
@@ -905,6 +915,16 @@ async function viewAgentReport(agentId) {
       const bm = data.blog_metrics;
       const nextP = bm.next_scheduled_post_tomorrow || {};
       container.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.3); padding:14px 18px; border-radius:14px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-size:13.5px; font-weight:800; color:var(--accent-cyan);"><i class="fa-solid fa-blog"></i> 24/7 Autonomous SEO Blog Publishing Engine</div>
+            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Target: <strong>${data.site_name}</strong> &bull; Cadence: Daily at 09:00 AM</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openAddBlogTopicsModal('${currentSiteId}')" style="font-size:12px; padding:8px 16px; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-weight:700;">
+            <i class="fa-solid fa-plus"></i> + Batch Add Topics & Auto-Schedule
+          </button>
+        </div>
+
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
           <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:16px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">Live Published Posts</div>
@@ -963,6 +983,16 @@ async function viewAgentReport(agentId) {
     } else if (agentId === 'corporate-cars-social-agent' && data.social_metrics) {
       const sm = data.social_metrics;
       container.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.3); padding:14px 18px; border-radius:14px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-size:13.5px; font-weight:800; color:var(--accent-purple);"><i class="fa-solid fa-share-nodes"></i> Multi-Platform Social Media Scheduler & Daemon</div>
+            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Platforms: Instagram, Facebook, LinkedIn, X, Threads, Pinterest &bull; Target: <strong>${data.site_name}</strong></div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openAddSocialCampaignModal('${currentSiteId}')" style="font-size:12px; padding:8px 16px; background:linear-gradient(135deg, var(--accent-purple), #ec4899); border:none; font-weight:700;">
+            <i class="fa-solid fa-plus"></i> + Add Keywords & Auto-Generate
+          </button>
+        </div>
+
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:20px;">
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#3b82f6; text-transform:uppercase;"><i class="fa-brands fa-facebook"></i> Facebook</div>
@@ -3163,6 +3193,163 @@ window.submitSaveAIProviderKey = submitSaveAIProviderKey;
 window.setPrimaryAIProvider = setPrimaryAIProvider;
 window.loadAIProviders = loadAIProviders;
 window.copyToClipboard = copyToClipboard;
+
+/* ============================================================
+   Batch Topic & Social Campaign Schedulers Handlers
+   ============================================================ */
+
+function openAddBlogTopicsModal(siteId) {
+  const siteSelect = document.getElementById('blog-topics-site-select');
+  if (siteSelect) {
+    siteSelect.innerHTML = allWebsitesList.map(s => `
+      <option value="${s.site_id}" ${s.site_id === (siteId || currentSiteId) ? 'selected' : ''}>
+        ${s.name} (${s.domain.replace('https://', '').replace('http://', '')})
+      </option>
+    `).join('');
+  }
+  const textarea = document.getElementById('blog-topics-textarea');
+  if (textarea) textarea.value = '';
+  updateBlogTopicCounter();
+  openModal('modal-add-blog-topics');
+}
+
+function updateBlogTopicCounter() {
+  const textarea = document.getElementById('blog-topics-textarea');
+  const badge = document.getElementById('blog-topics-count-badge');
+  if (!textarea || !badge) return;
+  const lines = textarea.value.split('\n').filter(l => l.trim().length > 0);
+  badge.textContent = `${lines.length} Topic${lines.length === 1 ? '' : 's'}`;
+}
+
+async function handleSaveBlogTopics(e) {
+  e.preventDefault();
+  const site = document.getElementById('blog-topics-site-select').value;
+  const rawText = document.getElementById('blog-topics-textarea').value.trim();
+  const autoApprove = document.getElementById('blog-topics-auto-approve').checked;
+  const btn = document.getElementById('btn-save-blog-topics');
+
+  if (!rawText) {
+    alert('Please enter or paste at least one blog topic or keyword.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving Topics...';
+
+  try {
+    const res = await fetch('/api/agents/blog-agent/topics/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        site: site,
+        raw_topics: rawText,
+        auto_schedule: autoApprove
+      })
+    });
+    const data = await res.json();
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Save Topics & Queue Auto-Publish';
+
+    if (!res.ok || data.status === 'error') {
+      alert(`Error: ${data.detail || data.message || 'Failed to add topics'}`);
+      return;
+    }
+
+    closeModal('modal-add-blog-topics');
+    alert(`Success! ${data.added_count} new blog topics added to [${site.toUpperCase()}].\nTotal queued for daily auto-publish: ${data.total_queued} topics.\nNext Auto-Publish: ${data.next_auto_publish}`);
+    await loadAgents();
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Save Topics & Queue Auto-Publish';
+    alert(`Failed to save topics: ${err.message}`);
+  }
+}
+
+function openAddSocialCampaignModal(siteId) {
+  const siteSelect = document.getElementById('social-campaign-site-select');
+  if (siteSelect) {
+    siteSelect.innerHTML = allWebsitesList.map(s => `
+      <option value="${s.site_id}" ${s.site_id === (siteId || currentSiteId) ? 'selected' : ''}>
+        ${s.name} (${s.domain.replace('https://', '').replace('http://', '')})
+      </option>
+    `).join('');
+  }
+  const textarea = document.getElementById('social-keywords-textarea');
+  if (textarea) textarea.value = '';
+  updateSocialKeywordCounter();
+  openModal('modal-add-social-campaign');
+}
+
+function updateSocialKeywordCounter() {
+  const textarea = document.getElementById('social-keywords-textarea');
+  const badge = document.getElementById('social-keywords-count-badge');
+  if (!textarea || !badge) return;
+  const lines = textarea.value.split('\n').filter(l => l.trim().length > 0);
+  badge.textContent = `${lines.length} Keyword${lines.length === 1 ? '' : 's'}`;
+}
+
+async function handleSaveSocialCampaign(e) {
+  e.preventDefault();
+  const site = document.getElementById('social-campaign-site-select').value;
+  const rawKeywords = document.getElementById('social-keywords-textarea').value.trim();
+  const frequency = parseInt(document.getElementById('social-frequency-select').value) || 3;
+  const btn = document.getElementById('btn-save-social-campaign');
+
+  if (!rawKeywords) {
+    alert('Please enter or paste at least one keyword or service topic.');
+    return;
+  }
+
+  const platformCheckboxes = document.querySelectorAll('input[name="social-platform"]:checked');
+  const platforms = Array.from(platformCheckboxes).map(cb => cb.value);
+
+  if (platforms.length === 0) {
+    alert('Please select at least one social media platform.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating Campaign...';
+
+  try {
+    const res = await fetch('/api/agents/social-agent/campaign/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        site: site,
+        keywords: rawKeywords,
+        platforms: platforms,
+        posts_per_week: frequency,
+        auto_schedule: true
+      })
+    });
+    const data = await res.json();
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-calendar-plus"></i> Generate Campaign & Auto-Schedule';
+
+    if (!res.ok || data.status === 'error') {
+      alert(`Error: ${data.detail || data.message || 'Failed to generate campaign'}`);
+      return;
+    }
+
+    closeModal('modal-add-social-campaign');
+    alert(`Success! Generated and scheduled ${data.scheduled_posts_count} new social posts across ${data.platforms.length} platforms for [${site.toUpperCase()}].\nPosts are queued in auto-publish scheduler.`);
+    await loadAgents();
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-calendar-plus"></i> Generate Campaign & Auto-Schedule';
+    alert(`Failed to generate campaign: ${err.message}`);
+  }
+}
+
+// Global scope bindings
+window.openAddBlogTopicsModal = openAddBlogTopicsModal;
+window.updateBlogTopicCounter = updateBlogTopicCounter;
+window.handleSaveBlogTopics = handleSaveBlogTopics;
+window.openAddSocialCampaignModal = openAddSocialCampaignModal;
+window.updateSocialKeywordCounter = updateSocialKeywordCounter;
+window.handleSaveSocialCampaign = handleSaveSocialCampaign;
+
 
 
 

@@ -908,6 +908,145 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=8.0.0"></script>
+  <!-- Modal: Batch Add Blog Topics & Auto-Scheduler -->
+  <div class="modal-overlay" id="modal-add-blog-topics">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(6, 182, 212, 0.18); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; color: var(--accent-cyan); font-size: 18px;">
+            <i class="fa-solid fa-newspaper"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin: 0;">Add Blog Topics & Auto-Scheduler</h3>
+            <p style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">Queue new SEO topics for 24/7 autonomous daily publishing</p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal('modal-add-blog-topics')" type="button">&times;</button>
+      </div>
+
+      <form id="form-add-blog-topics" onsubmit="handleSaveBlogTopics(event)">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Target Website Context</label>
+          <select class="form-control" id="blog-topics-site-select" style="width: 100%; font-size: 13px;">
+            <option value="ccm">Corporate Cars Melbourne (corporatecarsmelbourne.com.au)</option>
+            <option value="opal">Opal Chauffeurs (opalchauffeurs.com.au)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin: 0;">
+              Enter / Paste Blog Topics or Keywords (One per line)
+            </label>
+            <span class="badge badge-info" id="blog-topics-count-badge">0 Topics</span>
+          </div>
+          <textarea class="form-control" id="blog-topics-textarea" rows="6" placeholder="Example:&#10;Toorak executive airport transfer cost&#10;Brighton chauffeur vs rideshare to airport&#10;Melbourne CBD corporate car service guide&#10;Why business executives choose luxury chauffeur hire" style="width: 100%; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; padding: 12px;" oninput="updateBlogTopicCounter()"></textarea>
+        </div>
+
+        <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); padding: 12px 14px; border-radius: 10px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="blog-topics-auto-approve" checked style="accent-color: var(--accent-cyan); width: 17px; height: 17px; cursor: pointer;" />
+            <label for="blog-topics-auto-approve" style="font-size: 12.5px; font-weight: 700; color: #fff; cursor: pointer;">
+              Auto-Approve & Schedule For Daily 9:00 AM Auto-Publishing
+            </label>
+          </div>
+          <i class="fa-solid fa-bolt" style="color: var(--accent-cyan);"></i>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-blog-topics')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-blog-topics" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border: none; font-weight: 700;">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Save Topics & Queue Auto-Publish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Batch Add Social Keywords & Campaign Generator -->
+  <div class="modal-overlay" id="modal-add-social-campaign">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(168, 85, 247, 0.18); border: 1px solid rgba(168, 85, 247, 0.4); display: flex; align-items: center; justify-content: center; color: var(--accent-purple); font-size: 18px;">
+            <i class="fa-solid fa-share-nodes"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin: 0;">Add Social Keywords & Campaign Generator</h3>
+            <p style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">Create & auto-schedule multi-platform social posts</p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal('modal-add-social-campaign')" type="button">&times;</button>
+      </div>
+
+      <form id="form-add-social-campaign" onsubmit="handleSaveSocialCampaign(event)">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Target Website Context</label>
+          <select class="form-control" id="social-campaign-site-select" style="width: 100%; font-size: 13px;">
+            <option value="ccm">Corporate Cars Melbourne (corporatecarsmelbourne.com.au)</option>
+            <option value="opal">Opal Chauffeurs (opalchauffeurs.com.au)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin: 0;">
+              Enter Campaign Keywords / Services (One per line)
+            </label>
+            <span class="badge badge-purple" id="social-keywords-count-badge">0 Keywords</span>
+          </div>
+          <textarea class="form-control" id="social-keywords-textarea" rows="4" placeholder="Example:&#10;Melbourne Airport Luxury Transfers&#10;Yarra Valley Private Wine Tours&#10;Executive Mercedes S-Class Chauffeur&#10;Grand Prix VIP Corporate Transport" style="width: 100%; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; padding: 12px;" oninput="updateSocialKeywordCounter()"></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">Target Social Media Platforms</label>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fff; cursor: pointer; background: rgba(30,41,59,0.6); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border);">
+              <input type="checkbox" name="social-platform" value="instagram" checked style="accent-color: var(--accent-purple);" />
+              <i class="fa-brands fa-instagram" style="color: #ec4899;"></i> Instagram
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fff; cursor: pointer; background: rgba(30,41,59,0.6); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border);">
+              <input type="checkbox" name="social-platform" value="facebook" checked style="accent-color: var(--accent-purple);" />
+              <i class="fa-brands fa-facebook" style="color: #3b82f6;"></i> Facebook
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fff; cursor: pointer; background: rgba(30,41,59,0.6); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border);">
+              <input type="checkbox" name="social-platform" value="linkedin" checked style="accent-color: var(--accent-purple);" />
+              <i class="fa-brands fa-linkedin" style="color: #0ea5e9;"></i> LinkedIn
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fff; cursor: pointer; background: rgba(30,41,59,0.6); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border);">
+              <input type="checkbox" name="social-platform" value="x" checked style="accent-color: var(--accent-purple);" />
+              <i class="fa-brands fa-x-twitter" style="color: #f8fafc;"></i> X (Twitter)
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fff; cursor: pointer; background: rgba(30,41,59,0.6); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border);">
+              <input type="checkbox" name="social-platform" value="threads" checked style="accent-color: var(--accent-purple);" />
+              <i class="fa-brands fa-threads" style="color: #f8fafc;"></i> Threads
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fff; cursor: pointer; background: rgba(30,41,59,0.6); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border);">
+              <input type="checkbox" name="social-platform" value="pinterest" checked style="accent-color: var(--accent-purple);" />
+              <i class="fa-brands fa-pinterest" style="color: #ef4444;"></i> Pinterest
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Posting Cadence (Schedule Frequency)</label>
+          <select class="form-control" id="social-frequency-select" style="width: 100%; font-size: 12.5px;">
+            <option value="3">3 Posts Per Week (Recommended)</option>
+            <option value="7">Daily (7 Posts Per Week)</option>
+            <option value="1">Weekly (1 Post Per Week)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-social-campaign')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-social-campaign" style="background: linear-gradient(135deg, var(--accent-purple), #ec4899); border: none; font-weight: 700;">
+            <i class="fa-solid fa-calendar-plus"></i> Generate Campaign & Auto-Schedule
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v=9.0.0"></script>
 </body>
 </html>
