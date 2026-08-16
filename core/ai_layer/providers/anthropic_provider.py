@@ -8,8 +8,10 @@ token usage tracking, and cost calculation.
 import json
 import os
 import time
-from typing import Optional
-import anthropic
+try:
+    import anthropic
+except ImportError:
+    anthropic = None
 
 from config import TOKEN_PRICING
 from core.ai_layer.base import BaseAIProvider, LLMRequest, LLMResponse
@@ -44,6 +46,14 @@ class AnthropicProvider(BaseAIProvider):
 
     def generate(self, request: LLMRequest, model_override: Optional[str] = None) -> LLMResponse:
         start_time = time.time()
+        if not anthropic:
+            return LLMResponse(
+                content="",
+                model_used=model_override or "claude-3-5-sonnet-20241022",
+                provider=self.provider_name,
+                success=False,
+                error_message="anthropic package is not installed."
+            )
         if not self._api_key or self._api_key.startswith("your_"):
             return LLMResponse(
                 content="",
