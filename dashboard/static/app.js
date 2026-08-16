@@ -63,11 +63,46 @@ function switchToView(view) {
 
 function initNavigation() {
   const navItems = document.querySelectorAll('.nav-item');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const sidebarClose = document.getElementById('sidebar-close-btn');
+
+  function closeMobileSidebar() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+  }
+
+  function openMobileSidebar() {
+    if (sidebar) sidebar.classList.add('open');
+    if (overlay) overlay.classList.add('active');
+  }
+
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openMobileSidebar();
+    });
+  }
+
+  if (sidebarClose) {
+    sidebarClose.addEventListener('click', () => {
+      closeMobileSidebar();
+    });
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', () => {
+      closeMobileSidebar();
+    });
+  }
+
   navItems.forEach(item => {
     item.addEventListener('click', () => {
       const view = item.dataset.view;
       if (!view) return;
       switchToView(view);
+      closeMobileSidebar();
     });
   });
 }
