@@ -61,38 +61,70 @@ function switchToView(view) {
   loadCurrentView(effectiveView);
 }
 
-window.openMobileSidebar = function() {
+let isSidebarTransitioning = false;
+
+window.openMobileSidebar = function(e) {
+  if (e) {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+  }
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
-  if (sidebar) sidebar.classList.add('open');
-  if (overlay) overlay.classList.add('active');
+  if (sidebar) {
+    sidebar.classList.add('open');
+  }
+  if (overlay) {
+    overlay.classList.add('active');
+  }
+  isSidebarTransitioning = true;
+  setTimeout(() => { isSidebarTransitioning = false; }, 350);
 };
 
-window.closeMobileSidebar = function() {
+window.closeMobileSidebar = function(e) {
+  if (isSidebarTransitioning) return;
+  if (e) {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+  }
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
-  if (sidebar) sidebar.classList.remove('open');
-  if (overlay) overlay.classList.remove('active');
+  if (sidebar) {
+    sidebar.classList.remove('open');
+  }
+  if (overlay) {
+    overlay.classList.remove('active');
+  }
 };
 
 window.toggleMobileSidebar = function(e) {
-  if (e) e.stopPropagation();
+  if (e) {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+  }
   const sidebar = document.getElementById('sidebar');
   if (sidebar && sidebar.classList.contains('open')) {
-    window.closeMobileSidebar();
+    window.closeMobileSidebar(e);
   } else {
-    window.openMobileSidebar();
+    window.openMobileSidebar(e);
   }
 };
 
 function initNavigation() {
   const navItems = document.querySelectorAll('.nav-item');
+  const sidebar = document.getElementById('sidebar');
+  
+  if (sidebar) {
+    sidebar.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+
   navItems.forEach(item => {
-    item.addEventListener('click', () => {
+    item.addEventListener('click', (e) => {
       const view = item.dataset.view;
       if (!view) return;
       switchToView(view);
-      window.closeMobileSidebar();
+      window.closeMobileSidebar(e);
     });
   });
 }
