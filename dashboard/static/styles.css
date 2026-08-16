@@ -1068,7 +1068,7 @@ body {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: rgba(30, 41, 59, 0.9);
+  background: rgba(30, 41, 59, 0.95);
   border: 1px solid var(--glass-border);
   border-radius: 10px;
   color: var(--text-primary);
@@ -1077,6 +1077,10 @@ body {
   transition: all 0.2s ease;
   margin-right: 10px;
   flex-shrink: 0;
+  position: relative;
+  z-index: 10000;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-menu-btn:hover, .mobile-menu-btn:active {
