@@ -61,48 +61,38 @@ function switchToView(view) {
   loadCurrentView(effectiveView);
 }
 
-function initNavigation() {
-  const navItems = document.querySelectorAll('.nav-item');
+window.openMobileSidebar = function() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
-  const mobileToggle = document.getElementById('mobile-menu-toggle');
-  const sidebarClose = document.getElementById('sidebar-close-btn');
+  if (sidebar) sidebar.classList.add('open');
+  if (overlay) overlay.classList.add('active');
+};
 
-  function closeMobileSidebar() {
-    if (sidebar) sidebar.classList.remove('open');
-    if (overlay) overlay.classList.remove('active');
+window.closeMobileSidebar = function() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (sidebar) sidebar.classList.remove('open');
+  if (overlay) overlay.classList.remove('active');
+};
+
+window.toggleMobileSidebar = function(e) {
+  if (e) e.stopPropagation();
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && sidebar.classList.contains('open')) {
+    window.closeMobileSidebar();
+  } else {
+    window.openMobileSidebar();
   }
+};
 
-  function openMobileSidebar() {
-    if (sidebar) sidebar.classList.add('open');
-    if (overlay) overlay.classList.add('active');
-  }
-
-  if (mobileToggle) {
-    mobileToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openMobileSidebar();
-    });
-  }
-
-  if (sidebarClose) {
-    sidebarClose.addEventListener('click', () => {
-      closeMobileSidebar();
-    });
-  }
-
-  if (overlay) {
-    overlay.addEventListener('click', () => {
-      closeMobileSidebar();
-    });
-  }
-
+function initNavigation() {
+  const navItems = document.querySelectorAll('.nav-item');
   navItems.forEach(item => {
     item.addEventListener('click', () => {
       const view = item.dataset.view;
       if (!view) return;
       switchToView(view);
-      closeMobileSidebar();
+      window.closeMobileSidebar();
     });
   });
 }

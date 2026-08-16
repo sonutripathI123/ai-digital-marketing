@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="/static/styles.css?v=3.5.0">
+  <link rel="stylesheet" href="/static/styles.css?v=5.0.0">
 </head>
 <body>
   <!-- Full-Screen Ambient Luxury Background Overlay -->
@@ -19,7 +19,7 @@
   </div>
 
   <!-- Mobile Sidebar Backdrop Overlay -->
-  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+  <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeMobileSidebar()"></div>
 
   <div id="app-layout">
     <!-- Sidebar Navigation -->
@@ -33,7 +33,7 @@
             <div class="brand-title">Corporate Cars</div>
             <div class="brand-subtitle" id="brand-agents-count">AI MARKETING OS</div>
           </div>
-          <button id="sidebar-close-btn" class="sidebar-close-btn" type="button" aria-label="Close Sidebar">
+          <button id="sidebar-close-btn" class="sidebar-close-btn" type="button" aria-label="Close Sidebar" onclick="closeMobileSidebar()">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
@@ -91,7 +91,7 @@
       <!-- Top Header Bar -->
       <header id="top-header">
         <div class="header-title-group">
-          <button id="mobile-menu-toggle" class="mobile-menu-btn" type="button" aria-label="Toggle Navigation Menu">
+          <button id="mobile-menu-toggle" class="mobile-menu-btn" type="button" aria-label="Toggle Navigation Menu" onclick="toggleMobileSidebar(event)">
             <i class="fa-solid fa-bars"></i>
           </button>
           <h1 id="page-title">System Overview & 3D Telemetry</h1>
@@ -908,6 +908,6 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=3.2.0"></script>
+  <script src="/static/app.js?v=5.0.0"></script>
 </body>
 </html>
