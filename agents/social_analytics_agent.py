@@ -232,9 +232,6 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
                 live_accounts["facebook"]["followers"] = data_fb.get("followers_count", data_fb.get("fan_count", 1))
         except Exception as e:
             logger.warning(f"Meta FB live fetch failed: {e}")
-                live_accounts["facebook"]["followers"] = data_fb.get("followers_count", data_fb.get("fan_count", 1))
-        except Exception as e:
-            logger.warning(f"Meta FB live fetch failed: {e}")
 
     # Meta IG Business
     if meta_token and ig_id:
