@@ -41,7 +41,16 @@ def image_local_path(post: Post) -> Path | None:
     if post.image is None:
         return None
     p = Path(post.image.filepath)
-    return p if p.exists() else None
+    if p.exists():
+        return p
+    if hasattr(post.image, "filename") and post.image.filename:
+        fallback = Path(IMAGE_LIBRARY_PATH) / post.image.filename
+        if fallback.exists():
+            return fallback
+        matches = list(Path(IMAGE_LIBRARY_PATH).glob(f"**/{post.image.filename}"))
+        if matches:
+            return matches[0]
+    return None
 
 
 def image_public_url(post: Post) -> str | None:
