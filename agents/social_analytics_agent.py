@@ -6,6 +6,7 @@ Threads, and Pinterest using live Meta Graph API, LinkedIn API, and local social
 """
 
 import os
+import json
 import sqlite3
 import requests
 from pathlib import Path
@@ -34,8 +35,13 @@ def format_utc_to_display(utc_str: Optional[str]) -> str:
         return "Recent"
     try:
         from datetime import datetime, timedelta
-        clean_str = utc_str.split(".")[0]
-        dt = datetime.strptime(clean_str, "%Y-%m-%d %H:%M:%S")
+        raw = str(utc_str).strip()
+        if "+" in raw:
+            raw = raw.split("+")[0]
+        if "Z" in raw:
+            raw = raw.replace("Z", "")
+        raw = raw.replace("T", " ").split(".")[0].strip()
+        dt = datetime.strptime(raw, "%Y-%m-%d %H:%M:%S")
         dt_ist = dt + timedelta(hours=5, minutes=30)
         dt_aest = dt + timedelta(hours=10)
         return f"{dt_ist.strftime('%d %b %Y, %I:%M %p IST')} ({dt_aest.strftime('%I:%M %p AEST')})"
