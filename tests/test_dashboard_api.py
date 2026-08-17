@@ -10,6 +10,10 @@ from dashboard.api import app
 class TestDashboardAPI(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
+        from dashboard.api import generate_admin_token
+        from config.settings import ADMIN_EMAIL
+        self.token = generate_admin_token(ADMIN_EMAIL)
+        self.auth_headers = {"Authorization": f"Bearer {self.token}"}
 
     def test_serve_dashboard_ui(self):
         resp = self.client.get("/")
@@ -37,11 +41,11 @@ class TestDashboardAPI(unittest.TestCase):
         self.assertGreaterEqual(len(data["agents"]), 2)
 
     def test_agent_toggle(self):
-        resp = self.client.post("/api/agents/toggle", json={"agent_id": "blog-agent", "action": "pause"})
+        resp = self.client.post("/api/agents/toggle", json={"agent_id": "blog-agent", "action": "pause"}, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(resp.json()["agent"]["paused"])
 
-        resp_resume = self.client.post("/api/agents/toggle", json={"agent_id": "blog-agent", "action": "resume"})
+        resp_resume = self.client.post("/api/agents/toggle", json={"agent_id": "blog-agent", "action": "resume"}, headers=self.auth_headers)
         self.assertEqual(resp_resume.status_code, 200)
         self.assertFalse(resp_resume.json()["agent"]["paused"])
 
@@ -51,7 +55,7 @@ class TestDashboardAPI(unittest.TestCase):
             "task_type": "status",
             "input_data": {"action": "status"},
             "requires_approval": False
-        })
+        }, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         task_id = resp.json()["task"]["task_id"]
 
@@ -66,7 +70,8 @@ class TestDashboardAPI(unittest.TestCase):
             "task_type": "status",
             "input_data": {"action": "status"},
             "requires_approval": True
-        })
+        }, headers=self.auth_headers)
+        self.assertEqual(resp.status_code, 200)
         task_id = resp.json()["task"]["task_id"]
 
         resp_appr_list = self.client.get("/api/approvals")
@@ -78,7 +83,7 @@ class TestDashboardAPI(unittest.TestCase):
             "task_id": task_id,
             "approver": "test_admin",
             "comment": "Approved in unit test"
-        })
+        }, headers=self.auth_headers)
         self.assertEqual(resp_approve.status_code, 200)
         self.assertIn(resp_approve.json()["task"]["status"], ["APPROVED", "COMPLETED"])
 
@@ -127,14 +132,14 @@ class TestDashboardAPI(unittest.TestCase):
             "anchor_text": "Melbourne Airport Transfers",
             "topic": "Airport Travel Guide",
             "use_ai": False
-        })
+        }, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")
         self.assertEqual(data["output"]["processed_count"], 1)
 
     def test_external_link_daily_batch(self):
-        resp = self.client.post("/api/agents/external-link/daily-batch?batch_size=7")
+        resp = self.client.post("/api/agents/external-link/daily-batch?batch_size=7", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")

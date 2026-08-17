@@ -3,6 +3,8 @@ let currentSiteId = 'ccm';
 let allWebsitesList = [];
 let activityChartInstance = null;
 let categoryChartInstance = null;
+let currentUserRole = 'viewer';
+let authToken = localStorage.getItem('ccm_admin_token') || sessionStorage.getItem('ccm_admin_token') || null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   initClock();
@@ -11,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initAmbientParticles();
   init3DCyberCore();
   init3DCardTilt();
+  await checkAuthSession();
 
   // Restore saved active view from hash or sessionStorage
   const hashView = window.location.hash.replace('#', '').trim();
@@ -26,6 +29,182 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initWebsiteSwitcher();
   switchToView(initialView);
 });
+
+/* ============================================================
+   Role-Based Access Control (RBAC) & Authentication Helpers
+   ============================================================ */
+
+function getAuthHeaders(customHeaders = {}) {
+  const headers = { ...customHeaders };
+  if (authToken) {
+    headers['Authorization'] = `Bearer ${authToken}`;
+    headers['x-admin-token'] = authToken;
+  }
+  return headers;
+}
+
+async function checkAuthSession() {
+  if (!authToken) {
+    currentUserRole = 'viewer';
+    renderAuthHeaderUI();
+    return;
+  }
+  try {
+    const res = await fetch('/api/auth/session', {
+      headers: getAuthHeaders()
+    });
+    const data = await res.json();
+    if (data.is_admin) {
+      currentUserRole = 'admin';
+    } else {
+      currentUserRole = 'viewer';
+      authToken = null;
+      localStorage.removeItem('ccm_admin_token');
+      sessionStorage.removeItem('ccm_admin_token');
+    }
+  } catch (err) {
+    currentUserRole = 'viewer';
+  }
+  renderAuthHeaderUI();
+}
+
+function renderAuthHeaderUI() {
+  const container = document.getElementById('auth-status-container');
+  if (!container) return;
+
+  if (currentUserRole === 'admin') {
+    container.innerHTML = `
+      <div class="auth-pill admin-mode" title="Logged in with full administrative privileges">
+        <i class="fa-solid fa-crown"></i>
+        <span>Super Admin (Full Control)</span>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="logoutAdmin()" title="Log out from Admin session" style="font-size:11.5px; padding:6px 12px;">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+      </button>
+    `;
+  } else {
+    container.innerHTML = `
+      <div class="auth-pill viewer-mode" title="Only Admin can run tasks, add topics, and modify settings">
+        <i class="fa-solid fa-eye"></i>
+        <span>Read-Only Mode (Only Admin Can Run & Create Tasks)</span>
+      </div>
+      <button class="btn btn-sm btn-admin-login" onclick="openAdminLoginModal()" title="Unlock full task execution access" style="font-size:11.5px; padding:6px 14px;">
+        <i class="fa-solid fa-lock"></i> Admin Login
+      </button>
+    `;
+  }
+}
+
+function requireAdminAction(actionName = 'perform this action') {
+  if (currentUserRole !== 'admin') {
+    openAdminLoginModal(`Admin Authentication Required: Only Admin can ${actionName}. Public visitors have Read-Only view access.`);
+    return false;
+  }
+  return true;
+}
+
+function openAdminLoginModal(customMessage) {
+  const alertBox = document.getElementById('admin-login-alert');
+  if (alertBox) {
+    if (customMessage) {
+      alertBox.textContent = customMessage;
+      alertBox.style.display = 'block';
+    } else {
+      alertBox.style.display = 'none';
+    }
+  }
+  const emailInput = document.getElementById('admin-login-email');
+  const passInput = document.getElementById('admin-login-password');
+  if (passInput) passInput.value = '';
+  openModal('modal-admin-login');
+  if (emailInput && !emailInput.value) {
+    emailInput.focus();
+  } else if (passInput) {
+    passInput.focus();
+  }
+}
+
+async function handleAdminLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('admin-login-email').value.trim();
+  const password = document.getElementById('admin-login-password').value;
+  const alertBox = document.getElementById('admin-login-alert');
+  const btn = document.getElementById('btn-submit-admin-login');
+
+  if (!email || !password) {
+    if (alertBox) {
+      alertBox.textContent = 'Please enter both Admin Email and Password.';
+      alertBox.style.display = 'block';
+    }
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+
+  try {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin';
+
+    if (!res.ok || data.status === 'error') {
+      if (alertBox) {
+        alertBox.textContent = data.detail || 'Invalid Admin credentials. Only authorized Admin can log in.';
+        alertBox.style.display = 'block';
+      }
+      return;
+    }
+
+    authToken = data.token;
+    localStorage.setItem('ccm_admin_token', authToken);
+    currentUserRole = 'admin';
+
+    closeModal('modal-admin-login');
+    renderAuthHeaderUI();
+    alert('Super Admin session unlocked! You now have Full Control to run tasks, add topics, and create campaigns.');
+    await loadCurrentView(activeView);
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin';
+    if (alertBox) {
+      alertBox.textContent = `Connection error: ${err.message}`;
+      alertBox.style.display = 'block';
+    }
+  }
+}
+
+async function logoutAdmin() {
+  if (!confirm('Log out from Super Admin session and return to Read-Only mode?')) return;
+  try {
+    await fetch('/api/auth/logout', { method: 'POST', headers: getAuthHeaders() });
+  } catch (e) {}
+  authToken = null;
+  currentUserRole = 'viewer';
+  localStorage.removeItem('ccm_admin_token');
+  sessionStorage.removeItem('ccm_admin_token');
+  renderAuthHeaderUI();
+  alert('You are now viewing in Public Read-Only mode.');
+  await loadCurrentView(activeView);
+}
+
+function toggleAdminPasswordVisibility() {
+  const input = document.getElementById('admin-login-password');
+  const icon = document.getElementById('admin-password-eye-icon');
+  if (!input || !icon) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.className = 'fa-solid fa-eye-slash';
+  } else {
+    input.type = 'password';
+    icon.className = 'fa-solid fa-eye';
+  }
+}
+
 
 function initClock() {
   const clockEl = document.getElementById('live-time');
@@ -167,12 +346,14 @@ function initEventListeners() {
   }
 
   document.getElementById('open-create-task-modal').addEventListener('click', async () => {
+    if (!requireAdminAction('create new tasks')) return;
     await populateAgentDropdown();
     openModal('create-task-modal');
   });
 
   document.getElementById('create-task-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!requireAdminAction('create new tasks')) return;
     const siteId = document.getElementById('task-website-select').value || currentSiteId;
     const agentId = document.getElementById('task-agent-select').value;
     const action = document.getElementById('task-action-select').value;
@@ -182,7 +363,7 @@ function initEventListeners() {
     try {
       const res = await fetch('/api/tasks/create', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           agent_id: agentId,
           task_type: action,
@@ -193,6 +374,10 @@ function initEventListeners() {
         })
       });
       const data = await res.json();
+      if (!res.ok || data.status === 'error') {
+        alert(`Error creating task: ${data.detail || data.message || 'Failed'}`);
+        return;
+      }
       closeModal('create-task-modal');
       alert(`Task ${data.task.task_id} created for website [${siteId}] successfully.`);
       loadCurrentView(activeView);
@@ -346,6 +531,7 @@ async function switchWebsite(siteId) {
 
 async function submitAddNewWebsite(e) {
   e.preventDefault();
+  if (!requireAdminAction('add and connect new websites')) return;
   const siteId = document.getElementById('new-site-id').value.trim();
   const name = document.getElementById('new-site-name').value.trim();
   const domain = document.getElementById('new-site-domain').value.trim();
@@ -357,7 +543,7 @@ async function submitAddNewWebsite(e) {
   try {
     const res = await fetch('/api/websites', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         site_id: siteId,
         name: name,
@@ -866,10 +1052,11 @@ function getIconForAgent(agentId) {
 }
 
 async function runAgentTask(agentId, action) {
+  if (!requireAdminAction(`run task '${action}' on ${agentId}`)) return;
   try {
     const res = await fetch('/api/tasks/create', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         agent_id: agentId,
         task_type: action,
@@ -879,6 +1066,10 @@ async function runAgentTask(agentId, action) {
       })
     });
     const data = await res.json();
+    if (!res.ok || data.status === 'error') {
+      alert(`Task error: ${data.detail || data.message || 'Failed'}`);
+      return;
+    }
     alert(`Task created for ${agentId} on website [${currentSiteId}] (${data.task.task_id}).`);
     loadCurrentView(activeView);
   } catch (err) {
@@ -887,8 +1078,18 @@ async function runAgentTask(agentId, action) {
 }
 
 async function toggleAgent(agentId, action) {
+  if (!requireAdminAction(`${action} agent '${agentId}'`)) return;
   try {
-    await fetch(`/api/agents/${agentId}/${action}`, { method: 'POST' });
+    const res = await fetch('/api/agents/toggle', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ agent_id: agentId, action: action })
+    });
+    const data = await res.json();
+    if (!res.ok || data.status === 'error') {
+      alert(`Toggle error: ${data.detail || data.message || 'Failed'}`);
+      return;
+    }
     loadAgents();
   } catch (err) {
     alert(`Failed to toggle agent state: ${err}`);
@@ -1291,9 +1492,17 @@ async function loadTasks() {
 }
 
 async function executeTask(taskId) {
+  if (!requireAdminAction(`execute task ${taskId}`)) return;
   try {
-    const res = await fetch(`/api/tasks/execute/${taskId}`, { method: 'POST' });
+    const res = await fetch(`/api/tasks/execute/${taskId}`, {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
     const data = await res.json();
+    if (!res.ok || data.status === 'error') {
+      alert(`Execution error: ${data.detail || data.message || 'Failed'}`);
+      return;
+    }
     alert(`Execution completed for ${taskId}. Status: ${data.task.status}`);
     loadCurrentView(activeView);
   } catch (err) {
@@ -1346,10 +1555,11 @@ async function loadApprovals() {
 }
 
 async function approveTask(taskId) {
+  if (!requireAdminAction('approve tasks')) return;
   try {
     const res = await fetch(`/api/approvals/${taskId}/approve`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ approved_by: 'admin', comment: 'Approved via UI' })
     });
     const data = await res.json();
@@ -1366,11 +1576,12 @@ async function approveTask(taskId) {
 }
 
 async function rejectTask(taskId) {
+  if (!requireAdminAction('reject tasks')) return;
   try {
     const res = await fetch(`/api/approvals/${taskId}/reject`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rejected_by: 'admin', reason: 'Rejected by dashboard user' })
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ rejected_by: 'admin', reason: 'Rejected by dashboard admin' })
     });
     const data = await res.json();
     if (!res.ok || data.status === 'error') {
@@ -1386,16 +1597,17 @@ async function rejectTask(taskId) {
 }
 
 async function approveAllTasks() {
+  if (!requireAdminAction('approve all pending tasks')) return;
   if (!confirm('Are you sure you want to approve and execute all pending tasks?')) return;
   try {
     const res = await fetch('/api/approvals/approve-all', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ approver: 'admin' })
     });
     const data = await res.json();
-    if (!res.ok) {
-      alert(`Error approving tasks: ${data.detail || 'Failed'}`);
+    if (!res.ok || data.status === 'error') {
+      alert(`Error approving tasks: ${data.detail || data.message || 'Failed'}`);
       return;
     }
     alert(`Successfully approved and processed ${data.approved_count} tasks.`);
@@ -1408,16 +1620,17 @@ async function approveAllTasks() {
 }
 
 async function rejectAllTasks() {
+  if (!requireAdminAction('reject all pending tasks')) return;
   if (!confirm('Are you sure you want to reject all pending tasks?')) return;
   try {
     const res = await fetch('/api/approvals/reject-all', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ rejecter: 'admin' })
     });
     const data = await res.json();
-    if (!res.ok) {
-      alert(`Error rejecting tasks: ${data.detail || 'Failed'}`);
+    if (!res.ok || data.status === 'error') {
+      alert(`Error rejecting tasks: ${data.detail || data.message || 'Failed'}`);
       return;
     }
     alert(`Successfully rejected ${data.rejected_count} tasks.`);
@@ -1702,6 +1915,7 @@ function openCustomOutreachModal() {
 
 async function submitCustomOutreach(e) {
   if (e) e.preventDefault();
+  if (!requireAdminAction('create backlinks and run outreach')) return;
   const sitesInput = document.getElementById('outreach-target-websites').value.trim();
   if (!sitesInput) {
     alert('Please enter at least one target website URL to place backlinks on.');
@@ -1726,7 +1940,7 @@ async function submitCustomOutreach(e) {
   try {
     const res = await fetch('/api/agents/external-link/custom-outreach', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         target_websites: sites,
         landing_page_url: landingPage,
@@ -1739,9 +1953,9 @@ async function submitCustomOutreach(e) {
     if (res.ok) {
       alert(`Success! Generated ${data.output?.processed_count || sites.length} contextual backlinks with live URLs.`);
       closeModal('custom-outreach-modal');
-      showAgentPerformanceReport('external-link-building-agent');
+      viewAgentReport('external-link-building-agent');
     } else {
-      alert(`Outreach Error: ${data.detail || 'Failed to process outreach'}`);
+      alert(`Outreach Error: ${data.detail || data.message || 'Failed to process outreach'}`);
     }
   } catch (err) {
     alert(`Outreach request failed: ${err}`);
@@ -1752,17 +1966,21 @@ async function submitCustomOutreach(e) {
 }
 
 async function runDailyBacklinkBatch() {
+  if (!requireAdminAction('run daily backlink batches')) return;
   if (!confirm('Run daily automated batch of 5 to 10 high-quality directory and Web 2.0 editorial backlinks?')) {
     return;
   }
   try {
-    const res = await fetch('/api/agents/external-link/daily-batch?batch_size=7', { method: 'POST' });
+    const res = await fetch('/api/agents/external-link/daily-batch?batch_size=7', {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
     const data = await res.json();
     if (res.ok) {
       alert(`Daily Batch Complete! Generated ${data.output?.batch_count || 7} high-quality backlinks across Australian directories & Web 2.0 platforms.`);
-      showAgentPerformanceReport('external-link-building-agent');
+      viewAgentReport('external-link-building-agent');
     } else {
-      alert(`Batch Error: ${data.detail || 'Failed to execute daily batch'}`);
+      alert(`Batch Error: ${data.detail || data.message || 'Failed to execute daily batch'}`);
     }
   } catch (err) {
     alert(`Failed to trigger daily batch: ${err}`);
@@ -1778,6 +1996,7 @@ function openCompetitorAdSpyModal(url) {
 
 async function submitCompetitorAdSpy(e) {
   if (e) e.preventDefault();
+  if (!requireAdminAction('run competitor ad spy intelligence')) return;
   const url = document.getElementById('spy-competitor-url').value.trim();
   if (!url) {
     alert('Please enter a competitor website URL.');
@@ -1802,7 +2021,7 @@ async function submitCompetitorAdSpy(e) {
   try {
     const res = await fetch('/api/agents/ad-spy/analyze', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         competitor_url: url,
         location: location,
@@ -1816,7 +2035,7 @@ async function submitCompetitorAdSpy(e) {
     } else {
       resultsContainer.innerHTML = `
         <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:20px; border-radius:12px; color:#ef4444;">
-          <strong>Analysis Error:</strong> ${data.detail || 'Failed to extract competitor ads.'}
+          <strong>Analysis Error:</strong> ${data.detail || data.message || 'Failed to extract competitor ads.'}
         </div>
       `;
     }
@@ -2377,6 +2596,7 @@ function setSamplePageUrl() {
 
 async function submitPageOptimizerAudit(e) {
   if (e) e.preventDefault();
+  if (!requireAdminAction('run live Google Algorithm page audits')) return;
   const url = document.getElementById('page-opt-url').value.trim();
   if (!url) {
     alert('Please enter a valid webpage URL to audit.');
@@ -2410,7 +2630,7 @@ async function submitPageOptimizerAudit(e) {
   try {
     const res = await fetch('/api/agents/page-optimizer/audit', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         url: url,
         focus_keyword: focusKeyword,
@@ -2644,6 +2864,7 @@ function loadPageDoctorView() {
 
 async function submitPageOptimizerAuditView(e) {
   if (e) e.preventDefault();
+  if (!requireAdminAction('run live Google Algorithm page audits')) return;
   const url = document.getElementById('page-opt-view-url').value.trim();
   if (!url) {
     alert('Please enter a valid webpage URL to audit.');
@@ -2677,7 +2898,7 @@ async function submitPageOptimizerAuditView(e) {
   try {
     const res = await fetch('/api/agents/page-optimizer/audit', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         url: url,
         focus_keyword: focusKeyword,
@@ -3096,6 +3317,7 @@ async function testCurrentAIKey() {
 
 async function submitSaveAIProviderKey(e) {
   if (e) e.preventDefault();
+  if (!requireAdminAction('save and activate AI API keys')) return;
 
   const prov = document.getElementById('ai-modal-provider').value;
   const key = document.getElementById('ai-modal-api-key').value.trim();
@@ -3115,7 +3337,7 @@ async function submitSaveAIProviderKey(e) {
   try {
     const res = await fetch('/api/ai/providers/save-key', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         provider: prov,
         api_key: key,
@@ -3148,12 +3370,13 @@ async function submitSaveAIProviderKey(e) {
 }
 
 async function setPrimaryAIProvider(provId) {
+  if (!requireAdminAction('switch primary AI provider')) return;
   if (!confirm(`Switch default AI Engine to ${provId.toUpperCase()}?`)) return;
 
   try {
     const res = await fetch('/api/ai/providers/set-primary', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ provider: provId })
     });
     const data = await res.json();
@@ -3173,6 +3396,11 @@ async function setPrimaryAIProvider(provId) {
 // Global scope bindings for inline HTML onclick handlers
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.openAdminLoginModal = openAdminLoginModal;
+window.handleAdminLogin = handleAdminLogin;
+window.logoutAdmin = logoutAdmin;
+window.toggleAdminPasswordVisibility = toggleAdminPasswordVisibility;
+window.requireAdminAction = requireAdminAction;
 window.openCustomOutreachModal = openCustomOutreachModal;
 window.submitCustomOutreach = submitCustomOutreach;
 window.runDailyBacklinkBatch = runDailyBacklinkBatch;
@@ -3199,6 +3427,7 @@ window.copyToClipboard = copyToClipboard;
    ============================================================ */
 
 function openAddBlogTopicsModal(siteId) {
+  if (!requireAdminAction('add new blog topics')) return;
   const siteSelect = document.getElementById('blog-topics-site-select');
   if (siteSelect) {
     siteSelect.innerHTML = allWebsitesList.map(s => `
@@ -3223,6 +3452,7 @@ function updateBlogTopicCounter() {
 
 async function handleSaveBlogTopics(e) {
   e.preventDefault();
+  if (!requireAdminAction('save blog topics')) return;
   const site = document.getElementById('blog-topics-site-select').value;
   const rawText = document.getElementById('blog-topics-textarea').value.trim();
   const autoApprove = document.getElementById('blog-topics-auto-approve').checked;
@@ -3239,7 +3469,7 @@ async function handleSaveBlogTopics(e) {
   try {
     const res = await fetch('/api/agents/blog-agent/topics/add', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         site: site,
         raw_topics: rawText,
@@ -3266,6 +3496,7 @@ async function handleSaveBlogTopics(e) {
 }
 
 function openAddSocialCampaignModal(siteId) {
+  if (!requireAdminAction('create and schedule social campaigns')) return;
   const siteSelect = document.getElementById('social-campaign-site-select');
   if (siteSelect) {
     siteSelect.innerHTML = allWebsitesList.map(s => `
@@ -3290,6 +3521,7 @@ function updateSocialKeywordCounter() {
 
 async function handleSaveSocialCampaign(e) {
   e.preventDefault();
+  if (!requireAdminAction('create and schedule social campaigns')) return;
   const site = document.getElementById('social-campaign-site-select').value;
   const rawKeywords = document.getElementById('social-keywords-textarea').value.trim();
   const frequency = parseInt(document.getElementById('social-frequency-select').value) || 3;
@@ -3314,7 +3546,7 @@ async function handleSaveSocialCampaign(e) {
   try {
     const res = await fetch('/api/agents/social-agent/campaign/add', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         site: site,
         keywords: rawKeywords,

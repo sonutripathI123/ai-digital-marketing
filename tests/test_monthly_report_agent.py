@@ -19,6 +19,10 @@ class TestMonthlyReportAgent(unittest.TestCase):
         self.agent = MonthlyReportAgent()
         self.orchestrator.register_agent(self.agent)
         self.client = TestClient(app)
+        from dashboard.api import generate_admin_token
+        from config.settings import ADMIN_EMAIL
+        self.token = generate_admin_token(ADMIN_EMAIL)
+        self.auth_headers = {"Authorization": f"Bearer {self.token}"}
 
     def test_agent_metadata(self):
         meta = self.agent.metadata
@@ -65,11 +69,11 @@ class TestMonthlyReportAgent(unittest.TestCase):
             "task_type": "generate_report",
             "input_data": {"month": "August 2026"},
             "requires_approval": False
-        })
+        }, headers=self.auth_headers)
         self.assertEqual(resp_create.status_code, 200)
         task_id = resp_create.json()["task"]["task_id"]
 
-        resp_exec = self.client.post(f"/api/tasks/execute/{task_id}")
+        resp_exec = self.client.post(f"/api/tasks/execute/{task_id}", headers=self.auth_headers)
         self.assertEqual(resp_exec.status_code, 200)
         data = resp_exec.json()
         self.assertEqual(data["task"]["status"], "COMPLETED")

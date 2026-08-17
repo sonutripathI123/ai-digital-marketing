@@ -21,6 +21,10 @@ class TestAIProvidersAndVault(unittest.TestCase):
     def setUp(self):
         self.router = ModelRouter()
         self.client = TestClient(app)
+        from dashboard.api import generate_admin_token
+        from config.settings import ADMIN_EMAIL
+        self.token = generate_admin_token(ADMIN_EMAIL)
+        self.auth_headers = {"Authorization": f"Bearer {self.token}"}
 
     def test_providers_initialization(self):
         self.assertEqual(len(self.router._providers), 7)
@@ -67,7 +71,7 @@ class TestAIProvidersAndVault(unittest.TestCase):
             "api_key": "sk-testdeepseekkey12345678",
             "default_model": "deepseek-chat",
             "is_primary": False
-        })
+        }, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")
@@ -76,7 +80,7 @@ class TestAIProvidersAndVault(unittest.TestCase):
     def test_fastapi_set_primary_endpoint(self):
         resp = self.client.post("/api/ai/providers/set-primary", json={
             "provider": "anthropic"
-        })
+        }, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")

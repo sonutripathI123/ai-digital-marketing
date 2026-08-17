@@ -17,10 +17,15 @@ Provides REST API endpoints and static SPA UI serving for the AI Digital Marketi
 
 import os
 import csv
+import hmac
+import hashlib
+import time
+import json
+import base64
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -44,7 +49,14 @@ from agents.monthly_report_agent import MonthlyReportAgent
 from agents.external_link_agent import ExternalLinkBuildingAgent
 from agents.competitor_ad_spy_agent import CompetitorAdSpyAgent
 from agents.page_optimizer_agent import PageOptimizerAgent
-from config.settings import ADS_LIVE_EXECUTION_ENABLED, LOGS_DIR, ROOT_DIR
+from config.settings import (
+    ADMIN_EMAIL,
+    ADMIN_PASSWORD,
+    AUTH_SECRET_KEY,
+    ADS_LIVE_EXECUTION_ENABLED,
+    LOGS_DIR,
+    ROOT_DIR,
+)
 from config.websites import WebsiteManager, WebsiteProfile
 from core.ai_layer.router import ModelRouter
 from core.models.task import AgentTask, TaskPriority, TaskStatus
@@ -240,6 +252,68 @@ class AddSocialCampaignRequest(BaseModel):
     auto_schedule: bool = True
 
 
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+# --- Authentication & Authorization Core ---
+def generate_admin_token(email: str) -> str:
+    payload = {
+        "email": email.strip().lower(),
+        "role": "admin",
+        "exp": int(time.time()) + (30 * 86400),  # 30 days validity
+    }
+    payload_b64 = base64.urlsafe_b64encode(json.dumps(payload).encode()).decode()
+    signature = hmac.new(
+        AUTH_SECRET_KEY.encode(), payload_b64.encode(), hashlib.sha256
+    ).hexdigest()
+    return f"{payload_b64}.{signature}"
+
+
+def verify_token(token: Optional[str]) -> Optional[Dict[str, Any]]:
+    if not token:
+        return None
+    try:
+        parts = token.strip().split(".")
+        if len(parts) != 2:
+            return None
+        payload_b64, signature = parts
+        expected_sig = hmac.new(
+            AUTH_SECRET_KEY.encode(), payload_b64.encode(), hashlib.sha256
+        ).hexdigest()
+        if not hmac.compare_digest(signature, expected_sig):
+            return None
+        payload = json.loads(base64.urlsafe_b64decode(payload_b64.encode()).decode())
+        if payload.get("exp", 0) < int(time.time()):
+            return None
+        if payload.get("email") != ADMIN_EMAIL:
+            return None
+        return payload
+    except Exception:
+        return None
+
+
+def require_admin(
+    authorization: Optional[str] = Header(None),
+    x_admin_token: Optional[str] = Header(None),
+) -> Dict[str, Any]:
+    token = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split("Bearer ")[1].strip()
+    elif x_admin_token:
+        token = x_admin_token.strip()
+
+    payload = verify_token(token)
+    if not payload:
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required. Only authorized Admin can run tasks, add topics, or modify settings.",
+        )
+    return payload
+
+
+
 
 @app.get("/")
 def serve_dashboard_ui():
@@ -264,6 +338,59 @@ def health_check():
     }
 
 
+# ============================================================
+# Admin Authentication & Session Endpoints
+# ============================================================
+
+@app.post("/api/auth/login")
+def login(req: LoginRequest):
+    """Authenticate Admin credentials and issue session token."""
+    email_clean = req.email.strip().lower()
+    if email_clean == ADMIN_EMAIL and req.password == ADMIN_PASSWORD:
+        token = generate_admin_token(email_clean)
+        return {
+            "status": "success",
+            "message": "Admin session authenticated successfully.",
+            "role": "admin",
+            "token": token
+        }
+    raise HTTPException(status_code=401, detail="Invalid Admin credentials.")
+
+
+@app.get("/api/auth/session")
+def get_auth_session(
+    authorization: Optional[str] = Header(None),
+    x_admin_token: Optional[str] = Header(None)
+):
+    """Checks token validity and returns current role (admin vs viewer)."""
+    token = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split("Bearer ")[1].strip()
+    elif x_admin_token:
+        token = x_admin_token.strip()
+
+    payload = verify_token(token)
+    if payload:
+        return {
+            "status": "success",
+            "role": "admin",
+            "is_admin": True,
+            "display_role": "Super Admin (Full Control)"
+        }
+    return {
+        "status": "success",
+        "role": "viewer",
+        "is_admin": False,
+        "display_role": "Read-Only Viewer (Public)"
+    }
+
+
+@app.post("/api/auth/logout")
+def logout():
+    """Clears current Admin session."""
+    return {"status": "success", "message": "Logged out successfully."}
+
+
 @app.get("/api/websites")
 def list_websites():
     """List all registered multi-tenant websites."""
@@ -276,8 +403,8 @@ def list_websites():
 
 
 @app.post("/api/websites")
-def add_website(request: CreateWebsiteRequest):
-    """Register a new website profile in the Command Center."""
+def add_website(request: CreateWebsiteRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Register a new website profile in the Command Center (Admin Only)."""
     existing = websites_mgr.get(request.site_id)
     if existing:
         raise HTTPException(status_code=400, detail=f"Website with site_id '{request.site_id}' already exists.")
@@ -643,8 +770,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
 
 
 @app.post("/api/agents/toggle")
-def toggle_agent_status(request: AgentStatusToggleRequest):
-    """Pause, resume, enable, or disable a specific sub-agent."""
+def toggle_agent_status(request: AgentStatusToggleRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Pause, resume, enable, or disable a specific sub-agent (Admin Only)."""
     agent_id = request.agent_id
     action = request.action.lower()
 
@@ -697,8 +824,8 @@ def get_blog_topics(site: Optional[str] = None):
 
 
 @app.post("/api/agents/blog-agent/topics/add")
-def add_blog_topics(req: AddBlogTopicsRequest):
-    """Batch-add new blog topics to topics.csv and auto-queue them for daily publishing."""
+def add_blog_topics(req: AddBlogTopicsRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Batch-add new blog topics to topics.csv and auto-queue them for daily publishing (Admin Only)."""
     site = req.site.strip().lower() or "ccm"
     raw_text = req.raw_topics.strip()
     if not raw_text:
@@ -784,8 +911,8 @@ def add_blog_topics(req: AddBlogTopicsRequest):
 
 
 @app.post("/api/agents/social-agent/campaign/add")
-def add_social_campaign(req: AddSocialCampaignRequest):
-    """Batch-add social media keywords and generate scheduled multi-platform posts."""
+def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Batch-add social media keywords and generate scheduled multi-platform posts (Admin Only)."""
     site = req.site.strip().lower() or "ccm"
     raw_keywords = req.keywords.strip()
     if not raw_keywords:
@@ -851,8 +978,8 @@ def list_tasks(status: Optional[TaskStatus] = None, agent_id: Optional[str] = No
 
 
 @app.post("/api/tasks/create")
-def create_task(request: CreateTaskRequest):
-    """Create and queue a new agent task."""
+def create_task(request: CreateTaskRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Create and queue a new agent task (Admin Only)."""
     input_data = dict(request.input_data)
     if request.site_id:
         input_data["site_id"] = request.site_id
@@ -887,8 +1014,8 @@ def get_task_detail(task_id: str):
 
 
 @app.post("/api/tasks/execute/{task_id}")
-def execute_task(task_id: str):
-    """Manually trigger execution of a task."""
+def execute_task(task_id: str, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Manually trigger execution of a task (Admin Only)."""
     try:
         task = orchestrator.execute_task(task_id)
         return {
@@ -914,8 +1041,8 @@ def list_pending_approvals(site_id: Optional[str] = None):
 
 @app.post("/api/approvals/approve")
 @app.post("/api/approvals/{task_id}/approve")
-def approve_task(task_id: Optional[str] = None, request: Optional[ApprovalActionRequest] = None):
-    """Approve a pending task and execute it."""
+def approve_task(task_id: Optional[str] = None, request: Optional[ApprovalActionRequest] = None, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Approve a pending task and execute it (Admin Only)."""
     tid = task_id or (request.task_id if request else None)
     if not tid:
         raise HTTPException(status_code=400, detail="Task ID is required.")
@@ -943,8 +1070,8 @@ def approve_task(task_id: Optional[str] = None, request: Optional[ApprovalAction
 
 @app.post("/api/approvals/reject")
 @app.post("/api/approvals/{task_id}/reject")
-def reject_task(task_id: Optional[str] = None, request: Optional[ApprovalActionRequest] = None):
-    """Reject a pending task."""
+def reject_task(task_id: Optional[str] = None, request: Optional[ApprovalActionRequest] = None, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Reject a pending task (Admin Only)."""
     tid = task_id or (request.task_id if request else None)
     if not tid:
         raise HTTPException(status_code=400, detail="Task ID is required.")
@@ -961,8 +1088,8 @@ def reject_task(task_id: Optional[str] = None, request: Optional[ApprovalActionR
 
 
 @app.post("/api/approvals/approve-all")
-def approve_all_tasks(approver: str = "dashboard_user"):
-    """Approve and execute all pending tasks awaiting approval."""
+def approve_all_tasks(approver: str = "dashboard_user", _admin: Dict[str, Any] = Depends(require_admin)):
+    """Approve and execute all pending tasks awaiting approval (Admin Only)."""
     pending = orchestrator.queue.list_all(status=TaskStatus.AWAITING_APPROVAL)
     approved = []
     for t in pending:
@@ -977,8 +1104,8 @@ def approve_all_tasks(approver: str = "dashboard_user"):
 
 
 @app.post("/api/approvals/reject-all")
-def reject_all_tasks(rejecter: str = "dashboard_user"):
-    """Reject all pending tasks awaiting approval."""
+def reject_all_tasks(rejecter: str = "dashboard_user", _admin: Dict[str, Any] = Depends(require_admin)):
+    """Reject all pending tasks awaiting approval (Admin Only)."""
     pending = orchestrator.queue.list_all(status=TaskStatus.AWAITING_APPROVAL)
     rejected = []
     for t in pending:
@@ -1142,8 +1269,8 @@ def get_ai_providers():
 
 
 @app.post("/api/ai/providers/save-key")
-def save_ai_provider_key(request: SaveAIKeyRequest):
-    """Saves or updates an AI API key in .env and refreshes runtime memory."""
+def save_ai_provider_key(request: SaveAIKeyRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Saves or updates an AI API key in .env and refreshes runtime memory (Admin Only)."""
     prov_id = request.provider.lower().strip()
     key = request.api_key.strip()
 
@@ -1185,8 +1312,8 @@ def save_ai_provider_key(request: SaveAIKeyRequest):
 
 
 @app.post("/api/ai/providers/set-primary")
-def set_primary_ai_provider(request: SetPrimaryProviderRequest):
-    """Switches the default active primary AI provider."""
+def set_primary_ai_provider(request: SetPrimaryProviderRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Switches the default active primary AI provider (Admin Only)."""
     prov_id = request.provider.lower().strip()
     success = orchestrator.router.set_primary_provider(prov_id)
     if not success:
@@ -1339,8 +1466,8 @@ def get_settings():
 
 
 @app.post("/api/agents/external-link/custom-outreach")
-def trigger_custom_outreach(request: CustomOutreachRequest):
-    """Triggers custom site outreach & creates contextual backlinks for user-specified websites."""
+def trigger_custom_outreach(request: CustomOutreachRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Triggers custom site outreach & creates contextual backlinks for user-specified websites (Admin Only)."""
     if not request.target_websites:
         raise HTTPException(status_code=400, detail="Please provide at least one target website URL.")
 
@@ -1367,8 +1494,8 @@ def trigger_custom_outreach(request: CustomOutreachRequest):
 
 
 @app.post("/api/agents/external-link/daily-batch")
-def trigger_daily_backlink_batch(batch_size: int = 7, site_id: Optional[str] = None):
-    """Triggers an automated batch of 5 to 10 high-quality directory and Web 2.0 backlinks."""
+def trigger_daily_backlink_batch(batch_size: int = 7, site_id: Optional[str] = None, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Triggers an automated batch of 5 to 10 high-quality directory and Web 2.0 backlinks (Admin Only)."""
     task = orchestrator.create_task(
         agent_id="external-link-building-agent",
         task_type="daily_batch",
@@ -1388,8 +1515,8 @@ def trigger_daily_backlink_batch(batch_size: int = 7, site_id: Optional[str] = N
 
 
 @app.post("/api/agents/ad-spy/analyze")
-def analyze_competitor_ads(request: CompetitorAdSpyRequest):
-    """Extracts and reverse-engineers competitor Google Ads and Meta Ads."""
+def analyze_competitor_ads(request: CompetitorAdSpyRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Extracts and reverse-engineers competitor Google Ads and Meta Ads (Admin Only)."""
     if not request.competitor_url.strip():
         raise HTTPException(status_code=400, detail="Please provide a valid competitor website URL.")
 
@@ -1426,8 +1553,8 @@ def get_competitor_ad_spy_history():
 
 
 @app.post("/api/agents/page-optimizer/audit")
-def audit_webpage(request: PageAuditRequest):
-    """Conducts a comprehensive Google Algorithm SEO audit for any webpage URL."""
+def audit_webpage(request: PageAuditRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Conducts a comprehensive Google Algorithm SEO audit for any webpage URL (Admin Only)."""
     if not request.url.strip():
         raise HTTPException(status_code=400, detail="Please provide a valid webpage URL.")
 

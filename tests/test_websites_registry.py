@@ -11,6 +11,10 @@ from dashboard.api import app, websites_mgr
 class TestWebsitesRegistry(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
+        from dashboard.api import generate_admin_token
+        from config.settings import ADMIN_EMAIL
+        self.token = generate_admin_token(ADMIN_EMAIL)
+        self.auth_headers = {"Authorization": f"Bearer {self.token}"}
         self.mgr = websites_mgr
         self.mgr.delete_website("test-sydney-transfers")
 
@@ -43,7 +47,7 @@ class TestWebsitesRegistry(unittest.TestCase):
             "default_category": "Chauffeur Services",
             "color_accent": "#10b981"
         }
-        resp = self.client.post("/api/websites", json=new_site_data)
+        resp = self.client.post("/api/websites", json=new_site_data, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")
@@ -92,7 +96,7 @@ class TestWebsitesRegistry(unittest.TestCase):
             "task_type": "research",
             "input_data": {"seed": "luxury transfers"},
             "site_id": "opal"
-        })
+        }, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         task = resp.json()["task"]
         self.assertEqual(task["input_data"]["site_id"], "opal")

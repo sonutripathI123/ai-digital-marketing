@@ -18,9 +18,13 @@ load_dotenv(ROOT_DIR / ".env")
 load_dotenv(ROOT_DIR / "blog-agent" / ".env")
 load_dotenv(ROOT_DIR / "corporate-cars-social-agent" / ".env")
 
-# --- Security Flags ---
+# --- Security & Access Control ---
 ADS_LIVE_EXECUTION_ENABLED: bool = os.getenv("ADS_LIVE_EXECUTION_ENABLED", "false").lower() in ("true", "1", "yes")
 ALLOW_LIVE_PUBLISHING: bool = os.getenv("ALLOW_LIVE_PUBLISHING", "false").lower() in ("true", "1", "yes")
+ADMIN_EMAIL: str = os.getenv("ADMIN_EMAIL", "sonutripathi9305@gmail.com").strip().lower()
+ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "Admin@Marketing2026")
+AUTH_SECRET_KEY: str = os.getenv("AUTH_SECRET_KEY", "ai-marketing-auth-master-secret-9305")
+
 
 # --- Default AI Provider & Model Settings ---
 DEFAULT_PROVIDER: str = os.getenv("DEFAULT_AI_PROVIDER", "anthropic")

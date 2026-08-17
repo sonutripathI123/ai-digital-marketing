@@ -19,6 +19,10 @@ class TestCompetitorAdSpyAgent(unittest.TestCase):
         self.agent = CompetitorAdSpyAgent()
         self.orchestrator.register_agent(self.agent)
         self.client = TestClient(app)
+        from dashboard.api import generate_admin_token
+        from config.settings import ADMIN_EMAIL
+        self.token = generate_admin_token(ADMIN_EMAIL)
+        self.auth_headers = {"Authorization": f"Bearer {self.token}"}
 
     def test_agent_metadata(self):
         meta = self.agent.metadata
@@ -72,7 +76,7 @@ class TestCompetitorAdSpyAgent(unittest.TestCase):
             "competitor_url": "https://melbournechauffeurcars.com.au/",
             "location": "Melbourne CBD",
             "use_ai": False
-        })
+        }, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")
