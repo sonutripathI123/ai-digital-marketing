@@ -137,29 +137,49 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
                 if stat in platform_db_counts[plat]:
                     platform_db_counts[plat][stat] = count
 
-            # Fetch LinkedIn published posts from DB
+            # Fetch all published posts from DB across LinkedIn, Facebook, and Instagram
             cur.execute("""
                 SELECT p.id, p.platform, p.caption, p.hashtags, p.platform_post_id, s.publish_at, p.created_at
                 FROM posts p
                 LEFT JOIN schedule s ON s.post_id = p.id
-                WHERE p.status = 'published' AND p.platform = 'linkedin'
+                WHERE p.status = 'published'
                 ORDER BY COALESCE(s.publish_at, p.created_at) DESC
             """)
+            existing_ids = {p.get("platform_post_id") for p in published_history if p.get("platform_post_id")}
             for r in cur.fetchall():
+                pid = r[4] or ""
+                if pid and pid in existing_ids:
+                    continue
                 caption_clean = r[2].strip() if r[2] else ""
                 first_line = caption_clean.split("\n")[0] if caption_clean else f"Post #{r[0]}"
                 if len(first_line) > 75:
                     first_line = first_line[:72] + "..."
-                urn = r[4] or ""
-                share_id = urn.replace("urn:li:share:", "").replace("urn:li:ugcPost:", "")
-                post_url = f"https://www.linkedin.com/feed/update/{urn}/" if urn else "https://www.linkedin.com/company/corporate-cars-melbourne/"
+                plat = r[1].lower()
+                
+                # Construct platform-specific live permalink URL
+                if plat == "instagram":
+                    post_url = f"https://www.instagram.com/p/{pid}/" if pid.startswith("18") else "https://www.instagram.com/corporatecarsmelbourne/"
+                elif plat == "facebook":
+                    if "_" in pid:
+                        page_id, post_fbid = pid.split("_", 1)
+                        post_url = f"https://www.facebook.com/permalink.php?story_fbid={post_fbid}&id={page_id}"
+                    else:
+                        post_url = f"https://www.facebook.com/profile.php?id={meta_page_id}"
+                elif plat == "linkedin":
+                    if pid.startswith("urn:li:"):
+                        post_url = f"https://www.linkedin.com/feed/update/{pid}/"
+                    else:
+                        post_url = "https://www.linkedin.com/company/corporate-cars-melbourne/"
+                else:
+                    post_url = site_domain
+
                 published_history.append({
                     "id": f"s{r[0]:04d}",
-                    "platform": "LinkedIn",
+                    "platform": r[1].capitalize(),
                     "title": first_line,
                     "caption": caption_clean,
                     "hashtags": r[3] or "",
-                    "platform_post_id": r[4] or "Live API Verified",
+                    "platform_post_id": pid or "Live Verified",
                     "published_at": format_utc_to_display(r[5] or r[6]),
                     "likes": 0,
                     "comments": 0,
@@ -190,37 +210,6 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
             conn.close()
         except Exception as e:
             logger.warning(f"Failed to query social_agent.db: {e}")
-
-    # Fallback to DB if live API returned 0 posts
-    if not published_history and db_path.exists():
-        try:
-            conn = sqlite3.connect(db_path)
-            cur = conn.cursor()
-            cur.execute("""
-                SELECT p.id, p.platform, p.caption, p.hashtags, p.platform_post_id, s.publish_at, p.created_at
-                FROM posts p
-                LEFT JOIN schedule s ON s.post_id = p.id
-                WHERE p.status = 'published'
-                ORDER BY COALESCE(s.publish_at, p.created_at) DESC
-            """)
-            for r in cur.fetchall():
-                caption_clean = r[2].strip() if r[2] else ""
-                first_line = caption_clean.split("\n")[0] if caption_clean else f"Post #{r[0]}"
-                published_history.append({
-                    "id": f"s{r[0]:04d}",
-                    "platform": r[1].capitalize(),
-                    "title": first_line[:72] + "...",
-                    "caption": caption_clean,
-                    "hashtags": r[3] or "",
-                    "platform_post_id": r[4] or "Live Verified",
-                    "published_at": format_utc_to_display(r[5] or r[6]),
-                    "likes": 0,
-                    "comments": 0,
-                    "url": f"https://corporatecarsmelbourne.com.au"
-                })
-            conn.close()
-        except Exception as e:
-            logger.warning(f"DB fallback query failed: {e}")
 
     # Live Meta FB Page telemetry
     if meta_token and meta_page_id:
