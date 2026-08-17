@@ -722,29 +722,12 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             ]
         }
 
-    # Special handling for Social Media Agent
-    elif agent_id == "corporate-cars-social-agent":
-        report["social_metrics"] = {
-            "platforms": {
-                "facebook": {"published": 6 if effective_site == "ccm" else 4, "scheduled": 7, "impressions": 18400 if effective_site == "ccm" else 9200, "clicks": 820 if effective_site == "ccm" else 410, "likes": 340, "engagement_rate": "4.8%"},
-                "instagram": {"published": 5 if effective_site == "ccm" else 3, "scheduled": 8, "impressions": 24500 if effective_site == "ccm" else 14200, "clicks": 1210 if effective_site == "ccm" else 650, "likes": 890, "engagement_rate": "6.2%"},
-                "linkedin": {"published": 6 if effective_site == "ccm" else 2, "scheduled": 7, "impressions": 12100 if effective_site == "ccm" else 5800, "clicks": 640 if effective_site == "ccm" else 290, "likes": 210, "engagement_rate": "5.3%"}
-            },
-            "published_posts_history": [
-                {"id": "s0010", "platform": "Facebook", "published_at": "Thu 13 Aug 2026 16:00", "title": f"{site_name} - Airport Transfer Showcase", "clicks": 142, "likes": 68},
-                {"id": "s0009", "platform": "Instagram", "published_at": "Wed 12 Aug 2026 14:00", "title": f"{site_name} - Mercedes Fleet Group Experience", "clicks": 284, "likes": 195},
-                {"id": "s0008", "platform": "LinkedIn", "published_at": "Tue 11 Aug 2026 10:30", "title": f"{site_name} - B2B Executive Account Onboarding", "clicks": 118, "likes": 42},
-            ],
-            "next_scheduled_posts": [
-                {"platform": "Instagram", "time": "Fri 14 Aug 2026 15:30", "title": f"{site_name} - Executive Fleet Showcase"},
-                {"platform": "LinkedIn", "time": "Tue 18 Aug 2026 10:30", "title": f"{site_name} - B2B Corporate Accounts"},
-                {"platform": "Facebook", "time": "Tue 18 Aug 2026 16:00", "title": f"{site_name} - Airport Transfer Booking"}
-            ],
-            "weekly_recommendations": [
-                f"Increase Instagram Reel video content showcasing {site_name} interior luxury.",
-                f"Post LinkedIn B2B corporate chauffeur tips for {site_loc} on Tuesday mornings."
-            ]
-        }
+    # Special handling for Social Media Agent and Social Analytics Agent
+    elif agent_id in ("corporate-cars-social-agent", "social-analytics-agent"):
+        from agents.social_analytics_agent import fetch_real_social_analytics
+        real_social = fetch_real_social_analytics(site_domain=site_domain, site_name=site_name)
+        report["social_metrics"] = real_social
+        report["social_analytics_metrics"] = real_social
 
     elif agent_id == "external-link-building-agent":
         from agents.external_link_agent import load_backlink_history
