@@ -1258,7 +1258,8 @@ async function viewAgentReport(agentId) {
                 <th style="padding:10px 14px;">Platform</th>
                 <th style="padding:10px 14px;">Published Date & Time</th>
                 <th style="padding:10px 14px;">Content Title / Topic</th>
-                <th style="padding:10px 14px;">Performance</th>
+                <th style="padding:10px 14px;">Live Interactions</th>
+                <th style="padding:10px 14px;">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -1268,7 +1269,15 @@ async function viewAgentReport(agentId) {
                   <td style="padding:10px 14px;"><span class="action-chip">${p.platform}</span></td>
                   <td style="padding:10px 14px; font-family:var(--font-mono); font-size:11px;">${p.published_at}</td>
                   <td style="padding:10px 14px; font-weight:700;">${p.title}</td>
-                  <td style="padding:10px 14px; color:var(--status-success); font-weight:700;">${p.clicks || 118} clicks | ${p.likes || 42} likes</td>
+                  <td style="padding:10px 14px; white-space:nowrap;">
+                    <span class="badge badge-success" style="font-weight:700; margin-right:4px;">${p.likes || 0} Likes</span>
+                    <span class="badge badge-info" style="font-weight:700;">${p.comments || 0} Comments</span>
+                  </td>
+                  <td style="padding:10px 14px; white-space:nowrap;">
+                    <a href="${p.url || 'https://corporatecarsmelbourne.com.au'}" target="_blank" class="action-chip" style="color:var(--accent-cyan); text-decoration:none; font-weight:700;">
+                      <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Post
+                    </a>
+                  </td>
                 </tr>
               `).join('')}
             </tbody>
