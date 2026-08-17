@@ -123,15 +123,17 @@ class MasterOrchestrator:
                 "cost_usd": task.cost_usd,
             })
         except Exception as e:
+            from core.logging.logger import redact_sensitive_text
+            clean_err = redact_sensitive_text(str(e))
             task.retry_count += 1
             if task.retry_count <= task.max_retries:
-                agent_logger.warning(f"Task {task_id} attempt {task.retry_count} failed: {e}. Retrying.")
-                self.audit.record(task.agent_id, "TASK_RETRY", {"task_id": task_id, "error": str(e)})
+                agent_logger.warning(f"Task {task_id} attempt {task.retry_count} failed: {clean_err}. Retrying.")
+                self.audit.record(task.agent_id, "TASK_RETRY", {"task_id": task_id, "error": clean_err})
                 return self.execute_task(task_id)
             else:
                 task.status = TaskStatus.FAILED
-                task.error_message = str(e)
-                agent_logger.error(f"Task {task_id} permanently failed: {e}")
-                self.audit.record(task.agent_id, "TASK_FAILED", {"task_id": task_id, "error": str(e)})
+                task.error_message = clean_err
+                agent_logger.error(f"Task {task_id} permanently failed: {clean_err}")
+                self.audit.record(task.agent_id, "TASK_FAILED", {"task_id": task_id, "error": clean_err})
 
         return task
