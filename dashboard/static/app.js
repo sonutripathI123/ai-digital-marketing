@@ -1263,7 +1263,37 @@ async function viewAgentReport(agentId) {
               </tr>
             </thead>
             <tbody>
-              ${(sm.published_posts_history || []).map(p => `
+              ${(sm.published_posts_history || []).map(p => {
+                const plat = (p.platform || '').toLowerCase();
+                let iconClass = 'fa-solid fa-arrow-up-right-from-square';
+                let btnColor = 'var(--accent-cyan)';
+                let btnLabel = 'Open Post';
+                let targetUrl = p.url || '';
+
+                if (plat.includes('insta')) {
+                  iconClass = 'fa-brands fa-instagram';
+                  btnColor = '#ec4899';
+                  btnLabel = 'View on Instagram';
+                  if (!targetUrl || targetUrl.includes('corporatecarsmelbourne.com.au')) {
+                    targetUrl = 'https://www.instagram.com/corporatecarsmelbourne/';
+                  }
+                } else if (plat.includes('face')) {
+                  iconClass = 'fa-brands fa-facebook';
+                  btnColor = '#3b82f6';
+                  btnLabel = 'View on Facebook';
+                  if (!targetUrl || targetUrl.includes('corporatecarsmelbourne.com.au')) {
+                    targetUrl = 'https://www.facebook.com/profile.php?id=791630667378039';
+                  }
+                } else if (plat.includes('link')) {
+                  iconClass = 'fa-brands fa-linkedin';
+                  btnColor = '#0ea5e9';
+                  btnLabel = 'View on LinkedIn';
+                  if (!targetUrl || targetUrl.includes('corporatecarsmelbourne.com.au')) {
+                    targetUrl = 'https://www.linkedin.com/company/corporate-cars-melbourne/';
+                  }
+                }
+
+                return `
                 <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
                   <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--accent-cyan);">${p.id}</td>
                   <td style="padding:10px 14px;"><span class="action-chip">${p.platform}</span></td>
@@ -1274,12 +1304,13 @@ async function viewAgentReport(agentId) {
                     <span class="badge badge-info" style="font-weight:700;">${p.comments || 0} Comments</span>
                   </td>
                   <td style="padding:10px 14px; white-space:nowrap;">
-                    <a href="${p.url || 'https://corporatecarsmelbourne.com.au'}" target="_blank" class="action-chip" style="color:var(--accent-cyan); text-decoration:none; font-weight:700;">
-                      <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Post
+                    <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="action-chip" style="color:${btnColor}; border-color:${btnColor}; text-decoration:none; font-weight:700;">
+                      <i class="${iconClass}"></i> ${btnLabel}
                     </a>
                   </td>
                 </tr>
-              `).join('')}
+              `;
+              }).join('')}
             </tbody>
           </table>
         </div>
