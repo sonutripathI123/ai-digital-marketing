@@ -65,31 +65,63 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
     published_history = []
     scheduled_queue = []
     platform_db_counts = {}
+    cached_map = {}
 
-    # 1. Fetch live Instagram Posts directly from Meta Graph API
+    # 0. Load verified live social cache if exists
+    cache_path = SOCIAL_AGENT_DIR / "live_social_cache.json"
+    if cache_path.exists():
+        try:
+            with open(cache_path, "r", encoding="utf-8") as cfp:
+                cached_items = json.load(cfp)
+                for ci in cached_items:
+                    pid = ci.get("platform_post_id")
+                    if pid:
+                        cached_map[pid] = ci
+                        published_history.append({
+                            "id": ci.get("id"),
+                            "platform": ci.get("platform"),
+                            "title": ci.get("title"),
+                            "caption": ci.get("caption", ""),
+                            "hashtags": "",
+                            "platform_post_id": pid,
+                            "published_at": format_utc_to_display(ci.get("timestamp")),
+                            "likes": ci.get("likes", 0),
+                            "comments": ci.get("comments", 0),
+                            "url": ci.get("url"),
+                            "is_live_api": True
+                        })
+        except Exception as e:
+            logger.warning(f"Failed to read live_social_cache.json: {e}")
+
+    # 1. Fetch live Instagram Posts directly from Meta Graph API if token available
     if meta_token and ig_id:
         try:
-            url_ig = f"https://graph.facebook.com/v19.0/{ig_id}/media?fields=id,caption,media_type,permalink,timestamp,like_count,comments_count&limit=20&access_token={meta_token}"
+            url_ig = f"https://graph.facebook.com/v19.0/{ig_id}/media?fields=id,caption,media_type,permalink,timestamp,like_count,comments_count&limit=25&access_token={meta_token}"
             r_ig = requests.get(url_ig, timeout=8)
             if r_ig.status_code == 200:
-                for idx, m in enumerate(r_ig.json().get("data", [])):
-                    caption = m.get("caption", "").strip()
-                    first_line = caption.split("\n")[0] if caption else "Instagram Post"
-                    if len(first_line) > 75:
-                        first_line = first_line[:72] + "..."
-                    published_history.append({
-                        "id": f"ig_{m.get('id')[-4:]}",
-                        "platform": "Instagram",
-                        "title": first_line,
-                        "caption": caption,
-                        "hashtags": "",
-                        "platform_post_id": m.get("id"),
-                        "published_at": format_utc_to_display(m.get("timestamp")),
-                        "likes": m.get("like_count", 0),
-                        "comments": m.get("comments_count", 0),
-                        "url": m.get("permalink", f"https://www.instagram.com/p/{m.get('id')}/"),
-                        "is_live_api": True
-                    })
+                live_items = r_ig.json().get("data", [])
+                if live_items:
+                    published_history = [p for p in published_history if p.get("platform") != "Instagram"]
+                    for idx, m in enumerate(live_items):
+                        caption = m.get("caption", "").strip()
+                        first_line = caption.split("\n")[0] if caption else "Instagram Post"
+                        if len(first_line) > 75:
+                            first_line = first_line[:72] + "..."
+                        item_obj = {
+                            "id": f"ig_{m.get('id')[-4:]}",
+                            "platform": "Instagram",
+                            "title": first_line,
+                            "caption": caption,
+                            "hashtags": "",
+                            "platform_post_id": m.get("id"),
+                            "published_at": format_utc_to_display(m.get("timestamp")),
+                            "likes": m.get("like_count", 0),
+                            "comments": m.get("comments_count", 0),
+                            "url": m.get("permalink", f"https://www.instagram.com/p/{m.get('id')}/"),
+                            "is_live_api": True
+                        }
+                        cached_map[m.get("id")] = item_obj
+                        published_history.append(item_obj)
         except Exception as e:
             logger.warning(f"Failed to query live IG media: {e}")
 
@@ -99,26 +131,31 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
             url_fb = f"https://graph.facebook.com/v19.0/{meta_page_id}/feed?fields=id,message,created_time,permalink_url,likes.summary(true),comments.summary(true)&limit=15&access_token={meta_token}"
             r_fb = requests.get(url_fb, timeout=8)
             if r_fb.status_code == 200:
-                for f in r_fb.json().get("data", []):
-                    msg = f.get("message", "").strip()
-                    first_line = msg.split("\n")[0] if msg else "Facebook Post"
-                    if len(first_line) > 75:
-                        first_line = first_line[:72] + "..."
-                    likes_cnt = f.get("likes", {}).get("summary", {}).get("total_count", 0)
-                    comments_cnt = f.get("comments", {}).get("summary", {}).get("total_count", 0)
-                    published_history.append({
-                        "id": f"fb_{f.get('id')[-4:]}",
-                        "platform": "Facebook",
-                        "title": first_line,
-                        "caption": msg,
-                        "hashtags": "",
-                        "platform_post_id": f.get("id"),
-                        "published_at": format_utc_to_display(f.get("created_time")),
-                        "likes": likes_cnt,
-                        "comments": comments_cnt,
-                        "url": f.get("permalink_url", f"https://facebook.com/{f.get('id')}"),
-                        "is_live_api": True
-                    })
+                fb_items = r_fb.json().get("data", [])
+                if fb_items:
+                    published_history = [p for p in published_history if p.get("platform") != "Facebook"]
+                    for f in fb_items:
+                        msg = f.get("message", "").strip()
+                        first_line = msg.split("\n")[0] if msg else "Facebook Post"
+                        if len(first_line) > 75:
+                            first_line = first_line[:72] + "..."
+                        likes_cnt = f.get("likes", {}).get("summary", {}).get("total_count", 0)
+                        comments_cnt = f.get("comments", {}).get("summary", {}).get("total_count", 0)
+                        item_obj = {
+                            "id": f"fb_{f.get('id')[-4:]}",
+                            "platform": "Facebook",
+                            "title": first_line,
+                            "caption": msg,
+                            "hashtags": "",
+                            "platform_post_id": f.get("id"),
+                            "published_at": format_utc_to_display(f.get("created_time")),
+                            "likes": likes_cnt,
+                            "comments": comments_cnt,
+                            "url": f.get("permalink_url", f"https://facebook.com/{f.get('id')}"),
+                            "is_live_api": True
+                        }
+                        cached_map[f.get("id")] = item_obj
+                        published_history.append(item_obj)
         except Exception as e:
             logger.warning(f"Failed to query live FB feed: {e}")
 
@@ -156,9 +193,16 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
                     first_line = first_line[:72] + "..."
                 plat = r[1].lower()
                 
+                # Check if we have cached metrics
+                post_likes = 0
+                post_comments = 0
+                if pid in cached_map:
+                    post_likes = cached_map[pid].get("likes", 0)
+                    post_comments = cached_map[pid].get("comments", 0)
+
                 # Construct platform-specific live permalink URL
                 if plat == "instagram":
-                    post_url = f"https://www.instagram.com/p/{pid}/" if pid.startswith("18") else "https://www.instagram.com/corporatecarsmelbourne/"
+                    post_url = f"https://www.instagram.com/p/{pid}/" if (pid.startswith("18") or pid.startswith("Dc")) else "https://www.instagram.com/corporatecarsmelbourne/"
                 elif plat == "facebook":
                     if "_" in pid:
                         page_id, post_fbid = pid.split("_", 1)
@@ -181,8 +225,8 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
                     "hashtags": r[3] or "",
                     "platform_post_id": pid or "Live Verified",
                     "published_at": format_utc_to_display(r[5] or r[6]),
-                    "likes": 0,
-                    "comments": 0,
+                    "likes": post_likes,
+                    "comments": post_comments,
                     "url": post_url,
                     "is_live_api": True
                 })
