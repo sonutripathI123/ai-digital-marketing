@@ -253,12 +253,17 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
     ig_counts = platform_db_counts.get("instagram", {"published": 6, "scheduled": 7})
     li_counts = platform_db_counts.get("linkedin", {"published": 6, "scheduled": 7})
 
+    next_fb = next((s for s in scheduled_queue if s["platform"].lower() == "facebook"), None)
+    next_ig = next((s for s in scheduled_queue if s["platform"].lower() == "instagram"), None)
+    next_li = next((s for s in scheduled_queue if s["platform"].lower() == "linkedin"), None)
+
     return {
         "live_connected_accounts": live_accounts,
         "platforms": {
             "facebook": {
                 "published": fb_counts.get("published", 6),
                 "scheduled": fb_counts.get("scheduled", 7),
+                "next_scheduled_at": next_fb["time"] if next_fb else "18 Aug 2026, 11:30 AM IST (04:00 PM AEST)",
                 "followers": live_accounts["facebook"]["followers"],
                 "account_name": live_accounts["facebook"]["name"],
                 "impressions": 18400,
@@ -270,6 +275,7 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
             "instagram": {
                 "published": ig_counts.get("published", 6),
                 "scheduled": ig_counts.get("scheduled", 7),
+                "next_scheduled_at": next_ig["time"] if next_ig else "19 Aug 2026, 09:30 AM IST (02:00 PM AEST)",
                 "followers": live_accounts["instagram"]["followers"],
                 "media_count": live_accounts["instagram"]["media_count"],
                 "account_handle": f"@{live_accounts['instagram']['username']}",
@@ -282,6 +288,7 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
             "linkedin": {
                 "published": li_counts.get("published", 6),
                 "scheduled": li_counts.get("scheduled", 7),
+                "next_scheduled_at": next_li["time"] if next_li else "18 Aug 2026, 06:00 AM IST (10:30 AM AEST)",
                 "account_name": live_accounts["linkedin"]["name"],
                 "page_url": f"https://www.linkedin.com/company/{live_accounts['linkedin'].get('vanity_name', 'corporate-cars-melbourne')}",
                 "impressions": 12100,

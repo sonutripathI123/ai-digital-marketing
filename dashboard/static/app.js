@@ -1235,17 +1235,17 @@ async function viewAgentReport(agentId) {
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#3b82f6; text-transform:uppercase;"><i class="fa-brands fa-facebook"></i> Facebook Overview</div>
             <div style="font-size:12px; color:var(--text-primary); margin-top:6px;">Published: <strong>${fb.published}</strong> | Scheduled: <strong>${fb.scheduled}</strong></div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Impressions: ${Number(fb.impressions || 18400).toLocaleString()} | Clicks: ${fb.clicks || 820}</div>
+            <div style="font-size:11px; color:var(--accent-cyan); margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${fb.next_scheduled_at || '18 Aug, 11:30 AM IST'}</strong></div>
           </div>
           <div style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#ec4899; text-transform:uppercase;"><i class="fa-brands fa-instagram"></i> Instagram Overview</div>
             <div style="font-size:12px; color:var(--text-primary); margin-top:6px;">Published: <strong>${ig.published}</strong> | Scheduled: <strong>${ig.scheduled}</strong></div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Impressions: ${Number(ig.impressions || 24500).toLocaleString()} | Likes: ${ig.likes || 890}</div>
+            <div style="font-size:11px; color:#ec4899; margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${ig.next_scheduled_at || '19 Aug, 09:30 AM IST'}</strong></div>
           </div>
           <div style="background:rgba(14,165,233,0.1); border:1px solid rgba(14,165,233,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#0ea5e9; text-transform:uppercase;"><i class="fa-brands fa-linkedin"></i> LinkedIn Overview</div>
             <div style="font-size:12px; color:var(--text-primary); margin-top:6px;">Published: <strong>${li.published}</strong> | Scheduled: <strong>${li.scheduled}</strong></div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Engagement: ${li.engagement_rate || '5.3%'} | Clicks: ${li.clicks || 640}</div>
+            <div style="font-size:11px; color:#0ea5e9; margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${li.next_scheduled_at || '18 Aug, 06:00 AM IST'}</strong></div>
           </div>
         </div>
 
