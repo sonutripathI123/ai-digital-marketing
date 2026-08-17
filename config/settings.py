@@ -22,7 +22,7 @@ load_dotenv(ROOT_DIR / "corporate-cars-social-agent" / ".env")
 ADS_LIVE_EXECUTION_ENABLED: bool = os.getenv("ADS_LIVE_EXECUTION_ENABLED", "false").lower() in ("true", "1", "yes")
 ALLOW_LIVE_PUBLISHING: bool = os.getenv("ALLOW_LIVE_PUBLISHING", "false").lower() in ("true", "1", "yes")
 ADMIN_EMAIL: str = os.getenv("ADMIN_EMAIL", "sonutripathi9305@gmail.com").strip().lower()
-ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "Admin@Marketing2026")
+ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "26032024")
 AUTH_SECRET_KEY: str = os.getenv("AUTH_SECRET_KEY", "ai-marketing-auth-master-secret-9305")
 
 
