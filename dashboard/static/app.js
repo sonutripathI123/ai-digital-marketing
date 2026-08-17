@@ -1102,7 +1102,7 @@ async function viewAgentReport(agentId) {
     return;
   }
   try {
-    const res = await fetch(`/api/agents/${agentId}/report?site_id=${currentSiteId}`);
+    const res = await fetch(`/api/agents/${agentId}/report?site_id=${currentSiteId}&_t=${Date.now()}`, { cache: 'no-store' });
     const data = await res.json();
 
     document.getElementById('agent-report-title').innerHTML = `
