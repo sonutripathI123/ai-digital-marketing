@@ -29,6 +29,20 @@ if SOCIAL_ENV_FILE.exists():
     load_dotenv(SOCIAL_ENV_FILE)
 
 
+def format_utc_to_display(utc_str: Optional[str]) -> str:
+    if not utc_str:
+        return "Recent"
+    try:
+        from datetime import datetime, timedelta
+        clean_str = utc_str.split(".")[0]
+        dt = datetime.strptime(clean_str, "%Y-%m-%d %H:%M:%S")
+        dt_ist = dt + timedelta(hours=5, minutes=30)
+        dt_aest = dt + timedelta(hours=10)
+        return f"{dt_ist.strftime('%d %b %Y, %I:%M %p IST')} ({dt_aest.strftime('%I:%M %p AEST')})"
+    except Exception:
+        return str(utc_str)[:16]
+
+
 def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbourne.com.au", site_name: str = "Corporate Cars Melbourne") -> Dict[str, Any]:
     """
     Connects to real corporate-cars-social-agent/social_agent.db and queries live Meta & LinkedIn APIs
@@ -75,7 +89,7 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
                     "caption": caption_clean,
                     "hashtags": r[3] or "",
                     "platform_post_id": r[4] or "Live API Verified",
-                    "published_at": (r[5][:16] if r[5] else (r[6][:16] if r[6] else "Recent")),
+                    "published_at": format_utc_to_display(r[5] or r[6]),
                     "clicks": 110 + (r[0] * 11) % 180,
                     "likes": 25 + (r[0] * 9) % 95
                 })
@@ -97,7 +111,7 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
                     "id": f"s{r[0]:04d}",
                     "platform": r[1].capitalize(),
                     "title": first_line,
-                    "time": r[3][:16] if r[3] else "Upcoming"
+                    "time": format_utc_to_display(r[3])
                 })
 
             conn.close()
