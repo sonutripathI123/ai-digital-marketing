@@ -126,37 +126,86 @@ orchestrator.register_agent(external_link_agent)
 orchestrator.register_agent(ad_spy_agent)
 orchestrator.register_agent(page_optimizer_agent)
 
-# Register Production Schedules
+# Helper execution callbacks for autonomous background scheduler
+def _cron_run_blog_write():
+    task = orchestrator.create_task(
+        agent_id="blog-agent",
+        task_type="write",
+        input_data={"action": "write"}
+    )
+    orchestrator.execute_task(task.task_id)
+
+def _cron_run_blog_publish():
+    task = orchestrator.create_task(
+        agent_id="blog-agent",
+        task_type="publish",
+        input_data={"action": "publish"}
+    )
+    orchestrator.execute_task(task.task_id)
+
+def _cron_run_social_publish():
+    task = orchestrator.create_task(
+        agent_id="corporate-cars-social-agent",
+        task_type="publish-due",
+        input_data={"action": "publish-due"}
+    )
+    orchestrator.execute_task(task.task_id)
+
+def _cron_run_monthly_report():
+    task = orchestrator.create_task(
+        agent_id="monthly-report-agent",
+        task_type="generate_report",
+        input_data={"action": "generate_report"}
+    )
+    orchestrator.execute_task(task.task_id)
+
+def _cron_run_daily_backlinks():
+    task = orchestrator.create_task(
+        agent_id="external-link-building-agent",
+        task_type="daily_batch",
+        input_data={"action": "daily_batch"}
+    )
+    orchestrator.execute_task(task.task_id)
+
+# Register Production Schedules with Executable Callbacks
 scheduler_mgr.register_schedule(
     job_id="blog-write-cron",
     agent_id="blog-agent",
     cron_expression="0 9 * * 1-6",
-    action="write"
+    action="write",
+    callback=_cron_run_blog_write
 )
 scheduler_mgr.register_schedule(
     job_id="blog-publish-cron",
     agent_id="blog-agent",
     cron_expression="15 * * * 1-6",
-    action="publish"
+    action="publish",
+    callback=_cron_run_blog_publish
 )
 scheduler_mgr.register_schedule(
     job_id="social-publish-daemon",
     agent_id="corporate-cars-social-agent",
     cron_expression="*/5 * * * *",
-    action="publish-due"
+    action="publish-due",
+    callback=_cron_run_social_publish
 )
 scheduler_mgr.register_schedule(
     job_id="monthly-executive-report-cron",
     agent_id="monthly-report-agent",
     cron_expression="59 23 28-31 * *",
-    action="generate_report"
+    action="generate_report",
+    callback=_cron_run_monthly_report
 )
 scheduler_mgr.register_schedule(
     job_id="daily-backlinks-outreach-cron",
     agent_id="external-link-building-agent",
     cron_expression="0 10 * * *",
-    action="daily_batch"
+    action="daily_batch",
+    callback=_cron_run_daily_backlinks
 )
+
+# Start autonomous background execution runner daemon
+scheduler_mgr.start_background_runner()
 
 
 # --- Request/Response Models ---
