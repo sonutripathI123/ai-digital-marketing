@@ -59,9 +59,9 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
             cur.execute("""
                 SELECT p.id, p.platform, p.caption, p.hashtags, p.platform_post_id, s.publish_at, p.created_at
                 FROM posts p
-                JOIN schedule s ON s.post_id = p.id
-                WHERE p.status = 'published' AND s.published = 1
-                ORDER BY s.publish_at DESC
+                LEFT JOIN schedule s ON s.post_id = p.id
+                WHERE p.status = 'published'
+                ORDER BY COALESCE(s.publish_at, p.created_at) DESC
             """)
             for r in cur.fetchall():
                 caption_clean = r[2].strip() if r[2] else ""
@@ -75,7 +75,7 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
                     "caption": caption_clean,
                     "hashtags": r[3] or "",
                     "platform_post_id": r[4] or "Live API Verified",
-                    "published_at": r[5][:16] if r[5] else (r[6][:16] if r[6] else "Recent"),
+                    "published_at": (r[5][:16] if r[5] else (r[6][:16] if r[6] else "Recent")),
                     "clicks": 110 + (r[0] * 11) % 180,
                     "likes": 25 + (r[0] * 9) % 95
                 })
@@ -84,8 +84,8 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
             cur.execute("""
                 SELECT p.id, p.platform, p.caption, s.publish_at
                 FROM posts p
-                JOIN schedule s ON s.post_id = p.id
-                WHERE s.published = 0
+                LEFT JOIN schedule s ON s.post_id = p.id
+                WHERE p.status = 'scheduled' OR (s.published = 0 AND s.publish_at IS NOT NULL)
                 ORDER BY s.publish_at ASC
             """)
             for r in cur.fetchall():
