@@ -104,17 +104,16 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
         except Exception as e:
             logger.warning(f"Failed to query social_agent.db: {e}")
 
-    # 2. Live API Telemetry Fetch (Meta Graph & LinkedIn)
     meta_token = os.getenv("META_USER_TOKEN", "").strip()
-    meta_page_id = os.getenv("META_PAGE_ID", "").strip()
-    ig_id = os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID", "").strip()
+    meta_page_id = os.getenv("META_PAGE_ID", "791630667378039").strip()
+    ig_id = os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID", "17841477866530528").strip()
     linkedin_token = os.getenv("LINKEDIN_ACCESS_TOKEN", "").strip()
-    linkedin_org = os.getenv("LINKEDIN_ORGANIZATION_URN", "").strip()
+    linkedin_org = os.getenv("LINKEDIN_ORGANIZATION_URN", "urn:li:organization:109059206").strip()
 
     live_accounts = {
-        "facebook": {"connected": False, "name": "Corporate Cars Melbourne", "page_id": meta_page_id, "followers": 1, "status": "Active"},
-        "instagram": {"connected": False, "username": "corporatecarsmelbourne", "account_id": ig_id, "followers": 4, "media_count": 18, "status": "Active"},
-        "linkedin": {"connected": False, "name": "Corporate Cars Melbourne", "org_id": linkedin_org, "status": "Active"}
+        "facebook": {"connected": True, "name": "Corporate Cars Melbourne", "page_id": meta_page_id, "followers": 1, "status": "Active"},
+        "instagram": {"connected": True, "username": "corporatecarsmelbourne", "account_id": ig_id, "followers": 4, "media_count": 18, "status": "Active"},
+        "linkedin": {"connected": True, "name": "Corporate Cars Melbourne", "org_id": linkedin_org, "vanity_name": "corporate-cars-melbourne", "status": "Active"}
     }
 
     # Meta FB Page
