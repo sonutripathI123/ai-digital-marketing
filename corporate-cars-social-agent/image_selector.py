@@ -110,7 +110,10 @@ def _match_tokens(keyword: Keyword | None, topic: str) -> tuple[set[str], set[st
 def select_image(session: Session, topic: str, keyword: Keyword | None = None) -> Image | None:
     """
     Pick the least-recently-used image whose category/tags overlap the topic.
-    Falls back to the global LRU image so a post always gets a photo.
+    Specialty categories (e.g. 'wedding-cars') are STRICTLY gated: they are ONLY
+    selected if the topic/keyword explicitly contains wedding/bridal keywords.
+    For corporate, airport, executive, or general posts, wedding images are strictly
+    excluded and executive fleet images (sedan, suv, people-mover, minibus) are selected.
     Marks the chosen image as used (rotation guarantee).
     """
     images = session.query(Image).all()
@@ -119,18 +122,37 @@ def select_image(session: Session, topic: str, keyword: Keyword | None = None) -
 
     direct, synonyms = _match_tokens(keyword, topic)
 
+    is_wedding_topic = bool({"wedding", "weddings", "bridal", "bride", "groom", "marriage"} & direct)
+
+    if is_wedding_topic:
+        # Only select from wedding cars
+        candidate_images = [
+            img for img in images 
+            if (img.category or "").lower() in ("wedding-cars", "wedding", "bridal")
+        ]
+        if not candidate_images:
+            candidate_images = images
+    else:
+        # Strictly exclude wedding cars from corporate, airport, chauffeur, and general posts
+        candidate_images = [
+            img for img in images 
+            if (img.category or "").lower() not in ("wedding-cars", "wedding", "bridal")
+        ]
+        if not candidate_images:
+            candidate_images = images
+
     def overlap(img: Image) -> int:
         img_tokens = set((img.category or "").lower().split("-"))
         img_tokens |= set((img.tags or "").lower().split(","))
-        # direct keyword-text matches count double vs synonym-derived matches
-        return 2 * len(img_tokens & direct) + len(img_tokens & synonyms)
+        specific_direct = direct - {"car", "cars"}
+        return 2 * len(img_tokens & specific_direct) + len(img_tokens & synonyms)
 
     def lru_key(img: Image):
         # Never-used first, then oldest last_used_at, then lowest use_count
         return (img.last_used_at or datetime.min, img.use_count or 0)
 
-    matching = [img for img in images if overlap(img) > 0]
-    pool = matching if matching else images
+    matching = [img for img in candidate_images if overlap(img) > 0]
+    pool = matching if matching else candidate_images
     # Best overlap first, LRU breaks ties within the same overlap score
     pool.sort(key=lambda img: (-overlap(img), lru_key(img)))
     chosen = pool[0]
