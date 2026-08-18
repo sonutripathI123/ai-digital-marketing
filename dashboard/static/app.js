@@ -1101,16 +1101,44 @@ async function viewAgentReport(agentId) {
     openCompetitorAdSpyModal();
     return;
   }
+
+  // 1. Immediately open modal with responsive loading spinner
+  const titleElem = document.getElementById('agent-report-title');
+  const subtitleElem = document.getElementById('agent-report-subtitle');
+  const container = document.getElementById('agent-report-content');
+
+  if (titleElem) {
+    titleElem.innerHTML = `<i class="${getIconForAgent(agentId)}" style="color:var(--accent-cyan);"></i> Agent Performance Report`;
+  }
+  if (subtitleElem) {
+    subtitleElem.textContent = 'Loading live multi-platform analytics and performance metrics...';
+  }
+  if (container) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:60px 20px;">
+        <i class="fa-solid fa-circle-notch fa-spin" style="font-size:36px; color:var(--accent-cyan); margin-bottom:16px;"></i>
+        <div style="font-size:15px; font-weight:700; color:#fff;">Fetching Live Performance Report...</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">Connecting to live database, social feeds & platform telemetry</div>
+      </div>
+    `;
+  }
+  openModal('agent-report-modal');
+
   try {
     const res = await fetch(`/api/agents/${agentId}/report?site_id=${currentSiteId}&_t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) {
+      throw new Error(`Server returned HTTP ${res.status}: ${res.statusText}`);
+    }
     const data = await res.json();
 
-    document.getElementById('agent-report-title').innerHTML = `
-      <i class="${getIconForAgent(agentId)}" style="color:var(--accent-cyan);"></i> ${data.name} Performance Report
-    `;
-    document.getElementById('agent-report-subtitle').textContent = `Active Website: ${data.site_name} (${data.site_domain}) | Category: ${data.category} | Total Completed Tasks: ${data.completed_tasks_count}`;
-
-    const container = document.getElementById('agent-report-content');
+    if (titleElem) {
+      titleElem.innerHTML = `
+        <i class="${getIconForAgent(agentId)}" style="color:var(--accent-cyan);"></i> ${data.name || 'Agent'} Performance Report
+      `;
+    }
+    if (subtitleElem) {
+      subtitleElem.textContent = `Active Website: ${data.site_name || 'Corporate Cars Melbourne'} (${data.site_domain || 'corporatecarsmelbourne.com.au'}) | Category: ${data.category || 'Agent'} | Total Completed Tasks: ${data.completed_tasks_count || 0}`;
+    }
 
     if (agentId === 'blog-agent' && data.blog_metrics) {
       const bm = data.blog_metrics;
@@ -1530,9 +1558,19 @@ async function viewAgentReport(agentId) {
       `;
     }
 
-    openModal('agent-report-modal');
   } catch (err) {
-    alert(`Failed to load performance report: ${err}`);
+    if (container) {
+      container.innerHTML = `
+        <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:24px; border-radius:14px; text-align:center;">
+          <i class="fa-solid fa-triangle-exclamation" style="font-size:32px; color:#ef4444; margin-bottom:12px;"></i>
+          <div style="font-size:15px; font-weight:700; color:#fff;">Failed to Load Performance Report</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">${err.message || err}</div>
+          <button class="btn btn-primary btn-sm" onclick="viewAgentReport('${agentId}')" style="margin-top:16px; font-size:12px;">
+            <i class="fa-solid fa-rotate-right"></i> Try Again
+          </button>
+        </div>
+      `;
+    }
   }
 }
 

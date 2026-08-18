@@ -103,7 +103,7 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
     if meta_token and ig_id:
         try:
             url_ig = f"https://graph.facebook.com/v19.0/{ig_id}/media?fields=id,caption,media_type,permalink,timestamp,like_count,comments_count&limit=25&access_token={meta_token}"
-            r_ig = requests.get(url_ig, timeout=8)
+            r_ig = requests.get(url_ig, timeout=3)
             if r_ig.status_code == 200:
                 live_items = r_ig.json().get("data", [])
                 if live_items:
@@ -135,7 +135,7 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
     if meta_token and meta_page_id:
         try:
             url_fb = f"https://graph.facebook.com/v19.0/{meta_page_id}/feed?fields=id,message,created_time,permalink_url,likes.summary(true),comments.summary(true)&limit=15&access_token={meta_token}"
-            r_fb = requests.get(url_fb, timeout=8)
+            r_fb = requests.get(url_fb, timeout=3)
             if r_fb.status_code == 200:
                 fb_items = r_fb.json().get("data", [])
                 if fb_items:
