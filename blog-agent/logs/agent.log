@@ -101,3 +101,31 @@
 2026-08-15 10:03:35,966  INFO  write run complete. 1 draft(s) created.
 2026-08-15 11:37:28,854  INFO  Published: fitzroy chauffeur vs rideshare to airport -> https://corporatecarsmelbourne.com.au/chauffeur-vs-rideshare-airport-fitzroy/
 2026-08-15 11:37:28,868  INFO  publish run complete. 1 post(s) went live.
+2026-08-17 18:31:58,380  INFO  Writing: why malvern businesses choose a chauffeur (ccm)
+2026-08-17 18:32:56,685  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-17 18:33:16,969  INFO  Draft created. post_id=20529, featured_media=18987, auto-live at 2026-08-17T13:03:16.969843+00:00
+2026-08-17 18:33:16,977  INFO  write run complete. 1 draft(s) created.
+2026-08-17 18:33:54,820  INFO  Published: why malvern businesses choose a chauffeur -> https://corporatecarsmelbourne.com.au/why-malvern-businesses-choose-chauffeur-service/
+2026-08-17 18:33:54,825  INFO  publish run complete. 1 post(s) went live.
+2026-08-18 09:45:14,309  INFO  publish run complete. 0 post(s) went live.
+2026-08-18 09:45:15,790  INFO  publish run complete. 0 post(s) went live.
+2026-08-18 12:45:10,185  INFO  publish run complete. 0 post(s) went live.
+2026-08-18 15:45:14,917  INFO  publish run complete. 0 post(s) went live.
+2026-08-18 16:20:27,574  INFO  Writing: box hill airport transfer cost (ccm)
+2026-08-18 16:21:43,859  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-18 16:21:43,930  ERROR  Failed on box hill airport transfer cost: Expecting value: line 1 column 1 (char 0)
+2026-08-18 16:21:43,938  INFO  Writing: dandenong early morning airport flight plan (ccm)
+2026-08-18 16:22:30,527  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-18 16:22:30,575  INFO  SEO Content Brief Agent auto-optimized post: Early Flight From Dandenong: A Stress-Free Plan - Dandenong Early Flight Plan (Schema.org JSON-LD injected, LSI checked)
+2026-08-18 16:23:11,462  INFO  Draft created. post_id=20531, featured_media=18984, auto-live at 2026-08-18T10:53:11.462012+00:00
+2026-08-18 16:23:11,469  INFO  write run complete. 1 draft(s) created.
+2026-08-18 16:24:07,654  INFO  Published: dandenong early morning airport flight plan -> https://corporatecarsmelbourne.com.au/dandenong-early-morning-flight-plan/
+2026-08-18 16:24:07,660  INFO  publish run complete. 1 post(s) went live.
+2026-08-18 16:45:06,183  INFO  publish run complete. 0 post(s) went live.
+2026-08-19 11:21:55,611  INFO  Writing: box hill airport transfer cost (ccm)
+2026-08-19 11:23:03,161  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-19 11:23:03,249  INFO  SEO Content Brief Agent auto-optimized post: How Much Does a Box Hill Airport Transfer Cost? - Box Hill Transfer Cost (Schema.org JSON-LD injected, LSI checked)
+2026-08-19 11:24:31,387  INFO  Draft created. post_id=20535, featured_media=18981, auto-live at 2026-08-19T05:54:31.386986+00:00
+2026-08-19 11:24:31,393  INFO  write run complete. 1 draft(s) created.
+2026-08-19 11:34:03,794  INFO  Published: box hill airport transfer cost -> https://corporatecarsmelbourne.com.au/box-hill-airport-transfer-cost/
+2026-08-19 11:34:03,799  INFO  publish run complete. 1 post(s) went live.

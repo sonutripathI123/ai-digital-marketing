@@ -165,3 +165,182 @@
 2026-08-16 18:12:23,878 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
 2026-08-16 18:12:23,879 [INFO] [agent:agent.seo-audit-agent] Completed task task-3fea95fb successfully.
 2026-08-16 18:12:23,937 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-16 18:43:23,982 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-bb50a11f
+2026-08-16 18:43:23,983 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-16 18:43:23,983 [INFO] [agent:agent.seo-audit-agent] Completed task task-bb50a11f successfully.
+2026-08-16 18:43:24,172 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-40ed24d6
+2026-08-16 18:43:24,173 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-16 18:43:24,173 [INFO] [agent:agent.seo-audit-agent] Completed task task-40ed24d6 successfully.
+2026-08-16 18:43:24,242 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-16 19:15:24,975 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-b24384fd
+2026-08-16 19:15:24,976 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-16 19:15:24,976 [INFO] [agent:agent.seo-audit-agent] Completed task task-b24384fd successfully.
+2026-08-16 19:15:25,152 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-0928560a
+2026-08-16 19:15:25,153 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-16 19:15:25,154 [INFO] [agent:agent.seo-audit-agent] Completed task task-0928560a successfully.
+2026-08-16 19:15:25,229 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-17 10:08:11,016 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-5052f791
+2026-08-17 10:08:11,017 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-17 10:08:11,017 [INFO] [agent:agent.seo-audit-agent] Completed task task-5052f791 successfully.
+2026-08-17 10:08:11,097 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-17 10:12:14,189 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-0567df13
+2026-08-17 10:12:14,190 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-17 10:12:14,191 [INFO] [agent:agent.seo-audit-agent] Completed task task-0567df13 successfully.
+2026-08-17 10:12:14,526 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-fb121d40
+2026-08-17 10:12:14,527 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-17 10:12:14,527 [INFO] [agent:agent.seo-audit-agent] Completed task task-fb121d40 successfully.
+2026-08-17 10:12:14,629 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-17 10:15:39,926 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-09327390
+2026-08-17 10:15:39,928 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-17 10:15:39,929 [INFO] [agent:agent.seo-audit-agent] Completed task task-09327390 successfully.
+2026-08-17 10:15:40,244 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-03323b18
+2026-08-17 10:15:40,244 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-17 10:15:40,245 [INFO] [agent:agent.seo-audit-agent] Completed task task-03323b18 successfully.
+2026-08-17 10:15:40,358 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-17 13:41:56,613 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-188764bd
+2026-08-17 13:41:56,615 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-17 13:41:56,616 [INFO] [agent:agent.seo-audit-agent] Completed task task-188764bd successfully.
+2026-08-17 13:41:56,773 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-d1b90582
+2026-08-17 13:41:56,773 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-17 13:41:56,774 [INFO] [agent:agent.seo-audit-agent] Completed task task-d1b90582 successfully.
+2026-08-17 13:41:56,813 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-17 13:46:21,639 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-943d6bee
+2026-08-17 13:46:21,639 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-17 13:46:21,640 [INFO] [agent:agent.seo-audit-agent] Completed task task-943d6bee successfully.
+2026-08-17 13:46:21,732 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-52be1e45
+2026-08-17 13:46:21,732 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-17 13:46:21,732 [INFO] [agent:agent.seo-audit-agent] Completed task task-52be1e45 successfully.
+2026-08-17 13:46:21,766 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-17 18:35:26,235 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-df171c6b
+2026-08-17 18:35:26,236 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-17 18:35:26,237 [INFO] [agent:agent.seo-audit-agent] Completed task task-df171c6b successfully.
+2026-08-17 18:35:26,536 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-593e174b
+2026-08-17 18:35:26,537 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-17 18:35:26,538 [INFO] [agent:agent.seo-audit-agent] Completed task task-593e174b successfully.
+2026-08-17 18:35:26,624 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-17 19:09:48,953 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-7830ff47
+2026-08-17 19:09:48,954 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-17 19:09:48,955 [INFO] [agent:agent.seo-audit-agent] Completed task task-7830ff47 successfully.
+2026-08-17 19:09:49,170 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-11442523
+2026-08-17 19:09:49,171 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-17 19:09:49,171 [INFO] [agent:agent.seo-audit-agent] Completed task task-11442523 successfully.
+2026-08-17 19:09:49,252 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-17 19:27:28,172 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-bc8d8563
+2026-08-17 19:27:28,174 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-17 19:27:28,174 [INFO] [agent:agent.seo-audit-agent] Completed task task-bc8d8563 successfully.
+2026-08-17 19:27:28,430 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-e8b60e66
+2026-08-17 19:27:28,430 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-17 19:27:28,431 [INFO] [agent:agent.seo-audit-agent] Completed task task-e8b60e66 successfully.
+2026-08-17 19:27:28,521 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-17 20:05:58,083 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-deb85386
+2026-08-17 20:05:58,084 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-17 20:05:58,084 [INFO] [agent:agent.seo-audit-agent] Completed task task-deb85386 successfully.
+2026-08-17 20:05:58,171 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-0f1a7d14
+2026-08-17 20:05:58,172 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-17 20:05:58,172 [INFO] [agent:agent.seo-audit-agent] Completed task task-0f1a7d14 successfully.
+2026-08-17 20:05:58,218 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-18 09:45:12,923 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-0b5bef9a
+2026-08-18 09:45:12,926 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/contact'
+2026-08-18 09:45:12,927 [INFO] [agent:agent.seo-audit-agent] Completed task task-0b5bef9a successfully.
+2026-08-18 09:45:13,269 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-71caf960
+2026-08-18 09:45:13,270 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au'
+2026-08-18 09:45:13,271 [INFO] [agent:agent.seo-audit-agent] Completed task task-71caf960 successfully.
+2026-08-18 09:45:13,368 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, url='https://corporatecarsmelbourne.com.au/services'
+2026-08-18 17:19:40,828 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/
+2026-08-18 17:19:44,111 [INFO] [agent:agent.seo-audit-agent] Auditing whole website SEO for domain: https://corporatecarsmelbourne.com.au
+2026-08-18 17:19:52,608 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/
+2026-08-18 17:19:56,321 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/airport-transfers/
+2026-08-18 17:20:02,039 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/corporate-transfers/
+2026-08-18 17:20:10,822 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/wedding-car-hire/
+2026-08-18 17:20:16,832 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/winery-tours/
+2026-08-18 17:20:20,712 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/fleet/executive-sedans/
+2026-08-18 17:20:24,079 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/fleet/luxury-suv/
+2026-08-18 17:20:27,381 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/contact/
+2026-08-18 17:20:33,372 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/about-us/
+2026-08-18 17:20:45,445 [INFO] [agent:agent.seo-audit-agent] Auditing whole website SEO for domain: https://corporatecarsmelbourne.com.au
+2026-08-18 17:20:51,067 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/
+2026-08-18 17:20:51,069 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/airport-transfers/
+2026-08-18 17:20:51,073 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/corporate-transfers/
+2026-08-18 17:20:51,079 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/wedding-car-hire/
+2026-08-18 17:20:51,080 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/winery-tours/
+2026-08-18 17:20:54,322 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/fleet/executive-sedans/
+2026-08-18 17:20:54,503 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/fleet/luxury-suv/
+2026-08-18 17:20:54,507 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/contact/
+2026-08-18 17:20:55,434 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/about-us/
+2026-08-18 17:23:36,419 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-91d1e5c1
+2026-08-18 17:23:36,420 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_site, mode=whole_website, url='https://corporatecarsmelbourne.com.au'
+2026-08-18 17:23:36,421 [INFO] [agent:agent.seo-audit-agent] Auditing whole website SEO for domain: https://corporatecarsmelbourne.com.au
+2026-08-18 17:23:43,030 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/
+2026-08-18 17:23:43,033 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/airport-transfers/
+2026-08-18 17:23:43,035 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/corporate-transfers/
+2026-08-18 17:23:43,043 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/wedding-car-hire/
+2026-08-18 17:23:43,045 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/winery-tours/
+2026-08-18 17:23:47,718 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/fleet/executive-sedans/
+2026-08-18 17:23:47,721 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/fleet/luxury-suv/
+2026-08-18 17:23:47,962 [WARNING] [agent:agent.seo-audit-agent] Failed to read SEO audit history: Expecting ',' delimiter: line 1303 column 3 (char 51271)
+2026-08-18 17:23:47,968 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/contact/
+2026-08-18 17:23:48,305 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/about-us/
+2026-08-18 17:23:53,862 [WARNING] [agent:agent.seo-audit-agent] Failed to read SEO audit history: Extra data: line 510 column 2 (char 19997)
+2026-08-18 17:23:53,928 [INFO] [agent:agent.seo-audit-agent] Completed task task-91d1e5c1 successfully.
+2026-08-18 17:24:09,280 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-955715ac
+2026-08-18 17:24:09,284 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, mode=single_page, url='https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/'
+2026-08-18 17:24:09,284 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/
+2026-08-18 17:24:14,649 [INFO] [agent:agent.seo-audit-agent] Completed task task-955715ac successfully.
+2026-08-18 17:25:37,887 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-9e200f38
+2026-08-18 17:25:37,889 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, mode=single_page, url='https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/'
+2026-08-18 17:25:37,890 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/
+2026-08-18 17:25:42,157 [INFO] [agent:agent.seo-audit-agent] Completed task task-9e200f38 successfully.
+2026-08-18 17:26:05,958 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-9ef86cf4
+2026-08-18 17:26:05,959 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_site, mode=whole_website, url='https://corporatecarsmelbourne.com.au'
+2026-08-18 17:26:05,960 [INFO] [agent:agent.seo-audit-agent] Auditing whole website SEO for domain: https://corporatecarsmelbourne.com.au
+2026-08-18 17:26:13,644 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/
+2026-08-18 17:26:13,645 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/airport-transfers/
+2026-08-18 17:26:13,647 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/corporate-transfers/
+2026-08-18 17:26:13,652 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/wedding-car-hire/
+2026-08-18 17:26:13,658 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/services/winery-tours/
+2026-08-18 17:26:18,892 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/fleet/executive-sedans/
+2026-08-18 17:26:21,451 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/fleet/luxury-suv/
+2026-08-18 17:26:21,939 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/contact/
+2026-08-18 17:26:22,528 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/about-us/
+2026-08-18 17:26:25,731 [WARNING] [agent:agent.seo-audit-agent] Failed to read SEO audit history: Extra data: line 846 column 10 (char 32969)
+2026-08-18 17:26:25,731 [WARNING] [agent:agent.seo-audit-agent] Failed to read SEO audit history: Extra data: line 846 column 10 (char 32969)
+2026-08-18 17:26:28,156 [WARNING] [agent:agent.seo-audit-agent] Failed to read SEO audit history: Extra data: line 100 column 2 (char 3908)
+2026-08-18 17:26:28,454 [INFO] [agent:agent.seo-audit-agent] Completed task task-9ef86cf4 successfully.
+2026-08-18 17:27:18,612 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-459b0f6e
+2026-08-18 17:27:18,615 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, mode=single_page, url='https://corporatecarsmelbourne.com.au/'
+2026-08-18 17:27:18,616 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/
+2026-08-18 17:27:23,688 [INFO] [agent:agent.seo-audit-agent] Completed task task-459b0f6e successfully.
+2026-08-18 17:30:22,636 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-6c038a69
+2026-08-18 17:30:22,637 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, mode=single_page, url='https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/'
+2026-08-18 17:30:22,638 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/
+2026-08-18 17:30:30,805 [INFO] [agent:agent.seo-audit-agent] Completed task task-6c038a69 successfully.
+2026-08-18 17:32:04,644 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-8ab93742
+2026-08-18 17:32:04,646 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, mode=single_page, url='https://corporatecarsmelbourne.com.au/as-directed-point-to-point/'
+2026-08-18 17:32:04,647 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/as-directed-point-to-point/
+2026-08-18 17:32:10,663 [INFO] [agent:agent.seo-audit-agent] Completed task task-8ab93742 successfully.
+2026-08-18 17:37:20,702 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/
+2026-08-18 17:37:24,796 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/
+2026-08-18 17:37:32,888 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/as-directed-point-to-point/
+2026-08-18 17:37:37,735 [INFO] [agent:agent.seo-audit-agent] Auditing whole website SEO for domain: https://corporatecarsmelbourne.com.au
+2026-08-18 17:39:03,031 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/
+2026-08-18 17:39:06,689 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/
+2026-08-18 17:39:09,881 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/as-directed-point-to-point/
+2026-08-18 17:39:15,949 [INFO] [agent:agent.seo-audit-agent] Auditing whole website SEO for domain: https://corporatecarsmelbourne.com.au
+2026-08-18 17:39:24,773 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/
+2026-08-18 17:39:24,775 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/request-a-quote/
+2026-08-18 17:39:24,776 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/about-us/
+2026-08-18 17:39:24,777 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/
+2026-08-18 17:39:24,779 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/as-directed-point-to-point/
+2026-08-18 17:39:29,334 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/city-to-city-travel/
+2026-08-18 17:39:29,335 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/hourly-chauffeur-hire-melbourne/
+2026-08-18 17:39:29,400 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/conferences-transfers-melbourne/
+2026-08-18 17:39:29,591 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/
+2026-08-18 17:39:29,928 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/sporting-event-limo-transportation-in-melbourne/
+2026-08-18 17:41:38,314 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-b79ee826
+2026-08-18 17:41:38,314 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, mode=single_page, url='https://corporatecarsmelbourne.com.au/'
+2026-08-18 17:41:38,314 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/
+2026-08-18 17:41:41,473 [INFO] [agent:agent.seo-audit-agent] Completed task task-b79ee826 successfully.
+2026-08-18 17:41:43,583 [INFO] [agent:agent.seo-audit-agent] Starting execution for task task-c8dca2c3
+2026-08-18 17:41:43,583 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, mode=single_page, url='https://corporatecarsmelbourne.com.au/about-us/'
+2026-08-18 17:41:43,583 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/about-us/
+2026-08-18 17:41:46,526 [INFO] [agent:agent.seo-audit-agent] Completed task task-c8dca2c3 successfully.

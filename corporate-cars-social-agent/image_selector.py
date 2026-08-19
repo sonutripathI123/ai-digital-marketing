@@ -148,14 +148,13 @@ def select_image(session: Session, topic: str, keyword: Keyword | None = None) -
         return 2 * len(img_tokens & specific_direct) + len(img_tokens & synonyms)
 
     def lru_key(img: Image):
-        # Never-used first, then oldest last_used_at, then lowest use_count
-        return (img.last_used_at or datetime.min, img.use_count or 0)
+        # Strict Fair Sequential Round-Robin:
+        # Lowest use_count first, then oldest last_used_at (or never used), then stable ID
+        return (img.use_count or 0, img.last_used_at or datetime.min, img.id)
 
-    matching = [img for img in candidate_images if overlap(img) > 0]
-    pool = matching if matching else candidate_images
-    # Best overlap first, LRU breaks ties within the same overlap score
-    pool.sort(key=lambda img: (-overlap(img), lru_key(img)))
-    chosen = pool[0]
+    # Sort strictly by lowest use count and oldest usage to cycle through all images 1-by-1
+    candidate_images.sort(key=lru_key)
+    chosen = candidate_images[0]
 
     chosen.last_used_at = datetime.utcnow()
     chosen.use_count = (chosen.use_count or 0) + 1

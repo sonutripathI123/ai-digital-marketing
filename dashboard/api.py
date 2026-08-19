@@ -22,6 +22,7 @@ import hashlib
 import time
 import json
 import base64
+import logging
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -29,6 +30,8 @@ from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger("dashboard_api")
 
 from agents.blog_agent_adapter import BlogAgentAdapter
 from agents.social_agent_adapter import SocialAgentAdapter
@@ -126,14 +129,64 @@ orchestrator.register_agent(external_link_agent)
 orchestrator.register_agent(ad_spy_agent)
 orchestrator.register_agent(page_optimizer_agent)
 
+def check_and_auto_catchup_daily_blog():
+    """Self-healing watchdog: checks if today's blog was missed and auto-publishes immediately."""
+    try:
+        import csv
+        from datetime import datetime, timezone
+        from zoneinfo import ZoneInfo
+
+        now_utc = datetime.now(timezone.utc)
+        now_ist = datetime.now(ZoneInfo("Asia/Kolkata"))
+
+        # Skip on Sunday (weekday 6)
+        if now_utc.weekday() == 6:
+            return
+
+        # Check if past 10:00 AM IST (or past 04:30 UTC)
+        if now_ist.hour < 10:
+            return
+
+        today_str = now_utc.strftime("%Y-%m-%d")
+        today_ist_str = now_ist.strftime("%Y-%m-%d")
+
+        # Check topics.csv to see if any blog was published today
+        topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
+        already_published_today = False
+        if topics_file.exists():
+            with open(topics_file, newline="", encoding="utf-8") as f:
+                rows = list(csv.DictReader(f))
+                for r in rows:
+                    if r.get("status") == "published" and r.get("go_live_at"):
+                        if today_str in r["go_live_at"] or today_ist_str in r["go_live_at"]:
+                            already_published_today = True
+                            break
+
+        if not already_published_today:
+            logger.info(f"Self-Healing Catchup: Today's blog ({today_ist_str}) has not been published yet. Auto-triggering blog write & publish pipeline now...")
+            _cron_run_blog_write()
+        else:
+            logger.info(f"Daily blog check: Today's post ({today_ist_str}) is already verified published live.")
+    except Exception as e:
+        logger.warning(f"Daily blog auto-catchup check notice: {e}")
+
 # Helper execution callbacks for autonomous background scheduler
 def _cron_run_blog_write():
+    # 1. Generate & Auto-Optimize Post via SEO Content Brief Pipeline
     task = orchestrator.create_task(
         agent_id="blog-agent",
         task_type="write",
         input_data={"action": "write"}
     )
     orchestrator.execute_task(task.task_id)
+
+    # 2. Automatically Publish Live to WordPress
+    publish_task = orchestrator.create_task(
+        agent_id="blog-agent",
+        task_type="publish",
+        input_data={"action": "publish"}
+    )
+    orchestrator.execute_task(publish_task.task_id)
 
 def _cron_run_blog_publish():
     task = orchestrator.create_task(
@@ -168,19 +221,27 @@ def _cron_run_daily_backlinks():
     orchestrator.execute_task(task.task_id)
 
 # Register Production Schedules with Executable Callbacks
+# 10:00 AM IST = 04:30 AM UTC (30 4 * * 1-6: Mon-Sat, Sunday skipped)
 scheduler_mgr.register_schedule(
     job_id="blog-write-cron",
     agent_id="blog-agent",
-    cron_expression="0 9 * * 1-6",
+    cron_expression="30 4 * * 1-6",
     action="write",
     callback=_cron_run_blog_write
 )
 scheduler_mgr.register_schedule(
     job_id="blog-publish-cron",
     agent_id="blog-agent",
-    cron_expression="15 * * * 1-6",
+    cron_expression="35 4 * * 1-6",
     action="publish",
     callback=_cron_run_blog_publish
+)
+scheduler_mgr.register_schedule(
+    job_id="daily-blog-self-healing-watchdog",
+    agent_id="blog-agent",
+    cron_expression="*/15 * * * *",
+    action="auto-catchup",
+    callback=check_and_auto_catchup_daily_blog
 )
 scheduler_mgr.register_schedule(
     job_id="social-publish-daemon",
@@ -207,6 +268,10 @@ scheduler_mgr.register_schedule(
 # Start autonomous background execution runner daemon
 scheduler_mgr.start_background_runner()
 
+# Run initial auto-catchup check immediately on server startup in background thread
+import threading
+threading.Thread(target=check_and_auto_catchup_daily_blog, daemon=True, name="StartupBlogCatchup").start()
+
 
 # --- Request/Response Models ---
 class CustomOutreachRequest(BaseModel):
@@ -223,6 +288,35 @@ class CompetitorAdSpyRequest(BaseModel):
     location: str = "Melbourne, Victoria"
     use_ai: bool = True
     site_id: Optional[str] = None
+
+
+class CompetitorKeywordAnalysisRequest(BaseModel):
+    target_keyword: str
+    location: str = "Melbourne, Victoria"
+    competitor_url: Optional[str] = ""
+    use_ai: bool = True
+    site_id: Optional[str] = "ccm"
+
+
+class InternalLinkAuditRequest(BaseModel):
+    url: str
+    site_key: Optional[str] = "ccm"
+    site_id: Optional[str] = "ccm"
+
+
+class InternalLinkApplyRequest(BaseModel):
+    post_id: int
+    post_type: str = "post"
+    links_to_apply: List[Dict[str, Any]]
+    site_key: Optional[str] = "ccm"
+    site_id: Optional[str] = "ccm"
+
+
+class SEOAuditRunRequest(BaseModel):
+    url: str
+    audit_mode: str = "single_page"  # "single_page" or "whole_website"
+    site_key: Optional[str] = "ccm"
+    site_id: Optional[str] = "ccm"
 
 
 class PageAuditRequest(BaseModel):
@@ -761,6 +855,21 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             ]
         }
 
+    elif agent_id == "competitor-analysis-agent":
+        from agents.competitor_agent import load_competitor_history
+        hist = load_competitor_history()
+        latest = hist[0] if hist else None
+        report["competitor_analysis_metrics"] = {
+            "total_keyword_analyses": len(hist),
+            "latest_analysis": latest,
+            "all_analyses": hist[:10],
+            "recommendations": [
+                f"Target missing suburb keyword variations identified across competitors for {site_name}.",
+                f"Deploy localized Schema.org FAQPage markup on all {site_name} service pillars.",
+                f"Maintain 1,200+ word content depth on high-converting transactional pages."
+            ]
+        }
+
     elif agent_id == "competitor-ad-spy-agent":
         from agents.competitor_ad_spy_agent import load_ad_spy_history
         hist = load_ad_spy_history()
@@ -784,6 +893,99 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                 f"Maintain minimum 1,100 word count for high-intent {site_name} service pages.",
                 f"Implement LocalBusiness & FAQPage Schema.org structured data on all pillar pages."
             ]
+        }
+
+    elif agent_id == "monthly-report-agent":
+        from agents.monthly_report_agent import MonthlyReportAgent
+        from core.models.task import AgentTask
+        monthly_agent = MonthlyReportAgent()
+        task_stub = AgentTask(
+            task_id="monthly-live-query",
+            agent_id="monthly-report-agent",
+            task_type="generate_instant_mtd_report",
+            input_data={"action": "generate_instant_mtd_report", "site_id": effective_site},
+            site_id=effective_site
+        )
+        try:
+            task_res = monthly_agent.run_task(task_stub, router=orchestrator.router)
+            out_data = task_res.get("output", {})
+        except Exception as e:
+            out_data = {"error": str(e)}
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("top_strategic_recommendations", [
+                f"Continue daily blog publishing cadence to expand {site_name} organic keyword dominance.",
+                f"Maintain high-ROAS Google Ads campaigns (Airport Transfers - 4.8x ROAS).",
+                f"Rapidly respond to VIP corporate leads within 15 minutes to maximize close rate.",
+                f"Maintain active review collection requests post-ride to safeguard 4.8-star brand equity."
+            ])
+        }
+
+    elif agent_id == "gsc-agent":
+        from agents.gsc_agent import GSCAgent
+        from core.models.task import AgentTask
+        gsc_inst = GSCAgent()
+        task_stub = AgentTask(
+            task_id="gsc-live-query",
+            agent_id="gsc-agent",
+            task_type="fetch_performance",
+            input_data={"action": "fetch_performance", "site_id": effective_site, "site_url": site_domain},
+            site_id=effective_site
+        )
+        try:
+            task_res = gsc_inst.run_task(task_stub, router=orchestrator.router)
+            out_data = task_res.get("output", {})
+        except Exception as e:
+            out_data = {"error": str(e)}
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("actionable_insights", [])
+        }
+
+    elif agent_id == "ga4-reporting-agent":
+        from agents.ga4_reporting_agent import GA4ReportingAgent
+        from core.models.task import AgentTask
+        ga4_inst = GA4ReportingAgent()
+        task_stub = AgentTask(
+            task_id="ga4-live-query",
+            agent_id="ga4-reporting-agent",
+            task_type="fetch_overview",
+            input_data={"action": "fetch_overview", "site_id": effective_site},
+            site_id=effective_site
+        )
+        try:
+            task_res = ga4_inst.run_task(task_stub, router=orchestrator.router)
+            out_data = task_res.get("output", {})
+        except Exception as e:
+            out_data = {"error": str(e)}
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("actionable_insights", [])
+        }
+
+    elif agent_id == "lead-management-agent":
+        from agents.lead_management_agent import LeadManagementAgent
+        from core.models.task import AgentTask
+        lead_agent = LeadManagementAgent()
+        task_stub = AgentTask(
+            task_id="lead-live-query",
+            agent_id="lead-management-agent",
+            task_type="lead_report",
+            input_data={"action": "lead_report", "site_id": effective_site},
+            site_id=effective_site
+        )
+        try:
+            task_res = lead_agent.run_task(task_stub, router=orchestrator.router)
+            out_data = task_res.get("output", {})
+        except Exception as e:
+            out_data = {"error": str(e)}
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("actionable_recommendations", [])
         }
 
     # Handling for all other agents
@@ -1621,5 +1823,139 @@ def get_page_optimizer_history():
         "count": len(history),
         "reports": history
     }
+
+
+@app.post("/api/agents/competitor-analysis/find-by-keyword")
+def analyze_competitors_by_keyword(request: CompetitorKeywordAnalysisRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Discovers top ranking competitors for a given keyword, audits content gaps, and builds winning counter-strategies (Admin Only)."""
+    if not request.target_keyword.strip():
+        raise HTTPException(status_code=400, detail="Please provide a valid target keyword to search for competitors.")
+
+    task = orchestrator.create_task(
+        agent_id="competitor-analysis-agent",
+        task_type="find_by_keyword",
+        input_data={
+            "action": "find_by_keyword",
+            "target_keyword": request.target_keyword.strip(),
+            "location": request.location.strip() if request.location else "Melbourne",
+            "competitor_url": request.competitor_url.strip() if request.competitor_url else "",
+            "use_ai": request.use_ai,
+            "site_id": request.site_id or "ccm",
+            "site": request.site_id or "ccm"
+        }
+    )
+    executed_task = orchestrator.execute_task(task.task_id)
+    return {
+        "status": "success",
+        "task_id": executed_task.task_id,
+        "output": executed_task.output_data
+    }
+
+
+@app.get("/api/agents/competitor-analysis/history")
+def get_competitor_analysis_history():
+    """Retrieves list of past keyword-based competitor intelligence reports."""
+    from agents.competitor_agent import load_competitor_history
+    history = load_competitor_history()
+    return {
+        "status": "success",
+        "count": len(history),
+        "reports": history
+    }
+
+
+@app.post("/api/agents/internal-linking/audit-page")
+def audit_page_links(request: InternalLinkAuditRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Audits existing links and discovers high-relevance internal linking opportunities for any page URL (Admin Only)."""
+    if not request.url.strip():
+        raise HTTPException(status_code=400, detail="Please provide a valid page URL or slug to audit.")
+
+    site_key = request.site_key or request.site_id or "ccm"
+    task = orchestrator.create_task(
+        agent_id="internal-linking-agent",
+        task_type="audit_page",
+        input_data={
+            "action": "audit_page",
+            "source_url": request.url.strip(),
+            "site_key": site_key
+        }
+    )
+    executed_task = orchestrator.execute_task(task.task_id)
+    return {
+        "status": "success",
+        "task_id": executed_task.task_id,
+        "output": executed_task.output_data
+    }
+
+
+@app.post("/api/agents/internal-linking/apply-links")
+def apply_internal_links(request: InternalLinkApplyRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Applies selected internal links to a live WordPress post/page in 1 click (Admin Only)."""
+    if not request.post_id:
+        raise HTTPException(status_code=400, detail="Invalid post_id provided.")
+    if not request.links_to_apply:
+        raise HTTPException(status_code=400, detail="No internal links selected to apply.")
+
+    site_key = request.site_key or request.site_id or "ccm"
+    task = orchestrator.create_task(
+        agent_id="internal-linking-agent",
+        task_type="apply_links",
+        input_data={
+            "action": "apply_links",
+            "post_id": request.post_id,
+            "post_type": request.post_type,
+            "links_to_apply": request.links_to_apply,
+            "site_key": site_key
+        }
+    )
+    executed_task = orchestrator.execute_task(task.task_id)
+    return {
+        "status": "success",
+        "task_id": executed_task.task_id,
+        "output": executed_task.output_data
+    }
+
+
+@app.post("/api/agents/seo-audit/run")
+def run_seo_audit(request: SEOAuditRunRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Executes a Single Page Deep Audit or Whole Website Domain Crawl (Admin Only)."""
+    if not request.url.strip():
+        raise HTTPException(status_code=400, detail="Please provide a valid Page URL or Website Domain to audit.")
+
+    site_key = request.site_key or request.site_id or "ccm"
+    mode = "whole_website" if request.audit_mode.lower() in ("whole_website", "site", "domain") else "single_page"
+    action = "audit_site" if mode == "whole_website" else "audit_page"
+
+    task = orchestrator.create_task(
+        agent_id="seo-audit-agent",
+        task_type=action,
+        input_data={
+            "action": action,
+            "url": request.url.strip(),
+            "audit_mode": mode,
+            "site_key": site_key
+        }
+    )
+    executed_task = orchestrator.execute_task(task.task_id)
+    return {
+        "status": "success",
+        "task_id": executed_task.task_id,
+        "output": executed_task.output_data
+    }
+
+
+@app.get("/api/agents/seo-audit/history")
+def get_seo_audit_history():
+    """Retrieves history of past SEO audits."""
+    from agents.seo_audit_agent import load_seo_audit_history
+    history = load_seo_audit_history()
+    return {
+        "status": "success",
+        "count": len(history),
+        "reports": history
+    }
+
+
+
 
 

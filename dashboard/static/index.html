@@ -705,6 +705,174 @@
     </div>
   </div>
 
+  <!-- Competitor Keyword Intelligence & Content Gap Modal -->
+  <div class="modal-overlay" id="competitor-keyword-analysis-modal" style="z-index: 1100;">
+    <div class="modal-card" style="max-width: 1050px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 19px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-user-secret" style="color: #f59e0b;"></i> Competitor Keyword Intelligence & Content Gap Finder
+          </h2>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Enter any target keyword to discover live search competitors, uncover their content gaps, and get winning counter-strategies.
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('competitor-keyword-analysis-modal')">&times;</button>
+      </div>
+
+      <!-- Keyword Input Form -->
+      <form onsubmit="submitCompetitorKeywordAnalysis(event)" style="background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr auto; gap: 12px; align-items: flex-end;">
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Target Keyword to Search:
+            </label>
+            <input type="text" id="comp-target-keyword" class="form-input" style="width: 100%; font-size: 12.5px; font-weight: 600;" value="wedding car hire South Yarra" placeholder="e.g. airport transfer South Yarra, corporate chauffeur CBD" required />
+          </div>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Target Location:
+            </label>
+            <input type="text" id="comp-target-location" class="form-input" style="width: 100%;" value="Melbourne, VIC" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Optional Specific Competitor:
+            </label>
+            <input type="text" id="comp-custom-url" class="form-input" style="width: 100%; font-family: var(--font-mono); font-size: 11.5px;" placeholder="Leave empty to auto-discover" />
+          </div>
+          <button type="submit" id="btn-submit-comp-analysis" class="btn btn-primary" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; font-weight: 700; padding: 10px 18px; box-shadow: 0 0 14px rgba(245,158,11,0.4); white-space: nowrap;">
+            <i class="fa-solid fa-magnifying-glass"></i> Find Competitors
+          </button>
+        </div>
+        <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="comp-use-ai" checked style="accent-color: #f59e0b;" />
+          <label for="comp-use-ai" style="font-size: 12px; color: var(--text-muted); cursor: pointer;">
+            Enable AI Deep Intelligence & Outranking Counter-Strategy
+          </label>
+        </div>
+      </form>
+
+      <!-- Results Container -->
+      <div id="comp-keyword-results-container" style="max-height: 68vh; overflow-y: auto; padding-right: 4px;">
+        <div style="text-align: center; color: var(--text-muted); padding: 40px;">
+          <i class="fa-solid fa-crosshairs" style="font-size: 32px; color: rgba(245,158,11,0.4); margin-bottom: 12px; display: block;"></i>
+          Enter any target keyword above and click <strong>"Find Competitors"</strong> to extract top ranking competitors & SEO content gaps.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Internal Linking Intelligence & 1-Click Auto-Linker Modal -->
+  <div class="modal-overlay" id="internal-linking-audit-modal" style="z-index: 1100;">
+    <div class="modal-card" style="max-width: 1080px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 19px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-link" style="color: #38bdf8;"></i> Internal Linking Auditor & 1-Click WordPress Linker
+          </h2>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Audit existing link structure on any page, discover high-impact contextual links from 300+ landing pages, and apply changes in 1 click.
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('internal-linking-audit-modal')">&times;</button>
+      </div>
+
+      <!-- URL Input Form -->
+      <form onsubmit="submitInternalLinkAudit(event)" style="background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+        <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 280px;">
+            <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Enter Page / Blog URL or Slug to Audit:
+            </label>
+            <input type="text" id="internal-link-target-url" class="form-input" style="width: 100%; font-size: 12.5px; font-weight: 600; font-family: var(--font-mono);" value="https://corporatecarsmelbourne.com.au/dandenong-early-morning-flight-plan/" placeholder="e.g. https://corporatecarsmelbourne.com.au/dandenong-early-morning-flight-plan/ or slug" required />
+          </div>
+          <button type="submit" id="btn-submit-internal-link-audit" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); border: none; font-weight: 700; padding: 10px 20px; box-shadow: 0 0 14px rgba(2,132,199,0.4); white-space: nowrap;">
+            <i class="fa-solid fa-magnifying-glass"></i> Audit & Discover Links
+          </button>
+        </div>
+
+        <!-- Quick Pick Presets -->
+        <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Quick Pick Recent Posts:</span>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="pickAuditUrl('dandenong-early-morning-flight-plan')" style="font-size: 11px; padding: 3px 8px;">Dandenong Flight Plan</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="pickAuditUrl('why-malvern-businesses-choose-chauffeur-service')" style="font-size: 11px; padding: 3px 8px;">Malvern Chauffeur</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="pickAuditUrl('chauffeur-vs-rideshare-airport-fitzroy')" style="font-size: 11px; padding: 3px 8px;">Fitzroy Airport</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="pickAuditUrl('docklands-to-melbourne-airport-travel-time')" style="font-size: 11px; padding: 3px 8px;">Docklands Airport</button>
+        </div>
+      </form>
+
+      <!-- Results Container -->
+      <div id="internal-link-results-container" style="max-height: 68vh; overflow-y: auto; padding-right: 4px;">
+        <div style="text-align: center; color: var(--text-muted); padding: 40px;">
+          <i class="fa-solid fa-link" style="font-size: 34px; color: rgba(56,189,248,0.4); margin-bottom: 12px; display: block;"></i>
+          Enter any page or blog URL above and click <strong>"Audit & Discover Links"</strong> to inspect existing links and find new contextual opportunities.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEO Audit Agent Dual-Mode Modal (Single Page & Whole Website) -->
+  <div class="modal-overlay" id="seo-audit-interactive-modal" style="z-index: 1100;">
+    <div class="modal-card" style="max-width: 1080px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 19px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-magnifying-glass-chart" style="color: #10b981;"></i> Technical & On-Page SEO Auditor
+          </h2>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Perform deep SEO health checks on any single page URL or crawl the entire website domain.
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('seo-audit-interactive-modal')">&times;</button>
+      </div>
+
+      <!-- Mode Switcher Tabs -->
+      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+        <button type="button" id="tab-seo-audit-single" class="btn btn-primary btn-sm" onclick="switchSEOAuditMode('single_page')" style="flex: 1; padding: 10px; font-weight: 700; border-radius: 8px; font-size: 13px; background: linear-gradient(135deg, #10b981, #059669); border: none;">
+          <i class="fa-solid fa-file-lines"></i> 1. Single Page Deep Audit
+        </button>
+        <button type="button" id="tab-seo-audit-whole" class="btn btn-secondary btn-sm" onclick="switchSEOAuditMode('whole_website')" style="flex: 1; padding: 10px; font-weight: 700; border-radius: 8px; font-size: 13px; color: var(--text-secondary);">
+          <i class="fa-solid fa-globe"></i> 2. Whole Website Domain Crawl
+        </button>
+      </div>
+
+      <!-- Input Form -->
+      <form onsubmit="submitSEOAudit(event)" style="background: rgba(15,23,42,0.6); border: 1px solid var(--glass-border); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+        <input type="hidden" id="seo-audit-mode-input" value="single_page" />
+
+        <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 280px;">
+            <label id="seo-audit-input-label" style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Enter Page / Blog URL to Audit:
+            </label>
+            <input type="text" id="seo-audit-target-url" class="form-input" style="width: 100%; font-size: 12.5px; font-weight: 600; font-family: var(--font-mono);" value="https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/" placeholder="e.g. https://corporatecarsmelbourne.com.au/page-url" required />
+          </div>
+          <button type="submit" id="btn-submit-seo-audit" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 700; padding: 10px 22px; box-shadow: 0 0 14px rgba(16,185,129,0.4); white-space: nowrap;">
+            <i class="fa-solid fa-play"></i> Run SEO Audit
+          </button>
+        </div>
+
+        <!-- Quick Presets -->
+        <div id="seo-audit-presets" style="margin-top: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Quick Presets:</span>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="pickSEOAuditUrl('https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/')" style="font-size: 11px; padding: 3px 8px;">Baby Seat Service</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="pickSEOAuditUrl('https://corporatecarsmelbourne.com.au/services/airport-transfers/')" style="font-size: 11px; padding: 3px 8px;">Airport Transfers</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="pickSEOAuditUrl('https://corporatecarsmelbourne.com.au/services/corporate-transfers/')" style="font-size: 11px; padding: 3px 8px;">Corporate Transfers</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="pickSEOAuditUrl('https://corporatecarsmelbourne.com.au')" style="font-size: 11px; padding: 3px 8px;">Homepage (Domain)</button>
+        </div>
+      </form>
+
+      <!-- Results Container -->
+      <div id="seo-audit-results-container" style="max-height: 68vh; overflow-y: auto; padding-right: 4px;">
+        <div style="text-align: center; color: var(--text-muted); padding: 40px;">
+          <i class="fa-solid fa-stethoscope" style="font-size: 34px; color: rgba(16,185,129,0.4); margin-bottom: 12px; display: block;"></i>
+          Choose <strong>Single Page</strong> or <strong>Whole Website</strong> above and click <strong>"Run SEO Audit"</strong> to generate real-time technical diagnosis.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Add New Website Profile Modal -->
   <div class="modal-overlay" id="add-website-modal" style="z-index: 1200;">
     <div class="modal-card" style="max-width: 580px; width: 95%;">
@@ -1100,6 +1268,6 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=11.6.0"></script>
+  <script src="/static/app.js?v=11.20.0"></script>
 </body>
 </html>

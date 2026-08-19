@@ -18,8 +18,8 @@ from config.settings import ROOT_DIR
 
 logger = get_agent_logger("ga4-reporting-agent")
 
-GA4_PROPERTY_ID = "547374247"
-GA4_MEASUREMENT_ID = "G-ZHLOK8ZLWV"
+GA4_PROPERTY_ID = "550393874"
+GA4_MEASUREMENT_ID = "G-2CM2BW6QKN"
 GA4_ACCOUNT_ID = "402540807"
 
 
@@ -50,6 +50,7 @@ class GA4ReportingAgent(AgentInterface):
         key_file = Path(ROOT_DIR) / "gsc-service-account.json"
         live_fetched = False
         channel_breakdown = []
+        top_landing_pages = []
 
         if key_file.exists():
             try:
@@ -60,53 +61,122 @@ class GA4ReportingAgent(AgentInterface):
                     str(key_file),
                     scopes=['https://www.googleapis.com/auth/analytics.readonly']
                 )
-                # GA4 Data API query if permission granted
+                data_service = build('analyticsdata', 'v1beta', credentials=creds)
+                
+                # Query 1: Acquisition Channels Breakdown
+                channel_req = {
+                    "dateRanges": [{"startDate": "28daysAgo", "endDate": "today"}],
+                    "dimensions": [{"name": "sessionDefaultChannelGroup"}],
+                    "metrics": [
+                        {"name": "activeUsers"},
+                        {"name": "sessions"},
+                        {"name": "engagementRate"},
+                        {"name": "conversions"}
+                    ]
+                }
+                c_res = data_service.properties().runReport(property=f'properties/{GA4_PROPERTY_ID}', body=channel_req).execute()
+                for row in c_res.get('rows', []):
+                    c_name = row['dimensionValues'][0]['value']
+                    c_users = int(row['metricValues'][0]['value'])
+                    c_sessions = int(row['metricValues'][1]['value'])
+                    c_eng = round(float(row['metricValues'][2]['value']) * 100, 1)
+                    c_conv = int(float(row['metricValues'][3]['value']))
+                    channel_breakdown.append({
+                        "channel": c_name,
+                        "users": c_users,
+                        "sessions": c_sessions,
+                        "engagement_rate": c_eng,
+                        "conversions": c_conv
+                    })
+
+                # Query 2: Top Landing Pages
+                page_req = {
+                    "dateRanges": [{"startDate": "28daysAgo", "endDate": "today"}],
+                    "dimensions": [{"name": "pagePath"}],
+                    "metrics": [
+                        {"name": "sessions"},
+                        {"name": "userEngagementDuration"},
+                        {"name": "conversions"}
+                    ],
+                    "limit": 10
+                }
+                p_res = data_service.properties().runReport(property=f'properties/{GA4_PROPERTY_ID}', body=page_req).execute()
+                for row in p_res.get('rows', []):
+                    p_path = row['dimensionValues'][0]['value']
+                    p_sessions = int(row['metricValues'][0]['value'])
+                    p_dur = int(float(row['metricValues'][1]['value']))
+                    p_dur_avg = round(p_dur / max(p_sessions, 1))
+                    p_conv = int(float(row['metricValues'][2]['value']))
+                    top_landing_pages.append({
+                        "page": p_path,
+                        "sessions": p_sessions,
+                        "engagement_time_sec": p_dur_avg,
+                        "conversions": p_conv
+                    })
+
                 live_fetched = True
+                logger.info(f"Successfully authenticated and connected to live GA4 Data API for property {GA4_PROPERTY_ID}")
             except Exception as e:
                 logger.warning(f"GA4 Data API fetch notice: {e}")
 
-        channel_breakdown = [
-            {"channel": "Organic Search", "users": 1840, "sessions": 2450, "engagement_rate": 68.4, "conversions": 142},
-            {"channel": "Direct Traffic", "users": 620, "sessions": 890, "engagement_rate": 72.1, "conversions": 58},
-            {"channel": "Organic Social", "users": 410, "sessions": 530, "engagement_rate": 55.2, "conversions": 19},
-            {"channel": "Referral", "users": 290, "sessions": 360, "engagement_rate": 61.0, "conversions": 14}
-        ]
+        if live_fetched:
+            # 100% Genuine Live Google API Data
+            total_users = sum(c["users"] for c in channel_breakdown) if channel_breakdown else 0
+            total_sessions = sum(c["sessions"] for c in channel_breakdown) if channel_breakdown else 0
+            total_conversions = sum(c["conversions"] for c in channel_breakdown) if channel_breakdown else 0
+            avg_engagement = round(sum(c["engagement_rate"] for c in channel_breakdown) / max(len(channel_breakdown), 1), 1) if channel_breakdown else 0.0
+            conv_rate = f"{round((total_conversions / max(total_sessions, 1)) * 100, 2)}%" if total_sessions > 0 else "0.0%"
 
-        top_landing_pages = [
-            {"page": "/services/airport-transfers", "sessions": 980, "engagement_time_sec": 145, "conversions": 84},
-            {"page": "/", "sessions": 850, "engagement_time_sec": 110, "conversions": 45},
-            {"page": "/services/corporate-chauffeur", "sessions": 620, "engagement_time_sec": 160, "conversions": 62},
-            {"page": "/suburbs/south-yarra-chauffeur", "sessions": 320, "engagement_time_sec": 130, "conversions": 21}
-        ]
-
-        total_users = sum(c["users"] for c in channel_breakdown)
-        total_sessions = sum(c["sessions"] for c in channel_breakdown)
-        total_conversions = sum(c["conversions"] for c in channel_breakdown)
-        avg_engagement = round(sum(c["engagement_rate"] for c in channel_breakdown) / len(channel_breakdown), 1)
-
-        result_payload = {
-            "action": action,
-            "property_name": property_name,
-            "property_id": GA4_PROPERTY_ID,
-            "measurement_id": GA4_MEASUREMENT_ID,
-            "account_id": GA4_ACCOUNT_ID,
-            "site_tag_status": "INSTALLED & ACTIVE (Site Kit Connected)",
-            "date_range": date_range,
-            "overview_metrics": {
-                "total_users": total_users,
-                "total_sessions": total_sessions,
-                "total_conversions": total_conversions,
-                "average_engagement_rate": f"{avg_engagement}%",
-                "conversion_rate": f"{round((total_conversions / total_sessions) * 100, 2)}%"
-            },
-            "acquisition_channel_breakdown": channel_breakdown,
-            "top_landing_pages": top_landing_pages,
-            "actionable_insights": [
-                f"1. Connected to real GA4 Property ID '{GA4_PROPERTY_ID}' (Measurement ID: {GA4_MEASUREMENT_ID}).",
-                "2. Organic Search drives 58% of total conversions with a high 68.4% engagement rate.",
-                "3. '/services/airport-transfers' is the top converting landing page (84 conversions)."
-            ]
-        }
+            result_payload = {
+                "action": action,
+                "property_name": property_name,
+                "property_id": GA4_PROPERTY_ID,
+                "measurement_id": GA4_MEASUREMENT_ID,
+                "account_id": GA4_ACCOUNT_ID,
+                "live_data_connected": True,
+                "data_source": "100% LIVE GOOGLE ANALYTICS 4 API",
+                "site_tag_status": "GOOGLE API CONNECTED & LISTENING",
+                "date_range": date_range,
+                "overview_metrics": {
+                    "total_users": total_users,
+                    "total_sessions": total_sessions,
+                    "total_conversions": total_conversions,
+                    "average_engagement_rate": f"{avg_engagement}%",
+                    "conversion_rate": conv_rate
+                },
+                "acquisition_channel_breakdown": channel_breakdown,
+                "top_landing_pages": top_landing_pages,
+                "actionable_insights": [
+                    f"1. 🟢 Live Google Analytics 4 API successfully connected to Property ID '{GA4_PROPERTY_ID}' (Measurement ID: {GA4_MEASUREMENT_ID}).",
+                    "2. Stream is active and listening for live visitors on corporatecarsmelbourne.com.au.",
+                    "3. Ensure the Measurement Tag 'G-2CM2BW6QKN' is placed on your WordPress website so visitor hits are recorded."
+                ]
+            }
+        else:
+            # Unconnected State
+            result_payload = {
+                "action": action,
+                "property_name": property_name,
+                "property_id": GA4_PROPERTY_ID,
+                "measurement_id": GA4_MEASUREMENT_ID,
+                "account_id": GA4_ACCOUNT_ID,
+                "live_data_connected": False,
+                "data_source": "Pending Connection",
+                "site_tag_status": "PENDING AUTHENTICATION",
+                "date_range": date_range,
+                "overview_metrics": {
+                    "total_users": 0,
+                    "total_sessions": 0,
+                    "total_conversions": 0,
+                    "average_engagement_rate": "0%",
+                    "conversion_rate": "0%"
+                },
+                "acquisition_channel_breakdown": [],
+                "top_landing_pages": [],
+                "actionable_insights": [
+                    "1. GA4 connection pending verification."
+                ]
+            }
 
         # Optional AI Enrichment
         tokens_used = 0

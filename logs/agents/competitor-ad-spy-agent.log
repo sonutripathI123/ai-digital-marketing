@@ -64,3 +64,57 @@
 2026-08-16 18:11:47,336 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
 2026-08-16 18:11:47,399 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-ec690a2c successfully.
 2026-08-16 18:11:47,558 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-16 18:42:10,859 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-3a961866
+2026-08-16 18:42:10,861 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-16 18:42:10,953 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-3a961866 successfully.
+2026-08-16 18:42:11,161 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-16 19:14:50,293 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-83249c24
+2026-08-16 19:14:50,298 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-16 19:14:50,375 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-83249c24 successfully.
+2026-08-16 19:14:50,595 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-17 10:07:34,422 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-17 10:11:35,087 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-4fa36a84
+2026-08-17 10:11:35,089 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-17 10:11:35,203 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-4fa36a84 successfully.
+2026-08-17 10:11:35,483 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-17 10:14:46,110 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-03df2cd6
+2026-08-17 10:14:46,112 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-17 10:14:46,228 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-03df2cd6 successfully.
+2026-08-17 10:14:46,527 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-17 13:41:25,672 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-1513c564
+2026-08-17 13:41:25,688 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-17 13:41:25,754 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-1513c564 successfully.
+2026-08-17 13:41:25,891 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-17 13:46:00,293 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-ea024d66
+2026-08-17 13:46:00,294 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-17 13:46:00,324 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-ea024d66 successfully.
+2026-08-17 13:46:00,413 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-17 18:34:36,811 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-c8e643d8
+2026-08-17 18:34:36,815 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-17 18:34:36,945 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-c8e643d8 successfully.
+2026-08-17 18:34:37,213 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-17 19:08:50,787 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-f4e56cd7
+2026-08-17 19:08:50,794 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-17 19:08:51,045 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-f4e56cd7 successfully.
+2026-08-17 19:08:51,672 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-17 19:26:48,082 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-9269c3b3
+2026-08-17 19:26:48,085 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-17 19:26:48,187 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-9269c3b3 successfully.
+2026-08-17 19:26:48,419 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-17 20:05:19,988 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-dff99d7c
+2026-08-17 20:05:19,989 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-17 20:05:20,025 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-dff99d7c successfully.
+2026-08-17 20:05:20,107 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-18 09:44:30,707 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-236e5c33
+2026-08-18 09:44:30,710 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbournechauffeurcars.com.au', brand='Corporate Cars Melbourne', location='Melbourne CBD'
+2026-08-18 09:44:30,822 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-236e5c33 successfully.
+2026-08-18 09:44:31,055 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='chauffeurcarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne, Victoria'
+2026-08-18 19:18:39,120 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-3c20be9e
+2026-08-18 19:18:39,122 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='corporatecarsmelbourne.com.au', brand='Corporate Cars Melbourne', location='Melbourne & Tullamarine, VIC'
+2026-08-18 19:18:43,183 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-3c20be9e successfully.
+2026-08-18 19:22:41,407 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-4e5d41fe
+2026-08-18 19:22:41,409 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='www.opalchauffeurs.com.au', brand='Corporate Cars Melbourne', location='Melbourne & Tullamarine, VIC'
+2026-08-18 19:22:45,519 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-4e5d41fe successfully.
+2026-08-18 19:24:27,226 [INFO] [agent:agent.competitor-ad-spy-agent] Starting execution for task task-3c382bc0
+2026-08-18 19:24:27,230 [INFO] [agent:agent.competitor-ad-spy-agent] Executing CompetitorAdSpyAgent: action=spy_competitor_ads, competitor='melbourneairportchauffeurservice.com.au', brand='Corporate Cars Melbourne', location='Melbourne & Tullamarine, VIC'
+2026-08-18 19:24:42,473 [INFO] [agent:agent.competitor-ad-spy-agent] Completed task task-3c382bc0 successfully.

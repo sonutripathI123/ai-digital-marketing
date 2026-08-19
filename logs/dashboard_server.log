@@ -116,3 +116,941 @@ INFO:     127.0.0.1:49694 - "GET /api/websites HTTP/1.1" 200 OK
 INFO:     127.0.0.1:51901 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
 INFO:     127.0.0.1:49694 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
 INFO:     127.0.0.1:59141 - "GET /static/app.js?v=3.1.0 HTTP/1.1" 200 OK
+2026-08-16 19:33:48,643 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-16 19:33:48,644 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [13492]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58877 - "GET /api/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58427 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58427 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58905 - "GET /static/app.js?v=9.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58905 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58905 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58427 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58427 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58905 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60950 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60950 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60921 - "GET /static/app.js?v=9.0.0 HTTP/1.1" 200 OK
+2026-08-17 18:28:50,116 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-17 18:28:50,116 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-17 18:28:50,116 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-17 18:28:50,116 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-17 18:28:50,116 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-17 18:28:50,116 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-17 18:28:50,123 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-17 18:28:50,124 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [29948]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:50834 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50834 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /static/app.js?v=10.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50834 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50834 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50834 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55217 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55217 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65200 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65200 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53797 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65200 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50921 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51443 - "GET /api/tasks?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51443 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51443 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52282 - "GET /api/agents/blog-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62150 - "GET /api/agents/seo-keyword-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61805 - "GET /api/agents/competitor-analysis-agent/report?site_id=ccm HTTP/1.1" 200 OK
+2026-08-17 19:01:15,877 [INFO] [central] Created task task-ddd09ca8 for agent internal-linking-agent (Status: QUEUED)
+INFO:     127.0.0.1:57661 - "POST /api/tasks/create HTTP/1.1" 200 OK
+2026-08-17 19:01:17,016 [INFO] [central] Created task task-a5b3053d for agent internal-linking-agent (Status: QUEUED)
+INFO:     127.0.0.1:61519 - "POST /api/tasks/create HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55070 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55070 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49164 - "GET /api/agents/social-analytics-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65056 - "GET /api/agents/social-analytics-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55529 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52185 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52185 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50844 - "GET /static/app.js?v=10.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50844 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50844 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52185 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52185 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52185 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52185 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49729 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59043 - "GET /static/app.js?v=10.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49729 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59043 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49729 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63040 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49729 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49729 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49729 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49729 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51998 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /static/app.js?v=11.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51998 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51998 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49864 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49864 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52075 - "GET /static/app.js?v=11.1.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53341 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57026 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53264 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65302 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65302 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65302 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56741 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50753 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50753 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53308 - "GET /static/app.js?v=11.2.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53308 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53308 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50753 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53308 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53308 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53308 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62432 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62432 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60133 - "GET /static/app.js?v=11.3.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60133 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60133 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62432 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62432 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62432 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62432 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62432 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54093 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54093 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55956 - "GET /static/app.js?v=11.4.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55956 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55956 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54093 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54093 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54093 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54093 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54093 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54574 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54149 - "GET /static/app.js?v=11.4.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54574 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54149 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54574 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54149 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54574 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54149 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54149 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51582 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51582 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56056 - "GET /static/app.js?v=11.4.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51582 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56056 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51582 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51582 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51582 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51582 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57193 - "POST /api/auth/logout HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57193 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57193 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61908 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61908 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64151 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64151 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64151 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64151 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64151 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64151 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1786979636835 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64151 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64151 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64151 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61533 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61533 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64151 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61533 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61533 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63931 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1786979650684 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62175 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62175 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62175 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1786979661768 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /?_reload=1786979666350 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /?_reload=1786979667527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /?_reload=1786979668314 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51923 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1786979670001 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64838 - "GET /?_reload=1786979668314 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64838 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50071 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50071 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64838 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50071 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50071 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50071 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50071 - "GET /?_reload=1786979668314 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64838 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50071 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64838 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50071 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64838 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64838 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64838 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64838 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1786979683087 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56141 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+2026-08-17 20:47:01,169 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-17 20:47:01,169 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-17 20:47:01,170 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-17 20:47:01,170 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-17 20:47:01,170 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-17 20:47:01,170 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-17 20:47:01,170 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-17 20:47:01,170 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-17 20:47:01,170 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-17 20:47:01,170 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-17 20:47:01,171 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-17 20:47:01,171 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-17 20:47:01,171 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-17 20:47:01,171 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-17 20:47:01,171 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-17 20:47:01,171 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-17 20:47:01,171 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-17 20:47:01,171 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-17 20:47:01,171 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [29080]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+2026-08-18 09:18:27,341 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-18 09:18:27,341 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-18 09:18:27,347 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-18 09:18:27,353 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-18 09:18:27,353 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-18 09:18:27,353 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-18 09:18:27,353 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-18 09:18:27,353 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-18 09:18:27,353 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [23660]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:64609 - "GET /api/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50467 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65113 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50467 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65113 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50467 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65113 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65113 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50467 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50644 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50644 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60274 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60274 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50384 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59248 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61066 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+2026-08-18 09:19:44,295 [INFO] [central] Task task-53a71bc6 approved by dashboard_user
+2026-08-18 09:19:44,296 [INFO] [agent:agent.blog-agent] Starting execution for task task-53a71bc6
+2026-08-18 09:19:44,299 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+INFO:     127.0.0.1:57421 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56136 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57425 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /?_reload=1787024995256 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /?_reload=1787024996874 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /?_reload=1787024997437 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /?_reload=1787024998075 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+2026-08-18 09:20:04,837 [INFO] [central] Task task-d5c664d6 approved by dashboard_user
+2026-08-18 09:20:04,839 [INFO] [agent:agent.blog-agent] Starting execution for task task-d5c664d6
+2026-08-18 09:20:04,841 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=status, site=ccm
+INFO:     127.0.0.1:64673 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56272 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64319 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+2026-08-18 09:20:09,869 [INFO] [agent:agent.blog-agent] Completed task task-53a71bc6 successfully.
+2026-08-18 09:20:13,653 [INFO] [central] Created task task-7ff20b2d for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 09:20:13,658 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-7ff20b2d
+2026-08-18 09:20:13,662 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+INFO:     127.0.0.1:58966 - "GET /api/tasks?site_id=ccm HTTP/1.1" 200 OK
+2026-08-18 09:20:23,586 [INFO] [agent:agent.blog-agent] Completed task task-d5c664d6 successfully.
+INFO:     127.0.0.1:61389 - "POST /api/approvals/approve-all HTTP/1.1" 200 OK
+2026-08-18 09:20:29,379 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-7ff20b2d successfully.
+INFO:     127.0.0.1:50355 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50355 - "GET /api/schedules HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58503 - "GET /api/ai/providers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58503 - "GET /api/ai-usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /api/logs?agent_id=central HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /api/errors HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /api/errors HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /api/audit-trail?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51884 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51658 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+2026-08-18 09:25:14,780 [INFO] [central] Created task task-96f89ddb for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 09:25:14,786 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-96f89ddb
+2026-08-18 09:25:14,786 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 09:25:16,760 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-96f89ddb successfully.
+2026-08-18 09:35:39,778 [INFO] [central] Created task task-5802bd49 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 09:35:39,780 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-5802bd49
+2026-08-18 09:35:39,782 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 09:35:47,800 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-5802bd49 successfully.
+INFO:     127.0.0.1:65504 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+2026-08-18 09:40:03,364 [INFO] [central] Created task task-0f434f78 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 09:40:03,368 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-0f434f78
+2026-08-18 09:40:03,372 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+INFO:     127.0.0.1:65504 - "GET /api/agents/blog-agent/report?site_id=ccm&_t=1787026204144 HTTP/1.1" 200 OK
+2026-08-18 09:40:08,979 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-0f434f78 successfully.
+INFO:     127.0.0.1:49334 - "GET /?_reload=1787024997437 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49334 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58991 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58991 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58991 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58991 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58991 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65116 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026241155 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65116 - "GET /?_reload=1787026250721 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65116 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65280 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65280 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65116 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52082 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65116 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65116 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56141 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026264838 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56141 - "GET /?_reload=1787026250721 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63624 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64834 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64834 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63624 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64834 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63624 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63624 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64834 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64834 - "GET /api/agents/blog-agent/report?site_id=ccm&_t=1787026287830 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60490 - "GET /api/agents/seo-keyword-agent/report?site_id=ccm&_t=1787026297068 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60490 - "GET /api/agents/competitor-analysis-agent/report?site_id=ccm&_t=1787026301439 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50887 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026293942 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64834 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026292527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50456 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026294318 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58869 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026294578 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63383 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026294814 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54442 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026374900 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62046 - "GET /?_reload=1787024997437 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62046 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54962 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54962 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54962 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54962 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62046 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026400015 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54962 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026399011 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59871 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026400642 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54052 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026400322 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57370 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026400806 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60081 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026400520 HTTP/1.1" 200 OK
+2026-08-18 09:45:09,279 [INFO] [central] Created task task-4c408673 for agent blog-agent (Status: QUEUED)
+2026-08-18 09:45:09,279 [INFO] [agent:agent.blog-agent] Starting execution for task task-4c408673
+2026-08-18 09:45:09,289 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=publish, site=ccm
+2026-08-18 09:45:14,841 [INFO] [agent:agent.blog-agent] Completed task task-4c408673 successfully.
+2026-08-18 09:45:15,370 [INFO] [central] Created task task-8b719156 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 09:45:15,370 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-8b719156
+2026-08-18 09:45:15,372 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 09:45:17,579 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-8b719156 successfully.
+2026-08-18 09:50:02,816 [INFO] [central] Created task task-dad176a4 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 09:50:02,816 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-dad176a4
+2026-08-18 09:50:02,816 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 09:50:04,239 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-dad176a4 successfully.
+INFO:     127.0.0.1:61045 - "GET /?_reload=1787026865104 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58484 - "GET /static/app.js?v=11.5.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61045 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58484 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61045 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58484 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61045 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61045 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62757 - "GET /api/agents/blog-agent/report?site_id=ccm&_t=1787026875319 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58484 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026868294 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60586 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026870540 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61216 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026871690 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61045 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026870322 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53296 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026871905 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62757 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026879310 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58484 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026880276 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60586 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787026880506 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57637 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51993 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51999 - "GET /api/agents/social-analytics-agent/report?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52005 - "GET /api/agents/corporate-cars-social-agent/report?site_id=opal HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52011 - "GET /api/agents/social-analytics-agent/report?site_id=opal HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52017 - "GET /api/agents/corporate-cars-social-agent/report?site_id=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52023 - "GET /api/agents/social-analytics-agent/report?site_id=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52030 - "GET /api/agents/corporate-cars-social-agent/report?site_id= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52036 - "GET /api/agents/social-analytics-agent/report?site_id= HTTP/1.1" 200 OK
+2026-08-18 09:55:04,503 [INFO] [central] Created task task-19e899d9 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 09:55:04,503 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-19e899d9
+2026-08-18 09:55:04,503 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 09:55:06,361 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-19e899d9 successfully.
+2026-08-18 09:56:06,218 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-18 09:56:06,218 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-18 09:56:06,218 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-18 09:56:06,218 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-18 09:56:06,222 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-18 09:56:06,225 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-18 09:56:06,225 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [13572]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:52374 - "GET /api/overview HTTP/1.1" 200 OK
+2026-08-18 12:43:35,449 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-18 12:43:35,452 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-18 12:43:35,452 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-18 12:43:35,452 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-18 12:43:35,452 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-18 12:43:35,452 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-18 12:43:35,452 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-18 12:43:35,453 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-18 12:43:35,453 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-18 12:43:35,453 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-18 12:43:35,453 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-18 12:43:35,453 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-18 12:43:35,453 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-18 12:43:35,453 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-18 12:43:35,453 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-18 12:43:35,453 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-18 12:43:35,454 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-18 12:43:35,454 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-18 12:43:35,454 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [4200]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:63102 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53043 - "GET /static/app.js?v=11.6.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63102 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63102 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53043 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63102 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53043 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63102 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53043 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54017 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54017 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56829 - "GET /?_reload=1787037231523 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56829 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60975 - "GET /static/app.js?v=11.6.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56829 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60975 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56829 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60975 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60975 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56829 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56408 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56408 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56408 - "GET /api/agents/blog-agent/report?site_id=ccm&_t=1787037239664 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57184 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57184 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53873 - "GET /static/app.js?v=11.6.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53873 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53873 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53873 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57184 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61774 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61774 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61774 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787037269658 HTTP/1.1" 200 OK
+2026-08-18 12:45:05,617 [INFO] [central] Created task task-151412f4 for agent blog-agent (Status: QUEUED)
+2026-08-18 12:45:05,617 [INFO] [agent:agent.blog-agent] Starting execution for task task-151412f4
+2026-08-18 12:45:05,620 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=publish, site=ccm
+2026-08-18 12:45:10,590 [INFO] [agent:agent.blog-agent] Completed task task-151412f4 successfully.
+2026-08-18 12:45:10,703 [INFO] [central] Created task task-bbe0139a for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 12:45:10,703 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-bbe0139a
+2026-08-18 12:45:10,704 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+INFO:     127.0.0.1:53686 - "GET /api/agents/seo-keyword-agent/report?site_id=ccm&_t=1787037350436 HTTP/1.1" 200 OK
+2026-08-18 12:45:50,744 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-bbe0139a successfully.
+2026-08-18 12:50:05,878 [INFO] [central] Created task task-2188ff36 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 12:50:05,878 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-2188ff36
+2026-08-18 12:50:05,879 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 12:50:06,758 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-2188ff36 successfully.
+2026-08-18 12:51:32,115 [INFO] [central] Created task task-65d9ac66 for agent seo-content-brief-agent (Status: QUEUED)
+INFO:     127.0.0.1:59157 - "POST /api/tasks/create HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59157 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59157 - "GET /api/tasks?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61159 - "GET /api/tasks/task-65d9ac66 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61758 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59094 - "GET /api/agents/seo-keyword-agent/report?site_id=ccm&_t=1787037790049 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63157 - "GET /api/approvals?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55719 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61383 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65247 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+2026-08-18 12:55:06,868 [INFO] [central] Created task task-b20360ec for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 12:55:06,868 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-b20360ec
+2026-08-18 12:55:06,868 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 12:55:07,622 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-b20360ec successfully.
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-18 15:34:02,926 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [15032]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:65153 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53845 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63973 - "GET /static/app.js?v=11.6.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53845 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53845 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63973 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63973 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63973 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59781 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53845 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-18 15:42:40,787 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [21916]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:51585 - "GET /api/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49910 - "GET /static/app.js?v=11.6.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49910 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49910 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49671 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49910 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60375 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60375 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57588 - "GET /api/agents/seo-keyword-agent/report?site_id=ccm&_t=1787047970074 HTTP/1.1" 200 OK
+2026-08-18 15:45:11,133 [INFO] [central] Created task task-e3ec7247 for agent blog-agent (Status: QUEUED)
+2026-08-18 15:45:11,135 [INFO] [agent:agent.blog-agent] Starting execution for task task-e3ec7247
+2026-08-18 15:45:11,135 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=publish, site=ccm
+2026-08-18 15:45:15,399 [INFO] [agent:agent.blog-agent] Completed task task-e3ec7247 successfully.
+2026-08-18 15:45:15,622 [INFO] [central] Created task task-fe0db86e for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 15:45:15,623 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-fe0db86e
+2026-08-18 15:45:15,626 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 15:45:16,942 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-fe0db86e successfully.
+INFO:     127.0.0.1:54577 - "GET /api/agents/competitor-analysis-agent/report?site_id=ccm&_t=1787048234230 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57435 - "GET /api/agents/competitor-analysis-agent/report?site_id=ccm&_t=1787048333685 HTTP/1.1" 200 OK
+2026-08-18 15:50:02,195 [INFO] [central] Created task task-390a47ea for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 15:50:02,195 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-390a47ea
+2026-08-18 15:50:02,195 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 15:50:03,236 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-390a47ea successfully.
+INFO:     127.0.0.1:57858 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53388 - "GET /api/websites HTTP/1.1" 200 OK
+2026-08-18 15:55:03,481 [INFO] [central] Created task task-e9793f49 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 15:55:03,481 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-e9793f49
+2026-08-18 15:55:03,486 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 15:55:04,722 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-e9793f49 successfully.
+INFO:     127.0.0.1:56728 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /static/app.js?v=11.6.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56728 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52959 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50951 - "GET /static/app.js?v=11.6.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50951 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50951 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52959 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50951 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50951 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50951 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50951 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50531 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50531 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50531 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50531 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50531 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50531 - "GET /api/agents/seo-content-brief-agent/report?site_id=ccm&_t=1787048915451 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56807 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+2026-08-18 16:00:04,988 [INFO] [central] Created task task-cad10e95 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:00:04,988 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-cad10e95
+2026-08-18 16:00:04,988 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:00:06,265 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-cad10e95 successfully.
+INFO:     127.0.0.1:49215 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56952 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56952 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56952 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56952 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56952 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56952 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49288 - "GET /api/agents/page-optimizer-agent/report?site_id=ccm&_t=1787049114579 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58589 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58589 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65263 - "GET /static/app.js?v=11.7.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65263 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58589 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65263 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58589 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65263 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65263 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65263 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65263 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65263 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59745 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52826 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+2026-08-18 16:05:06,529 [INFO] [central] Created task task-97232954 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:05:06,529 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-97232954
+2026-08-18 16:05:06,530 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:05:07,849 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-97232954 successfully.
+INFO:     127.0.0.1:49672 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58348 - "GET /static/app.js?v=11.8.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58348 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58348 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58348 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58348 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58348 - "GET /api/agents/competitor-analysis-agent/report?site_id=ccm&_t=1787049525804 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58348 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58348 - "GET /api/agents/competitor-analysis/history HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49809 - "GET /api/agents/seo-content-brief-agent/report?site_id=ccm&_t=1787049557000 HTTP/1.1" 200 OK
+2026-08-18 16:10:08,098 [INFO] [central] Created task task-1f7768f3 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:10:08,098 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-1f7768f3
+2026-08-18 16:10:08,098 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:10:09,222 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-1f7768f3 successfully.
+2026-08-18 16:15:09,486 [INFO] [central] Created task task-f4e21e67 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:15:09,486 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-f4e21e67
+2026-08-18 16:15:09,486 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:15:10,811 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-f4e21e67 successfully.
+2026-08-18 16:20:11,082 [INFO] [central] Created task task-97b22282 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:20:11,082 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-97b22282
+2026-08-18 16:20:11,082 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:20:12,233 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-97b22282 successfully.
+2026-08-18 16:25:12,472 [INFO] [central] Created task task-771c69b2 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:25:12,476 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-771c69b2
+2026-08-18 16:25:12,477 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:25:13,740 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-771c69b2 successfully.
+2026-08-18 16:30:13,982 [INFO] [central] Created task task-28ac09ef for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:30:13,983 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-28ac09ef
+2026-08-18 16:30:13,983 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:30:15,107 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-28ac09ef successfully.
+INFO:     127.0.0.1:53489 - "GET /api/agents/seo-content-brief-agent/report?site_id=ccm&_t=1787050843916 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62174 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52306 - "GET /static/app.js?v=11.8.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62174 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52306 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62174 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52306 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62174 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52306 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52306 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60253 - "GET /api/agents/seo-content-brief-agent/report?site_id=ccm&_t=1787050863606 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50751 - "GET /api/agents/internal-linking-agent/report?site_id=ccm&_t=1787050924689 HTTP/1.1" 200 OK
+2026-08-18 16:35:00,349 [INFO] [central] Created task task-4285376b for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:35:00,349 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-4285376b
+2026-08-18 16:35:00,357 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:35:01,686 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-4285376b successfully.
+2026-08-18 16:40:01,966 [INFO] [central] Created task task-0cc997f0 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:40:01,968 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-0cc997f0
+2026-08-18 16:40:01,969 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:40:03,782 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-0cc997f0 successfully.
+2026-08-18 16:45:04,034 [INFO] [central] Created task task-f8b7409b for agent blog-agent (Status: QUEUED)
+2026-08-18 16:45:04,034 [INFO] [agent:agent.blog-agent] Starting execution for task task-f8b7409b
+2026-08-18 16:45:04,044 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=publish, site=ccm
+2026-08-18 16:45:06,451 [INFO] [agent:agent.blog-agent] Completed task task-f8b7409b successfully.
+2026-08-18 16:45:06,699 [INFO] [central] Created task task-cff7ca24 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:45:06,704 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-cff7ca24
+2026-08-18 16:45:06,705 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:45:07,885 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-cff7ca24 successfully.
+2026-08-18 16:50:08,144 [INFO] [central] Created task task-3735a412 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:50:08,144 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-3735a412
+2026-08-18 16:50:08,144 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:50:10,152 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-3735a412 successfully.
+2026-08-18 16:55:10,414 [INFO] [central] Created task task-19a68e45 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 16:55:10,414 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-19a68e45
+2026-08-18 16:55:10,414 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 16:55:11,594 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-19a68e45 successfully.
+2026-08-18 17:00:11,818 [INFO] [central] Created task task-bfccca8c for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 17:00:11,818 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-bfccca8c
+2026-08-18 17:00:11,818 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 17:00:12,918 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-bfccca8c successfully.
+2026-08-18 17:05:05,624 [INFO] [central] Created task task-cf6f0381 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 17:05:05,624 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-cf6f0381
+2026-08-18 17:05:05,624 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 17:05:07,599 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-cf6f0381 successfully.
+INFO:     127.0.0.1:62812 - "POST /api/agents/internal-linking/audit-page HTTP/1.1" 404 Not Found
+2026-08-18 22:12:14,074 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-18 22:12:14,077 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-18 22:12:14,077 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-18 22:12:14,077 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-18 22:12:14,080 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-18 22:12:14,080 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-18 22:12:14,080 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-18 22:12:14,080 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-18 22:12:14,080 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-18 22:12:14,080 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-18 22:12:14,082 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-18 22:12:14,082 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-18 22:12:14,082 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-18 22:12:14,082 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-18 22:12:14,082 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-18 22:12:14,082 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-18 22:12:14,084 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-18 22:12:14,084 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-18 22:12:14,084 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [13472]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60769 - "GET /api/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55827 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /static/app.js?v=11.19.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55827 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55827 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55827 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64435 - "GET /static/app.js?v=11.19.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+2026-08-18 22:12:33,958 [INFO] [agent:agent.ga4-reporting-agent] Executing GA4ReportingAgent task: action=fetch_overview, property='Corporate Cars Melbourne GA4 (G-2CM2BW6QKN)', date_range='last_28_days'
+2026-08-18 22:12:45,687 [INFO] [agent:agent.ga4-reporting-agent] Successfully authenticated and connected to live GA4 Data API for property 550393874
+INFO:     127.0.0.1:52241 - "GET /api/agents/ga4-reporting-agent/report?site_id=ccm&_t=1787071353923 HTTP/1.1" 200 OK
+2026-08-18 22:14:44,297 [INFO] [agent:agent.ga4-reporting-agent] Executing GA4ReportingAgent task: action=fetch_overview, property='Corporate Cars Melbourne GA4 (G-2CM2BW6QKN)', date_range='last_28_days'
+2026-08-18 22:14:51,625 [INFO] [agent:agent.ga4-reporting-agent] Successfully authenticated and connected to live GA4 Data API for property 550393874
+INFO:     127.0.0.1:59895 - "GET /api/agents/ga4-reporting-agent/report?site_id=ccm HTTP/1.1" 200 OK
+2026-08-18 22:15:14,405 [INFO] [central] Created task task-ef88190b for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 22:15:14,405 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-ef88190b
+2026-08-18 22:15:14,405 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 22:15:16,424 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-ef88190b successfully.
+2026-08-18 22:20:01,801 [INFO] [central] Created task task-d769aba5 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 22:20:01,801 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-d769aba5
+2026-08-18 22:20:01,801 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 22:20:05,239 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-d769aba5 successfully.
+2026-08-18 22:30:40,592 [INFO] [central] Created task task-050356c7 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-18 22:30:40,592 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-050356c7
+2026-08-18 22:30:40,594 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-18 22:33:21,552 [WARNING] [agent:agent.corporate-cars-social-agent] Task task-050356c7 attempt 1 failed: Social Agent CLI execution failed: . Retrying.
+2026-08-18 22:33:21,554 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-050356c7
+2026-08-18 22:33:21,556 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-19 11:06:31,718 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-19 11:06:31,724 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-19 11:06:31,724 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-19 11:06:31,726 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-19 11:06:31,726 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-19 11:06:31,726 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-19 11:06:31,726 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-19 11:06:31,726 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-19 11:06:31,726 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-19 11:06:31,728 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-19 11:06:31,728 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-19 11:06:31,728 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-19 11:06:31,728 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-19 11:06:31,728 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-19 11:06:31,728 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-19 11:06:31,730 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-19 11:06:31,730 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-19 11:06:31,730 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-19 11:06:31,730 [INFO] [central] Registered agent implementation: page-optimizer-agent
+INFO:     Started server process [22496]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58140 - "GET /api/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63500 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63500 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50940 - "GET /static/app.js?v=11.20.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63500 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58403 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50652 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58403 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58403 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58551 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53250 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50652 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51655 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51655 - "GET /api/agents/blog-agent/report?site_id=ccm&_t=1787117812610 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57202 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57202 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60854 - "GET /static/app.js?v=11.20.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60854 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57202 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60854 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57202 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57202 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55505 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787117852117 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59484 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787117861652 HTTP/1.1" 200 OK
+2026-08-19 11:10:03,774 [INFO] [central] Created task task-e5475192 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-19 11:10:03,821 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-e5475192
+2026-08-19 11:10:03,824 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-19 11:10:28,766 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-e5475192 successfully.
+INFO:     127.0.0.1:54701 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54701 - "GET /static/styles.css?v=8.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55726 - "GET /static/app.js?v=11.20.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55726 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55726 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54701 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54701 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54701 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54701 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+2026-08-19 11:12:46,753 [WARNING] [agent:agent.social-analytics-agent] Failed to query live FB feed: HTTPSConnectionPool(host='graph.facebook.com', port=443): Read timed out. (read timeout=3)
+INFO:     127.0.0.1:64222 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787118150737 HTTP/1.1" 200 OK
+2026-08-19 11:15:14,164 [INFO] [central] Created task task-5cd4daf4 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-19 11:15:14,164 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-5cd4daf4
+2026-08-19 11:15:14,164 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-19 11:15:17,238 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-5cd4daf4 successfully.

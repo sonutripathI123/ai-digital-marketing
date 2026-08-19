@@ -123,3 +123,93 @@
 2026-08-16 18:12:25,180 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
 2026-08-16 18:12:25,180 [INFO] [agent:agent.social-analytics-agent] Completed task task-1d098f3a successfully.
 2026-08-16 18:12:25,237 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-16 18:43:25,401 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-ab3ef010
+2026-08-16 18:43:25,403 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-16 18:43:25,403 [INFO] [agent:agent.social-analytics-agent] Completed task task-ab3ef010 successfully.
+2026-08-16 18:43:25,581 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-ebd22311
+2026-08-16 18:43:25,582 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-16 18:43:25,582 [INFO] [agent:agent.social-analytics-agent] Completed task task-ebd22311 successfully.
+2026-08-16 18:43:25,648 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-16 19:15:26,448 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-295ba322
+2026-08-16 19:15:26,449 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-16 19:15:26,449 [INFO] [agent:agent.social-analytics-agent] Completed task task-295ba322 successfully.
+2026-08-16 19:15:26,629 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-ea191d4e
+2026-08-16 19:15:26,629 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-16 19:15:26,630 [INFO] [agent:agent.social-analytics-agent] Completed task task-ea191d4e successfully.
+2026-08-16 19:15:26,700 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 10:08:12,188 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-9f26537e
+2026-08-17 10:08:12,189 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-17 10:08:12,190 [INFO] [agent:agent.social-analytics-agent] Completed task task-9f26537e successfully.
+2026-08-17 10:08:12,263 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 10:12:16,657 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-f11514e0
+2026-08-17 10:12:16,658 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-17 10:12:16,658 [INFO] [agent:agent.social-analytics-agent] Completed task task-f11514e0 successfully.
+2026-08-17 10:12:16,986 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-4b87113f
+2026-08-17 10:12:16,986 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-17 10:12:16,987 [INFO] [agent:agent.social-analytics-agent] Completed task task-4b87113f successfully.
+2026-08-17 10:12:17,082 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 10:15:42,678 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-2d3072ea
+2026-08-17 10:15:42,679 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-17 10:15:42,679 [INFO] [agent:agent.social-analytics-agent] Completed task task-2d3072ea successfully.
+2026-08-17 10:15:43,001 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-227b2468
+2026-08-17 10:15:43,002 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-17 10:15:43,002 [INFO] [agent:agent.social-analytics-agent] Completed task task-227b2468 successfully.
+2026-08-17 10:15:43,096 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 13:41:57,836 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-7b765949
+2026-08-17 13:41:57,838 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-17 13:41:57,839 [INFO] [agent:agent.social-analytics-agent] Completed task task-7b765949 successfully.
+2026-08-17 13:41:58,008 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-21c6e692
+2026-08-17 13:41:58,008 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-17 13:41:58,008 [INFO] [agent:agent.social-analytics-agent] Completed task task-21c6e692 successfully.
+2026-08-17 13:41:58,115 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 13:46:22,305 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-1c4da53c
+2026-08-17 13:46:22,305 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-17 13:46:22,306 [INFO] [agent:agent.social-analytics-agent] Completed task task-1c4da53c successfully.
+2026-08-17 13:46:22,395 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-81a4e824
+2026-08-17 13:46:22,395 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-17 13:46:22,395 [INFO] [agent:agent.social-analytics-agent] Completed task task-81a4e824 successfully.
+2026-08-17 13:46:22,426 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 18:35:28,193 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-214a9da1
+2026-08-17 18:35:28,195 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-17 18:35:28,195 [INFO] [agent:agent.social-analytics-agent] Completed task task-214a9da1 successfully.
+2026-08-17 18:35:28,442 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-9b4df16c
+2026-08-17 18:35:28,442 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-17 18:35:28,443 [INFO] [agent:agent.social-analytics-agent] Completed task task-9b4df16c successfully.
+2026-08-17 18:35:28,528 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 19:09:50,782 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-c81d8795
+2026-08-17 19:09:50,783 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-17 19:09:53,139 [INFO] [agent:agent.social-analytics-agent] Completed task task-c81d8795 successfully.
+2026-08-17 19:09:53,473 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-385a84f8
+2026-08-17 19:09:53,474 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-17 19:09:56,606 [INFO] [agent:agent.social-analytics-agent] Completed task task-385a84f8 successfully.
+2026-08-17 19:09:56,688 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 19:21:40,647 [WARNING] [agent:agent.social-analytics-agent] Meta FB live fetch failed: HTTPSConnectionPool(host='graph.facebook.com', port=443): Read timed out. (read timeout=8)
+2026-08-17 19:21:40,653 [WARNING] [agent:agent.social-analytics-agent] Meta IG live fetch failed: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/17841477866530528?fields=username,followers_count,media_count&access_token=[REDACTED] (Caused by NameResolutionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to resolve 'graph.facebook.com' ([Errno 11001] getaddrinfo failed)"))
+2026-08-17 19:21:40,659 [WARNING] [agent:agent.social-analytics-agent] LinkedIn live fetch failed: HTTPSConnectionPool(host='api.linkedin.com', port=443): Max retries exceeded with url: /v2/organizations/109059206 (Caused by NameResolutionError("HTTPSConnection(host='api.linkedin.com', port=443): Failed to resolve 'api.linkedin.com' ([Errno 11001] getaddrinfo failed)"))
+2026-08-17 19:27:30,210 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-642d778e
+2026-08-17 19:27:30,211 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-17 19:27:32,756 [INFO] [agent:agent.social-analytics-agent] Completed task task-642d778e successfully.
+2026-08-17 19:27:33,027 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-17e72f41
+2026-08-17 19:27:33,027 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-17 19:27:35,727 [INFO] [agent:agent.social-analytics-agent] Completed task task-17e72f41 successfully.
+2026-08-17 19:27:35,805 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 20:05:58,860 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-ed6bef32
+2026-08-17 20:05:58,860 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-17 20:06:03,333 [INFO] [agent:agent.social-analytics-agent] Completed task task-ed6bef32 successfully.
+2026-08-17 20:06:03,469 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-fd0e1895
+2026-08-17 20:06:03,469 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-17 20:06:07,247 [INFO] [agent:agent.social-analytics-agent] Completed task task-fd0e1895 successfully.
+2026-08-17 20:06:07,276 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-17 20:21:48,852 [WARNING] [agent:agent.social-analytics-agent] Failed to read live_social_cache.json: name 'json' is not defined
+2026-08-17 20:48:23,467 [WARNING] [agent:agent.social-analytics-agent] Meta FB live fetch failed: HTTPSConnectionPool(host='graph.facebook.com', port=443): Read timed out. (read timeout=8)
+2026-08-17 20:48:31,481 [WARNING] [agent:agent.social-analytics-agent] Meta IG live fetch failed: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/17841477866530528?fields=username,followers_count,media_count&access_token=[REDACTED] (Caused by ConnectTimeoutError(<HTTPSConnection(host='graph.facebook.com', port=443) at 0x1a76992f390>, 'Connection to graph.facebook.com timed out. (connect timeout=8)'))
+2026-08-18 09:45:15,758 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-665412d5
+2026-08-18 09:45:15,760 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='linkedin', date_range='last_30_days'
+2026-08-18 09:45:22,478 [INFO] [agent:agent.social-analytics-agent] Completed task task-665412d5 successfully.
+2026-08-18 09:45:22,735 [INFO] [agent:agent.social-analytics-agent] Starting execution for task task-3bbcc6b1
+2026-08-18 09:45:22,736 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='instagram', date_range='last_30_days'
+2026-08-18 09:45:27,245 [INFO] [agent:agent.social-analytics-agent] Completed task task-3bbcc6b1 successfully.
+2026-08-18 09:45:27,324 [INFO] [agent:agent.social-analytics-agent] Executing SocialAnalyticsAgent task: action=fetch_analytics, platform='all', date_range='last_30_days'
+2026-08-18 18:39:44,359 [WARNING] [agent:agent.social-analytics-agent] Failed to query live IG media: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/17841477866530528/media?fields=id,caption,media_type,permalink,timestamp,like_count,comments_count&limit=25&access_token=[REDACTED] (Caused by NameResolutionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to resolve 'graph.facebook.com' ([Errno 11001] getaddrinfo failed)"))
+2026-08-18 19:35:58,722 [WARNING] [agent:agent.social-analytics-agent] Failed to query live IG media: HTTPSConnectionPool(host='graph.facebook.com', port=443): Read timed out. (read timeout=3)
+2026-08-19 11:12:46,753 [WARNING] [agent:agent.social-analytics-agent] Failed to query live FB feed: HTTPSConnectionPool(host='graph.facebook.com', port=443): Read timed out. (read timeout=3)

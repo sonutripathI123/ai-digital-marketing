@@ -1,0 +1,3432 @@
+[
+  {
+    "timestamp": "2026-08-18 17:41:46",
+    "url": "https://corporatecarsmelbourne.com.au/about-us/",
+    "audit_mode": "single_page",
+    "score": 84,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/about-us/",
+      "page_title": "About Us | Corporate Chauffeur Service Melbourne",
+      "overall_seo_health_score": 84,
+      "status_code": 200,
+      "response_time_ms": 2916,
+      "page_size_kb": 98.5,
+      "word_count": 814,
+      "h1_count": 1,
+      "h2_count": 6,
+      "h3_count": 0,
+      "images_count": 6,
+      "missing_alt_count": 1,
+      "internal_links_count": 41,
+      "external_links_count": 3,
+      "has_schema": true,
+      "schema_types": [
+        "WebSite",
+        "EntryPoint",
+        "ReadAction",
+        "ListItem",
+        "SearchAction",
+        "PropertyValueSpecification",
+        "ImageObject",
+        "BreadcrumbList"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 2,
+        "low": 0,
+        "total_checks": 12
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Moderate response time (2916ms, Page Size: 98.5 KB).",
+          "recommendation": "Consider WP Rocket or Cloudflare CDN caching to bring response under 1.2s."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (48 chars): \"About Us | Corporate Chauffeur Service Melbourne\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Meta description is long (175 chars, exceeds 158 chars limit).",
+          "recommendation": "Trim description to 130-155 characters to prevent snippet cutoff on Google."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"About Us...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (6 H2s, 0 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Standard content length (~814 words).",
+          "recommendation": "Consider expanding to 1,000+ words with FAQ section for higher rankings."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: WebSite, EntryPoint, ReadAction, ListItem.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "41 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "3 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "1 of 6 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/about-us/...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Meta Description Length: Trim description to 130-155 characters to prevent snippet cutoff on Google.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:41:41",
+    "url": "https://corporatecarsmelbourne.com.au/",
+    "audit_mode": "single_page",
+    "score": 88,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/",
+      "page_title": "Corporate Cars Melbourne | #1 Executive Chauffeur Service",
+      "overall_seo_health_score": 88,
+      "status_code": 200,
+      "response_time_ms": 3127,
+      "page_size_kb": 207.0,
+      "word_count": 1478,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 20,
+      "images_count": 33,
+      "missing_alt_count": 12,
+      "internal_links_count": 48,
+      "external_links_count": 4,
+      "has_schema": true,
+      "schema_types": [
+        "Answer",
+        "WebSite",
+        "EntryPoint",
+        "ReadAction",
+        "WebPage",
+        "FAQPage",
+        "ListItem",
+        "ItemList",
+        "SearchAction",
+        "PropertyValueSpecification",
+        "ImageObject",
+        "BreadcrumbList",
+        "Question"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (3.13s, Page Size: 207.0 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (57 chars): \"Corporate Cars Melbourne | #1 Executive Chauffeur Service\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Meta description is long (164 chars, exceeds 158 chars limit).",
+          "recommendation": "Trim description to 130-155 characters to prevent snippet cutoff on Google."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Corporate Chauffeur Services in Melbourne for Every Occasion...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 20 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1478 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: Answer, WebSite, EntryPoint, ReadAction.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "48 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "4 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "12 of 33 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Meta Description Length: Trim description to 130-155 characters to prevent snippet cutoff on Google.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:34",
+    "url": "https://corporatecarsmelbourne.com.au",
+    "audit_mode": "whole_website",
+    "score": 85,
+    "data": {
+      "audit_mode": "whole_website",
+      "domain_url": "https://corporatecarsmelbourne.com.au",
+      "site_health_score": 85,
+      "pages_audited_count": 10,
+      "schema_coverage_pct": 100,
+      "h1_compliance_pct": 100,
+      "total_missing_alts": 56,
+      "technical_diagnostics": {
+        "robots_txt": "ACTIVE",
+        "xml_sitemap": "ACTIVE",
+        "https_ssl": "ACTIVE"
+      },
+      "pages_breakdown": [
+        {
+          "url": "https://corporatecarsmelbourne.com.au/",
+          "path": "/",
+          "title": "Corporate Cars Melbourne | #1 Executive Chauffeur Service",
+          "score": 88,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1478,
+          "missing_alt_count": 12,
+          "internal_links_count": 48,
+          "response_time_ms": 4609,
+          "issues_count": 4,
+          "top_issue": "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/request-a-quote/",
+          "path": "/request-a-quote/",
+          "title": "Request a quote",
+          "score": 56,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 282,
+          "missing_alt_count": 1,
+          "internal_links_count": 31,
+          "response_time_ms": 4540,
+          "issues_count": 5,
+          "top_issue": "[HIGH] Meta Description: Add a compelling meta description (130-155 characters) with a clear Call to Action."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/about-us/",
+          "path": "/about-us/",
+          "title": "About Us | Corporate Chauffeur Service Melbourne",
+          "score": 82,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 814,
+          "missing_alt_count": 1,
+          "internal_links_count": 41,
+          "response_time_ms": 4536,
+          "issues_count": 3,
+          "top_issue": "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+          "path": "/melbourne-airport-transfers/",
+          "title": "Melbourne Airport Transfers | Corporate Cars Melbourne",
+          "score": 92,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1150,
+          "missing_alt_count": 6,
+          "internal_links_count": 44,
+          "response_time_ms": 4794,
+          "issues_count": 3,
+          "top_issue": "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+          "path": "/as-directed-point-to-point/",
+          "title": "Point to Point Transfer Melbourne | Corporate Cars",
+          "score": 92,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1152,
+          "missing_alt_count": 6,
+          "internal_links_count": 38,
+          "response_time_ms": 5128,
+          "issues_count": 3,
+          "top_issue": "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/city-to-city-travel/",
+          "path": "/city-to-city-travel/",
+          "title": "City to City Travel Melbourne | Luxury Chauffeur Service",
+          "score": 89,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1141,
+          "missing_alt_count": 6,
+          "internal_links_count": 41,
+          "response_time_ms": 3908,
+          "issues_count": 4,
+          "top_issue": "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/hourly-chauffeur-hire-melbourne/",
+          "path": "/hourly-chauffeur-hire-melbourne/",
+          "title": "Hourly Chauffeur Hire Melbourne | Book by the Hour",
+          "score": 89,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1153,
+          "missing_alt_count": 6,
+          "internal_links_count": 40,
+          "response_time_ms": 4484,
+          "issues_count": 4,
+          "top_issue": "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/conferences-transfers-melbourne/",
+          "path": "/conferences-transfers-melbourne/",
+          "title": "Conference Transfers Melbourne | Corporate Chauffeur Service",
+          "score": 89,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1200,
+          "missing_alt_count": 6,
+          "internal_links_count": 42,
+          "response_time_ms": 3809,
+          "issues_count": 4,
+          "top_issue": "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/",
+          "path": "/car-service-with-baby-seat-melbourne/",
+          "title": "Car Service with Baby Seat Melbourne | Safe Family Rides",
+          "score": 92,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1150,
+          "missing_alt_count": 6,
+          "internal_links_count": 39,
+          "response_time_ms": 4047,
+          "issues_count": 3,
+          "top_issue": "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/sporting-event-limo-transportation-in-melbourne/",
+          "path": "/sporting-event-limo-transportation-in-melbourne/",
+          "title": "Sporting Event Limo Transportation in Melbourne | Corporate Cars",
+          "score": 86,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1174,
+          "missing_alt_count": 6,
+          "internal_links_count": 41,
+          "response_time_ms": 4223,
+          "issues_count": 5,
+          "top_issue": "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        }
+      ],
+      "domain_recommendations": [
+        "Domain Health Score: 85/100 across 10 audited core pages.",
+        "Schema.org Coverage: 100% of core pages contain structured data. (Optimal)",
+        "H1 Heading Compliance: 100% of pages have exactly 1 primary H1 heading.",
+        "Image Optimization: 56 total images across audited pages are missing descriptive alt attributes.",
+        "Robots.txt: \u2705 Active and accessible.",
+        "XML Sitemap: \u2705 Active and valid sitemap found."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:34",
+    "url": "https://corporatecarsmelbourne.com.au/sporting-event-limo-transportation-in-melbourne/",
+    "audit_mode": "single_page",
+    "score": 86,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/sporting-event-limo-transportation-in-melbourne/",
+      "page_title": "Sporting Event Limo Transportation in Melbourne | Corporate Cars",
+      "overall_seo_health_score": 86,
+      "status_code": 200,
+      "response_time_ms": 4223,
+      "page_size_kb": 178.4,
+      "word_count": 1174,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 41,
+      "external_links_count": 10,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 5,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (4.22s, Page Size: 178.4 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Title tag is long (64 chars): \"Sporting Event Limo Transportation in Melbourne | Corporate Cars\"",
+          "recommendation": "Shorten title tag to 50-60 characters to prevent truncation in Google SERPs."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Meta description is long (159 chars, exceeds 158 chars limit).",
+          "recommendation": "Trim description to 130-155 characters to prevent snippet cutoff on Google."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Sporting Event Limo Transportation in Melbourne...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1174 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "41 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "10 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/corporate-transfers-me...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Title Tag Length: Shorten title tag to 50-60 characters to prevent truncation in Google SERPs.",
+        "[MEDIUM] Meta Description Length: Trim description to 130-155 characters to prevent snippet cutoff on Google.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:33",
+    "url": "https://corporatecarsmelbourne.com.au/hourly-chauffeur-hire-melbourne/",
+    "audit_mode": "single_page",
+    "score": 89,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/hourly-chauffeur-hire-melbourne/",
+      "page_title": "Hourly Chauffeur Hire Melbourne | Book by the Hour",
+      "overall_seo_health_score": 89,
+      "status_code": 200,
+      "response_time_ms": 4484,
+      "page_size_kb": 179.7,
+      "word_count": 1153,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 40,
+      "external_links_count": 8,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (4.48s, Page Size: 179.7 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (50 chars): \"Hourly Chauffeur Hire Melbourne | Book by the Hour\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Meta description is long (162 chars, exceeds 158 chars limit).",
+          "recommendation": "Trim description to 130-155 characters to prevent snippet cutoff on Google."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Hourly Chauffeur Hire in Melbourne...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1153 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "40 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "8 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/hourly-chauffeur-hire-...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Meta Description Length: Trim description to 130-155 characters to prevent snippet cutoff on Google.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:33",
+    "url": "https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/",
+    "audit_mode": "single_page",
+    "score": 92,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/",
+      "page_title": "Car Service with Baby Seat Melbourne | Safe Family Rides",
+      "overall_seo_health_score": 92,
+      "status_code": 200,
+      "response_time_ms": 4047,
+      "page_size_kb": 175.4,
+      "word_count": 1150,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 39,
+      "external_links_count": 11,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (4.05s, Page Size: 175.4 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (56 chars): \"Car Service with Baby Seat Melbourne | Safe Family Rides\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (133 chars): \"Book a safe, comfortable car service with baby seat in Melbourne....\"",
+          "recommendation": "Meta description length and CTA structure are optimal."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Car Service with Baby Seat in  Melbourne...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1150 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "39 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "11 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/car-service-with-baby-...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:33",
+    "url": "https://corporatecarsmelbourne.com.au/city-to-city-travel/",
+    "audit_mode": "single_page",
+    "score": 89,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/city-to-city-travel/",
+      "page_title": "City to City Travel Melbourne | Luxury Chauffeur Service",
+      "overall_seo_health_score": 89,
+      "status_code": 200,
+      "response_time_ms": 3908,
+      "page_size_kb": 181.6,
+      "word_count": 1141,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 41,
+      "external_links_count": 9,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (3.91s, Page Size: 181.6 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (56 chars): \"City to City Travel Melbourne | Luxury Chauffeur Service\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Meta description is long (166 chars, exceeds 158 chars limit).",
+          "recommendation": "Trim description to 130-155 characters to prevent snippet cutoff on Google."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"City to City Travel in Melbourne...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1141 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "41 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "9 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/city-to-city-travel/...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Meta Description Length: Trim description to 130-155 characters to prevent snippet cutoff on Google.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:33",
+    "url": "https://corporatecarsmelbourne.com.au/conferences-transfers-melbourne/",
+    "audit_mode": "single_page",
+    "score": 89,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/conferences-transfers-melbourne/",
+      "page_title": "Conference Transfers Melbourne | Corporate Chauffeur Service",
+      "overall_seo_health_score": 89,
+      "status_code": 200,
+      "response_time_ms": 3809,
+      "page_size_kb": 181.2,
+      "word_count": 1200,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 42,
+      "external_links_count": 9,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (3.81s, Page Size: 181.2 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (60 chars): \"Conference Transfers Melbourne | Corporate Chauffeur Service\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Meta description is long (174 chars, exceeds 158 chars limit).",
+          "recommendation": "Trim description to 130-155 characters to prevent snippet cutoff on Google."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Conference Transfers in Melbourne...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1200 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "42 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "9 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/conferences-transfers-...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Meta Description Length: Trim description to 130-155 characters to prevent snippet cutoff on Google.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:29",
+    "url": "https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+    "audit_mode": "single_page",
+    "score": 92,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+      "page_title": "Point to Point Transfer Melbourne | Corporate Cars",
+      "overall_seo_health_score": 92,
+      "status_code": 200,
+      "response_time_ms": 5128,
+      "page_size_kb": 176.0,
+      "word_count": 1152,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 38,
+      "external_links_count": 8,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (5.13s, Page Size: 176.0 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (50 chars): \"Point to Point Transfer Melbourne | Corporate Cars\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (128 chars): \"Book reliable point to point transfers in Melbourne with professi...\"",
+          "recommendation": "Meta description length and CTA structure are optimal."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Point-to-Point Transfers in Melbourne\u200b...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1152 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "38 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "8 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/as-directed-point-to-p...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:29",
+    "url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+    "audit_mode": "single_page",
+    "score": 92,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+      "page_title": "Melbourne Airport Transfers | Corporate Cars Melbourne",
+      "overall_seo_health_score": 92,
+      "status_code": 200,
+      "response_time_ms": 4794,
+      "page_size_kb": 181.5,
+      "word_count": 1150,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 44,
+      "external_links_count": 9,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (4.79s, Page Size: 181.5 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (54 chars): \"Melbourne Airport Transfers | Corporate Cars Melbourne\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (152 chars): \"Book reliable Melbourne airport transfers with professional chauf...\"",
+          "recommendation": "Meta description length and CTA structure are optimal."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Airport Transfers Melbourne...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1150 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "44 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "9 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/melbourne-airport-tran...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:29",
+    "url": "https://corporatecarsmelbourne.com.au/",
+    "audit_mode": "single_page",
+    "score": 88,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/",
+      "page_title": "Corporate Cars Melbourne | #1 Executive Chauffeur Service",
+      "overall_seo_health_score": 88,
+      "status_code": 200,
+      "response_time_ms": 4609,
+      "page_size_kb": 207.0,
+      "word_count": 1478,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 20,
+      "images_count": 33,
+      "missing_alt_count": 12,
+      "internal_links_count": 48,
+      "external_links_count": 4,
+      "has_schema": true,
+      "schema_types": [
+        "FAQPage",
+        "BreadcrumbList",
+        "EntryPoint",
+        "Question",
+        "ReadAction",
+        "Answer",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (4.61s, Page Size: 207.0 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (57 chars): \"Corporate Cars Melbourne | #1 Executive Chauffeur Service\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Meta description is long (164 chars, exceeds 158 chars limit).",
+          "recommendation": "Trim description to 130-155 characters to prevent snippet cutoff on Google."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Corporate Chauffeur Services in Melbourne for Every Occasion...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 20 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1478 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: FAQPage, BreadcrumbList, EntryPoint, Question.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "48 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "4 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "12 of 33 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Meta Description Length: Trim description to 130-155 characters to prevent snippet cutoff on Google.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:29",
+    "url": "https://corporatecarsmelbourne.com.au/request-a-quote/",
+    "audit_mode": "single_page",
+    "score": 56,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/request-a-quote/",
+      "page_title": "Request a quote",
+      "overall_seo_health_score": 56,
+      "status_code": 200,
+      "response_time_ms": 4540,
+      "page_size_kb": 95.2,
+      "word_count": 282,
+      "h1_count": 1,
+      "h2_count": 1,
+      "h3_count": 0,
+      "images_count": 5,
+      "missing_alt_count": 1,
+      "internal_links_count": 31,
+      "external_links_count": 3,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 2,
+        "medium": 3,
+        "low": 1,
+        "total_checks": 12
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (4.54s, Page Size: 95.2 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Title tag is short (15 chars): \"Request a quote\"",
+          "recommendation": "Expand title tag to 50-60 characters to include primary and local keywords."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "MISSING",
+          "severity": "HIGH",
+          "details": "Meta description tag is missing.",
+          "recommendation": "Add a compelling meta description (130-155 characters) with a clear Call to Action."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Request a Quote...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "WARNING",
+          "severity": "LOW",
+          "details": "Only 1 H2 subheading(s) found (0 H3s).",
+          "recommendation": "Add 3-5 descriptive H2 subheadings to cover core customer questions."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "WARNING",
+          "severity": "HIGH",
+          "details": "Thin content detected (~282 words).",
+          "recommendation": "Add comprehensive service descriptions, vehicle features, and pricing details."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ListItem.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "31 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "3 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "1 of 5 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/request-a-quote/...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[HIGH] Meta Description: Add a compelling meta description (130-155 characters) with a clear Call to Action.",
+        "[HIGH] Word Count & Topical Depth: Add comprehensive service descriptions, vehicle features, and pricing details.",
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Title Tag Length: Expand title tag to 50-60 characters to include primary and local keywords.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:15",
+    "url": "https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+    "audit_mode": "single_page",
+    "score": 92,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+      "page_title": "Point to Point Transfer Melbourne | Corporate Cars",
+      "overall_seo_health_score": 92,
+      "status_code": 200,
+      "response_time_ms": 6045,
+      "page_size_kb": 176.0,
+      "word_count": 1152,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 38,
+      "external_links_count": 8,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (6.04s, Page Size: 176.0 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (50 chars): \"Point to Point Transfer Melbourne | Corporate Cars\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (128 chars): \"Book reliable point to point transfers in Melbourne with professi...\"",
+          "recommendation": "Meta description length and CTA structure are optimal."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Point-to-Point Transfers in Melbourne\u200b...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1152 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "38 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "8 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/as-directed-point-to-p...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:09",
+    "url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+    "audit_mode": "single_page",
+    "score": 92,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+      "page_title": "Melbourne Airport Transfers | Corporate Cars Melbourne",
+      "overall_seo_health_score": 92,
+      "status_code": 200,
+      "response_time_ms": 3169,
+      "page_size_kb": 181.5,
+      "word_count": 1150,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 44,
+      "external_links_count": 9,
+      "has_schema": true,
+      "schema_types": [
+        "BreadcrumbList",
+        "EntryPoint",
+        "ReadAction",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (3.17s, Page Size: 181.5 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (54 chars): \"Melbourne Airport Transfers | Corporate Cars Melbourne\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (152 chars): \"Book reliable Melbourne airport transfers with professional chauf...\"",
+          "recommendation": "Meta description length and CTA structure are optimal."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Airport Transfers Melbourne...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1150 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: BreadcrumbList, EntryPoint, ReadAction, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "44 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "9 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/melbourne-airport-tran...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:39:06",
+    "url": "https://corporatecarsmelbourne.com.au/",
+    "audit_mode": "single_page",
+    "score": 88,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/",
+      "page_title": "Corporate Cars Melbourne | #1 Executive Chauffeur Service",
+      "overall_seo_health_score": 88,
+      "status_code": 200,
+      "response_time_ms": 3636,
+      "page_size_kb": 207.0,
+      "word_count": 1478,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 20,
+      "images_count": 33,
+      "missing_alt_count": 12,
+      "internal_links_count": 48,
+      "external_links_count": 4,
+      "has_schema": true,
+      "schema_types": [
+        "FAQPage",
+        "BreadcrumbList",
+        "EntryPoint",
+        "Question",
+        "ReadAction",
+        "Answer",
+        "ItemList",
+        "ListItem",
+        "SearchAction",
+        "WebPage",
+        "ImageObject",
+        "WebSite",
+        "PropertyValueSpecification"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (3.64s, Page Size: 207.0 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (57 chars): \"Corporate Cars Melbourne | #1 Executive Chauffeur Service\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Meta description is long (164 chars, exceeds 158 chars limit).",
+          "recommendation": "Trim description to 130-155 characters to prevent snippet cutoff on Google."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Corporate Chauffeur Services in Melbourne for Every Occasion...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 20 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1478 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: FAQPage, BreadcrumbList, EntryPoint, Question.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "48 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "4 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "12 of 33 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Meta Description Length: Trim description to 130-155 characters to prevent snippet cutoff on Google.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:37:37",
+    "url": "https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+    "audit_mode": "single_page",
+    "score": 92,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+      "page_title": "Point to Point Transfer Melbourne | Corporate Cars",
+      "overall_seo_health_score": 92,
+      "status_code": 200,
+      "response_time_ms": 4819,
+      "page_size_kb": 176.0,
+      "word_count": 1152,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 38,
+      "external_links_count": 8,
+      "has_schema": true,
+      "schema_types": [
+        "ListItem",
+        "EntryPoint",
+        "WebPage",
+        "ItemList",
+        "BreadcrumbList",
+        "SearchAction",
+        "ImageObject",
+        "ReadAction",
+        "PropertyValueSpecification",
+        "WebSite"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (4.82s, Page Size: 176.0 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (50 chars): \"Point to Point Transfer Melbourne | Corporate Cars\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (128 chars): \"Book reliable point to point transfers in Melbourne with professi...\"",
+          "recommendation": "Meta description length and CTA structure are optimal."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Point-to-Point Transfers in Melbourne\u200b...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1152 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: ListItem, EntryPoint, WebPage, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "38 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "8 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/as-directed-point-to-p...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:37:32",
+    "url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+    "audit_mode": "single_page",
+    "score": 92,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+      "page_title": "Melbourne Airport Transfers | Corporate Cars Melbourne",
+      "overall_seo_health_score": 92,
+      "status_code": 200,
+      "response_time_ms": 8070,
+      "page_size_kb": 181.5,
+      "word_count": 1150,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 17,
+      "images_count": 28,
+      "missing_alt_count": 6,
+      "internal_links_count": 44,
+      "external_links_count": 9,
+      "has_schema": true,
+      "schema_types": [
+        "ListItem",
+        "EntryPoint",
+        "WebPage",
+        "ItemList",
+        "BreadcrumbList",
+        "SearchAction",
+        "ImageObject",
+        "ReadAction",
+        "PropertyValueSpecification",
+        "WebSite"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (8.07s, Page Size: 181.5 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (54 chars): \"Melbourne Airport Transfers | Corporate Cars Melbourne\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (152 chars): \"Book reliable Melbourne airport transfers with professional chauf...\"",
+          "recommendation": "Meta description length and CTA structure are optimal."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Airport Transfers Melbourne...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 17 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1150 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: ListItem, EntryPoint, WebPage, ItemList.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "44 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "9 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/melbourne-airport-tran...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:37:24",
+    "url": "https://corporatecarsmelbourne.com.au/",
+    "audit_mode": "single_page",
+    "score": 88,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/",
+      "page_title": "Corporate Cars Melbourne | #1 Executive Chauffeur Service",
+      "overall_seo_health_score": 88,
+      "status_code": 200,
+      "response_time_ms": 4072,
+      "page_size_kb": 207.0,
+      "word_count": 1478,
+      "h1_count": 1,
+      "h2_count": 9,
+      "h3_count": 20,
+      "images_count": 33,
+      "missing_alt_count": 12,
+      "internal_links_count": 48,
+      "external_links_count": 4,
+      "has_schema": true,
+      "schema_types": [
+        "ListItem",
+        "EntryPoint",
+        "Question",
+        "WebPage",
+        "ItemList",
+        "Answer",
+        "BreadcrumbList",
+        "SearchAction",
+        "ImageObject",
+        "ReadAction",
+        "PropertyValueSpecification",
+        "FAQPage",
+        "WebSite"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Slow response time (4.07s, Page Size: 207.0 KB).",
+          "recommendation": "Optimize server response time. Enable page caching and compress HTML/CSS resources."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (57 chars): \"Corporate Cars Melbourne | #1 Executive Chauffeur Service\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Meta description is long (164 chars, exceeds 158 chars limit).",
+          "recommendation": "Trim description to 130-155 characters to prevent snippet cutoff on Google."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Corporate Chauffeur Services in Melbourne for Every Occasion...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (9 H2s, 20 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~1478 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: ListItem, EntryPoint, Question, WebPage.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "48 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "4 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "12 of 33 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Server Latency (TTFB): Optimize server response time. Enable page caching and compress HTML/CSS resources.",
+        "[MEDIUM] Meta Description Length: Trim description to 130-155 characters to prevent snippet cutoff on Google.",
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:32:10",
+    "url": "https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+    "audit_mode": "single_page",
+    "score": 94,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+      "page_title": "Point to Point Transfer Melbourne | Corporate Cars",
+      "overall_seo_health_score": 94,
+      "status_code": 200,
+      "response_time_ms": 5934,
+      "word_count": 1152,
+      "h1_count": 1,
+      "images_count": 28,
+      "has_schema": true,
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "low": 0,
+        "total_checks": 9
+      },
+      "audit_findings": [
+        {
+          "category": "HTTP Status",
+          "check": "Page Reachability",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "HTTP 200 OK (Response time: 5934ms).",
+          "recommendation": "Server response time is healthy."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (50 chars): \"Point to Point Transfer Melbourne | Corporate Cars\"",
+          "recommendation": "Title tag length is within Google best practices."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (128 chars).",
+          "recommendation": "Meta description is well-optimized."
+        },
+        {
+          "category": "Heading Structure",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Point-to-Point Transfers in Melbourne\u200b...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Technical SEO",
+          "check": "Schema.org Structured Data",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Schema JSON-LD detected: WebSite, EntryPoint, ReadAction, ItemList, WebPage, ImageObject, BreadcrumbList, PropertyValueSpecification, ListItem, SearchAction.",
+          "recommendation": "Rich snippet markup is installed."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/as-directed-point-to-point/",
+          "recommendation": "Canonical tag is properly set."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content length: ~1152 words.",
+          "recommendation": "Content length is sufficient for search engine indexing."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:30:30",
+    "url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+    "audit_mode": "single_page",
+    "score": 94,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+      "page_title": "Melbourne Airport Transfers | Corporate Cars Melbourne",
+      "overall_seo_health_score": 94,
+      "status_code": 200,
+      "response_time_ms": 8115,
+      "word_count": 1150,
+      "h1_count": 1,
+      "images_count": 28,
+      "has_schema": true,
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "low": 0,
+        "total_checks": 9
+      },
+      "audit_findings": [
+        {
+          "category": "HTTP Status",
+          "check": "Page Reachability",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "HTTP 200 OK (Response time: 8115ms).",
+          "recommendation": "Server response time is healthy."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (54 chars): \"Melbourne Airport Transfers | Corporate Cars Melbourne\"",
+          "recommendation": "Title tag length is within Google best practices."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (152 chars).",
+          "recommendation": "Meta description is well-optimized."
+        },
+        {
+          "category": "Heading Structure",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Airport Transfers Melbourne...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Technical SEO",
+          "check": "Schema.org Structured Data",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Schema JSON-LD detected: WebSite, EntryPoint, ReadAction, ItemList, WebPage, ImageObject, BreadcrumbList, PropertyValueSpecification, ListItem, SearchAction.",
+          "recommendation": "Rich snippet markup is installed."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+          "recommendation": "Canonical tag is properly set."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 of 28 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content length: ~1150 words.",
+          "recommendation": "Content length is sufficient for search engine indexing."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:27:23",
+    "url": "https://corporatecarsmelbourne.com.au/",
+    "audit_mode": "single_page",
+    "score": 94,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/",
+      "page_title": "Corporate Cars Melbourne | #1 Executive Chauffeur Service",
+      "overall_seo_health_score": 94,
+      "status_code": 200,
+      "response_time_ms": 5039,
+      "word_count": 1478,
+      "h1_count": 1,
+      "images_count": 33,
+      "has_schema": true,
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "low": 0,
+        "total_checks": 9
+      },
+      "audit_findings": [
+        {
+          "category": "HTTP Status",
+          "check": "Page Reachability",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "HTTP 200 OK (Response time: 5039ms).",
+          "recommendation": "Server response time is healthy."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (57 chars): \"Corporate Cars Melbourne | #1 Executive Chauffeur Service\"",
+          "recommendation": "Title tag length is within Google best practices."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (164 chars).",
+          "recommendation": "Meta description is well-optimized."
+        },
+        {
+          "category": "Heading Structure",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Corporate Chauffeur Services in Melbourne for Every Occasion...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Technical SEO",
+          "check": "Schema.org Structured Data",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Schema JSON-LD detected: WebSite, EntryPoint, ReadAction, Answer, ItemList, WebPage, ImageObject, BreadcrumbList, Question, PropertyValueSpecification, FAQPage, ListItem, SearchAction.",
+          "recommendation": "Rich snippet markup is installed."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/",
+          "recommendation": "Canonical tag is properly set."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "12 of 33 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content length: ~1478 words.",
+          "recommendation": "Content length is sufficient for search engine indexing."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:26:28",
+    "url": "https://corporatecarsmelbourne.com.au",
+    "audit_mode": "whole_website",
+    "score": 61,
+    "data": {
+      "audit_mode": "whole_website",
+      "domain_url": "https://corporatecarsmelbourne.com.au",
+      "site_health_score": 61,
+      "pages_audited_count": 9,
+      "schema_coverage_pct": 77,
+      "h1_compliance_pct": 66,
+      "technical_diagnostics": {
+        "robots_txt": "ACTIVE",
+        "xml_sitemap": "ACTIVE",
+        "https_ssl": "ACTIVE"
+      },
+      "pages_breakdown": [
+        {
+          "url": "https://corporatecarsmelbourne.com.au/",
+          "path": "/",
+          "title": "Corporate Cars Melbourne | #1 Executive Chauffeur Service",
+          "score": 94,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1478,
+          "issues_count": 1,
+          "top_issue": "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/services/airport-transfers/",
+          "path": "/services/airport-transfers/",
+          "title": "Page Title",
+          "score": 35,
+          "h1_count": 0,
+          "has_schema": false,
+          "word_count": 26,
+          "issues_count": 6,
+          "top_issue": "[CRITICAL] Title Tag: Add a descriptive, keyword-rich title tag between 50-60 characters."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers/",
+          "path": "/services/corporate-transfers/",
+          "title": "Premium Corporate Transfers Melbourne | Luxury Chauffeur Service",
+          "score": 92,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 1075,
+          "issues_count": 1,
+          "top_issue": "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/services/wedding-car-hire/",
+          "path": "/services/wedding-car-hire/",
+          "title": "Page not found - Corporate Cars Melbourne",
+          "score": 43,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 223,
+          "issues_count": 5,
+          "top_issue": "[CRITICAL] Page Reachability: Ensure page URL is live, not returning 404/500 errors, and properly resolving."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/services/winery-tours/",
+          "path": "/services/winery-tours/",
+          "title": "Page not found - Corporate Cars Melbourne",
+          "score": 43,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 223,
+          "issues_count": 5,
+          "top_issue": "[CRITICAL] Page Reachability: Ensure page URL is live, not returning 404/500 errors, and properly resolving."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/fleet/executive-sedans/",
+          "path": "/fleet/executive-sedans/",
+          "title": "Page not found - Corporate Cars Melbourne",
+          "score": 43,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 223,
+          "issues_count": 5,
+          "top_issue": "[CRITICAL] Page Reachability: Ensure page URL is live, not returning 404/500 errors, and properly resolving."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/fleet/luxury-suv/",
+          "path": "/fleet/luxury-suv/",
+          "title": "Page Title",
+          "score": 35,
+          "h1_count": 0,
+          "has_schema": false,
+          "word_count": 189,
+          "issues_count": 6,
+          "top_issue": "[CRITICAL] Title Tag: Add a descriptive, keyword-rich title tag between 50-60 characters."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/contact/",
+          "path": "/contact/",
+          "title": "Contact Us | Corporate Cars Melbourne \u2013 Book a Ride",
+          "score": 76,
+          "h1_count": 0,
+          "has_schema": true,
+          "word_count": 242,
+          "issues_count": 3,
+          "top_issue": "[HIGH] H1 Heading: Add exactly one descriptive H1 heading containing the primary target keyword."
+        },
+        {
+          "url": "https://corporatecarsmelbourne.com.au/about-us/",
+          "path": "/about-us/",
+          "title": "About Us | Corporate Chauffeur Service Melbourne",
+          "score": 92,
+          "h1_count": 1,
+          "has_schema": true,
+          "word_count": 814,
+          "issues_count": 1,
+          "top_issue": "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+        }
+      ],
+      "domain_recommendations": [
+        "Domain Health Score: 61/100 across 9 audited core pages.",
+        "Schema.org Coverage: 77% of core pages contain structured data. Expand schema to all service pages.",
+        "H1 Heading Compliance: 66% of pages have exactly 1 primary H1 heading.",
+        "Robots.txt: \u2705 Active and correctly accessible.",
+        "XML Sitemap: \u2705 Active and valid sitemap found."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:26:28",
+    "url": "https://corporatecarsmelbourne.com.au/contact/",
+    "audit_mode": "single_page",
+    "score": 76,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/contact/",
+      "page_title": "Contact Us | Corporate Cars Melbourne \u2013 Book a Ride",
+      "overall_seo_health_score": 76,
+      "status_code": 200,
+      "response_time_ms": 6462,
+      "word_count": 242,
+      "h1_count": 0,
+      "images_count": 5,
+      "has_schema": true,
+      "issues_summary": {
+        "critical": 0,
+        "high": 1,
+        "medium": 2,
+        "low": 0,
+        "total_checks": 9
+      },
+      "audit_findings": [
+        {
+          "category": "HTTP Status",
+          "check": "Page Reachability",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "HTTP 200 OK (Response time: 6462ms).",
+          "recommendation": "Server response time is healthy."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (51 chars): \"Contact Us | Corporate Cars Melbourne \u2013 Book a Ride\"",
+          "recommendation": "Title tag length is within Google best practices."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (156 chars).",
+          "recommendation": "Meta description is well-optimized."
+        },
+        {
+          "category": "Heading Structure",
+          "check": "H1 Heading",
+          "status": "MISSING",
+          "severity": "HIGH",
+          "details": "No H1 heading found on the page.",
+          "recommendation": "Add exactly one descriptive H1 heading containing the primary target keyword."
+        },
+        {
+          "category": "Technical SEO",
+          "check": "Schema.org Structured Data",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Schema JSON-LD detected: WebSite, EntryPoint, ReadAction, WebPage, BreadcrumbList, PropertyValueSpecification, ListItem, SearchAction.",
+          "recommendation": "Rich snippet markup is installed."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/contact-us/",
+          "recommendation": "Canonical tag is properly set."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "1 of 5 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "Thin content detected (242 words).",
+          "recommendation": "Expand page content to at least 800-1,200 words for comprehensive topical authority."
+        }
+      ],
+      "actionable_priorities": [
+        "[HIGH] H1 Heading: Add exactly one descriptive H1 heading containing the primary target keyword.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images.",
+        "[MEDIUM] Word Count: Expand page content to at least 800-1,200 words for comprehensive topical authority."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-18 17:26:28",
+    "url": "https://corporatecarsmelbourne.com.au/about-us/",
+    "audit_mode": "single_page",
+    "score": 92,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/about-us/",
+      "page_title": "About Us | Corporate Chauffeur Service Melbourne",
+      "overall_seo_health_score": 92,
+      "status_code": 200,
+      "response_time_ms": 5586,
+      "word_count": 814,
+      "h1_count": 1,
+      "images_count": 6,
+      "has_schema": true,
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "low": 1,
+        "total_checks": 9
+      },
+      "audit_findings": [
+        {
+          "category": "HTTP Status",
+          "check": "Page Reachability",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "HTTP 200 OK (Response time: 5586ms).",
+          "recommendation": "Server response time is healthy."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (48 chars): \"About Us | Corporate Chauffeur Service Melbourne\"",
+          "recommendation": "Title tag length is within Google best practices."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description Length",
+          "status": "WARNING",
+          "severity": "LOW",
+          "details": "Meta description is long (175 chars). May be truncated by Google.",
+          "recommendation": "Trim description to under 160 characters."
+        },
+        {
+          "category": "Heading Structure",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"About Us...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Technical SEO",
+          "check": "Schema.org Structured Data",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Schema JSON-LD detected: WebSite, EntryPoint, ReadAction, ImageObject, BreadcrumbList, PropertyValueSpecification, ListItem, SearchAction.",
+          "recommendation": "Rich snippet markup is installed."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://corporatecarsmelbourne.com.au/about-us/",
+          "recommendation": "Canonical tag is properly set."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "1 of 6 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content length: ~814 words.",
+          "recommendation": "Content length is sufficient for search engine indexing."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images.",
+        "[LOW] Meta Description Length: Trim description to under 160 characters."
+      ]
+    }
+  }
+]

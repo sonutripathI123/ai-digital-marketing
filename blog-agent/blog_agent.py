@@ -28,10 +28,19 @@ import requests
 import yaml
 from dotenv import load_dotenv
 from anthropic import Anthropic
-
 import google_indexing
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(BASE_DIR)
+if PARENT_DIR not in sys.path:
+    sys.path.insert(0, PARENT_DIR)
+
+try:
+    from agents.seo_content_brief_agent import generate_brief_for_topic, optimize_and_refine_blog_post
+except ImportError:
+    generate_brief_for_topic = None
+    optimize_and_refine_blog_post = None
+
 TOPICS_FILE = os.path.join(BASE_DIR, "topics.csv")
 RULES_FILE = os.path.join(BASE_DIR, "content_rules.md")
 CONFIG_FILE = os.path.join(BASE_DIR, "config.yaml")
@@ -104,13 +113,51 @@ def anthropic_client():
 
 
 def parse_json(text):
-    """Strip accidental fences and parse the model's JSON reply."""
-    text = text.strip()
-    if text.startswith("```"):
-        text = text.split("```", 2)[1]
-        if text.lstrip().startswith("json"):
-            text = text.lstrip()[4:]
-    return json.loads(text.strip())
+    """Strip accidental fences and parse the model's JSON reply robustly."""
+    text = (text or "").strip()
+    if not text:
+        raise ValueError("Empty response from AI model")
+
+    # 1. Direct parse attempt
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+
+    # 2. Extract from markdown code fence ```json ... ```
+    if "```" in text:
+        parts = text.split("```")
+        for part in parts:
+            clean = part.strip()
+            if clean.startswith("json"):
+                clean = clean[4:].strip()
+            if (clean.startswith("{") and clean.endswith("}")) or (clean.startswith("[") and clean.endswith("]")):
+                try:
+                    return json.loads(clean)
+                except json.JSONDecodeError:
+                    pass
+
+    # 3. Find outermost { ... } or [ ... ]
+    first_brace = text.find("{")
+    last_brace = text.rfind("}")
+    first_bracket = text.find("[")
+    last_bracket = text.rfind("]")
+
+    if first_brace != -1 and last_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
+        candidate = text[first_brace:last_brace + 1]
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError:
+            pass
+
+    if first_bracket != -1 and last_bracket != -1:
+        candidate = text[first_bracket:last_bracket + 1]
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError:
+            pass
+
+    raise ValueError(f"Could not extract valid JSON from response: {text[:200]}...")
 
 
 # --------------------------------------------------------------------------- #
@@ -323,12 +370,38 @@ def generate_post(client, cfg, site_key, site_cfg, row, extra_instruction=""):
     suburb_line = f"Suburb focus: {row['suburb']}.\n" if row.get("suburb") else ""
     hint_line = f"Working title idea: {row['title_hint']}.\n" if row.get("title_hint") else ""
 
+    # Pre-generate SEO Content Brief from SEO Content Brief Agent
+    brief = None
+    brief_prompt = ""
+    if generate_brief_for_topic:
+        try:
+            brief = generate_brief_for_topic(
+                target_keyword=row["keyword"],
+                suburb=row.get("suburb", ""),
+                site_name=site_cfg["name"],
+                site_domain=site_cfg["base_url"]
+            )
+            outlines_str = "\n".join([f"- {s['heading']} (Level: {s['level']}, Key points: {', '.join(s['key_points'])})" for s in brief.get("structured_outline", [])])
+            brief_prompt = (
+                f"\n--- MANDATORY SEO CONTENT BRIEF FROM SEO CONTENT BRIEF AGENT ---\n"
+                f"H1 Title Options: {', '.join(brief.get('title_suggestions', []))}\n"
+                f"Recommended Word Count: {brief.get('recommended_word_count', '1,200 - 1,500 words')}\n"
+                f"LSI Secondary Keywords: {', '.join(brief.get('secondary_keywords', []))}\n"
+                f"Target Audience: {brief.get('target_audience')} ({brief.get('search_intent')})\n"
+                f"Required Section Outline:\n{outlines_str}\n"
+                f"Conversion Call to Action: {brief.get('call_to_action')}\n"
+                f"---------------------------------------------------------------\n"
+            )
+        except Exception as e:
+            log.warning("Could not pre-generate SEO brief: %s", e)
+
     prompt = (
         f"Business: {site_cfg['name']} ({site_cfg['base_url']}).\n"
         f"Topic seed / keyword: {row['keyword']}.\n"
         f"{suburb_line}{hint_line}"
         f"Default category if unsure: {site_cfg['default_category']}.\n"
         f"{anti_block}\n"
+        f"{brief_prompt}\n"
         f"Internal link targets you may use (pick 2 to 4):\n{links_block}\n\n"
         f"{extra_instruction}\n"
         f"Write the blog post now. Return ONLY the JSON object described in your "
@@ -429,6 +502,25 @@ def cmd_write(args, cfg):
                     raise ValueError(
                         f"cannibalisation guard: focus keyword '{post.get('focus_keyword')}' "
                         f"still competes with suburb page '{sp['keyword']}'")
+
+            # Post-Draft Auto-Optimization & SEO Quality Refinement via SEO Content Brief Agent
+            if optimize_and_refine_blog_post:
+                try:
+                    brief = generate_brief_for_topic(
+                        target_keyword=row["keyword"],
+                        suburb=row.get("suburb", ""),
+                        site_name=site_cfg["name"],
+                        site_domain=site_cfg["base_url"]
+                    ) if generate_brief_for_topic else None
+                    post = optimize_and_refine_blog_post(
+                        post=post,
+                        brief=brief,
+                        site_name=site_cfg["name"],
+                        site_domain=site_cfg["base_url"]
+                    )
+                    log.info("SEO Content Brief Agent auto-optimized post: %s (Schema.org JSON-LD injected, LSI checked)", post.get("title"))
+                except Exception as e:
+                    log.warning("SEO Content Brief post-optimization warning: %s", e)
 
             post.setdefault("category", site_cfg["default_category"])
             featured_id = pick_featured_image(api, auth, cfg, row["site"], row)
