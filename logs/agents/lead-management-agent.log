@@ -223,3 +223,4 @@
 2026-08-18 09:44:54,208 [INFO] [agent:agent.lead-management-agent] Completed task task-e444d72e successfully.
 2026-08-18 09:44:54,293 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=draft_followup, lead_id='lead-1001', service='Corporate Chauffeur'
 2026-08-18 09:44:54,349 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=process_lead, lead_id='lead-1001', service='Airport Transfer'
+2026-08-19 12:48:06,788 [INFO] [agent:agent.lead-management-agent] Executing LeadManagementAgent task: action=lead_report, lead_id='lead-1001', service='Airport Transfer'

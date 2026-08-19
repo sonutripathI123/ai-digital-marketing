@@ -472,6 +472,22 @@ def serve_dashboard_ui():
     )
 
 
+@app.get("/download-handbook")
+@app.get("/api/download-handbook")
+def download_handbook():
+    """Download the official AI Digital Marketing Master Handbook PDF."""
+    pdf_file = STATIC_DIR / "AI_Digital_Marketing_Master_Handbook.pdf"
+    if not pdf_file.exists():
+        pdf_file = Path(ROOT_DIR) / "AI_Digital_Marketing_Master_Handbook.pdf"
+    if not pdf_file.exists():
+        raise HTTPException(status_code=404, detail="Handbook PDF not found")
+    return FileResponse(
+        str(pdf_file),
+        filename="AI_Digital_Marketing_Master_Handbook.pdf",
+        media_type="application/pdf"
+    )
+
+
 @app.get("/health")
 def health_check():
     return {
