@@ -1166,3 +1166,7 @@ INFO:     127.0.0.1:50396 - "GET /api/errors HTTP/1.1" 200 OK
 2026-08-19 13:05:04,643 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-2d325c1f
 2026-08-19 13:05:04,643 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
 2026-08-19 13:05:05,978 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-2d325c1f successfully.
+2026-08-19 13:10:06,703 [INFO] [central] Created task task-5fc9fcd1 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-19 13:10:06,707 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-5fc9fcd1
+2026-08-19 13:10:06,707 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-19 13:10:08,421 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-5fc9fcd1 successfully.

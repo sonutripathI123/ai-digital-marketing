@@ -48100,22 +48100,26 @@
     "input_data": {
       "action": "publish-due"
     },
-    "status": "QUEUED",
+    "status": "COMPLETED",
     "priority": "NORMAL",
     "requires_approval": false,
     "approval_comment": null,
-    "output_data": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
     "error_message": null,
     "retry_count": 0,
     "max_retries": 3,
-    "model_used": null,
+    "model_used": "subprocess-agent-flow",
     "tokens_used": 0,
     "cost_usd": 0.0,
     "created_at": "2026-08-19T07:40:06.444201+00:00",
     "updated_at": "2026-08-19T07:40:06.445206+00:00"
   },
   {
-    "task_id": "task-a4bc9064",
+    "task_id": "task-63892566",
     "agent_id": "corporate-cars-social-agent",
     "task_type": "publish-due",
     "input_data": {
@@ -48132,7 +48136,7 @@
     "model_used": null,
     "tokens_used": 0,
     "cost_usd": 0.0,
-    "created_at": "2026-08-19T07:40:44.823056+00:00",
-    "updated_at": "2026-08-19T07:40:44.823056+00:00"
+    "created_at": "2026-08-19T07:45:08.475114+00:00",
+    "updated_at": "2026-08-19T07:45:08.475114+00:00"
   }
 ]

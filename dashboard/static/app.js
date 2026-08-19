@@ -306,25 +306,7 @@ function initNavigation() {
 }
 
 function getTitleForView(view) {
-  const activeSite = allWebsitesList.find(s => s.site_id === currentSiteId);
-  const siteSuffix = currentSiteId === 'all'
-    ? ' (Portfolio View)'
-    : (activeSite ? ` — ${activeSite.name}` : '');
-
-  const titles = {
-    'overview': `System Overview & 3D Telemetry${siteSuffix}`,
-    'agents': `18-Agent Operating System Registry${siteSuffix}`,
-    'tasks': `Task Queue & Execution Pipeline${siteSuffix}`,
-    'approvals': `Human Approval Queue${siteSuffix}`,
-    'scheduler': `Automated Cron Job Scheduler${siteSuffix}`,
-    'ai-usage': `AI Model Router & Cost Analytics${siteSuffix}`,
-    'logs': `Structured Execution Logs${siteSuffix}`,
-    'errors': `Error Tracing & Recovery${siteSuffix}`,
-    'audit': `Immutable System Audit Trail${siteSuffix}`,
-    'health': `System Health & Diagnostics${siteSuffix}`,
-    'settings': `Command Center Configuration${siteSuffix}`
-  };
-  return titles[view] || 'Dashboard';
+  return '';
 }
 
 function initEventListeners() {
