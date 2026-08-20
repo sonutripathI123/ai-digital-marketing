@@ -1258,3 +1258,11 @@ INFO:     127.0.0.1:63916 - "GET /api/agents/corporate-cars-social-agent/report?
 2026-08-20 11:50:02,328 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-09070734
 2026-08-20 11:50:02,328 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
 2026-08-20 11:50:04,811 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-09070734 successfully.
+2026-08-20 11:55:05,522 [INFO] [central] Created task task-5593d6d1 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 11:55:05,537 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-5593d6d1
+2026-08-20 11:55:05,546 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 11:55:10,862 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-5593d6d1 successfully.
+2026-08-20 12:00:11,237 [INFO] [central] Created task task-c0180f36 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:00:11,237 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-c0180f36
+2026-08-20 12:00:11,237 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:00:13,320 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-c0180f36 successfully.

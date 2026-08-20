@@ -1,0 +1,16 @@
+name: 24/7 Render Cloud Keep-Alive Engine
+
+on:
+  schedule:
+    # Runs every 10 minutes, 24 hours a day, 7 days a week
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    name: Ping Cloud Server Health
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Keep-Alive HTTP Pulse to Render
+        run: |
+          curl -s -m 25 https://ai-digital-marketing-gm68.onrender.com/health || echo "Ping attempted"
