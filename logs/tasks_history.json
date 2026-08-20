@@ -48138,5 +48138,151 @@
     "cost_usd": 0.0,
     "created_at": "2026-08-19T07:45:08.475114+00:00",
     "updated_at": "2026-08-19T07:45:08.475114+00:00"
+  },
+  {
+    "task_id": "task-5a656846",
+    "agent_id": "blog-agent",
+    "task_type": "write",
+    "input_data": {
+      "action": "write"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "write",
+      "site": "ccm",
+      "details": "2026-08-20 11:45:16,647  INFO  Writing: essendon to melbourne airport travel time (ccm)\n2026-08-20 11:46:04,780  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages \"HTTP/1.1 200 OK\"\n2026-08-20 11:46:05,392  INFO  SEO Content Brief Agent auto-optimized post: How Long From Essendon to Melbourne Airport? - Essendon Airport Travel Time (Schema.org JSON-LD injected, LSI checked)\n2026-08-20 11:46:23,929  ERROR  Failed on essendon to melbourne airport travel time: 400 Client Error: Bad Request for url: https://corporatecarsmelbourne.com.au/wp-json/wp/v2/tags\n2026-08-20 11:46:23,944  INFO  Writing: blackburn airport transfer tips (ccm)\n2026-08-20 11:47:12,302  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages \"HTTP/1.1 200 OK\"\n2026-08-20 11:47:12,315  INFO  SEO Content Brief Agent auto-optimized post: Blackburn Airport Transfer Tips for Business Travellers (Schema.org JSON-LD injected, LSI checked)\n2026-08-20 11:47:44,295  INFO  Draft created. post_id=20540, featured_media=18946, auto-live at 2026-08-20T06:17:44.295184+00:00\n2026-08-20 11:47:44,313  INFO  write run complete. 1 draft(s) created."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T06:14:54.566223+00:00",
+    "updated_at": "2026-08-20T06:14:54.566223+00:00"
+  },
+  {
+    "task_id": "task-cbaf54fd",
+    "agent_id": "blog-agent",
+    "task_type": "write",
+    "input_data": {
+      "action": "write"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "write",
+      "site": "ccm",
+      "details": "2026-08-20 11:45:23,550  INFO  Writing: essendon to melbourne airport travel time (ccm)\n2026-08-20 11:46:05,672  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages \"HTTP/1.1 200 OK\"\n2026-08-20 11:46:05,776  INFO  SEO Content Brief Agent auto-optimized post: How Long From Essendon to Melbourne Airport? - Essendon To Airport Travel Time (Schema.org JSON-LD injected, LSI checked)\n2026-08-20 11:46:36,572  INFO  Draft created. post_id=20537, featured_media=18963, auto-live at 2026-08-20T06:16:36.572182+00:00\n2026-08-20 11:46:36,581  INFO  write run complete. 1 draft(s) created."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T06:15:09.481176+00:00",
+    "updated_at": "2026-08-20T06:15:09.481176+00:00"
+  },
+  {
+    "task_id": "task-082a7a76",
+    "agent_id": "blog-agent",
+    "task_type": "publish",
+    "input_data": {
+      "action": "publish"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish",
+      "site": "ccm",
+      "details": "2026-08-20 11:46:51,838  INFO  Published: essendon to melbourne airport travel time -> https://corporatecarsmelbourne.com.au/essendon-to-melbourne-airport-travel-time/\n2026-08-20 11:46:51,847  INFO  publish run complete. 1 post(s) went live."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T06:16:37.166946+00:00",
+    "updated_at": "2026-08-20T06:16:37.166946+00:00"
+  },
+  {
+    "task_id": "task-32be64bd",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 2, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}\n\n2026-08-20 11:47:02,249 INFO    publishing: Published post 33 to linkedin (platform id urn:li:share:7496087879224397824)\n2026-08-20 11:47:16,264 INFO    publishing: Published post 32 to facebook (platform id 791630667378039_122149644579049450)"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T06:16:52.637814+00:00",
+    "updated_at": "2026-08-20T06:16:52.637814+00:00"
+  },
+  {
+    "task_id": "task-0f8e8d69",
+    "agent_id": "blog-agent",
+    "task_type": "publish",
+    "input_data": {
+      "action": "publish"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish",
+      "site": "ccm",
+      "details": "2026-08-20 11:47:56,175  INFO  Published: blackburn airport transfer tips -> https://corporatecarsmelbourne.com.au/blackburn-airport-transfer-tips/\n2026-08-20 11:47:56,191  INFO  publish run complete. 1 post(s) went live."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T06:17:45.509501+00:00",
+    "updated_at": "2026-08-20T06:17:45.509501+00:00"
+  },
+  {
+    "task_id": "task-09070734",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T06:20:01.794159+00:00",
+    "updated_at": "2026-08-20T06:20:01.794159+00:00"
   }
 ]

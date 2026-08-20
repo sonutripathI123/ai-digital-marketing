@@ -81,13 +81,17 @@ class BlogAgentAdapter(AgentInterface):
         cmd = [python_bin, "blog_agent.py", action]
         if action == "write" and site:
             cmd.extend(["--site", site])
+        if action == "publish" and task.input_data.get("force", True):
+            cmd.append("--force")
 
+        import os
         result = subprocess.run(
             cmd,
             cwd=BLOG_AGENT_DIR,
             text=True,
             capture_output=True,
-            timeout=300
+            timeout=300,
+            env=dict(os.environ)
         )
 
         output_str = (result.stdout + "\n" + result.stderr).strip()

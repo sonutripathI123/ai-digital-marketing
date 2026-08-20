@@ -174,21 +174,50 @@ def wp_auth(site_key, site_cfg):
 
 
 def wp_term_id(api, auth, taxonomy, name):
-    """Find a category/tag by name, create it if missing, return its id."""
-    r = requests.get(f"{api}/{taxonomy}", params={"search": name, "per_page": 100},
-                     auth=auth, timeout=30)
-    r.raise_for_status()
-    for term in r.json():
-        if term["name"].lower() == name.lower():
-            return term["id"]
-    r = requests.post(f"{api}/{taxonomy}", json={"name": name}, auth=auth, timeout=30)
-    r.raise_for_status()
-    return r.json()["id"]
+    """Find a category/tag by name, create it if missing, return its id.
+    Handles existing terms (400 term_exists) without crashing."""
+    clean_name = str(name).strip()
+    if not clean_name:
+        return None
+    try:
+        r = requests.get(f"{api}/{taxonomy}", params={"search": clean_name, "per_page": 100},
+                         auth=auth, timeout=30)
+        if r.status_code == 200:
+            for term in r.json():
+                if term.get("name", "").strip().lower() == clean_name.lower():
+                    return term["id"]
+    except Exception as e:
+        log.warning("Error searching %s for %s: %s", taxonomy, clean_name, e)
+
+    try:
+        r = requests.post(f"{api}/{taxonomy}", json={"name": clean_name}, auth=auth, timeout=30)
+        if r.status_code == 201:
+            return r.json().get("id")
+
+        # Handle term_exists (WordPress returns 400 Bad Request when term exists)
+        if r.status_code == 400:
+            try:
+                res_data = r.json()
+                if res_data.get("code") == "term_exists":
+                    term_id = res_data.get("data", {}).get("term_id")
+                    if term_id:
+                        return term_id
+                    if res_data.get("additional_data") and len(res_data["additional_data"]) > 0:
+                        return res_data["additional_data"][0]
+            except Exception:
+                pass
+
+        r.raise_for_status()
+        return r.json().get("id")
+    except Exception as e:
+        log.warning("Could not create/find %s term '%s': %s. Skipping term.", taxonomy, clean_name, e)
+        return None
 
 
 def wp_create_draft(api, auth, post, featured_media_id=None):
     cat_id = wp_term_id(api, auth, "categories", post["category"])
     tag_ids = [wp_term_id(api, auth, "tags", t) for t in post.get("tags", [])]
+    tag_ids = [t for t in tag_ids if t is not None]
 
     body_html = post["content_html"]
     faq = post.get("faq_jsonld")
@@ -196,13 +225,14 @@ def wp_create_draft(api, auth, post, featured_media_id=None):
         body_html += ('\n<!-- wp:html -->\n<script type="application/ld+json">'
                       + json.dumps(faq) + "</script>\n<!-- /wp:html -->")
 
+    categories_list = [cat_id] if cat_id else []
     payload = {
         "title": post["title"],
         "slug": post["slug"],
         "content": body_html,
         "excerpt": post["meta_description"],
         "status": "draft",
-        "categories": [cat_id],
+        "categories": categories_list,
         "tags": tag_ids,
         "meta": {
             "_yoast_wpseo_focuskw": post["focus_keyword"],
@@ -552,7 +582,7 @@ def cmd_publish(args, cfg):
             go_live = dt.datetime.fromisoformat(row["go_live_at"])
         except ValueError:
             continue
-        if go_live > now:
+        if not getattr(args, "force", False) and go_live > now:
             continue
         site_cfg = get_site(cfg, row["site"])
         api, auth = wp_auth(row["site"], site_cfg)
@@ -637,7 +667,10 @@ def main():
     i.add_argument("--file", required=True, help="CSV with columns: site,suburb,keyword,title")
     i.add_argument("--site", default="", help="Default site if the CSV omits the site column")
 
-    sub.add_parser("publish", help="Auto-publish drafts past their review window")
+    pub = sub.add_parser("publish", help="Auto-publish drafts past their review window")
+    pub.add_argument("--force", action="store_true", help="Publish immediately regardless of review window")
+
+    sub.add_parser("status", help="Show queue summary")
     sub.add_parser("status", help="Show queue summary")
 
     args = p.parse_args()

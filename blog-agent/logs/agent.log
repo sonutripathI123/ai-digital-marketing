@@ -129,3 +129,33 @@
 2026-08-19 11:24:31,393  INFO  write run complete. 1 draft(s) created.
 2026-08-19 11:34:03,794  INFO  Published: box hill airport transfer cost -> https://corporatecarsmelbourne.com.au/box-hill-airport-transfer-cost/
 2026-08-19 11:34:03,799  INFO  publish run complete. 1 post(s) went live.
+2026-08-20 11:45:16,647  INFO  Writing: essendon to melbourne airport travel time (ccm)
+2026-08-20 11:45:23,550  INFO  Writing: essendon to melbourne airport travel time (ccm)
+2026-08-20 11:46:04,780  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-20 11:46:05,392  INFO  SEO Content Brief Agent auto-optimized post: How Long From Essendon to Melbourne Airport? - Essendon Airport Travel Time (Schema.org JSON-LD injected, LSI checked)
+2026-08-20 11:46:05,672  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-20 11:46:05,776  INFO  SEO Content Brief Agent auto-optimized post: How Long From Essendon to Melbourne Airport? - Essendon To Airport Travel Time (Schema.org JSON-LD injected, LSI checked)
+2026-08-20 11:46:23,136  INFO  Writing: essendon to melbourne airport travel time (ccm)
+2026-08-20 11:46:23,929  ERROR  Failed on essendon to melbourne airport travel time: 400 Client Error: Bad Request for url: https://corporatecarsmelbourne.com.au/wp-json/wp/v2/tags
+2026-08-20 11:46:23,944  INFO  Writing: blackburn airport transfer tips (ccm)
+2026-08-20 11:46:36,572  INFO  Draft created. post_id=20537, featured_media=18963, auto-live at 2026-08-20T06:16:36.572182+00:00
+2026-08-20 11:46:36,581  INFO  write run complete. 1 draft(s) created.
+2026-08-20 11:46:51,838  INFO  Published: essendon to melbourne airport travel time -> https://corporatecarsmelbourne.com.au/essendon-to-melbourne-airport-travel-time/
+2026-08-20 11:46:51,847  INFO  publish run complete. 1 post(s) went live.
+2026-08-20 11:47:07,765  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-20 11:47:08,008  INFO  SEO Content Brief Agent auto-optimized post: How Long From Essendon to Melbourne Airport? (Schema.org JSON-LD injected, LSI checked)
+2026-08-20 11:47:12,302  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-20 11:47:12,315  INFO  SEO Content Brief Agent auto-optimized post: Blackburn Airport Transfer Tips for Business Travellers (Schema.org JSON-LD injected, LSI checked)
+2026-08-20 11:47:40,604  INFO  Draft created. post_id=20539, featured_media=18996, auto-live at 2026-08-20T06:17:40.604066+00:00
+2026-08-20 11:47:40,618  INFO  write run complete. 1 draft(s) created.
+2026-08-20 11:47:44,295  INFO  Draft created. post_id=20540, featured_media=18946, auto-live at 2026-08-20T06:17:44.295184+00:00
+2026-08-20 11:47:44,313  INFO  write run complete. 1 draft(s) created.
+2026-08-20 11:47:56,175  INFO  Published: blackburn airport transfer tips -> https://corporatecarsmelbourne.com.au/blackburn-airport-transfer-tips/
+2026-08-20 11:47:56,191  INFO  publish run complete. 1 post(s) went live.
+2026-08-20 11:50:10,332  INFO  Writing: essendon to melbourne airport travel time (ccm)
+2026-08-20 11:50:56,873  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-20 11:50:56,952  INFO  SEO Content Brief Agent auto-optimized post: Essendon Airport Travel Time: What to Expect (Schema.org JSON-LD injected, LSI checked)
+2026-08-20 11:51:24,530  INFO  Draft created. post_id=20542, featured_media=18930, auto-live at 2026-08-20T06:21:24.530635+00:00
+2026-08-20 11:51:24,535  INFO  write run complete. 1 draft(s) created.
+2026-08-20 11:52:07,022  INFO  Published: essendon to melbourne airport travel time -> https://corporatecarsmelbourne.com.au/essendon-airport-travel-time/
+2026-08-20 11:52:07,031  INFO  publish run complete. 1 post(s) went live.
