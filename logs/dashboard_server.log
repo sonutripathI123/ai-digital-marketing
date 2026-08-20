@@ -1270,3 +1270,52 @@ INFO:     127.0.0.1:63916 - "GET /api/agents/corporate-cars-social-agent/report?
 2026-08-20 12:05:13,668 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-9ee67387
 2026-08-20 12:05:13,668 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
 2026-08-20 12:05:16,393 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-9ee67387 successfully.
+2026-08-20 12:10:01,701 [INFO] [central] Created task task-afcfebe0 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:10:01,702 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-afcfebe0
+2026-08-20 12:10:01,702 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:10:03,696 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-afcfebe0 successfully.
+2026-08-20 12:15:04,116 [INFO] [central] Created task task-64f7f26c for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:15:04,122 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-64f7f26c
+2026-08-20 12:15:04,123 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:15:06,787 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-64f7f26c successfully.
+2026-08-20 12:20:07,104 [INFO] [central] Created task task-9d55e885 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:20:07,109 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-9d55e885
+2026-08-20 12:20:07,109 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:20:09,096 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-9d55e885 successfully.
+2026-08-20 12:25:09,403 [INFO] [central] Created task task-38113b73 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:25:09,403 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-38113b73
+2026-08-20 12:25:09,403 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:25:11,398 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-38113b73 successfully.
+INFO:     127.0.0.1:57752 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57752 - "GET /static/styles.css?v=11.22.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63045 - "GET /static/app.js?v=11.22.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63045 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63045 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57752 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63045 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57752 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63045 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+2026-08-20 12:30:12,023 [INFO] [central] Created task task-2afbea8a for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:30:12,025 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-2afbea8a
+2026-08-20 12:30:12,027 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:30:14,559 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-2afbea8a successfully.
+2026-08-20 12:35:15,010 [INFO] [central] Created task task-443f6165 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:35:15,013 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-443f6165
+2026-08-20 12:35:15,018 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:35:17,734 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-443f6165 successfully.
+2026-08-20 12:40:03,115 [INFO] [central] Created task task-0d328b99 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:40:03,115 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-0d328b99
+2026-08-20 12:40:03,124 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:40:05,637 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-0d328b99 successfully.
+2026-08-20 12:45:05,954 [INFO] [central] Created task task-40486079 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:45:05,954 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-40486079
+2026-08-20 12:45:05,954 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:45:07,583 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-40486079 successfully.
+2026-08-20 12:50:07,914 [INFO] [central] Created task task-be89e037 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:50:07,914 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-be89e037
+2026-08-20 12:50:07,914 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:50:10,506 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-be89e037 successfully.
+2026-08-20 12:55:12,064 [INFO] [central] Created task task-f11ff364 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-20 12:55:12,064 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-f11ff364
+2026-08-20 12:55:12,064 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-20 12:55:14,628 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-f11ff364 successfully.

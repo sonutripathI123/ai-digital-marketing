@@ -10,14 +10,17 @@ from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
+ROOT_DIR = BASE_DIR.parent
 load_dotenv(BASE_DIR / ".env")
+load_dotenv(ROOT_DIR / ".env")
+load_dotenv(ROOT_DIR / "blog-agent" / ".env")
 
 # --- Core app settings ---
 DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{(BASE_DIR / 'social_agent.db').as_posix()}")
 IMAGE_LIBRARY_PATH = Path(os.getenv("IMAGE_LIBRARY_PATH", str(BASE_DIR / "images")))
 TIMEZONE = ZoneInfo(os.getenv("TIMEZONE", "Australia/Melbourne"))
 POSTS_PER_WEEK_PER_PLATFORM = int(os.getenv("POSTS_PER_WEEK_PER_PLATFORM", "2"))
-DRY_RUN = os.getenv("DRY_RUN", "true").strip().lower() in ("1", "true", "yes")
+DRY_RUN = os.getenv("DRY_RUN", "false").strip().lower() in ("1", "true", "yes")
 
 # --- Logging ---
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
@@ -28,11 +31,7 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6")
 
 # --- Publishing ---
-# Meta's publishing APIs (Instagram, Threads) and Pinterest require a PUBLIC
-# image URL — they cannot accept a local file upload. Mirror the local /images
-# folder to a public host and set IMAGE_BASE_URL so local paths map to URLs,
-# e.g. IMAGE_BASE_URL=https://corporatecarsmelbourne.com.au/social-images
-IMAGE_BASE_URL = os.getenv("IMAGE_BASE_URL", "").rstrip("/")
+IMAGE_BASE_URL = os.getenv("IMAGE_BASE_URL", "https://ai-digital-marketing-gm68.onrender.com/social-images").rstrip("/")
 
 # Daemon: how often run_scheduler.py checks for due posts (minutes)
 PUBLISH_CHECK_INTERVAL_MINUTES = int(os.getenv("PUBLISH_CHECK_INTERVAL_MINUTES", "5"))

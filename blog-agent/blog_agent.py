@@ -108,7 +108,12 @@ def next_id(rows):
 def anthropic_client():
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
-        raise SystemExit("ANTHROPIC_API_KEY missing. Copy .env.example to .env and fill it in.")
+        for p in [os.path.join(PARENT_DIR, ".env"), os.path.join(PARENT_DIR, "corporate-cars-social-agent", ".env")]:
+            if os.path.exists(p):
+                load_dotenv(p)
+        key = os.environ.get("ANTHROPIC_API_KEY")
+    if not key:
+        raise SystemExit("ANTHROPIC_API_KEY missing. Please set ANTHROPIC_API_KEY in Environment Variables.")
     return Anthropic(api_key=key)
 
 
@@ -168,7 +173,13 @@ def wp_auth(site_key, site_cfg):
     user = os.environ.get(f"{prefix}_WP_USER")
     pw = os.environ.get(f"{prefix}_WP_APP_PASSWORD")
     if not user or not pw:
-        raise SystemExit(f"Missing {prefix}_WP_USER / {prefix}_WP_APP_PASSWORD in .env")
+        for p in [os.path.join(PARENT_DIR, ".env"), os.path.join(BASE_DIR, ".env")]:
+            if os.path.exists(p):
+                load_dotenv(p)
+        user = os.environ.get(f"{prefix}_WP_USER")
+        pw = os.environ.get(f"{prefix}_WP_APP_PASSWORD")
+    if not user or not pw:
+        raise SystemExit(f"Missing {prefix}_WP_USER / {prefix}_WP_APP_PASSWORD in environment")
     api = site_cfg["base_url"].rstrip("/") + "/wp-json/wp/v2"
     return api, (user, pw)
 
