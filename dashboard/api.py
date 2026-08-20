@@ -83,6 +83,10 @@ async def add_no_cache_headers(request, call_next):
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
+SOCIAL_IMAGES_DIR = Path(ROOT_DIR) / "corporate-cars-social-agent" / "images"
+if SOCIAL_IMAGES_DIR.exists():
+    app.mount("/social-images", StaticFiles(directory=str(SOCIAL_IMAGES_DIR)), name="social-images")
+
 # Initialize Master Orchestrator, Model Router, Scheduler, and Websites Manager
 router = ModelRouter()
 orchestrator = MasterOrchestrator(router=router)
