@@ -47,6 +47,8 @@ CONFIG_FILE = os.path.join(BASE_DIR, "config.yaml")
 FIELDNAMES = ["id", "site", "keyword", "title_hint", "suburb",
               "status", "wp_post_id", "go_live_at", "notes"]
 
+load_dotenv("/etc/secrets/.env")
+load_dotenv(os.path.join(PARENT_DIR, ".env"))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 logging.basicConfig(

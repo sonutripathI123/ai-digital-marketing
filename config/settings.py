@@ -13,7 +13,8 @@ from dotenv import load_dotenv
 # Root directory of the workspace
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
-# Load .env if present in workspace root or sub-agents
+# Load .env if present in workspace root, sub-agents, or Render /etc/secrets
+load_dotenv("/etc/secrets/.env")
 load_dotenv(ROOT_DIR / ".env")
 load_dotenv(ROOT_DIR / "blog-agent" / ".env")
 load_dotenv(ROOT_DIR / "corporate-cars-social-agent" / ".env")

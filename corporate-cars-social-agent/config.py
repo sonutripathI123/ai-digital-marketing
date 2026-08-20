@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
 ROOT_DIR = BASE_DIR.parent
+load_dotenv("/etc/secrets/.env")
 load_dotenv(BASE_DIR / ".env")
 load_dotenv(ROOT_DIR / ".env")
 load_dotenv(ROOT_DIR / "blog-agent" / ".env")
