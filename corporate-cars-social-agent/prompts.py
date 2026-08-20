@@ -78,11 +78,12 @@ PLATFORM_RULES = {
     },
     "linkedin": {
         "max_chars": 3000,
-        "target_chars": "600-1300; first 200 chars must stand alone (shown before 'see more')",
+        "target_chars": "80-120 words (approx 500-750 chars). Keep it strictly within 80-120 words. First 120 chars must hook before 'see more'.",
         "hashtag_count": "3 professional hashtags max, placed at the end",
         "cta_style": "Professional: invite corporate account enquiries, mention monthly invoicing/corporate travel programs.",
         "algorithm_notes": (
-            "LinkedIn rewards dwell time and early comments from relevant professionals. "
+            "LinkedIn rewards dwell time and clean, readable posts. "
+            "Keep the post strictly between 80 and 120 words. Avoid overly long walls of text. "
             "Use short paragraphs / line breaks for skimmability. Value-first angle "
             "(travel tips for EAs, duty-of-care for corporate travel bookers) outperforms "
             "pure promotion. No external links in the body if avoidable — mention the "
