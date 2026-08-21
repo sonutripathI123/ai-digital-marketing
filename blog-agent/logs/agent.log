@@ -159,3 +159,10 @@
 2026-08-20 11:51:24,535  INFO  write run complete. 1 draft(s) created.
 2026-08-20 11:52:07,022  INFO  Published: essendon to melbourne airport travel time -> https://corporatecarsmelbourne.com.au/essendon-airport-travel-time/
 2026-08-20 11:52:07,031  INFO  publish run complete. 1 post(s) went live.
+2026-08-21 10:19:17,295  INFO  Writing: blackburn airport transfer tips (ccm)
+2026-08-21 10:20:01,681  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-21 10:20:01,713  INFO  SEO Content Brief Agent auto-optimized post: Airport Transfer Tips Blackburn: A Traveller's Guide (Schema.org JSON-LD injected, LSI checked)
+2026-08-21 10:20:24,131  INFO  Draft created. post_id=20545, featured_media=18993, auto-live at 2026-08-21T04:50:24.131626+00:00
+2026-08-21 10:20:24,134  INFO  write run complete. 1 draft(s) created.
+2026-08-21 10:20:52,753  INFO  Published: blackburn airport transfer tips -> https://corporatecarsmelbourne.com.au/airport-transfer-tips-blackburn/
+2026-08-21 10:20:52,757  INFO  publish run complete. 1 post(s) went live.

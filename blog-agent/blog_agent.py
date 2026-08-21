@@ -684,7 +684,6 @@ def main():
     pub.add_argument("--force", action="store_true", help="Publish immediately regardless of review window")
 
     sub.add_parser("status", help="Show queue summary")
-    sub.add_parser("status", help="Show queue summary")
 
     args = p.parse_args()
     {"suggest": cmd_suggest, "write": cmd_write, "import": cmd_import,

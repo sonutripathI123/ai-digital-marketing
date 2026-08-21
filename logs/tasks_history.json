@@ -48671,6 +48671,331 @@
     "input_data": {
       "action": "publish-due"
     },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T07:40:04.639441+00:00",
+    "updated_at": "2026-08-20T07:40:04.639441+00:00"
+  },
+  {
+    "task_id": "task-b448bca0",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T07:45:07.564930+00:00",
+    "updated_at": "2026-08-20T07:45:07.564930+00:00"
+  },
+  {
+    "task_id": "task-26728dc6",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T07:50:09.637283+00:00",
+    "updated_at": "2026-08-20T07:50:09.639328+00:00"
+  },
+  {
+    "task_id": "task-5be7cec9",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T07:55:11.378337+00:00",
+    "updated_at": "2026-08-20T07:55:11.378337+00:00"
+  },
+  {
+    "task_id": "task-03109f91",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T08:00:13.495352+00:00",
+    "updated_at": "2026-08-20T08:00:13.495352+00:00"
+  },
+  {
+    "task_id": "task-babd68b9",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T08:05:00.706402+00:00",
+    "updated_at": "2026-08-20T08:05:00.706402+00:00"
+  },
+  {
+    "task_id": "task-f80b0b1e",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T08:10:02.290951+00:00",
+    "updated_at": "2026-08-20T08:10:02.290951+00:00"
+  },
+  {
+    "task_id": "task-dce87890",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T08:15:04.076474+00:00",
+    "updated_at": "2026-08-20T08:15:04.076474+00:00"
+  },
+  {
+    "task_id": "task-148c1364",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T08:20:05.275122+00:00",
+    "updated_at": "2026-08-20T08:20:05.275122+00:00"
+  },
+  {
+    "task_id": "task-3bd092a0",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T08:25:06.271098+00:00",
+    "updated_at": "2026-08-20T08:25:06.272645+00:00"
+  },
+  {
+    "task_id": "task-b0283f1e",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T08:30:07.472677+00:00",
+    "updated_at": "2026-08-20T08:30:07.472677+00:00"
+  },
+  {
+    "task_id": "task-223bd5ab",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T08:35:08.565597+00:00",
+    "updated_at": "2026-08-20T08:35:08.565597+00:00"
+  },
+  {
+    "task_id": "task-8258657b",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-20T08:40:09.621372+00:00",
+    "updated_at": "2026-08-20T08:40:09.621372+00:00"
+  },
+  {
+    "task_id": "task-5ac46c78",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
     "status": "QUEUED",
     "priority": "NORMAL",
     "requires_approval": false,
@@ -48682,7 +49007,162 @@
     "model_used": null,
     "tokens_used": 0,
     "cost_usd": 0.0,
-    "created_at": "2026-08-20T07:40:04.639441+00:00",
-    "updated_at": "2026-08-20T07:40:04.639441+00:00"
+    "created_at": "2026-08-20T08:45:10.989275+00:00",
+    "updated_at": "2026-08-20T08:45:10.989275+00:00"
+  },
+  {
+    "task_id": "task-733c6144",
+    "agent_id": "blog-agent",
+    "task_type": "write",
+    "input_data": {
+      "action": "write"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Blog Agent CLI execution failed: Traceback (most recent call last):\n  File \"C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\blog-agent\\blog_agent.py\", line 695, in <module>\n    main()\n    ~~~~^^\n  File \"C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\blog-agent\\blog_agent.py\", line 687, in main\n    sub.add_parser(\"status\", help=\"Show queue summary\")\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Python314\\Lib\\argparse.py\", line 1258, in add_parser\n    raise ValueError(f'conflicting subparser: {name}')\nValueError: conflicting subparser: status",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T04:37:31.627467+00:00",
+    "updated_at": "2026-08-21T04:37:31.627467+00:00"
+  },
+  {
+    "task_id": "task-626762d1",
+    "agent_id": "blog-agent",
+    "task_type": "publish",
+    "input_data": {
+      "action": "publish"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Blog Agent CLI execution failed: Traceback (most recent call last):\n  File \"C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\blog-agent\\blog_agent.py\", line 695, in <module>\n    main()\n    ~~~~^^\n  File \"C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\blog-agent\\blog_agent.py\", line 687, in main\n    sub.add_parser(\"status\", help=\"Show queue summary\")\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Python314\\Lib\\argparse.py\", line 1258, in add_parser\n    raise ValueError(f'conflicting subparser: {name}')\nValueError: conflicting subparser: status",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T04:38:13.185576+00:00",
+    "updated_at": "2026-08-21T04:38:13.185576+00:00"
+  },
+  {
+    "task_id": "task-df472a60",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T04:40:01.552971+00:00",
+    "updated_at": "2026-08-21T04:40:01.552971+00:00"
+  },
+  {
+    "task_id": "task-2857b455",
+    "agent_id": "blog-agent",
+    "task_type": "write",
+    "input_data": {
+      "action": "write"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Blog Agent CLI execution failed: Traceback (most recent call last):\n  File \"C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\blog-agent\\blog_agent.py\", line 695, in <module>\n    main()\n    ~~~~^^\n  File \"C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\blog-agent\\blog_agent.py\", line 687, in main\n    sub.add_parser(\"status\", help=\"Show queue summary\")\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Python314\\Lib\\argparse.py\", line 1258, in add_parser\n    raise ValueError(f'conflicting subparser: {name}')\nValueError: conflicting subparser: status",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T04:45:11.778087+00:00",
+    "updated_at": "2026-08-21T04:45:11.778087+00:00"
+  },
+  {
+    "task_id": "task-88ce1700",
+    "agent_id": "blog-agent",
+    "task_type": "publish",
+    "input_data": {
+      "action": "publish"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Blog Agent CLI execution failed: Traceback (most recent call last):\n  File \"C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\blog-agent\\blog_agent.py\", line 695, in <module>\n    main()\n    ~~~~^^\n  File \"C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\blog-agent\\blog_agent.py\", line 687, in main\n    sub.add_parser(\"status\", help=\"Show queue summary\")\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Python314\\Lib\\argparse.py\", line 1258, in add_parser\n    raise ValueError(f'conflicting subparser: {name}')\nValueError: conflicting subparser: status",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T04:45:19.866255+00:00",
+    "updated_at": "2026-08-21T04:45:19.866255+00:00"
+  },
+  {
+    "task_id": "task-80a207d9",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T04:45:26.804897+00:00",
+    "updated_at": "2026-08-21T04:45:26.804897+00:00"
+  },
+  {
+    "task_id": "task-8dbfdc85",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T04:50:13.487688+00:00",
+    "updated_at": "2026-08-21T04:50:13.487688+00:00"
   }
 ]
