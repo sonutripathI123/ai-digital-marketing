@@ -49151,6 +49151,59 @@
     "input_data": {
       "action": "publish-due"
     },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T04:50:13.487688+00:00",
+    "updated_at": "2026-08-21T04:50:13.487688+00:00"
+  },
+  {
+    "task_id": "task-ef8f8b5f",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T04:55:00.572963+00:00",
+    "updated_at": "2026-08-21T04:55:00.572963+00:00"
+  },
+  {
+    "task_id": "task-539738e1",
+    "agent_id": "monthly-report-agent",
+    "task_type": "generate_instant_mtd_report",
+    "input_data": {
+      "action": "generate_instant_mtd_report",
+      "site_id": "ccm",
+      "site": "ccm",
+      "site_url": "https://corporatecarsmelbourne.com.au"
+    },
     "status": "QUEUED",
     "priority": "NORMAL",
     "requires_approval": false,
@@ -49162,7 +49215,28 @@
     "model_used": null,
     "tokens_used": 0,
     "cost_usd": 0.0,
-    "created_at": "2026-08-21T04:50:13.487688+00:00",
-    "updated_at": "2026-08-21T04:50:13.487688+00:00"
+    "created_at": "2026-08-21T04:59:47.576377+00:00",
+    "updated_at": "2026-08-21T04:59:47.576377+00:00"
+  },
+  {
+    "task_id": "task-f00a76fb",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T05:00:02.537443+00:00",
+    "updated_at": "2026-08-21T05:00:02.537443+00:00"
   }
 ]

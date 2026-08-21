@@ -7123,3 +7123,25 @@ monitoring-agent
 2026-08-21 10:15:19,972 [INFO] [central] Created task task-88ce1700 for agent blog-agent (Status: QUEUED)
 2026-08-21 10:15:26,913 [INFO] [central] Created task task-80a207d9 for agent corporate-cars-social-agent (Status: QUEUED)
 2026-08-21 10:20:13,618 [INFO] [central] Created task task-8dbfdc85 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-21 10:25:00,774 [INFO] [central] Created task task-ef8f8b5f for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-21 10:29:47,753 [INFO] [central] Created task task-539738e1 for agent monthly-report-agent (Status: QUEUED)
+2026-08-21 10:30:02,836 [INFO] [central] Created task task-f00a76fb for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-21 10:33:06,897 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-21 10:33:06,898 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-21 10:33:06,898 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-21 10:33:06,898 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-21 10:33:06,898 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-21 10:33:06,898 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-21 10:33:06,899 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-21 10:33:06,899 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-21 10:33:06,899 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-21 10:33:06,899 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-21 10:33:06,899 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-21 10:33:06,899 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-21 10:33:06,900 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-21 10:33:06,900 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-21 10:33:06,900 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-21 10:33:06,900 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-21 10:33:06,900 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-21 10:33:06,900 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-21 10:33:06,900 [INFO] [central] Registered agent implementation: page-optimizer-agent

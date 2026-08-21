@@ -506,3 +506,9 @@
 2026-08-21 10:20:13,618 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-8dbfdc85
 2026-08-21 10:20:13,618 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
 2026-08-21 10:20:15,541 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-8dbfdc85 successfully.
+2026-08-21 10:25:00,775 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-ef8f8b5f
+2026-08-21 10:25:00,776 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-21 10:25:02,525 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-ef8f8b5f successfully.
+2026-08-21 10:30:02,837 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-f00a76fb
+2026-08-21 10:30:02,837 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-21 10:30:03,595 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-f00a76fb successfully.
