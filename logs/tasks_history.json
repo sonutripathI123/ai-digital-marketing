@@ -49250,6 +49250,59 @@
     "input_data": {
       "action": "publish-due"
     },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T05:05:03.609473+00:00",
+    "updated_at": "2026-08-21T05:05:03.609473+00:00"
+  },
+  {
+    "task_id": "task-cabdf3bf",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T05:10:04.497548+00:00",
+    "updated_at": "2026-08-21T05:10:04.497548+00:00"
+  },
+  {
+    "task_id": "task-f683cf2e",
+    "agent_id": "monthly-report-agent",
+    "task_type": "generate_instant_mtd_report",
+    "input_data": {
+      "action": "generate_instant_mtd_report",
+      "site_id": "ccm",
+      "site": "ccm",
+      "site_url": "https://corporatecarsmelbourne.com.au"
+    },
     "status": "QUEUED",
     "priority": "NORMAL",
     "requires_approval": false,
@@ -49261,7 +49314,295 @@
     "model_used": null,
     "tokens_used": 0,
     "cost_usd": 0.0,
-    "created_at": "2026-08-21T05:05:03.609473+00:00",
-    "updated_at": "2026-08-21T05:05:03.609473+00:00"
+    "created_at": "2026-08-21T05:12:46.679701+00:00",
+    "updated_at": "2026-08-21T05:12:46.679701+00:00"
+  },
+  {
+    "task_id": "task-55a0b600",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T05:15:05.312890+00:00",
+    "updated_at": "2026-08-21T05:15:05.312890+00:00"
+  },
+  {
+    "task_id": "task-91eddfd9",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 1, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}\n\n2026-08-21 11:40:27,233 INFO    publishing: Published post 31 to instagram (platform id 17899233777602789)"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T06:10:14.014001+00:00",
+    "updated_at": "2026-08-21T06:10:14.014001+00:00"
+  },
+  {
+    "task_id": "task-f89e1e89",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T06:15:12.401388+00:00",
+    "updated_at": "2026-08-21T06:15:12.401388+00:00"
+  },
+  {
+    "task_id": "task-07a12627",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T06:20:13.454393+00:00",
+    "updated_at": "2026-08-21T06:20:13.454393+00:00"
+  },
+  {
+    "task_id": "task-73f220fe",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-21T06:25:14.419353+00:00",
+    "updated_at": "2026-08-21T06:25:14.419353+00:00"
+  },
+  {
+    "task_id": "task-a774dcb9",
+    "agent_id": "blog-agent",
+    "task_type": "write",
+    "input_data": {
+      "action": "write"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "write",
+      "site": "ccm",
+      "details": "2026-08-22 11:05:06,116  INFO  Writing: east melbourne corporate car service guide (ccm)\n2026-08-22 11:05:52,608  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages \"HTTP/1.1 200 OK\"\n2026-08-22 11:05:52,878  INFO  SEO Content Brief Agent auto-optimized post: East Melbourne Corporate Car Service Guide (Schema.org JSON-LD injected, LSI checked)\n2026-08-22 11:06:12,841  INFO  Draft created. post_id=20549, featured_media=18915, auto-live at 2026-08-22T05:36:12.840784+00:00\n2026-08-22 11:06:12,849  INFO  write run complete. 1 draft(s) created."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T05:34:49.197888+00:00",
+    "updated_at": "2026-08-22T05:34:49.197888+00:00"
+  },
+  {
+    "task_id": "task-1e8f4328",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T05:35:04.076235+00:00",
+    "updated_at": "2026-08-22T05:35:04.076235+00:00"
+  },
+  {
+    "task_id": "task-7b5e5642",
+    "agent_id": "blog-agent",
+    "task_type": "publish",
+    "input_data": {
+      "action": "publish"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish",
+      "site": "ccm",
+      "details": "2026-08-22 11:06:23,141  INFO  Published: east melbourne corporate car service guide -> https://corporatecarsmelbourne.com.au/east-melbourne-corporate-car-service-guide/\n2026-08-22 11:06:23,148  INFO  publish run complete. 1 post(s) went live."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T05:36:13.484955+00:00",
+    "updated_at": "2026-08-22T05:36:13.484955+00:00"
+  },
+  {
+    "task_id": "task-b28832b8",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T05:40:07.444488+00:00",
+    "updated_at": "2026-08-22T05:40:07.444488+00:00"
+  },
+  {
+    "task_id": "task-c2a89c52",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T05:45:03.189664+00:00",
+    "updated_at": "2026-08-22T05:45:03.189664+00:00"
+  },
+  {
+    "task_id": "task-ff86caca",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T05:50:06.578907+00:00",
+    "updated_at": "2026-08-22T05:50:06.578907+00:00"
+  },
+  {
+    "task_id": "task-790ce10e",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T05:55:08.853168+00:00",
+    "updated_at": "2026-08-22T05:55:08.853168+00:00"
   }
 ]

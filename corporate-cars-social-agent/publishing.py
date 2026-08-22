@@ -28,8 +28,24 @@ def _retry_due(entry: Schedule, now: datetime) -> bool:
 
 
 def publish_due(session: Session, dry_run: bool = True) -> dict:
-    """Publish all scheduled posts whose publish_at has passed. Returns counts."""
+    """Publish all scheduled posts whose publish_at has passed. Enforces strict 1-post/day/platform rate limit."""
     now = datetime.utcnow()
+    today_start = datetime(now.year, now.month, now.day, 0, 0, 0)
+
+    # Track platforms that have already published today (strict 1 post per platform per day limit)
+    already_published_today = set()
+    today_published_rows = (
+        session.query(Post.platform)
+        .join(Schedule)
+        .filter(
+            Schedule.published == True,
+            Schedule.last_attempt_at >= today_start
+        )
+        .all()
+    )
+    for row in today_published_rows:
+        already_published_today.add(row[0])
+
     due = (
         session.query(Schedule)
         .join(Post)
@@ -42,9 +58,19 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
         .all()
     )
 
-    counts = {"published": 0, "failed": 0, "skipped_backoff": 0, "dry_run": 0}
+    counts = {"published": 0, "failed": 0, "skipped_backoff": 0, "skipped_daily_limit": 0, "dry_run": 0}
+    published_this_run = set()
+
     for entry in due:
         post = entry.post
+        plat = post.platform
+
+        # Enforce strict maximum 1 post per platform per calendar day
+        if plat in already_published_today or plat in published_this_run:
+            counts["skipped_daily_limit"] += 1
+            log.info("Skipping post %d for %s — daily limit of 1 post reached for today", post.id, plat.value)
+            continue
+
         if not _retry_due(entry, now):
             counts["skipped_backoff"] += 1
             continue
@@ -83,6 +109,8 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
         post.error_message = None
         entry.published = True
         counts["published"] += 1
+        published_this_run.add(plat)
+        already_published_today.add(plat)
         session.commit()
         log.info("Published post %d to %s (platform id %s)",
                  post.id, post.platform.value, platform_post_id)

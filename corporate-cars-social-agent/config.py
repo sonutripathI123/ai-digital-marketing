@@ -17,7 +17,11 @@ load_dotenv(ROOT_DIR / ".env")
 load_dotenv(ROOT_DIR / "blog-agent" / ".env")
 
 # --- Core app settings ---
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{(BASE_DIR / 'social_agent.db').as_posix()}")
+_raw_db = os.getenv("DATABASE_URL", "")
+if not _raw_db or _raw_db == "sqlite:///social_agent.db":
+    DATABASE_URL = f"sqlite:///{(BASE_DIR / 'social_agent.db').as_posix()}"
+else:
+    DATABASE_URL = _raw_db
 IMAGE_LIBRARY_PATH = Path(os.getenv("IMAGE_LIBRARY_PATH", str(BASE_DIR / "images")))
 TIMEZONE = ZoneInfo(os.getenv("TIMEZONE", "Australia/Melbourne"))
 POSTS_PER_WEEK_PER_PLATFORM = int(os.getenv("POSTS_PER_WEEK_PER_PLATFORM", "2"))

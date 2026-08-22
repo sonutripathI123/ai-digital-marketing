@@ -694,3 +694,9 @@ ValueError: conflicting subparser: status. Retrying.
   File "C:\Python314\Lib\argparse.py", line 1258, in add_parser
     raise ValueError(f'conflicting subparser: {name}')
 ValueError: conflicting subparser: status
+2026-08-22 11:04:49,352 [INFO] [agent:agent.blog-agent] Starting execution for task task-a774dcb9
+2026-08-22 11:04:49,354 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=write, site=ccm
+2026-08-22 11:06:13,482 [INFO] [agent:agent.blog-agent] Completed task task-a774dcb9 successfully.
+2026-08-22 11:06:13,883 [INFO] [agent:agent.blog-agent] Starting execution for task task-7b5e5642
+2026-08-22 11:06:13,886 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=publish, site=ccm
+2026-08-22 11:06:24,234 [INFO] [agent:agent.blog-agent] Completed task task-7b5e5642 successfully.

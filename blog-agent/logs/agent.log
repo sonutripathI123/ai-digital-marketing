@@ -166,3 +166,10 @@
 2026-08-21 10:20:24,134  INFO  write run complete. 1 draft(s) created.
 2026-08-21 10:20:52,753  INFO  Published: blackburn airport transfer tips -> https://corporatecarsmelbourne.com.au/airport-transfer-tips-blackburn/
 2026-08-21 10:20:52,757  INFO  publish run complete. 1 post(s) went live.
+2026-08-22 11:05:06,116  INFO  Writing: east melbourne corporate car service guide (ccm)
+2026-08-22 11:05:52,608  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-22 11:05:52,878  INFO  SEO Content Brief Agent auto-optimized post: East Melbourne Corporate Car Service Guide (Schema.org JSON-LD injected, LSI checked)
+2026-08-22 11:06:12,841  INFO  Draft created. post_id=20549, featured_media=18915, auto-live at 2026-08-22T05:36:12.840784+00:00
+2026-08-22 11:06:12,849  INFO  write run complete. 1 draft(s) created.
+2026-08-22 11:06:23,141  INFO  Published: east melbourne corporate car service guide -> https://corporatecarsmelbourne.com.au/east-melbourne-corporate-car-service-guide/
+2026-08-22 11:06:23,148  INFO  publish run complete. 1 post(s) went live.
