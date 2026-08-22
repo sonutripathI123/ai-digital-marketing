@@ -1897,3 +1897,7 @@ INFO:     127.0.0.1:56814 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
 2026-08-22 11:45:07,760 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-838135fe
 2026-08-22 11:45:07,763 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
 2026-08-22 11:45:09,705 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-838135fe successfully.
+2026-08-22 11:50:10,003 [INFO] [central] Created task task-9bdde064 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-22 11:50:10,003 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-9bdde064
+2026-08-22 11:50:10,003 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-22 11:50:11,421 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-9bdde064 successfully.
