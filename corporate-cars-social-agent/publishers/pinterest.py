@@ -13,7 +13,7 @@ import requests
 
 from config import PINTEREST_ACCESS_TOKEN, PINTEREST_BOARD_ID, WEBSITE_URL
 from models import Post
-from publishers.base import PublishError, image_public_url, require
+from publishers.base import PublishError, image_public_url, require, validate_post_integrity
 
 log = logging.getLogger(__name__)
 API = "https://api.pinterest.com/v5"
@@ -23,6 +23,7 @@ def publish(post: Post) -> str:
     require("pinterest",
             PINTEREST_ACCESS_TOKEN=PINTEREST_ACCESS_TOKEN,
             PINTEREST_BOARD_ID=PINTEREST_BOARD_ID)
+    validate_post_integrity(post, "pinterest")
 
     image_url = image_public_url(post)
     if not image_url:

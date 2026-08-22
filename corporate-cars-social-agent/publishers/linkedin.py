@@ -14,7 +14,7 @@ import requests
 
 from config import LINKEDIN_ACCESS_TOKEN, LINKEDIN_ORGANIZATION_URN
 from models import Post
-from publishers.base import PublishError, full_text, image_local_path, require
+from publishers.base import PublishError, full_text, image_local_path, require, validate_post_integrity
 
 log = logging.getLogger(__name__)
 API = "https://api.linkedin.com/v2"
@@ -63,12 +63,14 @@ def publish(post: Post) -> str:
     require("linkedin",
             LINKEDIN_ACCESS_TOKEN=LINKEDIN_ACCESS_TOKEN,
             LINKEDIN_ORGANIZATION_URN=LINKEDIN_ORGANIZATION_URN)
+    validate_post_integrity(post, "linkedin")
 
-    media = []
     path = image_local_path(post)
-    if path:
-        asset = _upload_image(path)
-        media = [{"status": "READY", "media": asset}]
+    if not path:
+        raise PublishError("linkedin: Local image file missing — image is strictly mandatory.", retryable=False)
+
+    asset = _upload_image(path)
+    media = [{"status": "READY", "media": asset}]
 
     body = {
         "author": LINKEDIN_ORGANIZATION_URN,
@@ -76,8 +78,8 @@ def publish(post: Post) -> str:
         "specificContent": {
             "com.linkedin.ugc.ShareContent": {
                 "shareCommentary": {"text": full_text(post)},
-                "shareMediaCategory": "IMAGE" if media else "NONE",
-                **({"media": media} if media else {}),
+                "shareMediaCategory": "IMAGE",
+                "media": media,
             }
         },
         "visibility": {"com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"},

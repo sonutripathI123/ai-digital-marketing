@@ -14,7 +14,7 @@ import requests
 
 from config import INSTAGRAM_BUSINESS_ACCOUNT_ID, META_ACCESS_TOKEN
 from models import Post
-from publishers.base import PublishError, full_text, image_public_url, require
+from publishers.base import PublishError, full_text, image_public_url, require, validate_post_integrity
 
 log = logging.getLogger(__name__)
 GRAPH = "https://graph.facebook.com/v21.0"
@@ -24,6 +24,7 @@ def publish(post: Post) -> str:
     require("instagram",
             META_ACCESS_TOKEN=META_ACCESS_TOKEN,
             INSTAGRAM_BUSINESS_ACCOUNT_ID=INSTAGRAM_BUSINESS_ACCOUNT_ID)
+    validate_post_integrity(post, "instagram")
 
     image_url = image_public_url(post)
     if not image_url:

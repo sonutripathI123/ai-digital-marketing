@@ -13,7 +13,7 @@ from requests_oauthlib import OAuth1
 
 from config import X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET, X_API_KEY, X_API_SECRET
 from models import Post
-from publishers.base import PublishError, full_text, image_local_path, require
+from publishers.base import PublishError, full_text, image_local_path, require, validate_post_integrity
 
 log = logging.getLogger(__name__)
 
@@ -28,20 +28,23 @@ def _auth() -> OAuth1:
 def publish(post: Post) -> str:
     require("x", X_API_KEY=X_API_KEY, X_API_SECRET=X_API_SECRET,
             X_ACCESS_TOKEN=X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET=X_ACCESS_TOKEN_SECRET)
+    validate_post_integrity(post, "x")
     auth = _auth()
 
-    media_ids = []
     path = image_local_path(post)
-    if path:
-        with open(path, "rb") as f:
-            r = requests.post(MEDIA_UPLOAD, files={"media": f}, auth=auth, timeout=120)
-        if r.status_code not in (200, 201):
-            raise PublishError(f"x media upload failed: {r.status_code} {r.text[:300]}")
-        media_ids = [r.json()["media_id_string"]]
+    if not path:
+        raise PublishError("x: Local image file missing — image is strictly mandatory.", retryable=False)
 
-    payload: dict = {"text": full_text(post)[:280]}
-    if media_ids:
-        payload["media"] = {"media_ids": media_ids}
+    with open(path, "rb") as f:
+        r = requests.post(MEDIA_UPLOAD, files={"media": f}, auth=auth, timeout=120)
+    if r.status_code not in (200, 201):
+        raise PublishError(f"x media upload failed: {r.status_code} {r.text[:300]}")
+    media_ids = [r.json()["media_id_string"]]
+
+    payload: dict = {
+        "text": full_text(post)[:280],
+        "media": {"media_ids": media_ids}
+    }
 
     r = requests.post(TWEETS, json=payload, auth=auth, timeout=60)
     if r.status_code != 201:

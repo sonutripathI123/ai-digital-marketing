@@ -13,7 +13,7 @@ import requests
 
 from config import META_ACCESS_TOKEN, META_PAGE_ID
 from models import Post
-from publishers.base import PublishError, full_text, image_public_url, require
+from publishers.base import PublishError, full_text, image_public_url, require, validate_post_integrity
 
 log = logging.getLogger(__name__)
 GRAPH = "https://graph.facebook.com/v21.0"
@@ -21,21 +21,18 @@ GRAPH = "https://graph.facebook.com/v21.0"
 
 def publish(post: Post) -> str:
     require("facebook", META_ACCESS_TOKEN=META_ACCESS_TOKEN, META_PAGE_ID=META_PAGE_ID)
+    validate_post_integrity(post, "facebook")
 
     image_url = image_public_url(post)
-    if image_url:
-        r = requests.post(
-            f"{GRAPH}/{META_PAGE_ID}/photos",
-            data={"url": image_url, "message": full_text(post),
-                  "access_token": META_ACCESS_TOKEN},
-            timeout=60,
-        )
-    else:
-        r = requests.post(
-            f"{GRAPH}/{META_PAGE_ID}/feed",
-            data={"message": full_text(post), "access_token": META_ACCESS_TOKEN},
-            timeout=60,
-        )
+    if not image_url:
+        raise PublishError("facebook: Missing public image URL — image is strictly mandatory.", retryable=False)
+
+    r = requests.post(
+        f"{GRAPH}/{META_PAGE_ID}/photos",
+        data={"url": image_url, "message": full_text(post),
+              "access_token": META_ACCESS_TOKEN},
+        timeout=60,
+    )
     if r.status_code != 200:
         raise PublishError(f"facebook publish failed: {r.status_code} {r.text[:300]}")
     body = r.json()

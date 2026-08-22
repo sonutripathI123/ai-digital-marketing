@@ -1881,3 +1881,11 @@ INFO:     127.0.0.1:52048 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
 INFO:     127.0.0.1:52048 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
 INFO:     127.0.0.1:63411 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
 INFO:     127.0.0.1:56814 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+2026-08-22 11:30:14,084 [INFO] [central] Created task task-ed121d29 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-22 11:30:14,087 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-ed121d29
+2026-08-22 11:30:14,088 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-22 11:30:16,570 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-ed121d29 successfully.
+2026-08-22 11:35:01,933 [INFO] [central] Created task task-bc6723ad for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-22 11:35:01,935 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-bc6723ad
+2026-08-22 11:35:01,936 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-22 11:35:04,042 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-bc6723ad successfully.

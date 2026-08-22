@@ -92,3 +92,35 @@ def image_public_url(post: Post) -> str | None:
 
     cloud_base = os.getenv("RENDER_EXTERNAL_URL", "https://ai-digital-marketing-gm68.onrender.com").rstrip("/")
     return f"{cloud_base}/social-images/{encoded_path}"
+
+
+def validate_post_integrity(post: Post, platform: str) -> None:
+    """
+    STRICT DUAL CONTENT + IMAGE MANDATORY VALIDATION:
+    Enforces that a post MUST have BOTH substantive caption text AND a verified image.
+    Never publish image-only or text-only posts across any platform.
+    """
+    # 1. Text caption validation
+    caption = (post.caption or "").strip()
+    if not caption or len(caption) < 25:
+        raise PublishError(
+            f"{platform}: Post rejected by Content Guard — substantive caption is missing (found {len(caption)} chars, min 25 required). Both image AND content are strictly mandatory.",
+            retryable=False
+        )
+
+    # 2. Image attachment validation
+    if post.image is None and not post.image_id:
+        raise PublishError(
+            f"{platform}: Post rejected by Image Guard — no image attached. Both image AND content are strictly mandatory.",
+            retryable=False
+        )
+
+    # 3. Image file / URL validation
+    local_p = image_local_path(post)
+    pub_url = image_public_url(post)
+
+    if not local_p and not pub_url:
+        raise PublishError(
+            f"{platform}: Post rejected by Image Guard — image file or public CDN URL could not be resolved.",
+            retryable=False
+        )

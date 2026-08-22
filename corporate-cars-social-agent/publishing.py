@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 from config import MAX_PUBLISH_ATTEMPTS, RETRY_BASE_DELAY_SECONDS
 from models import Post, PostStatus, Schedule
 from publishers import PublishError, publish_post
-from publishers.base import full_text, image_public_url
+from publishers.base import full_text, image_public_url, validate_post_integrity
 
 log = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ def _retry_due(entry: Schedule, now: datetime) -> bool:
 
 
 def publish_due(session: Session, dry_run: bool = True) -> dict:
-    """Publish all scheduled posts whose publish_at has passed. Enforces strict 1-post/day/platform rate limit."""
+    """Publish all scheduled posts whose publish_at has passed. Enforces strict 1-post/day/platform rate limit and dual image+content guard."""
     now = datetime.utcnow()
     today_start = datetime(now.year, now.month, now.day, 0, 0, 0)
 
@@ -58,12 +58,25 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
         .all()
     )
 
-    counts = {"published": 0, "failed": 0, "skipped_backoff": 0, "skipped_daily_limit": 0, "dry_run": 0}
+    counts = {"published": 0, "failed": 0, "skipped_backoff": 0, "skipped_daily_limit": 0, "skipped_integrity": 0, "dry_run": 0}
     published_this_run = set()
 
     for entry in due:
         post = entry.post
         plat = post.platform
+
+        # STRICT CONTENT + IMAGE INTEGRITY GUARD:
+        # Require BOTH high-res image and substantive caption text. Never publish text-only or image-only posts.
+        try:
+            validate_post_integrity(post, plat.value)
+        except PublishError as e:
+            post.status = PostStatus.failed
+            post.error_message = str(e)
+            counts["skipped_integrity"] += 1
+            counts["failed"] += 1
+            session.commit()
+            log.warning("Post %d for %s BLOCKED by Content+Image Safety Guard: %s", post.id, plat.value, e)
+            continue
 
         # Enforce strict maximum 1 post per platform per calendar day
         if plat in already_published_today or plat in published_this_run:
