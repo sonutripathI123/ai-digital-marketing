@@ -45,13 +45,14 @@ def _build_user_prompt(keyword: Keyword, platform: str) -> str:
         f"Platform: {platform}\n"
         f"SEO keyword to target: \"{keyword.keyword}\""
         + (f" (category: {keyword.category})" if keyword.category else "")
-        + "\n\nPLATFORM RULES\n"
+        + "\n\nPLATFORM RULES & STRICT WORD LIMITS\n"
+        f"- Target Word Count: {rules.get('target_words', '40-70 words')} (Strictly do not exceed {rules.get('max_words', 70)} words)\n"
         f"- Hard character limit (caption + hashtags combined): {rules['max_chars']}\n"
-        f"- Target length: {rules['target_chars']}\n"
+        f"- Target character length: {rules['target_chars']}\n"
         f"- Hashtags: {rules['hashtag_count']}\n"
         f"- CTA style: {rules['cta_style']}\n"
         f"- Algorithm guidance: {rules['algorithm_notes']}\n\n"
-        "Write the post now. Respond with the JSON object only."
+        "Write the post now. Keep it crisp, compact, and punchy (max 2-3 short paragraphs). Respond with the JSON object only."
     )
 
 

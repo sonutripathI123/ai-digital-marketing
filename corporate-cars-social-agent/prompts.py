@@ -35,11 +35,12 @@ WRITING STYLE - sound like a real person, not an ad or AI:
 - Keep the calm, premium, confident feel - but keep it easy to read.
 - No cliches, no hype, no exclamation-heavy lines. Vary sentence length so it reads naturally.
 - Contractions are fine.
+- CONCISENESS (CRITICAL): Keep all posts short, crisp, and easily skimmable on mobile screens. Maximum 2-3 short paragraphs. Never write long essays or walls of text. Strictly adhere to the word count targets below.
 
 TASK
 Write ONE social media post for the platform specified, targeting the SEO keyword supplied. \
 Weave the keyword in naturally — never stuff it. Follow the platform rules given in the user \
-message exactly (character limits, hashtag count, CTA style).
+message exactly (character limits, word limits, hashtag count, CTA style).
 
 OUTPUT FORMAT — respond with ONLY a JSON object, no markdown fences, no commentary:
 {
@@ -54,84 +55,82 @@ OUTPUT FORMAT — respond with ONLY a JSON object, no markdown fences, no commen
 # model follows; review quarterly (see maintenance note above).
 PLATFORM_RULES = {
     "instagram": {
-        "max_chars": 2200,
-        "target_chars": "125-400 (first 125 chars must hook — that's what shows before '...more')",
-        "hashtag_count": "3-5 niche, specific hashtags (mass generic tags no longer help reach)",
-        "cta_style": "Soft CTA: 'Tap the link in bio to book' or invite saves/shares ('Save this for your next Melbourne trip').",
+        "max_words": 70,
+        "max_chars": 500,
+        "target_words": "40-70 words (2-3 short, punchy paragraphs)",
+        "target_chars": "250-450 chars (first 100 chars must hook before '...more')",
+        "hashtag_count": "3-4 clean, relevant hashtags",
+        "cta_style": "Soft CTA: 'Tap the link in bio to book' or 'Save this for your next Melbourne trip'.",
         "algorithm_notes": (
-            "Instagram ranks by watch/dwell time, sends (shares via DM), and saves. "
-            "Write a scroll-stopping first line. Encourage saves/shares over likes. "
-            "Keyword-rich captions matter for Instagram SEO search. No engagement bait "
-            "('like if you agree') — it is downranked."
+            "Instagram users skim quickly. Keep the total post under 70 words. "
+            "Write a strong first hook line. 2 short paragraphs + 1 CTA line maximum."
         ),
     },
     "facebook": {
-        "max_chars": 1500,
-        "target_chars": "80-250; short, conversational, one idea per post",
-        "hashtag_count": "0-2 (hashtags add little on Facebook; omit or keep minimal)",
-        "cta_style": "Direct but warm: 'Request a quote at corporatecarsmelbourne.com.au' or 'Call us to arrange your transfer.'",
+        "max_words": 60,
+        "max_chars": 400,
+        "target_words": "30-55 words (conversational, clean, 1 key message)",
+        "target_chars": "200-350 chars",
+        "hashtag_count": "0-2 hashtags maximum",
+        "cta_style": "Direct and clear: 'Request a quote at corporatecarsmelbourne.com.au' or 'Call to reserve your chauffeur.'",
         "algorithm_notes": (
-            "Facebook favours posts that spark genuine comments and shares from the "
-            "page's existing audience, and native content over link-heavy posts. Ask a "
-            "light question when natural. Avoid clickbait phrasing and all-caps — downranked."
+            "Facebook posts perform best when short and conversational. "
+            "Keep it under 60 words. No long essays. One clear takeaway."
         ),
     },
     "linkedin": {
-        "max_chars": 3000,
-        "target_chars": "80-120 words (approx 500-750 chars). Keep it strictly within 80-120 words. First 120 chars must hook before 'see more'.",
-        "hashtag_count": "3 professional hashtags max, placed at the end",
-        "cta_style": "Professional: invite corporate account enquiries, mention monthly invoicing/corporate travel programs.",
+        "max_words": 90,
+        "max_chars": 650,
+        "target_words": "60-90 words (compact executive perspective, skimmable lines)",
+        "target_chars": "350-600 chars (first 100 chars must hook before 'see more')",
+        "hashtag_count": "2-3 professional hashtags placed at the end",
+        "cta_style": "Professional: mention corporate accounts, priority invoicing, or booking for executive teams.",
         "algorithm_notes": (
-            "LinkedIn rewards dwell time and clean, readable posts. "
-            "Keep the post strictly between 80 and 120 words. Avoid overly long walls of text. "
-            "Use short paragraphs / line breaks for skimmability. Value-first angle "
-            "(travel tips for EAs, duty-of-care for corporate travel bookers) outperforms "
-            "pure promotion. No external links in the body if avoidable — mention the "
-            "website by name instead."
+            "LinkedIn rewards skimmable, concise posts. Keep strictly between 60 and 90 words. "
+            "Use line breaks between 1-2 sentence thoughts. Avoid heavy jargon."
         ),
     },
     "x": {
+        "max_words": 40,
         "max_chars": 280,
-        "target_chars": "under 280 INCLUDING hashtags — be sharp and punchy",
+        "target_words": "20-38 words",
+        "target_chars": "under 280 chars INCLUDING hashtags — sharp and punchy",
         "hashtag_count": "1-2 max",
-        "cta_style": "Minimal: 'Book: corporatecarsmelbourne.com.au' or a crisp imperative.",
+        "cta_style": "Minimal: 'Book: corporatecarsmelbourne.com.au'",
         "algorithm_notes": (
-            "X boosts replies and dwell time; links in the main post are deprioritised, "
-            "so lead with the message. Punchy, confident, timely (events, flights, "
-            "Melbourne happenings) performs best."
+            "X requires immediate punch. 1-2 tight sentences maximum."
         ),
     },
     "threads": {
-        "max_chars": 500,
-        "target_chars": "100-350; conversational, lighter tone than LinkedIn but still premium",
-        "hashtag_count": "0-1 (Threads uses topic tags sparingly; one tag max)",
-        "cta_style": "Very soft — conversational mention of the service; hard-sell is punished by low engagement.",
+        "max_words": 50,
+        "max_chars": 350,
+        "target_words": "30-50 words (light, conversational thought)",
+        "target_chars": "150-320 chars",
+        "hashtag_count": "0-1 topic tag max",
+        "cta_style": "Very soft mention of the service.",
         "algorithm_notes": (
-            "Threads favours conversation starters and personality. Reads like a "
-            "knowledgeable local expert sharing a thought, not an ad. Questions and "
-            "hot-takes about travel/Melbourne do well."
+            "Casual, expert insight about Melbourne corporate travel in 30-50 words."
         ),
     },
     "pinterest": {
-        "max_chars": 500,
-        "target_chars": "Title ≤ 100 chars (put it as the first line of the caption), description 150-400 chars",
-        "hashtag_count": "0 (Pinterest ignores hashtags; use natural keyword phrases instead)",
-        "cta_style": "SEO-style: 'Plan your Melbourne airport transfer at corporatecarsmelbourne.com.au'.",
+        "max_words": 45,
+        "max_chars": 350,
+        "target_words": "25-45 words (1 catchy title line + 2 short SEO description sentences)",
+        "target_chars": "Title ≤ 80 chars, description 150-280 chars",
+        "hashtag_count": "0 hashtags (natural SEO keyword phrases)",
+        "cta_style": "SEO-style: 'Book your Melbourne airport transfer at corporatecarsmelbourne.com.au'.",
         "algorithm_notes": (
-            "Pinterest is a search engine: pack the title and description with natural "
-            "keyword phrases (e.g. 'Melbourne airport chauffeur', 'luxury wedding car "
-            "hire Melbourne'). Evergreen phrasing — pins surface for months. First line "
-            "of caption = pin title."
+            "First line = Pin Title. Followed by 2 sentences with natural keywords."
         ),
     },
 }
 
 # Hard character caps enforced in code after generation (caption + hashtags)
 HARD_LIMITS = {
-    "instagram": 2200,
-    "facebook": 5000,
-    "linkedin": 3000,
+    "instagram": 550,
+    "facebook": 450,
+    "linkedin": 750,
     "x": 280,
-    "threads": 500,
-    "pinterest": 800,
+    "threads": 380,
+    "pinterest": 400,
 }
