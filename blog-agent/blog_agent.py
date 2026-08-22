@@ -244,7 +244,7 @@ def wp_create_draft(api, auth, post, featured_media_id=None):
         "slug": post["slug"],
         "content": body_html,
         "excerpt": post["meta_description"],
-        "status": "draft",
+        "status": "publish",
         "categories": categories_list,
         "tags": tag_ids,
         "meta": {
