@@ -188,15 +188,20 @@ def fetch_real_social_analytics(site_domain: str = "https://corporatecarsmelbour
                 WHERE p.status = 'published'
                 ORDER BY COALESCE(s.publish_at, p.created_at) DESC
             """)
-            existing_ids = {p.get("platform_post_id") for p in published_history if p.get("platform_post_id")}
+            existing_ids = {str(p.get("platform_post_id")) for p in published_history if p.get("platform_post_id")}
+            existing_titles = {str(p.get("title", ""))[:35].lower() for p in published_history if p.get("title")}
             for r in cur.fetchall():
-                pid = r[4] or ""
-                if pid and pid in existing_ids:
-                    continue
+                pid = str(r[4] or "")
                 caption_clean = r[2].strip() if r[2] else ""
                 first_line = caption_clean.split("\n")[0] if caption_clean else f"Post #{r[0]}"
                 if len(first_line) > 75:
                     first_line = first_line[:72] + "..."
+                
+                # Deduplicate by platform_post_id or matching opening title
+                if pid and pid in existing_ids:
+                    continue
+                if first_line[:35].lower() in existing_titles and r[1].lower() == "instagram":
+                    continue
                 plat = r[1].lower()
                 
                 # Check if we have cached metrics
