@@ -329,3 +329,7 @@
 2026-08-18 17:48:09,020 [INFO] [agent:agent.internal-linking-agent] Executing InternalLinkingAgent task: action=audit_page, source_url='https://corporatecarsmelbourne.com.au/car-service-with-baby-seat-melbourne/'
 2026-08-18 17:48:09,022 [INFO] [agent:agent.internal-linking-agent] Auditing internal links for slug='car-service-with-baby-seat-melbourne', site='ccm'
 2026-08-18 17:48:52,583 [INFO] [agent:agent.internal-linking-agent] Completed task task-d9977a0c successfully.
+2026-08-23 20:40:09,673 [INFO] [agent:agent.internal-linking-agent] Starting execution for task task-d75332bd
+2026-08-23 20:40:09,680 [INFO] [agent:agent.internal-linking-agent] Executing InternalLinkingAgent task: action=audit_page, source_url='https://corporatecarsmelbourne.com.au/dandenong-early-morning-flight-plan/'
+2026-08-23 20:40:09,685 [INFO] [agent:agent.internal-linking-agent] Auditing internal links for slug='dandenong-early-morning-flight-plan', site='ccm'
+2026-08-23 20:40:14,096 [INFO] [agent:agent.internal-linking-agent] Completed task task-d75332bd successfully.

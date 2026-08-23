@@ -52053,6 +52053,118 @@
       "source_url": "https://corporatecarsmelbourne.com.au/dandenong-early-morning-flight-plan/",
       "site_key": "ccm"
     },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "post_id": 20531,
+      "post_type": "post",
+      "post_title": "Early Flight From Dandenong: A Stress-Free Plan - Dandenong Early Flight Plan",
+      "post_url": "https://corporatecarsmelbourne.com.au/dandenong-early-morning-flight-plan/",
+      "slug": "dandenong-early-morning-flight-plan",
+      "existing_links_count": 5,
+      "existing_links": [
+        {
+          "href": "https://corporatecarsmelbourne.com.au/chauffer-services-in-dandenong/",
+          "anchor_text": "chauffer services in dandenong",
+          "is_internal": true,
+          "quality": "Optimal",
+          "verdict_badge": "success",
+          "notes": "Good descriptive anchor text pointing to a relevant target page."
+        },
+        {
+          "href": "https://en.wikipedia.org/wiki/Dandenong,_Victoria",
+          "anchor_text": "Dandenong",
+          "is_internal": false,
+          "quality": "External Link",
+          "verdict_badge": "info",
+          "notes": "External authority citation. Ensure target opens in new tab or has rel='noopener'."
+        },
+        {
+          "href": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers-the-complete-guide-for-first-time-visitors-2026/",
+          "anchor_text": "Melbourne airport transfers guide",
+          "is_internal": true,
+          "quality": "Optimal",
+          "verdict_badge": "success",
+          "notes": "Good descriptive anchor text pointing to a relevant target page."
+        },
+        {
+          "href": "https://corporatecarsmelbourne.com.au/",
+          "anchor_text": "corporate chauffeur Melbourne",
+          "is_internal": true,
+          "quality": "Optimal",
+          "verdict_badge": "success",
+          "notes": "Good descriptive anchor text pointing to a relevant target page."
+        },
+        {
+          "href": "https://corporatecarsmelbourne.com.au/request-a-quote/",
+          "anchor_text": "request a quote",
+          "is_internal": true,
+          "quality": "Optimal",
+          "verdict_badge": "success",
+          "notes": "Good descriptive anchor text pointing to a relevant target page."
+        }
+      ],
+      "opportunities_count": 3,
+      "opportunities": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers/",
+          "target_keyword": "Airport Transfers",
+          "category": "Core Service",
+          "matched_anchor": "airport transfers",
+          "sentence_snippet": "If you are unsure which route suits your flight, our Melbourne <mark style=\"background:rgba(245,158,11,0.3); color:#f59e0b; padding:2px 6px; border-radius:4px; font-weight:700;\">airport transfers</mark> guide breaks down both options in detail.",
+          "raw_sentence": "If you are unsure which route suits your flight, our Melbourne airport transfers guide breaks down both options in detail.",
+          "relevance_score": 96,
+          "selected": true
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers/",
+          "target_keyword": "Corporate Chauffeur",
+          "category": "Core Service",
+          "matched_anchor": "corporate chauffeur",
+          "sentence_snippet": "If that sounds like your itinerary, explore <mark style=\"background:rgba(245,158,11,0.3); color:#f59e0b; padding:2px 6px; border-radius:4px; font-weight:700;\">corporate chauffeur</mark> Melbourne services built around back-to-back schedules.",
+          "raw_sentence": "If that sounds like your itinerary, explore corporate chauffeur Melbourne services built around back-to-back schedules.",
+          "relevance_score": 96,
+          "selected": true
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/melbourne-airport-transfers/",
+          "target_keyword": "Melbourne Airport Transfers",
+          "category": "service",
+          "matched_anchor": "Melbourne airport transfers",
+          "sentence_snippet": "If you are unsure which route suits your flight, our <mark style=\"background:rgba(245,158,11,0.3); color:#f59e0b; padding:2px 6px; border-radius:4px; font-weight:700;\">Melbourne airport transfers</mark> guide breaks down both options in detail.",
+          "raw_sentence": "If you are unsure which route suits your flight, our Melbourne airport transfers guide breaks down both options in detail.",
+          "relevance_score": 96,
+          "selected": true
+        }
+      ],
+      "audit_score": 100,
+      "seo_recommendations": [
+        "Current internal links found: 5. Google recommends 3 to 5 internal links per 1,000 words.",
+        "Distribute links evenly across the Introduction, Body paragraphs, and Conclusion CTA.",
+        "Use descriptive target keyword anchors (e.g. 'Melbourne Airport Transfers') rather than generic words."
+      ]
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "deterministic-link-audit-engine",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T15:10:08.991184+00:00",
+    "updated_at": "2026-08-23T15:10:08.991184+00:00"
+  },
+  {
+    "task_id": "task-55602480",
+    "agent_id": "ga4-reporting-agent",
+    "task_type": "fetch_overview",
+    "input_data": {
+      "action": "fetch_overview",
+      "site_id": "ccm",
+      "site": "ccm",
+      "site_url": "https://corporatecarsmelbourne.com.au"
+    },
     "status": "QUEUED",
     "priority": "NORMAL",
     "requires_approval": false,
@@ -52064,7 +52176,102 @@
     "model_used": null,
     "tokens_used": 0,
     "cost_usd": 0.0,
-    "created_at": "2026-08-23T15:10:08.991184+00:00",
-    "updated_at": "2026-08-23T15:10:08.991184+00:00"
+    "created_at": "2026-08-23T15:12:59.623363+00:00",
+    "updated_at": "2026-08-23T15:12:59.623363+00:00"
+  },
+  {
+    "task_id": "task-d351ea9a",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T15:15:08.056560+00:00",
+    "updated_at": "2026-08-23T15:15:08.056560+00:00"
+  },
+  {
+    "task_id": "task-fed7e1db",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T15:20:14.648639+00:00",
+    "updated_at": "2026-08-23T15:20:14.648639+00:00"
+  },
+  {
+    "task_id": "task-ac4ec413",
+    "agent_id": "seo-keyword-agent",
+    "task_type": "research",
+    "input_data": {
+      "action": "research",
+      "site_id": "ccm",
+      "site": "ccm",
+      "site_url": "https://corporatecarsmelbourne.com.au"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T15:21:02.839795+00:00",
+    "updated_at": "2026-08-23T15:21:02.839795+00:00"
+  },
+  {
+    "task_id": "task-3ce18bed",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T15:25:01.944313+00:00",
+    "updated_at": "2026-08-23T15:25:01.944313+00:00"
   }
 ]

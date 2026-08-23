@@ -34,18 +34,18 @@ DEFAULT_PROVIDER: str = os.getenv("DEFAULT_AI_PROVIDER", "anthropic")
 MODEL_CONFIG: Dict[str, Dict[str, Any]] = {
     "ROUTINE": {
         "provider": os.getenv("MODEL_ROUTINE_PROVIDER", "anthropic"),
-        "primary_model": os.getenv("MODEL_ROUTINE_PRIMARY", "claude-3-5-haiku-20241022"),
-        "fallback_model": os.getenv("MODEL_ROUTINE_FALLBACK", "claude-3-5-sonnet-20241022"),
+        "primary_model": os.getenv("MODEL_ROUTINE_PRIMARY", "claude-sonnet-4-6"),
+        "fallback_model": os.getenv("MODEL_ROUTINE_FALLBACK", "claude-sonnet-4-6"),
     },
     "STANDARD": {
         "provider": os.getenv("MODEL_STANDARD_PROVIDER", "anthropic"),
-        "primary_model": os.getenv("MODEL_STANDARD_PRIMARY", "claude-3-5-sonnet-20241022"),
-        "fallback_model": os.getenv("MODEL_STANDARD_FALLBACK", "claude-3-7-sonnet-20250219"),
+        "primary_model": os.getenv("MODEL_STANDARD_PRIMARY", "claude-sonnet-4-6"),
+        "fallback_model": os.getenv("MODEL_STANDARD_FALLBACK", "claude-sonnet-4-6"),
     },
     "COMPLEX": {
         "provider": os.getenv("MODEL_COMPLEX_PROVIDER", "anthropic"),
-        "primary_model": os.getenv("MODEL_COMPLEX_PRIMARY", "claude-3-7-sonnet-20250219"),
-        "fallback_model": os.getenv("MODEL_COMPLEX_FALLBACK", "claude-3-opus-20240229"),
+        "primary_model": os.getenv("MODEL_COMPLEX_PRIMARY", "claude-sonnet-4-6"),
+        "fallback_model": os.getenv("MODEL_COMPLEX_FALLBACK", "claude-sonnet-4-6"),
     },
 }
 

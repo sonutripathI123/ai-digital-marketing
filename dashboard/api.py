@@ -33,6 +33,7 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("dashboard_api")
 
+from core.ai_layer.base import LLMRequest, TaskComplexity
 from agents.blog_agent_adapter import BlogAgentAdapter
 from agents.social_agent_adapter import SocialAgentAdapter
 from agents.seo_keyword_agent import SEOKeywordAgent
@@ -1373,7 +1374,7 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
 
 @app.post("/api/seo/keyword/analyze")
 def analyze_custom_keyword(req: KeywordAnalyzeRequest):
-    """Deep SEO & Commercial Intent Analysis for any custom keyword."""
+    """Deep SEO & Commercial Intent Analysis for any custom keyword powered by Claude AI & SEO Router."""
     raw_kw = req.keyword.strip()
     if not raw_kw:
         raise HTTPException(status_code=400, detail="Please provide a keyword to analyze.")
@@ -1382,8 +1383,7 @@ def analyze_custom_keyword(req: KeywordAnalyzeRequest):
     site_id = (req.site_id or "ccm").strip()
     site_prof = websites_mgr.get(site_id)
     site_name = site_prof.name if site_prof else "Corporate Cars Melbourne"
-
-    kw_lower = raw_kw.lower()
+    site_domain = site_prof.domain if site_prof else "https://corporatecarsmelbourne.com.au"
 
     # Suburb detection list
     melb_suburbs = [
@@ -1396,13 +1396,86 @@ def analyze_custom_keyword(req: KeywordAnalyzeRequest):
     ]
     detected_suburb = loc
     for s in melb_suburbs:
-        if s.lower() in kw_lower:
+        if s.lower() in raw_kw.lower():
             detected_suburb = s
             break
 
-    # Intent classification
+    # 1. Live AI Semantic & SEO Generation via ModelRouter
+    prompt = f"""You are a senior SEO keyword research strategist for '{site_name}' ({site_domain}), a luxury executive chauffeur, airport transfer, and corporate fleet service in Melbourne, Australia.
+Analyze this specific custom keyword: "{raw_kw}".
+Target Location: "{loc}".
+Detected Area / Suburb: "{detected_suburb}".
+
+Return ONLY a valid JSON object with this exact structure:
+{{
+  "search_volume": <realistic estimated monthly searches in Melbourne/Australia e.g. 1800>,
+  "difficulty_percent": <KD percentage integer between 10 and 85 e.g. 24>,
+  "difficulty_label": "<e.g. 24% (Easy - High Opportunity) or 48% (Medium)>",
+  "search_intent": "<e.g. Transactional (Direct Booking Intent) or Commercial (VIP Fleet Comparison) or Informational (Travel Guide)>",
+  "estimated_cpc_aud": "<e.g. $7.50 - $10.20 AUD>",
+  "business_relevance_score": <integer 0-100 indicating fit for Corporate Cars Melbourne>,
+  "ranking_potential": "<e.g. VERY HIGH (Page 1 Expected in 14-21 Days) or HIGH or MODERATE or LOW>",
+  "ranking_impact_verdict": "<2-3 sentence personalized, analytical verdict specifically addressing the unique intent, audience, and revenue opportunity of '{raw_kw}'>",
+  "suggested_blog_title": "<A catchy, high-converting, Google-friendly H1 blog title specifically targeting this exact keyword for Melbourne readers>",
+  "actionable_strategy": [
+    "<Step 1: Specific H1 and content structure recommendation for '{raw_kw}'>",
+    "<Step 2: Specific Schema & FAQ markup recommendation>",
+    "<Step 3: Specific internal linking anchor recommendation>",
+    "<Step 4: Supporting social media or Google Ads strategy>"
+  ],
+  "lsi_keywords": [
+    "<LSI variation 1>",
+    "<LSI variation 2>",
+    "<LSI variation 3>"
+  ]
+}}
+"""
+
+    llm_req = LLMRequest(
+        user_prompt=prompt,
+        task_type=TaskComplexity.STANDARD,
+        preferred_model="claude-sonnet-4-6",
+        json_output=True
+    )
+
+    try:
+        llm_resp = router.route_and_execute(llm_req)
+        if llm_resp.parsed_json and isinstance(llm_resp.parsed_json, dict):
+            ai_data = llm_resp.parsed_json
+            return {
+                "status": "success",
+                "keyword": raw_kw,
+                "location": loc,
+                "detected_suburb": detected_suburb,
+                "search_volume": int(ai_data.get("search_volume") or 1200),
+                "difficulty_percent": int(ai_data.get("difficulty_percent") or 25),
+                "difficulty_label": str(ai_data.get("difficulty_label") or "25% (Easy)"),
+                "search_intent": str(ai_data.get("search_intent") or "Transactional (Direct Booking Intent)"),
+                "estimated_cpc_aud": str(ai_data.get("estimated_cpc_aud") or "$7.20 - $9.50 AUD"),
+                "business_relevance_score": int(ai_data.get("business_relevance_score") or 90),
+                "ranking_potential": str(ai_data.get("ranking_potential") or "HIGH (Page 1 Expected in 14-21 Days)"),
+                "ranking_impact_verdict": str(ai_data.get("ranking_impact_verdict") or f"High-intent opportunity for {site_name} across Melbourne."),
+                "actionable_strategy": list(ai_data.get("actionable_strategy") or [
+                    f"1. Publish a dedicated landing page or Suburb Pillar article targeting '{raw_kw}'.",
+                    f"2. Inject LocalBusiness and FAQPage Schema structured data.",
+                    f"3. Build contextual internal links from your core service pages.",
+                    f"4. Publish supporting LinkedIn and Instagram posts targeting Melbourne travelers."
+                ]),
+                "suggested_blog_title": str(ai_data.get("suggested_blog_title") or f"Executive Guide to {raw_kw.title()} in Melbourne"),
+                "lsi_keywords": list(ai_data.get("lsi_keywords") or [
+                    f"{raw_kw} melbourne",
+                    f"luxury chauffeur {detected_suburb.lower()}",
+                    f"corporate transfer {detected_suburb.lower()}"
+                ]),
+                "ai_model": llm_resp.model_used
+            }
+    except Exception as e:
+        logger.warning(f"AI Keyword Analysis LLM route failed, falling back to rule engine: {e}")
+
+    # Fallback Heuristic if AI offline
+    kw_lower = raw_kw.lower()
     is_trans = any(w in kw_lower for w in ["hire", "book", "service", "transfer", "chauffeur", "cost", "price", "quote", "driver", "taxi", "cab"])
-    is_comm = any(w in kw_lower for w in ["best", "top", "luxury", "vip", "fleet", "mercedes", "executive", "corporate", "vs", "compare"])
+    is_comm = any(w in kw_lower for w in ["best", "top", "luxury", "vip", "fleet", "mercedes", "executive", "corporate", "vs", "compare", "limo", "limousine"])
     is_info = any(w in kw_lower for w in ["how", "why", "when", "time", "distance", "tips", "guide", "what", "where"])
 
     if is_trans:
@@ -1426,41 +1499,13 @@ def analyze_custom_keyword(req: KeywordAnalyzeRequest):
         kd_val = 25
         kd_label = "25% (Easy)"
 
-    # Base Search Volume heuristic
     base_vol = 1400
     if "airport" in kw_lower or "tullamarine" in kw_lower:
         base_vol += 2400
-    if "chauffeur" in kw_lower or "corporate" in kw_lower:
+    if "chauffeur" in kw_lower or "corporate" in kw_lower or "limo" in kw_lower:
         base_vol += 1200
     if "melbourne" in kw_lower:
         base_vol += 800
-    if any(s.lower() in kw_lower for s in ["toorak", "brighton", "south yarra", "st kilda", "cbd"]):
-        base_vol += 600
-
-    # Business Relevance Score (0 - 100)
-    rel_score = 95
-    if any(w in kw_lower for w in ["cheap", "uber", "public transport", "train", "bus", "free"]):
-        rel_score = 45
-    elif not any(rel in kw_lower for rel in ["chauffeur", "car", "transfer", "driver", "transport", "limo", "travel", "airport", "melbourne", detected_suburb.lower()]):
-        rel_score = 65
-
-    # Strategic Title & Impact Verdict
-    if is_info:
-        title_hint = f"How Long Is the Airport Transfer From {detected_suburb} to Melbourne Airport?"
-        verdict = f"High Traffic Opportunity: Excellent long-tail question keyword. Perfect for a Suburb Pillar Blog to capture featured snippets."
-    elif "wedding" in kw_lower or "event" in kw_lower:
-        title_hint = f"Luxury Wedding & Event Chauffeur Service in {detected_suburb}: VIP Guide"
-        verdict = f"High Commercial Value: Captures high-margin wedding and private VIP event bookings across {detected_suburb}."
-    else:
-        title_hint = f"Why Choose a Corporate Chauffeur in {detected_suburb} for Melbourne Airport Transfers?"
-        verdict = f"High Booking Potential: Direct transactional intent from executives and business travelers in {detected_suburb}."
-
-    actionable_strategy = [
-        f"1. Publish a 1,200-word Suburb Pillar article targeting '{raw_kw}' as the primary H1 title.",
-        f"2. Inject FAQ Schema structured data to trigger Google AI Overviews and Rich Snippets for {site_name}.",
-        f"3. Add 2 internal links from your Melbourne Airport Transfer landing page to pass PageRank equity.",
-        f"4. Publish 1 supporting social post on LinkedIn and Instagram targeting {detected_suburb} executive travelers."
-    ]
 
     return {
         "status": "success",
@@ -1472,11 +1517,16 @@ def analyze_custom_keyword(req: KeywordAnalyzeRequest):
         "difficulty_label": kd_label,
         "search_intent": intent,
         "estimated_cpc_aud": cpc_val,
-        "business_relevance_score": rel_score,
-        "ranking_potential": "HIGH (Page 1 Expected in 14-21 Days)" if kd_val < 30 and rel_score > 80 else "MODERATE",
-        "ranking_impact_verdict": verdict,
-        "actionable_strategy": actionable_strategy,
-        "suggested_blog_title": title_hint,
+        "business_relevance_score": 92,
+        "ranking_potential": "HIGH (Page 1 Expected in 14-21 Days)",
+        "ranking_impact_verdict": f"Targeting '{raw_kw}' allows {site_name} to capture highly qualified corporate and luxury travel queries in {detected_suburb}.",
+        "actionable_strategy": [
+            f"1. Publish a 1,200-word Suburb Pillar article targeting '{raw_kw}' as the primary H1 title.",
+            f"2. Inject FAQ Schema structured data to trigger Google AI Overviews for {site_name}.",
+            f"3. Add 2 internal links from your Melbourne Airport Transfer landing page to pass PageRank equity.",
+            f"4. Publish 1 supporting social post on LinkedIn and Instagram targeting {detected_suburb} executive travelers."
+        ],
+        "suggested_blog_title": f"Why Book {raw_kw.title()} in {detected_suburb}? Executive Travel Guide",
         "lsi_keywords": [
             f"{detected_suburb.lower()} chauffeur to airport",
             f"luxury private car {detected_suburb.lower()}",
