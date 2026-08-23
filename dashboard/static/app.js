@@ -6911,8 +6911,12 @@ window.handleSERPSearch = handleSERPSearch;
 window.renderSERPRankingsTable = renderSERPRankingsTable;
 window.exportSERPRankingsCSV = exportSERPRankingsCSV;
 window.addSERPKeywordToBlog = addSERPKeywordToBlog;
-window.addSERPKeywordToSocial = addSERPKeywordToSocial;
 window.auditSERPPageLinks = auditSERPPageLinks;
+
+function downloadMasterHandbookPDF() {
+  window.open('/api/docs/download-master-handbook', '_blank');
+}
+window.downloadMasterHandbookPDF = downloadMasterHandbookPDF;
 
 
 

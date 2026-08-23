@@ -2573,8 +2573,25 @@ def get_seo_audit_history():
         "count": len(history),
         "reports": history
     }
-
-
-
+@app.get("/api/docs/download-master-handbook")
+def download_master_handbook_pdf():
+    """Generates and serves the complete AI Digital Marketing Master Operation Handbook PDF."""
+    pdf_path = Path(ROOT_DIR) / "AI_Digital_Marketing_Master_Handbook.pdf"
+    
+    # If not existing or older than 1 hour, generate freshly
+    if not pdf_path.exists() or (time.time() - pdf_path.stat().st_mtime > 3600):
+        try:
+            from scripts.generate_master_handbook import build_handbook_pdf
+            build_handbook_pdf(str(pdf_path))
+        except Exception as e:
+            logger.warning(f"Failed to generate fresh handbook PDF: {e}")
+            if not pdf_path.exists():
+                raise HTTPException(status_code=500, detail=f"PDF generation failed: {e}")
+                
+    return FileResponse(
+        path=str(pdf_path),
+        filename="AI_Digital_Marketing_Master_Handbook.pdf",
+        media_type="application/pdf"
+    )
 
 
