@@ -6410,6 +6410,18 @@ async function exportMonthlyPDFReport(siteId = 'ccm') {
   }
 }
 
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+window._lastAnalyzedKeywordData = null;
+
 function openCustomKeywordResearchModal(seedKeyword = '') {
   const input = document.getElementById('custom-keyword-input');
   const resultsDiv = document.getElementById('custom-keyword-results');
@@ -6453,7 +6465,7 @@ async function submitCustomKeywordAnalysis(event) {
     <div style="text-align:center; padding:30px; color:var(--text-muted);">
       <i class="fa-solid fa-circle-notch fa-spin" style="font-size:24px; color:var(--accent-cyan); margin-bottom:10px;"></i>
       <div style="font-size:13px; font-weight:700; color:#fff;">Analyzing Search Volume & Commercial Intent...</div>
-      <div style="font-size:11.5px; margin-top:4px;">Evaluating competition, CPC, and ranking impact for "${kw}"</div>
+      <div style="font-size:11.5px; margin-top:4px;">Evaluating competition, CPC, and ranking impact for "${escapeHtml(kw)}"</div>
     </div>
   `;
 
@@ -6469,6 +6481,8 @@ async function submitCustomKeywordAnalysis(event) {
       return;
     }
 
+    window._lastAnalyzedKeywordData = data;
+
     resultsDiv.innerHTML = `
       <!-- 4 Core Metric Badges -->
       <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
@@ -6482,11 +6496,11 @@ async function submitCustomKeywordAnalysis(event) {
         </div>
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:12px; border-radius:10px; text-align:center;">
           <div style="font-size:10px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Search Intent</div>
-          <div style="font-size:12px; font-weight:800; color:#fff; margin-top:6px;">${data.search_intent.split(' ')[0]}</div>
+          <div style="font-size:12px; font-weight:800; color:#fff; margin-top:6px;">${escapeHtml(data.search_intent.split(' ')[0])}</div>
         </div>
         <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:12px; border-radius:10px; text-align:center;">
           <div style="font-size:10px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Est. CPC (AUD)</div>
-          <div style="font-size:16px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${data.estimated_cpc_aud}</div>
+          <div style="font-size:16px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${escapeHtml(data.estimated_cpc_aud)}</div>
         </div>
       </div>
 
@@ -6497,11 +6511,11 @@ async function submitCustomKeywordAnalysis(event) {
             <i class="fa-solid fa-bullseye"></i> Website Relevance & Ranking Verdict:
           </span>
           <span class="badge ${data.business_relevance_score >= 80 ? 'badge-success' : 'badge-warning'}" style="font-size:11px;">
-            Fit Score: ${data.business_relevance_score}/100 (${data.ranking_potential})
+            Fit Score: ${data.business_relevance_score}/100 (${escapeHtml(data.ranking_potential)})
           </span>
         </div>
         <div style="font-size:13px; color:#fff; font-weight:600; line-height:1.5;">
-          ${data.ranking_impact_verdict}
+          ${escapeHtml(data.ranking_impact_verdict)}
         </div>
       </div>
 
@@ -6513,7 +6527,7 @@ async function submitCustomKeywordAnalysis(event) {
         ${(data.actionable_strategy || []).map(s => `
           <div style="font-size:12px; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:flex-start; gap:6px;">
             <i class="fa-solid fa-circle-check" style="color:var(--status-success); margin-top:3px; font-size:11px;"></i>
-            <span>${s}</span>
+            <span>${escapeHtml(s)}</span>
           </div>
         `).join('')}
       </div>
@@ -6522,13 +6536,13 @@ async function submitCustomKeywordAnalysis(event) {
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; background:rgba(6,182,212,0.06); border:1px solid rgba(6,182,212,0.25); padding:14px; border-radius:12px;">
         <div>
           <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Suggested Blog Title:</div>
-          <div style="font-size:12.5px; font-weight:700; color:#fff;">${data.suggested_blog_title}</div>
+          <div style="font-size:12.5px; font-weight:700; color:#fff;">${escapeHtml(data.suggested_blog_title)}</div>
         </div>
         <div style="display:flex; gap:8px;">
-          <button type="button" class="btn btn-sm" onclick="addCustomKeywordToBlog('${escapeHtml(data.keyword)}', '${escapeHtml(data.suggested_blog_title)}', '${escapeHtml(data.detected_suburb)}')" style="background:linear-gradient(135deg, #06b6d4, #0284c7); border:none; font-weight:700; color:#fff; cursor:pointer;">
+          <button type="button" class="btn btn-sm" onclick="addCurrentKeywordToBlog()" style="background:linear-gradient(135deg, #06b6d4, #0284c7); border:none; font-weight:700; color:#fff; cursor:pointer;">
             <i class="fa-solid fa-plus-circle"></i> + Add to Blog Queue
           </button>
-          <button type="button" class="btn btn-sm" onclick="addCustomKeywordToSocial('${escapeHtml(data.keyword)}')" style="background:linear-gradient(135deg, #a855f7, #9333ea); border:none; font-weight:700; color:#fff; cursor:pointer;">
+          <button type="button" class="btn btn-sm" onclick="addCurrentKeywordToSocial()" style="background:linear-gradient(135deg, #a855f7, #9333ea); border:none; font-weight:700; color:#fff; cursor:pointer;">
             <i class="fa-solid fa-share-nodes"></i> + Add to Social Pool
           </button>
         </div>
@@ -6543,6 +6557,18 @@ async function submitCustomKeywordAnalysis(event) {
       btn.innerHTML = '<i class="fa-solid fa-bolt"></i> 🚀 Analyze Keyword';
     }
   }
+}
+
+async function addCurrentKeywordToBlog() {
+  const data = window._lastAnalyzedKeywordData;
+  if (!data) return;
+  await addCustomKeywordToBlog(data.keyword, data.suggested_blog_title, data.detected_suburb);
+}
+
+async function addCurrentKeywordToSocial() {
+  const data = window._lastAnalyzedKeywordData;
+  if (!data) return;
+  await addCustomKeywordToSocial(data.keyword);
 }
 
 async function addCustomKeywordToBlog(keyword, titleHint, suburb) {

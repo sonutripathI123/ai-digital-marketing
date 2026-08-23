@@ -1,5 +1,217 @@
 [
   {
+    "analysis_id": "comp-analysis-1787477671",
+    "created_at": "2026-08-23T15:04:31.023425Z",
+    "target_keyword": "executive chauffeur melbourne",
+    "location": "Melbourne & Tullamarine, VIC",
+    "site_id": "ccm",
+    "site_name": "Corporate Cars Melbourne",
+    "data": {
+      "analysis_id": "comp-analysis-1787477671",
+      "timestamp": "2026-08-23T15:04:31.023425Z",
+      "action": "find_by_keyword",
+      "target_keyword": "executive chauffeur melbourne",
+      "location": "Melbourne & Tullamarine, VIC",
+      "my_brand": "Corporate Cars Melbourne",
+      "my_domain": "https://corporatecarsmelbourne.com.au",
+      "competitors_analyzed_count": 3,
+      "competitors_discovered": [
+        "chauffeurcarsmelbourne.com.au",
+        "luxurydriver.com.au",
+        "silverexecutivetravel.com.au"
+      ],
+      "competitor_insights": [
+        {
+          "competitor_name": "Chauffeurcarsmelbourne Chauffeurs",
+          "competitor_url": "https://chauffeurcarsmelbourne.com.au",
+          "competitor_domain": "chauffeurcarsmelbourne.com.au",
+          "domain_authority": 35,
+          "content_depth_score": "70/100",
+          "organic_traffic_tier": "Medium",
+          "targeted_keywords": [
+            "executive chauffeur melbourne",
+            "luxury chauffeur Melbourne & Tullamarine, VIC",
+            "airport transfer Melbourne & Tullamarine, VIC",
+            "private driver Melbourne & Tullamarine, VIC"
+          ],
+          "content_gaps": [
+            "Missing dedicated suburb landing page for 'executive chauffeur melbourne' with local schema",
+            "No instant pricing calculator or fixed-fare transparency table",
+            "Lacks Schema.org 'PrivateChauffeurService' and 'FAQPage' structured markup",
+            "Thin content under 600 words without E-E-A-T credentials or driver profiles"
+          ],
+          "positioning_strengths": "Established domain age for broad 'Melbourne & Tullamarine, VIC' searches and strong brand review volume.",
+          "weaknesses": "Slow mobile PageSpeed (< 45/100), missing FAQ sections, and generic non-optimized H2/H3 subheadings.",
+          "difficulty_to_outrank": "EASY",
+          "counter_strategy": "Publish a 1,200+ word localized pillar guide for 'executive chauffeur melbourne' with rich Schema.org FAQ markup."
+        },
+        {
+          "competitor_name": "Luxurydriver Chauffeurs",
+          "competitor_url": "https://luxurydriver.com.au",
+          "competitor_domain": "luxurydriver.com.au",
+          "domain_authority": 45,
+          "content_depth_score": "74/100",
+          "organic_traffic_tier": "High",
+          "targeted_keywords": [
+            "executive chauffeur melbourne",
+            "luxury chauffeur Melbourne & Tullamarine, VIC",
+            "airport transfer Melbourne & Tullamarine, VIC",
+            "private driver Melbourne & Tullamarine, VIC"
+          ],
+          "content_gaps": [
+            "Missing dedicated suburb landing page for 'executive chauffeur melbourne' with local schema",
+            "No instant pricing calculator or fixed-fare transparency table",
+            "Lacks Schema.org 'PrivateChauffeurService' and 'FAQPage' structured markup",
+            "Thin content under 600 words without E-E-A-T credentials or driver profiles"
+          ],
+          "positioning_strengths": "Established domain age for broad 'Melbourne & Tullamarine, VIC' searches and strong brand review volume.",
+          "weaknesses": "Slow mobile PageSpeed (< 45/100), missing FAQ sections, and generic non-optimized H2/H3 subheadings.",
+          "difficulty_to_outrank": "MEDIUM",
+          "counter_strategy": "Publish a 1,200+ word localized pillar guide for 'executive chauffeur melbourne' with rich Schema.org FAQ markup."
+        },
+        {
+          "competitor_name": "Silverexecutivetravel Chauffeurs",
+          "competitor_url": "https://silverexecutivetravel.com.au",
+          "competitor_domain": "silverexecutivetravel.com.au",
+          "domain_authority": 46,
+          "content_depth_score": "79/100",
+          "organic_traffic_tier": "High",
+          "targeted_keywords": [
+            "executive chauffeur melbourne",
+            "luxury chauffeur Melbourne & Tullamarine, VIC",
+            "airport transfer Melbourne & Tullamarine, VIC",
+            "private driver Melbourne & Tullamarine, VIC"
+          ],
+          "content_gaps": [
+            "Missing dedicated suburb landing page for 'executive chauffeur melbourne' with local schema",
+            "No instant pricing calculator or fixed-fare transparency table",
+            "Lacks Schema.org 'PrivateChauffeurService' and 'FAQPage' structured markup",
+            "Thin content under 600 words without E-E-A-T credentials or driver profiles"
+          ],
+          "positioning_strengths": "Established domain age for broad 'Melbourne & Tullamarine, VIC' searches and strong brand review volume.",
+          "weaknesses": "Slow mobile PageSpeed (< 45/100), missing FAQ sections, and generic non-optimized H2/H3 subheadings.",
+          "difficulty_to_outrank": "HARD",
+          "counter_strategy": "Publish a 1,200+ word localized pillar guide for 'executive chauffeur melbourne' with rich Schema.org FAQ markup."
+        }
+      ],
+      "identified_content_gaps_count": 12,
+      "actionable_recommendations": [
+        "Target 'executive chauffeur melbourne' as the primary H1 title on a dedicated Corporate Cars Melbourne landing page.",
+        "Exploit competitor content gaps by adding a transparent vehicle fleet breakdown (Mercedes S-Class, V-Class, GLS SUV).",
+        "Implement LocalBusiness & Service Schema.org markup to capture Google rich snippet cards before competitors.",
+        "Add internal links from high-authority pillar pages to your new 'executive chauffeur melbourne' page using exact match anchors."
+      ],
+      "win_strategy_summary": "By targeting long-tail suburb variations of 'executive chauffeur melbourne' and adding structured E-E-A-T trust signals, Corporate Cars Melbourne can outrank these 3 competitors within 30-45 days.",
+      "ai_summary": ""
+    }
+  },
+  {
+    "analysis_id": "comp-analysis-1787477459",
+    "created_at": "2026-08-23T15:00:59.281179Z",
+    "target_keyword": "melbourne airport transfer",
+    "location": "Melbourne & Tullamarine, VIC",
+    "site_id": "ccm",
+    "site_name": "Corporate Cars Melbourne",
+    "data": {
+      "analysis_id": "comp-analysis-1787477459",
+      "timestamp": "2026-08-23T15:00:59.281179Z",
+      "action": "find_by_keyword",
+      "target_keyword": "melbourne airport transfer",
+      "location": "Melbourne & Tullamarine, VIC",
+      "my_brand": "Corporate Cars Melbourne",
+      "my_domain": "https://corporatecarsmelbourne.com.au",
+      "competitors_analyzed_count": 3,
+      "competitors_discovered": [
+        "chauffeurcarsmelbourne.com.au",
+        "melbourneairportchauffeurs.com.au",
+        "crownchauffeursmelbourne.com.au"
+      ],
+      "competitor_insights": [
+        {
+          "competitor_name": "Chauffeurcarsmelbourne Chauffeurs",
+          "competitor_url": "https://chauffeurcarsmelbourne.com.au",
+          "competitor_domain": "chauffeurcarsmelbourne.com.au",
+          "domain_authority": 35,
+          "content_depth_score": "70/100",
+          "organic_traffic_tier": "Medium",
+          "targeted_keywords": [
+            "melbourne airport transfer",
+            "luxury chauffeur Melbourne & Tullamarine, VIC",
+            "airport transfer Melbourne & Tullamarine, VIC",
+            "private driver Melbourne & Tullamarine, VIC"
+          ],
+          "content_gaps": [
+            "Missing dedicated suburb landing page for 'melbourne airport transfer' with local schema",
+            "No instant pricing calculator or fixed-fare transparency table",
+            "Lacks Schema.org 'PrivateChauffeurService' and 'FAQPage' structured markup",
+            "Thin content under 600 words without E-E-A-T credentials or driver profiles"
+          ],
+          "positioning_strengths": "Established domain age for broad 'Melbourne & Tullamarine, VIC' searches and strong brand review volume.",
+          "weaknesses": "Slow mobile PageSpeed (< 45/100), missing FAQ sections, and generic non-optimized H2/H3 subheadings.",
+          "difficulty_to_outrank": "EASY",
+          "counter_strategy": "Publish a 1,200+ word localized pillar guide for 'melbourne airport transfer' with rich Schema.org FAQ markup."
+        },
+        {
+          "competitor_name": "Melbourneairportchauffeurs Chauffeurs",
+          "competitor_url": "https://melbourneairportchauffeurs.com.au",
+          "competitor_domain": "melbourneairportchauffeurs.com.au",
+          "domain_authority": 45,
+          "content_depth_score": "79/100",
+          "organic_traffic_tier": "High",
+          "targeted_keywords": [
+            "melbourne airport transfer",
+            "luxury chauffeur Melbourne & Tullamarine, VIC",
+            "airport transfer Melbourne & Tullamarine, VIC",
+            "private driver Melbourne & Tullamarine, VIC"
+          ],
+          "content_gaps": [
+            "Missing dedicated suburb landing page for 'melbourne airport transfer' with local schema",
+            "No instant pricing calculator or fixed-fare transparency table",
+            "Lacks Schema.org 'PrivateChauffeurService' and 'FAQPage' structured markup",
+            "Thin content under 600 words without E-E-A-T credentials or driver profiles"
+          ],
+          "positioning_strengths": "Established domain age for broad 'Melbourne & Tullamarine, VIC' searches and strong brand review volume.",
+          "weaknesses": "Slow mobile PageSpeed (< 45/100), missing FAQ sections, and generic non-optimized H2/H3 subheadings.",
+          "difficulty_to_outrank": "MEDIUM",
+          "counter_strategy": "Publish a 1,200+ word localized pillar guide for 'melbourne airport transfer' with rich Schema.org FAQ markup."
+        },
+        {
+          "competitor_name": "Crownchauffeursmelbourne Chauffeurs",
+          "competitor_url": "https://crownchauffeursmelbourne.com.au",
+          "competitor_domain": "crownchauffeursmelbourne.com.au",
+          "domain_authority": 49,
+          "content_depth_score": "82/100",
+          "organic_traffic_tier": "High",
+          "targeted_keywords": [
+            "melbourne airport transfer",
+            "luxury chauffeur Melbourne & Tullamarine, VIC",
+            "airport transfer Melbourne & Tullamarine, VIC",
+            "private driver Melbourne & Tullamarine, VIC"
+          ],
+          "content_gaps": [
+            "Missing dedicated suburb landing page for 'melbourne airport transfer' with local schema",
+            "No instant pricing calculator or fixed-fare transparency table",
+            "Lacks Schema.org 'PrivateChauffeurService' and 'FAQPage' structured markup",
+            "Thin content under 600 words without E-E-A-T credentials or driver profiles"
+          ],
+          "positioning_strengths": "Established domain age for broad 'Melbourne & Tullamarine, VIC' searches and strong brand review volume.",
+          "weaknesses": "Slow mobile PageSpeed (< 45/100), missing FAQ sections, and generic non-optimized H2/H3 subheadings.",
+          "difficulty_to_outrank": "HARD",
+          "counter_strategy": "Publish a 1,200+ word localized pillar guide for 'melbourne airport transfer' with rich Schema.org FAQ markup."
+        }
+      ],
+      "identified_content_gaps_count": 12,
+      "actionable_recommendations": [
+        "Target 'melbourne airport transfer' as the primary H1 title on a dedicated Corporate Cars Melbourne landing page.",
+        "Exploit competitor content gaps by adding a transparent vehicle fleet breakdown (Mercedes S-Class, V-Class, GLS SUV).",
+        "Implement LocalBusiness & Service Schema.org markup to capture Google rich snippet cards before competitors.",
+        "Add internal links from high-authority pillar pages to your new 'melbourne airport transfer' page using exact match anchors."
+      ],
+      "win_strategy_summary": "By targeting long-tail suburb variations of 'melbourne airport transfer' and adding structured E-E-A-T trust signals, Corporate Cars Melbourne can outrank these 3 competitors within 30-45 days.",
+      "ai_summary": ""
+    }
+  },
+  {
     "analysis_id": "comp-analysis-1787028965",
     "created_at": "2026-08-18T10:26:05.676737Z",
     "target_keyword": "wedding car hire South Yarra",

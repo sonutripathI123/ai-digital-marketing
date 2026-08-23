@@ -277,3 +277,6 @@
 2026-08-18 09:44:31,717 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-8a241112 successfully.
 2026-08-18 09:44:31,806 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent task: action=analyze, target_kw='airport transfer melbourne', competitors=['comp1.com', 'comp2.com']
 2026-08-18 15:56:05,675 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent: action=find_by_keyword, kw='wedding car hire South Yarra', location='Melbourne', competitors=['https://melbourneweddingcars.com.au', 'https://enrikchauffeurs.com.au', 'https://silverexecutivetravel.com.au']
+2026-08-23 20:30:59,268 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-c1905eff
+2026-08-23 20:30:59,281 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent: action=find_by_keyword, kw='melbourne airport transfer', location='Melbourne & Tullamarine, VIC', competitors=['https://chauffeurcarsmelbourne.com.au', 'https://melbourneairportchauffeurs.com.au', 'https://crownchauffeursmelbourne.com.au']
+2026-08-23 20:31:13,427 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-c1905eff successfully.
