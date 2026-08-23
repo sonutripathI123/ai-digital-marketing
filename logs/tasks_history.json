@@ -49716,6 +49716,1424 @@
     "input_data": {
       "action": "publish-due"
     },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T06:20:09.722380+00:00",
+    "updated_at": "2026-08-22T06:20:09.722380+00:00"
+  },
+  {
+    "task_id": "task-f9d8354d",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T06:25:11.438313+00:00",
+    "updated_at": "2026-08-22T06:25:11.438313+00:00"
+  },
+  {
+    "task_id": "task-42e3cb26",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T06:30:14.148626+00:00",
+    "updated_at": "2026-08-22T06:30:14.148626+00:00"
+  },
+  {
+    "task_id": "task-526b4385",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T06:35:01.339776+00:00",
+    "updated_at": "2026-08-22T06:35:01.339776+00:00"
+  },
+  {
+    "task_id": "task-652fb30a",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T06:40:03.997828+00:00",
+    "updated_at": "2026-08-22T06:40:03.997828+00:00"
+  },
+  {
+    "task_id": "task-2f98908a",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T06:45:06.511352+00:00",
+    "updated_at": "2026-08-22T06:45:06.511352+00:00"
+  },
+  {
+    "task_id": "task-c8ed9278",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T06:50:08.239786+00:00",
+    "updated_at": "2026-08-22T06:50:08.239786+00:00"
+  },
+  {
+    "task_id": "task-51431a70",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T06:55:10.995186+00:00",
+    "updated_at": "2026-08-22T06:55:10.995186+00:00"
+  },
+  {
+    "task_id": "task-294a20bb",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:10:06.604616+00:00",
+    "updated_at": "2026-08-22T07:10:06.604616+00:00"
+  },
+  {
+    "task_id": "task-6f75a7d9",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:15:09.780394+00:00",
+    "updated_at": "2026-08-22T07:15:09.780394+00:00"
+  },
+  {
+    "task_id": "task-b36bde54",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:20:12.564852+00:00",
+    "updated_at": "2026-08-22T07:20:12.564852+00:00"
+  },
+  {
+    "task_id": "task-ff342d46",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:25:14.608150+00:00",
+    "updated_at": "2026-08-22T07:25:14.608150+00:00"
+  },
+  {
+    "task_id": "task-58f2e8eb",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:30:01.414014+00:00",
+    "updated_at": "2026-08-22T07:30:01.414014+00:00"
+  },
+  {
+    "task_id": "task-b4136e79",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:35:03.549879+00:00",
+    "updated_at": "2026-08-22T07:35:03.549879+00:00"
+  },
+  {
+    "task_id": "task-fc8ea2ef",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:40:05.459597+00:00",
+    "updated_at": "2026-08-22T07:40:05.459597+00:00"
+  },
+  {
+    "task_id": "task-0c38bb4e",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:45:07.530180+00:00",
+    "updated_at": "2026-08-22T07:45:07.531741+00:00"
+  },
+  {
+    "task_id": "task-53c443df",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:50:09.721769+00:00",
+    "updated_at": "2026-08-22T07:50:09.721769+00:00"
+  },
+  {
+    "task_id": "task-1d042520",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T07:55:12.476835+00:00",
+    "updated_at": "2026-08-22T07:55:12.476835+00:00"
+  },
+  {
+    "task_id": "task-dedf97fe",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:00:00.866108+00:00",
+    "updated_at": "2026-08-22T08:00:00.866108+00:00"
+  },
+  {
+    "task_id": "task-74571de4",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:05:01.405627+00:00",
+    "updated_at": "2026-08-22T08:05:01.405627+00:00"
+  },
+  {
+    "task_id": "task-25308e89",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:10:02.378206+00:00",
+    "updated_at": "2026-08-22T08:10:02.378206+00:00"
+  },
+  {
+    "task_id": "task-3c284314",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:15:03.296820+00:00",
+    "updated_at": "2026-08-22T08:15:03.296820+00:00"
+  },
+  {
+    "task_id": "task-2bfd163a",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:20:04.241117+00:00",
+    "updated_at": "2026-08-22T08:20:04.241117+00:00"
+  },
+  {
+    "task_id": "task-30f10b52",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:25:07.371457+00:00",
+    "updated_at": "2026-08-22T08:25:07.371457+00:00"
+  },
+  {
+    "task_id": "task-0d56667a",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:30:08.250379+00:00",
+    "updated_at": "2026-08-22T08:30:08.250379+00:00"
+  },
+  {
+    "task_id": "task-6e473f42",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:35:09.970278+00:00",
+    "updated_at": "2026-08-22T08:35:09.981140+00:00"
+  },
+  {
+    "task_id": "task-e8e94578",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:40:11.204138+00:00",
+    "updated_at": "2026-08-22T08:40:11.204138+00:00"
+  },
+  {
+    "task_id": "task-b18a63c8",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:45:12.298272+00:00",
+    "updated_at": "2026-08-22T08:45:12.298272+00:00"
+  },
+  {
+    "task_id": "task-b45475c3",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:50:13.670095+00:00",
+    "updated_at": "2026-08-22T08:50:13.670095+00:00"
+  },
+  {
+    "task_id": "task-24714d31",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T08:55:14.563570+00:00",
+    "updated_at": "2026-08-22T08:55:14.563570+00:00"
+  },
+  {
+    "task_id": "task-c380748b",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:00:00.452096+00:00",
+    "updated_at": "2026-08-22T09:00:00.452096+00:00"
+  },
+  {
+    "task_id": "task-b2c84e2e",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:05:01.312691+00:00",
+    "updated_at": "2026-08-22T09:05:01.312691+00:00"
+  },
+  {
+    "task_id": "task-7403da79",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:10:02.214761+00:00",
+    "updated_at": "2026-08-22T09:10:02.214761+00:00"
+  },
+  {
+    "task_id": "task-cebdf798",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:15:03.207496+00:00",
+    "updated_at": "2026-08-22T09:15:03.207496+00:00"
+  },
+  {
+    "task_id": "task-b24d0f20",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:20:04.365424+00:00",
+    "updated_at": "2026-08-22T09:20:04.365424+00:00"
+  },
+  {
+    "task_id": "task-b7a80c71",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:25:05.304635+00:00",
+    "updated_at": "2026-08-22T09:25:05.304635+00:00"
+  },
+  {
+    "task_id": "task-b2d8522b",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:30:06.319321+00:00",
+    "updated_at": "2026-08-22T09:30:06.319321+00:00"
+  },
+  {
+    "task_id": "task-32b4e393",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:35:07.493062+00:00",
+    "updated_at": "2026-08-22T09:35:07.493062+00:00"
+  },
+  {
+    "task_id": "task-21dad710",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:40:08.472076+00:00",
+    "updated_at": "2026-08-22T09:40:08.472590+00:00"
+  },
+  {
+    "task_id": "task-abff80bc",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:45:09.505217+00:00",
+    "updated_at": "2026-08-22T09:45:09.505217+00:00"
+  },
+  {
+    "task_id": "task-64d24dda",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:50:10.683187+00:00",
+    "updated_at": "2026-08-22T09:50:10.683187+00:00"
+  },
+  {
+    "task_id": "task-69ec1fbf",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T09:55:11.626416+00:00",
+    "updated_at": "2026-08-22T09:55:11.627042+00:00"
+  },
+  {
+    "task_id": "task-faf1e750",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:00:12.553669+00:00",
+    "updated_at": "2026-08-22T10:00:12.553669+00:00"
+  },
+  {
+    "task_id": "task-6c9750cc",
+    "agent_id": "external-link-building-agent",
+    "task_type": "daily_batch",
+    "input_data": {
+      "action": "daily_batch"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "daily_batch",
+      "batch_count": 7,
+      "created_links": [
+        {
+          "id": "batch-20260822-01",
+          "platform": "Aussie Business Directory",
+          "url": "https://aussiebusinessdirectory.com.au/listing/corporate-cars-melbourne",
+          "target_url": "https://corporatecarsmelbourne.com.au/",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Aussie Business Directory",
+          "published_date": "2026-08-22",
+          "anchor_used": "Corporate Cars Melbourne",
+          "da": 64,
+          "link_type": "Dofollow",
+          "category": "Directory Citation",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260822-02",
+          "platform": "Melbourne Business Review (Substack)",
+          "url": "https://melbournebiz.substack.com/p/luxury-transport-melbourne-executives",
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Melbourne Business Review (Substack)",
+          "published_date": "2026-08-22",
+          "anchor_used": "Corporate Cars Melbourne Chauffeur Service",
+          "da": 88,
+          "link_type": "Dofollow",
+          "category": "Web 2.0 Editorial",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne Chauffeur Service maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260822-03",
+          "platform": "Victoria Commerce Guide",
+          "url": "https://viccommerce.com.au/directory/corporate-cars-melbourne",
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Victoria Commerce Guide",
+          "published_date": "2026-08-22",
+          "anchor_used": "Corporate Cars Melbourne Airport Transfers",
+          "da": 58,
+          "link_type": "Dofollow",
+          "category": "Directory Citation",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne Airport Transfers maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260822-04",
+          "platform": "LinkedIn Executive Travel Hub",
+          "url": "https://www.linkedin.com/pulse/melbourne-corporate-travel-logistics-guide-2026/",
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - LinkedIn Executive Travel Hub",
+          "published_date": "2026-08-22",
+          "anchor_used": "executive car hire Melbourne, Victoria",
+          "da": 98,
+          "link_type": "Nofollow",
+          "category": "Web 2.0 Editorial",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, executive car hire Melbourne, Victoria maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260822-05",
+          "platform": "Medium Travel & Tourism AU",
+          "url": "https://medium.com/@aussietraveler/best-airport-chauffeur-services-in-melbourne-cbd-9921b",
+          "target_url": "https://corporatecarsmelbourne.com.au/",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Medium Travel & Tourism AU",
+          "published_date": "2026-08-22",
+          "anchor_used": "https://corporatecarsmelbourne.com.au/",
+          "da": 96,
+          "link_type": "Dofollow",
+          "category": "Web 2.0 Editorial",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, https://corporatecarsmelbourne.com.au/ maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260822-06",
+          "platform": "Quora AU: Corporate Travel Q&A",
+          "url": "https://www.quora.com/What-is-the-best-chauffeur-car-service-in-Melbourne/answer/Corporate-Cars-Melbourne",
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Quora AU: Corporate Travel Q&A",
+          "published_date": "2026-08-22",
+          "anchor_used": "Corporate Cars Melbourne Luxury Fleet",
+          "da": 93,
+          "link_type": "Nofollow",
+          "category": "Q&A Citation",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne Luxury Fleet maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260822-07",
+          "platform": "Melbourne Wedding Services Directory",
+          "url": "https://melbourneweddings.com.au/cars/corporate-cars-melbourne",
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Melbourne Wedding Services Directory",
+          "published_date": "2026-08-22",
+          "anchor_used": "corporate chauffeur Melbourne, Victoria",
+          "da": 52,
+          "link_type": "Dofollow",
+          "category": "Directory Citation",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, corporate chauffeur Melbourne, Victoria maintains accredited European vehicles and 24/7 flight monitoring."
+        }
+      ],
+      "message": "Daily batch complete: 7 high-quality backlinks staged across Australian directories & Web 2.0 platforms."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "model-router-batch",
+    "tokens_used": 200,
+    "cost_usd": 0.001,
+    "created_at": "2026-08-22T10:00:13.529009+00:00",
+    "updated_at": "2026-08-22T10:00:13.529009+00:00"
+  },
+  {
+    "task_id": "task-d0642561",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:05:13.807677+00:00",
+    "updated_at": "2026-08-22T10:05:13.807677+00:00"
+  },
+  {
+    "task_id": "task-d4fa41ee",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:10:14.650125+00:00",
+    "updated_at": "2026-08-22T10:10:14.650125+00:00"
+  },
+  {
+    "task_id": "task-59beb498",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:15:00.554282+00:00",
+    "updated_at": "2026-08-22T10:15:00.554282+00:00"
+  },
+  {
+    "task_id": "task-7251ea5b",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:20:01.480044+00:00",
+    "updated_at": "2026-08-22T10:20:01.480044+00:00"
+  },
+  {
+    "task_id": "task-ef0825cb",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:25:02.389021+00:00",
+    "updated_at": "2026-08-22T10:25:02.389021+00:00"
+  },
+  {
+    "task_id": "task-fe53f8bb",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:30:03.339747+00:00",
+    "updated_at": "2026-08-22T10:30:03.339747+00:00"
+  },
+  {
+    "task_id": "task-cfea76ff",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:35:06.285955+00:00",
+    "updated_at": "2026-08-22T10:35:06.285955+00:00"
+  },
+  {
+    "task_id": "task-d7936ce7",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:40:09.296566+00:00",
+    "updated_at": "2026-08-22T10:40:09.296566+00:00"
+  },
+  {
+    "task_id": "task-141ae576",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-22T10:45:13.267484+00:00",
+    "updated_at": "2026-08-22T10:45:13.269023+00:00"
+  },
+  {
+    "task_id": "task-59089548",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
     "status": "QUEUED",
     "priority": "NORMAL",
     "requires_approval": false,
@@ -49727,7 +51145,172 @@
     "model_used": null,
     "tokens_used": 0,
     "cost_usd": 0.0,
-    "created_at": "2026-08-22T06:20:09.722380+00:00",
-    "updated_at": "2026-08-22T06:20:09.722380+00:00"
+    "created_at": "2026-08-22T10:50:00.895775+00:00",
+    "updated_at": "2026-08-22T10:50:00.895775+00:00"
+  },
+  {
+    "task_id": "task-55c38ab1",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T13:10:11.984951+00:00",
+    "updated_at": "2026-08-23T13:10:11.984951+00:00"
+  },
+  {
+    "task_id": "task-977178a2",
+    "agent_id": "seo-keyword-agent",
+    "task_type": "research",
+    "input_data": {
+      "action": "research",
+      "site_id": "ccm",
+      "site": "ccm",
+      "site_url": "https://corporatecarsmelbourne.com.au"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T13:10:45.041347+00:00",
+    "updated_at": "2026-08-23T13:10:45.041347+00:00"
+  },
+  {
+    "task_id": "task-cc75d47a",
+    "agent_id": "seo-keyword-agent",
+    "task_type": "research",
+    "input_data": {
+      "action": "research",
+      "site_id": "ccm",
+      "site": "ccm",
+      "site_url": "https://corporatecarsmelbourne.com.au"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T13:10:53.093455+00:00",
+    "updated_at": "2026-08-23T13:10:53.094015+00:00"
+  },
+  {
+    "task_id": "task-9deb77e8",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T13:15:01.527990+00:00",
+    "updated_at": "2026-08-23T13:15:01.527990+00:00"
+  },
+  {
+    "task_id": "task-56dd7639",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T13:20:10.400334+00:00",
+    "updated_at": "2026-08-23T13:20:10.400334+00:00"
+  },
+  {
+    "task_id": "task-bf11699d",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T13:25:12.884071+00:00",
+    "updated_at": "2026-08-23T13:25:12.884071+00:00"
+  },
+  {
+    "task_id": "task-331944b4",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T13:25:54.377210+00:00",
+    "updated_at": "2026-08-23T13:25:54.377219+00:00"
   }
 ]
