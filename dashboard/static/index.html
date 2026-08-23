@@ -1223,50 +1223,6 @@
     </div>
   </div>
 
-  <!-- Modal: Custom Keyword Intelligence & Strategy Lab -->
-  <div class="modal-overlay" id="modal-custom-keyword-research">
-    <div class="modal-card" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
-      <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(6, 182, 212, 0.18); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; color: var(--accent-cyan); font-size: 20px;">
-            <i class="fa-solid fa-magnifying-glass-chart"></i>
-          </div>
-          <div>
-            <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin: 0;">Custom Keyword Intelligence Lab</h3>
-            <p style="font-size: 11.5px; color: var(--text-secondary); margin: 2px 0 0 0;">Check Search Volume, KD%, Commercial Intent & Ranking Potential for any keyword</p>
-          </div>
-        </div>
-        <button class="modal-close" onclick="closeModal('modal-custom-keyword-research')" type="button">&times;</button>
-      </div>
-
-      <!-- Quick Seed Suggestions -->
-      <div style="margin-bottom: 14px;">
-        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Try Example Keywords:</div>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-          <button type="button" class="action-chip" onclick="fillCustomKeyword('chauffeur st kilda')" style="cursor: pointer; font-size: 11px;">chauffeur st kilda</button>
-          <button type="button" class="action-chip" onclick="fillCustomKeyword('wedding car hire yarra valley')" style="cursor: pointer; font-size: 11px;">wedding car hire yarra valley</button>
-          <button type="button" class="action-chip" onclick="fillCustomKeyword('corporate airport transfer brighton')" style="cursor: pointer; font-size: 11px;">corporate airport transfer brighton</button>
-          <button type="button" class="action-chip" onclick="fillCustomKeyword('luxury private driver toorak')" style="cursor: pointer; font-size: 11px;">luxury private driver toorak</button>
-        </div>
-      </div>
-
-      <form id="form-custom-keyword-research" onsubmit="submitCustomKeywordAnalysis(event)" style="margin-bottom: 16px;">
-        <div style="display: flex; gap: 10px; align-items: flex-end;">
-          <div class="form-group" style="flex: 1; margin: 0;">
-            <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Enter Keyword to Analyze</label>
-            <input type="text" class="form-control" id="custom-keyword-input" required placeholder="e.g. chauffeur st kilda or luxury wedding car melbourne" style="width: 100%; font-size: 13px;" />
-          </div>
-          <button type="submit" class="btn btn-primary" id="btn-submit-keyword-analysis" style="background: linear-gradient(135deg, var(--accent-cyan), #0284c7); border: none; font-weight: 800; padding: 10px 20px; white-space: nowrap;">
-            <i class="fa-solid fa-bolt"></i> 🚀 Analyze Keyword
-          </button>
-        </div>
-      </form>
-
-      <!-- Analysis Results Container -->
-      <div id="custom-keyword-results" style="display: none;"></div>
-    </div>
-  </div>
-
   <!-- Modal: Administrator Authentication & Login -->
   <div class="modal-overlay" id="modal-admin-login">
     <div class="modal-card" style="max-width: 450px;">
