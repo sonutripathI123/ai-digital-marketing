@@ -52273,5 +52273,71 @@
     "cost_usd": 0.0,
     "created_at": "2026-08-23T15:25:01.944313+00:00",
     "updated_at": "2026-08-23T15:25:01.944313+00:00"
+  },
+  {
+    "task_id": "task-9a2f08ff",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T15:30:10.707670+00:00",
+    "updated_at": "2026-08-23T15:30:10.707670+00:00"
+  },
+  {
+    "task_id": "task-80d45856",
+    "agent_id": "seo-keyword-agent",
+    "task_type": "research",
+    "input_data": {
+      "action": "research",
+      "site_id": "ccm",
+      "site": "ccm",
+      "site_url": "https://corporatecarsmelbourne.com.au"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T15:32:44.427551+00:00",
+    "updated_at": "2026-08-23T15:32:44.427551+00:00"
+  },
+  {
+    "task_id": "task-7651daa9",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-23T15:35:09.680856+00:00",
+    "updated_at": "2026-08-23T15:35:09.680856+00:00"
   }
 ]

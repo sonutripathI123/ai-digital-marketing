@@ -2790,7 +2790,10 @@ async function viewAgentReport(agentId) {
             </div>
           </div>
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-            <button class="btn btn-sm" onclick="openCustomKeywordResearchModal()" style="background:linear-gradient(135deg, #10b981, #059669); font-size:12px; font-weight:800; padding:8px 18px; border:none; box-shadow:0 4px 14px rgba(16,185,129,0.35); cursor:pointer; color:#fff;">
+            <button class="btn btn-sm" onclick="openLiveSERPRankingsModal()" style="background:linear-gradient(135deg, #a855f7, #7c3aed); font-size:12px; font-weight:800; padding:8px 18px; border:none; box-shadow:0 4px 14px rgba(168,85,247,0.35); cursor:pointer; color:#fff;">
+              <i class="fa-solid fa-ranking-star"></i> 🎯 Check Live Google SERP Rankings
+            </button>
+            <button class="btn btn-sm" onclick="openCustomKeywordResearchModal()" style="background:linear-gradient(135deg, #10b981, #059669); font-size:12px; font-weight:800; padding:8px 18px; border:none; box-shadow:0 4px 14px rgba(168,85,247,0.35); cursor:pointer; color:#fff;">
               <i class="fa-solid fa-magnifying-glass-plus"></i> 🔍 + Research Any Custom Keyword
             </button>
             <button class="btn btn-primary btn-sm" onclick="runAgentNow('seo-keyword-agent', 'research')" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); font-size:12px; font-weight:700; padding:8px 18px; border:none; color:#fff;">
@@ -6609,6 +6612,274 @@ async function addCustomKeywordToSocial(keyword) {
   }
 }
 
+// -------------------------------------------------------------
+// Live Google SERP Keyword Rankings & URL Performance Engine
+// -------------------------------------------------------------
+window._liveSERPData = null;
+window._currentSERPBucket = 'all';
+window._currentSERPSearch = '';
+
+function openLiveSERPRankingsModal() {
+  openModal('modal-live-serp-rankings');
+  loadLiveSERPRankings(false);
+}
+
+async function loadLiveSERPRankings(forceRefresh = false) {
+  const tbody = document.getElementById('live-serp-table-body');
+  const siteNameEl = document.getElementById('live-serp-site-name');
+  const siteUrlEl = document.getElementById('live-serp-site-url');
+  
+  if (tbody && (!window._liveSERPData || forceRefresh)) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="9" style="text-align:center; padding:45px 20px; color:var(--text-muted);">
+          <i class="fa-solid fa-circle-notch fa-spin" style="font-size:26px; color:var(--accent-cyan); margin-bottom:10px;"></i>
+          <div style="font-size:13.5px; font-weight:700; color:#fff;">Fetching Live Google Search Console API Data...</div>
+          <div style="font-size:11.5px; color:var(--text-muted); margin-top:4px;">Retrieving genuine search rankings, landing page URLs, impressions & CTRs for ${currentSiteId}</div>
+        </td>
+      </tr>
+    `;
+  }
+
+  try {
+    const res = await fetch(`/api/seo/rankings/live?site_id=${currentSiteId}&force_refresh=${forceRefresh ? 'true' : 'false'}`);
+    const data = await res.json();
+    if (data.status !== 'success') {
+      if (tbody) tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:#fca5a5;">Failed to load live rankings: ${data.detail || data.error || 'Unknown error'}</td></tr>`;
+      return;
+    }
+
+    window._liveSERPData = data;
+
+    if (siteNameEl) siteNameEl.textContent = data.site_name || 'Corporate Cars Melbourne';
+    if (siteUrlEl) siteUrlEl.textContent = data.site_url || 'https://corporatecarsmelbourne.com.au';
+
+    const sum = data.summary || {};
+    const kpiTotal = document.getElementById('kpi-total-keywords');
+    const kpiTop3 = document.getElementById('kpi-top3-keywords');
+    const kpiPage1 = document.getElementById('kpi-page1-keywords');
+    const kpiStriking = document.getElementById('kpi-striking-keywords');
+    const kpiImpr = document.getElementById('kpi-total-impressions');
+
+    if (kpiTotal) kpiTotal.textContent = (sum.total_tracked_keywords || 0).toLocaleString();
+    if (kpiTop3) kpiTop3.textContent = (sum.top_3_count || 0).toLocaleString();
+    if (kpiPage1) kpiPage1.textContent = (sum.page_1_count || 0).toLocaleString();
+    if (kpiStriking) kpiStriking.textContent = (sum.striking_distance_count || 0).toLocaleString();
+    if (kpiImpr) kpiImpr.textContent = (sum.total_impressions || 0).toLocaleString();
+
+    // Update filter counts
+    const cAll = document.getElementById('count-all');
+    const cTop3 = document.getElementById('count-top3');
+    const cPage1 = document.getElementById('count-page1');
+    const cStriking = document.getElementById('count-striking');
+    const cPage2 = document.getElementById('count-page2plus');
+
+    if (cAll) cAll.textContent = (sum.total_tracked_keywords || 0).toLocaleString();
+    if (cTop3) cTop3.textContent = (sum.top_3_count || 0).toLocaleString();
+    if (cPage1) cPage1.textContent = (sum.page_1_count || 0).toLocaleString();
+    if (cStriking) cStriking.textContent = (sum.striking_distance_count || 0).toLocaleString();
+    if (cPage2) cPage2.textContent = (sum.page_2_plus_count || 0).toLocaleString();
+
+    // Render Quick Wins
+    const qwBanner = document.getElementById('live-serp-quick-wins-banner');
+    const qwList = document.getElementById('live-serp-quick-wins-list');
+    if (qwBanner && qwList && (data.quick_wins || []).length > 0) {
+      qwBanner.style.display = 'block';
+      qwList.innerHTML = (data.quick_wins || []).map(qw => `
+        <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(245,158,11,0.4); padding:6px 12px; border-radius:8px; display:flex; align-items:center; gap:8px; font-size:11.5px;">
+          <strong style="color:#fbbf24;">${escapeHtml(qw.keyword)}</strong>
+          <span style="color:var(--text-muted);">(Pos #${qw.position} | ${qw.impressions} Impr)</span>
+          <button type="button" class="btn btn-sm" onclick="addSERPKeywordToBlog('${escapeHtml(qw.keyword)}', '${escapeHtml(qw.landing_page)}')" style="background:linear-gradient(135deg, #06b6d4, #0284c7); border:none; padding:2px 8px; font-size:10px; color:#fff; cursor:pointer; border-radius:4px;">
+            + Blog
+          </button>
+        </div>
+      `).join('');
+    }
+
+    renderSERPRankingsTable();
+
+  } catch (err) {
+    if (tbody) tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:#fca5a5;">Failed to load live rankings: ${err.message || err}</td></tr>`;
+  }
+}
+
+function filterSERPBucket(bucket) {
+  window._currentSERPBucket = bucket;
+  const container = document.getElementById('live-serp-bucket-filters');
+  if (container) {
+    container.querySelectorAll('.btn-filter').forEach(btn => {
+      if (btn.getAttribute('data-bucket') === bucket) {
+        btn.style.background = 'rgba(6,182,212,0.25)';
+        btn.style.color = '#fff';
+        btn.style.borderColor = 'var(--accent-cyan)';
+      } else {
+        btn.style.background = 'rgba(30,41,59,0.8)';
+        btn.style.color = 'var(--text-secondary)';
+        btn.style.borderColor = 'rgba(255,255,255,0.1)';
+      }
+    });
+  }
+  renderSERPRankingsTable();
+}
+
+function handleSERPSearch(val) {
+  window._currentSERPSearch = (val || '').trim().toLowerCase();
+  renderSERPRankingsTable();
+}
+
+function renderSERPRankingsTable() {
+  const tbody = document.getElementById('live-serp-table-body');
+  const visibleCountEl = document.getElementById('serp-visible-count');
+  const filteredCountEl = document.getElementById('serp-total-filtered-count');
+  if (!tbody || !window._liveSERPData) return;
+
+  const keywords = window._liveSERPData.keywords || [];
+  const bucket = window._currentSERPBucket || 'all';
+  const query = window._currentSERPSearch || '';
+
+  let filtered = keywords.filter(k => {
+    if (bucket === 'top_3' && k.bucket !== 'top_3') return false;
+    if (bucket === 'page_1' && k.bucket !== 'top_3' && k.bucket !== 'page_1') return false;
+    if (bucket === 'striking_distance' && k.bucket !== 'striking_distance') return false;
+    if (bucket === 'page_2_plus' && k.bucket !== 'page_2_plus') return false;
+
+    if (query) {
+      const qMatch = (k.keyword || '').toLowerCase().includes(query);
+      const urlMatch = (k.landing_page || '').toLowerCase().includes(query);
+      if (!qMatch && !urlMatch) return false;
+    }
+    return true;
+  });
+
+  if (filteredCountEl) filteredCountEl.textContent = filtered.length.toLocaleString();
+
+  // Render max 200 rows for high performance
+  const displayRows = filtered.slice(0, 200);
+  if (visibleCountEl) visibleCountEl.textContent = displayRows.length.toLocaleString();
+
+  if (displayRows.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="9" style="text-align:center; padding:35px; color:var(--text-muted);">
+          <i class="fa-solid fa-magnifying-glass" style="font-size:22px; color:var(--text-muted); margin-bottom:8px;"></i>
+          <div style="font-size:13px; font-weight:700; color:#fff;">No matching keywords found</div>
+          <div style="font-size:11.5px;">Try searching a different term or clear the filter.</div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = displayRows.map((k, idx) => {
+    let posBadgeStyle = '';
+    if (k.position <= 3.0) {
+      posBadgeStyle = 'background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#10b981; font-weight:800;';
+    } else if (k.position <= 10.0) {
+      posBadgeStyle = 'background:rgba(6,182,212,0.2); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-weight:800;';
+    } else if (k.position <= 20.0) {
+      posBadgeStyle = 'background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#f59e0b; font-weight:800;';
+    } else {
+      posBadgeStyle = 'background:rgba(100,116,139,0.2); border:1px solid #64748b; color:#94a3b8; font-weight:700;';
+    }
+
+    const shortUrl = k.landing_page.replace('https://corporatecarsmelbourne.com.au', '').replace('https://', '');
+    const cleanUrl = shortUrl === '' || shortUrl === '/' ? '/ (Home)' : shortUrl;
+
+    return `
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.05); transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+        <td style="padding:10px 14px; color:var(--text-muted); font-size:11px;">${idx + 1}</td>
+        <td style="padding:10px 14px;">
+          <div style="font-weight:700; color:#fff; font-size:12.5px;">${escapeHtml(k.keyword)}</div>
+          <span style="font-size:10px; color:var(--accent-purple); text-transform:uppercase; font-weight:700;">${escapeHtml(k.intent || 'Transactional')}</span>
+        </td>
+        <td style="padding:10px 14px; text-align:center;">
+          <span style="display:inline-block; padding:4px 10px; border-radius:6px; font-family:var(--font-mono); font-size:12.5px; ${posBadgeStyle}">
+            #${k.position}
+          </span>
+        </td>
+        <td style="padding:10px 14px;">
+          <span style="font-size:11px; font-weight:700; color:${k.badge_color};">${k.badge_label}</span>
+        </td>
+        <td style="padding:10px 14px; text-align:right; font-family:var(--font-mono); font-weight:${k.clicks > 0 ? '800' : '500'}; color:${k.clicks > 0 ? '#10b981' : 'var(--text-muted)'};">
+          ${k.clicks.toLocaleString()}
+        </td>
+        <td style="padding:10px 14px; text-align:right; font-family:var(--font-mono); color:#fff; font-weight:600;">
+          ${k.impressions.toLocaleString()}
+        </td>
+        <td style="padding:10px 14px; text-align:right; font-family:var(--font-mono); color:var(--text-secondary);">
+          ${k.ctr}%
+        </td>
+        <td style="padding:10px 14px;">
+          <a href="${escapeHtml(k.landing_page)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent-cyan); text-decoration:none; font-size:11.5px; word-break:break-all;" title="${escapeHtml(k.landing_page)}">
+            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px; margin-right:4px;"></i>
+            ${escapeHtml(cleanUrl)}
+          </a>
+        </td>
+        <td style="padding:10px 14px; text-align:center;">
+          <div style="display:flex; gap:5px; justify-content:center;">
+            <button type="button" class="btn btn-sm" onclick="addSERPKeywordToBlog('${escapeHtml(k.keyword)}', '${escapeHtml(k.landing_page)}')" style="background:rgba(6,182,212,0.2); border:1px solid rgba(6,182,212,0.4); padding:4px 8px; font-size:11px; color:var(--accent-cyan); cursor:pointer; border-radius:6px;" title="Push topic to Blog Agent">
+              <i class="fa-solid fa-plus"></i> Blog
+            </button>
+            <button type="button" class="btn btn-sm" onclick="addSERPKeywordToSocial('${escapeHtml(k.keyword)}')" style="background:rgba(168,85,247,0.2); border:1px solid rgba(168,85,247,0.4); padding:4px 8px; font-size:11px; color:var(--accent-purple); cursor:pointer; border-radius:6px;" title="Push to Social Agent pool">
+              <i class="fa-solid fa-share-nodes"></i>
+            </button>
+            <button type="button" class="btn btn-sm" onclick="auditSERPPageLinks('${escapeHtml(k.landing_page)}')" style="background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.4); padding:4px 8px; font-size:11px; color:#10b981; cursor:pointer; border-radius:6px;" title="Audit internal linking for this page">
+              <i class="fa-solid fa-link"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function exportSERPRankingsCSV() {
+  if (!window._liveSERPData || !window._liveSERPData.keywords) {
+    alert('No ranking data loaded to export.');
+    return;
+  }
+  const keywords = window._liveSERPData.keywords;
+  let csvContent = 'data:text/csv;charset=utf-8,';
+  csvContent += 'Keyword,Google_Position,SERP_Bucket,Clicks,Impressions,CTR_Percent,Landing_Page_URL\n';
+
+  keywords.forEach(k => {
+    const q = `"${(k.keyword || '').replace(/"/g, '""')}"`;
+    const p = k.position;
+    const b = `"${k.badge_label}"`;
+    const clk = k.clicks;
+    const imp = k.impressions;
+    const ctr = k.ctr;
+    const url = `"${(k.landing_page || '').replace(/"/g, '""')}"`;
+    csvContent += `${q},${p},${b},${clk},${imp},${ctr},${url}\n`;
+  });
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `CorporateCarsMelbourne_Live_SERP_Rankings_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+async function addSERPKeywordToBlog(kw, pageUrl) {
+  const suggestedTitle = `Executive Chauffeur Guide: ${kw.charAt(0).toUpperCase() + kw.slice(1)} in Melbourne`;
+  await addCustomKeywordToBlog(kw, suggestedTitle, 'Melbourne');
+}
+
+async function addSERPKeywordToSocial(kw) {
+  await addCustomKeywordToSocial(kw);
+}
+
+function auditSERPPageLinks(pageUrl) {
+  closeModal('modal-live-serp-rankings');
+  openInternalLinkAuditModal();
+  setTimeout(() => {
+    pickAuditUrl(pageUrl);
+    submitInternalLinkAudit();
+  }, 200);
+}
+
 // Global scope bindings
 window.openAddBlogTopicsModal = openAddBlogTopicsModal;
 window.updateBlogTopicCounter = updateBlogTopicCounter;
@@ -6633,6 +6904,15 @@ window.fillCustomKeyword = fillCustomKeyword;
 window.submitCustomKeywordAnalysis = submitCustomKeywordAnalysis;
 window.addCustomKeywordToBlog = addCustomKeywordToBlog;
 window.addCustomKeywordToSocial = addCustomKeywordToSocial;
+window.openLiveSERPRankingsModal = openLiveSERPRankingsModal;
+window.loadLiveSERPRankings = loadLiveSERPRankings;
+window.filterSERPBucket = filterSERPBucket;
+window.handleSERPSearch = handleSERPSearch;
+window.renderSERPRankingsTable = renderSERPRankingsTable;
+window.exportSERPRankingsCSV = exportSERPRankingsCSV;
+window.addSERPKeywordToBlog = addSERPKeywordToBlog;
+window.addSERPKeywordToSocial = addSERPKeywordToSocial;
+window.auditSERPPageLinks = auditSERPPageLinks;
 
 
 

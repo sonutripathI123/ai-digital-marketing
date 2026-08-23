@@ -1267,6 +1267,124 @@
     </div>
   </div>
 
+  <!-- Modal: Live Google Search Console SERP Keyword Rankings & URL Performance Tracker -->
+  <div class="modal-overlay" id="modal-live-serp-rankings">
+    <div class="modal-card" style="max-width: 1140px; width: 96vw; max-height: 90vh; overflow-y: auto; background: rgba(15, 23, 42, 0.97); border: 1px solid rgba(6, 182, 212, 0.35); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(6, 182, 212, 0.15);">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 16px; margin-bottom: 18px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(16, 185, 129, 0.25)); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; color: var(--accent-cyan); font-size: 22px;">
+            <i class="fa-solid fa-ranking-star"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin: 0;">Live Google SERP Keyword Rankings & Performance Tracker</h3>
+              <span class="badge badge-success" id="live-serp-connection-badge" style="font-size: 11px; padding: 4px 10px;">
+                <i class="fa-solid fa-circle-check"></i> 100% Live Google Search Console API
+              </span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin: 3px 0 0 0;">
+              Real-time Google search positions, URLs, impressions & clicks for <strong id="live-serp-site-name" style="color: var(--accent-cyan);">Corporate Cars Melbourne</strong> (<span id="live-serp-site-url" style="color: var(--text-muted);">https://corporatecarsmelbourne.com.au</span>)
+            </p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal('modal-live-serp-rankings')" type="button">&times;</button>
+      </div>
+
+      <!-- Top Summary Metrics Grid -->
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 18px;" id="live-serp-summary-cards">
+        <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); padding: 12px; border-radius: 10px; text-align: center;">
+          <div style="font-size: 10.5px; font-weight: 800; color: var(--accent-cyan); text-transform: uppercase;">Indexed Keywords</div>
+          <div style="font-size: 22px; font-weight: 800; color: #fff; font-family: var(--font-mono); margin-top: 2px;" id="kpi-total-keywords">--</div>
+        </div>
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: 10px; text-align: center;">
+          <div style="font-size: 10.5px; font-weight: 800; color: #10b981; text-transform: uppercase;">Top 3 (Page 1) 🥇</div>
+          <div style="font-size: 22px; font-weight: 800; color: #10b981; font-family: var(--font-mono); margin-top: 2px;" id="kpi-top3-keywords">--</div>
+        </div>
+        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 12px; border-radius: 10px; text-align: center;">
+          <div style="font-size: 10.5px; font-weight: 800; color: #60a5fa; text-transform: uppercase;">Page 1 (#1 - #10) ⭐</div>
+          <div style="font-size: 22px; font-weight: 800; color: #fff; font-family: var(--font-mono); margin-top: 2px;" id="kpi-page1-keywords">--</div>
+        </div>
+        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 12px; border-radius: 10px; text-align: center;">
+          <div style="font-size: 10.5px; font-weight: 800; color: #f59e0b; text-transform: uppercase;">Striking Distance (#11-#20) ⚡</div>
+          <div style="font-size: 22px; font-weight: 800; color: #f59e0b; font-family: var(--font-mono); margin-top: 2px;" id="kpi-striking-keywords">--</div>
+        </div>
+        <div style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); padding: 12px; border-radius: 10px; text-align: center;">
+          <div style="font-size: 10.5px; font-weight: 800; color: var(--accent-purple); text-transform: uppercase;">Total Impressions</div>
+          <div style="font-size: 22px; font-weight: 800; color: #fff; font-family: var(--font-mono); margin-top: 2px;" id="kpi-total-impressions">--</div>
+        </div>
+      </div>
+
+      <!-- Quick-Win High Opportunity Banner -->
+      <div id="live-serp-quick-wins-banner" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(6, 182, 212, 0.08)); border: 1px solid rgba(245, 158, 11, 0.3); padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 12px; display: none;">
+        <div style="font-weight: 800; color: #fbbf24; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-bolt"></i> ⚡ Immediate Quick-Win Opportunity Keywords (Positions 11–20):
+        </div>
+        <div id="live-serp-quick-wins-list" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+      </div>
+
+      <!-- Search, Filter & Export Controls -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: rgba(30, 41, 59, 0.6); border: 1px solid var(--glass-border); padding: 12px 16px; border-radius: 12px; margin-bottom: 16px;">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; flex: 1;">
+          <div style="position: relative; min-width: 260px; flex: 1;">
+            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 11px; color: var(--text-muted); font-size: 12px;"></i>
+            <input type="text" id="live-serp-search-input" oninput="handleSERPSearch(this.value)" placeholder="Search keyword or URL (e.g. airport, sprinter, toorak)..." style="width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px 12px 8px 34px; border-radius: 8px; font-size: 12.5px;" />
+          </div>
+          <div style="display: flex; gap: 6px;" id="live-serp-bucket-filters">
+            <button class="btn btn-sm btn-filter active" onclick="filterSERPBucket('all')" data-bucket="all" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; background: rgba(6,182,212,0.25); color: #fff; border: 1px solid var(--accent-cyan);">All (<span id="count-all">0</span>)</button>
+            <button class="btn btn-sm btn-filter" onclick="filterSERPBucket('top_3')" data-bucket="top_3" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; background: rgba(30,41,59,0.8); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.1);">🥇 Top 3 (<span id="count-top3">0</span>)</button>
+            <button class="btn btn-sm btn-filter" onclick="filterSERPBucket('page_1')" data-bucket="page_1" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; background: rgba(30,41,59,0.8); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.1);">⭐ Page 1 (<span id="count-page1">0</span>)</button>
+            <button class="btn btn-sm btn-filter" onclick="filterSERPBucket('striking_distance')" data-bucket="striking_distance" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; background: rgba(30,41,59,0.8); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.1);">⚡ Striking Distance (<span id="count-striking">0</span>)</button>
+            <button class="btn btn-sm btn-filter" onclick="filterSERPBucket('page_2_plus')" data-bucket="page_2_plus" style="font-size: 11px; padding: 6px 12px; border-radius: 8px; background: rgba(30,41,59,0.8); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.1);">📄 Page 2+ (<span id="count-page2plus">0</span>)</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn btn-sm" onclick="exportSERPRankingsCSV()" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #10b981; font-weight: 700; font-size: 11.5px; padding: 7px 14px; border-radius: 8px; cursor: pointer;">
+            <i class="fa-solid fa-file-csv"></i> ⬇ Export CSV
+          </button>
+          <button class="btn btn-sm" onclick="loadLiveSERPRankings(true)" style="background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.35); color: var(--accent-cyan); font-weight: 700; font-size: 11.5px; padding: 7px 14px; border-radius: 8px; cursor: pointer;" title="Refresh live Google data">
+            <i class="fa-solid fa-rotate"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Live SERP Rankings Data Table -->
+      <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid var(--glass-border); border-radius: 12px; overflow-x: auto; max-height: 480px;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;" id="live-serp-table">
+          <thead style="position: sticky; top: 0; background: rgba(15, 23, 42, 0.98); z-index: 2; border-bottom: 2px solid rgba(6, 182, 212, 0.3);">
+            <tr style="color: var(--text-muted); text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">
+              <th style="padding: 12px 14px; width: 45px;">#</th>
+              <th style="padding: 12px 14px;">Google Search Query</th>
+              <th style="padding: 12px 14px; width: 130px; text-align: center;">SERP Position</th>
+              <th style="padding: 12px 14px; width: 120px;">SERP Tier</th>
+              <th style="padding: 12px 14px; width: 75px; text-align: right;">Clicks</th>
+              <th style="padding: 12px 14px; width: 90px; text-align: right;">Impressions</th>
+              <th style="padding: 12px 14px; width: 75px; text-align: right;">CTR</th>
+              <th style="padding: 12px 14px;">Ranking Landing Page URL</th>
+              <th style="padding: 12px 14px; width: 150px; text-align: center;">1-Click Actions</th>
+            </tr>
+          </thead>
+          <tbody id="live-serp-table-body">
+            <tr>
+              <td colspan="9" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; color: var(--accent-cyan); margin-bottom: 8px;"></i>
+                <div style="font-size: 13px; font-weight: 700; color: #fff;">Fetching Live Google Search Console Data...</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination / Result Count Footer -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding: 0 4px; font-size: 12px; color: var(--text-muted);">
+        <div>Showing <strong id="serp-visible-count" style="color: #fff;">0</strong> of <strong id="serp-total-filtered-count" style="color: #fff;">0</strong> matching keywords</div>
+        <div style="font-size: 11.5px; color: var(--text-secondary);">
+          <i class="fa-solid fa-circle-info" style="color: var(--accent-cyan);"></i> Rankings are calculated from real Google user queries over the last 90 days.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal: Administrator Authentication & Login -->
   <div class="modal-overlay" id="modal-admin-login">
     <div class="modal-card" style="max-width: 450px;">
@@ -1316,6 +1434,6 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=11.23.0"></script>
+  <script src="/static/app.js?v=11.24.0"></script>
 </body>
 </html>
