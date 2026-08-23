@@ -2789,9 +2789,14 @@ async function viewAgentReport(agentId) {
               Auditing search volume, intent classification, and low-difficulty keyword opportunities for <strong>${data.site_name}</strong>.
             </div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="runAgentNow('seo-keyword-agent', 'research')" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); font-size:12px; font-weight:700; padding:8px 18px; border:none;">
-            <i class="fa-solid fa-bolt"></i> + Research High-Intent Keywords
-          </button>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button class="btn btn-sm" onclick="openCustomKeywordResearchModal()" style="background:linear-gradient(135deg, #10b981, #059669); font-size:12px; font-weight:800; padding:8px 18px; border:none; box-shadow:0 4px 14px rgba(16,185,129,0.35); cursor:pointer; color:#fff;">
+              <i class="fa-solid fa-magnifying-glass-plus"></i> 🔍 + Research Any Custom Keyword
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="runAgentNow('seo-keyword-agent', 'research')" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); font-size:12px; font-weight:700; padding:8px 18px; border:none; color:#fff;">
+              <i class="fa-solid fa-bolt"></i> + Auto-Cluster Sync
+            </button>
+          </div>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-bottom:20px;">
@@ -6405,6 +6410,179 @@ async function exportMonthlyPDFReport(siteId = 'ccm') {
   }
 }
 
+function openCustomKeywordResearchModal(seedKeyword = '') {
+  const input = document.getElementById('custom-keyword-input');
+  const resultsDiv = document.getElementById('custom-keyword-results');
+  if (input) input.value = seedKeyword || '';
+  if (resultsDiv) {
+    resultsDiv.style.display = 'none';
+    resultsDiv.innerHTML = '';
+  }
+  openModal('modal-custom-keyword-research');
+  if (seedKeyword) {
+    setTimeout(() => submitCustomKeywordAnalysis(), 100);
+  }
+}
+
+function fillCustomKeyword(kw) {
+  const input = document.getElementById('custom-keyword-input');
+  if (input) {
+    input.value = kw;
+    submitCustomKeywordAnalysis();
+  }
+}
+
+async function submitCustomKeywordAnalysis(event) {
+  if (event) event.preventDefault();
+  const input = document.getElementById('custom-keyword-input');
+  const kw = input ? input.value.trim() : '';
+  if (!kw) {
+    alert('Please enter a keyword to analyze.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit-keyword-analysis');
+  const resultsDiv = document.getElementById('custom-keyword-results');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...';
+  }
+
+  resultsDiv.style.display = 'block';
+  resultsDiv.innerHTML = `
+    <div style="text-align:center; padding:30px; color:var(--text-muted);">
+      <i class="fa-solid fa-circle-notch fa-spin" style="font-size:24px; color:var(--accent-cyan); margin-bottom:10px;"></i>
+      <div style="font-size:13px; font-weight:700; color:#fff;">Analyzing Search Volume & Commercial Intent...</div>
+      <div style="font-size:11.5px; margin-top:4px;">Evaluating competition, CPC, and ranking impact for "${kw}"</div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch('/api/seo/keyword/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keyword: kw, location: 'Melbourne', site_id: currentSiteId })
+    });
+    const data = await res.json();
+    if (data.status !== 'success') {
+      resultsDiv.innerHTML = `<div style="padding:14px; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); border-radius:10px; color:#fca5a5; font-size:12.5px;">Error: ${data.detail || 'Analysis failed'}</div>`;
+      return;
+    }
+
+    resultsDiv.innerHTML = `
+      <!-- 4 Core Metric Badges -->
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
+        <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:12px; border-radius:10px; text-align:center;">
+          <div style="font-size:10px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">Search Volume</div>
+          <div style="font-size:20px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:2px;">${(data.search_volume || 0).toLocaleString()} <span style="font-size:10px; color:var(--text-muted);">/mo</span></div>
+        </div>
+        <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:12px; border-radius:10px; text-align:center;">
+          <div style="font-size:10px; font-weight:800; color:#10b981; text-transform:uppercase;">Difficulty (KD%)</div>
+          <div style="font-size:20px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:2px;">${data.difficulty_percent}%</div>
+        </div>
+        <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:12px; border-radius:10px; text-align:center;">
+          <div style="font-size:10px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Search Intent</div>
+          <div style="font-size:12px; font-weight:800; color:#fff; margin-top:6px;">${data.search_intent.split(' ')[0]}</div>
+        </div>
+        <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:12px; border-radius:10px; text-align:center;">
+          <div style="font-size:10px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Est. CPC (AUD)</div>
+          <div style="font-size:16px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${data.estimated_cpc_aud}</div>
+        </div>
+      </div>
+
+      <!-- Business Fit & Ranking Impact Verdict -->
+      <div style="background:rgba(15,23,42,0.9); border:1px solid var(--glass-border-glow); padding:16px; border-radius:12px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:12px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">
+            <i class="fa-solid fa-bullseye"></i> Website Relevance & Ranking Verdict:
+          </span>
+          <span class="badge ${data.business_relevance_score >= 80 ? 'badge-success' : 'badge-warning'}" style="font-size:11px;">
+            Fit Score: ${data.business_relevance_score}/100 (${data.ranking_potential})
+          </span>
+        </div>
+        <div style="font-size:13px; color:#fff; font-weight:600; line-height:1.5;">
+          ${data.ranking_impact_verdict}
+        </div>
+      </div>
+
+      <!-- Actionable Execution Strategy -->
+      <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); padding:16px; border-radius:12px; margin-bottom:16px;">
+        <div style="font-size:11.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">
+          <i class="fa-solid fa-route"></i> Recommended SEO Action Strategy:
+        </div>
+        ${(data.actionable_strategy || []).map(s => `
+          <div style="font-size:12px; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:flex-start; gap:6px;">
+            <i class="fa-solid fa-circle-check" style="color:var(--status-success); margin-top:3px; font-size:11px;"></i>
+            <span>${s}</span>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- 1-Click Action Integration Buttons -->
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; background:rgba(6,182,212,0.06); border:1px solid rgba(6,182,212,0.25); padding:14px; border-radius:12px;">
+        <div>
+          <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Suggested Blog Title:</div>
+          <div style="font-size:12.5px; font-weight:700; color:#fff;">${data.suggested_blog_title}</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="btn btn-sm" onclick="addCustomKeywordToBlog('${escapeHtml(data.keyword)}', '${escapeHtml(data.suggested_blog_title)}', '${escapeHtml(data.detected_suburb)}')" style="background:linear-gradient(135deg, #06b6d4, #0284c7); border:none; font-weight:700; color:#fff; cursor:pointer;">
+            <i class="fa-solid fa-plus-circle"></i> + Add to Blog Queue
+          </button>
+          <button type="button" class="btn btn-sm" onclick="addCustomKeywordToSocial('${escapeHtml(data.keyword)}')" style="background:linear-gradient(135deg, #a855f7, #9333ea); border:none; font-weight:700; color:#fff; cursor:pointer;">
+            <i class="fa-solid fa-share-nodes"></i> + Add to Social Pool
+          </button>
+        </div>
+      </div>
+    `;
+
+  } catch (err) {
+    resultsDiv.innerHTML = `<div style="padding:14px; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); border-radius:10px; color:#fca5a5; font-size:12.5px;">Failed to analyze keyword: ${err.message || err}</div>`;
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-bolt"></i> 🚀 Analyze Keyword';
+    }
+  }
+}
+
+async function addCustomKeywordToBlog(keyword, titleHint, suburb) {
+  if (!requireAdminAction('add topics to blog queue')) return;
+  try {
+    const res = await fetch('/api/seo/keyword/add-to-blog', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ keyword, title_hint: titleHint, suburb, site: currentSiteId })
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      alert(`Success! "${keyword}" has been added to Blog Queue as topic #${data.topic.id}. Blog Agent will auto-write and publish this article!`);
+    } else {
+      alert(`Failed to add to blog: ${data.detail || data.message || 'Error'}`);
+    }
+  } catch (err) {
+    alert(`Error: ${err.message || err}`);
+  }
+}
+
+async function addCustomKeywordToSocial(keyword) {
+  if (!requireAdminAction('add keywords to social pool')) return;
+  try {
+    const res = await fetch('/api/seo/keyword/add-to-social', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ keyword, category: 'corporate chauffeur' })
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      alert(`Success! "${keyword}" added to Social Media Keyword Pool.`);
+    } else {
+      alert(`Failed to add to social pool: ${data.detail || data.message || 'Error'}`);
+    }
+  } catch (err) {
+    alert(`Error: ${err.message || err}`);
+  }
+}
+
 // Global scope bindings
 window.openAddBlogTopicsModal = openAddBlogTopicsModal;
 window.updateBlogTopicCounter = updateBlogTopicCounter;
@@ -6424,6 +6602,11 @@ window.pickSEOAuditUrl = pickSEOAuditUrl;
 window.submitSEOAudit = submitSEOAudit;
 window.runAgentNow = runAgentNow;
 window.exportMonthlyPDFReport = exportMonthlyPDFReport;
+window.openCustomKeywordResearchModal = openCustomKeywordResearchModal;
+window.fillCustomKeyword = fillCustomKeyword;
+window.submitCustomKeywordAnalysis = submitCustomKeywordAnalysis;
+window.addCustomKeywordToBlog = addCustomKeywordToBlog;
+window.addCustomKeywordToSocial = addCustomKeywordToSocial;
 
 
 
