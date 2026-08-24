@@ -1913,20 +1913,21 @@ async function viewAgentReport(agentId) {
       const ps = lf.performance_summary || {};
       const tq = lf.top_queries || [];
       const qw = lf.quick_win_opportunities || [];
-      const isLive = lf.live_data_connected !== false;
+      const isCcm = (data.site_id === 'ccm' || currentSiteId === 'ccm');
+      const isConnected = isCcm && lf.status !== 'not_connected';
 
       container.innerHTML = `
         <!-- Live Connection Status Banner -->
         <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, rgba(59,130,246,0.15), rgba(15,23,42,0.8)); border:1px solid rgba(59,130,246,0.3); padding:16px 20px; border-radius:14px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
           <div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge ${isLive ? 'badge-success' : 'badge-warning'}" style="font-size:11px; padding:4px 10px; font-weight:800;">
-                <i class="fa-solid fa-circle" style="font-size:8px; margin-right:4px;"></i> ${isLive ? '100% LIVE GSC API CONNECTED' : 'FALLBACK DATA'}
+              <span class="badge ${isConnected ? 'badge-success' : 'badge-warning'}" style="font-size:11px; padding:4px 10px; font-weight:800;">
+                <i class="fa-solid fa-circle" style="font-size:8px; margin-right:4px;"></i> ${isConnected ? '100% LIVE GSC API CONNECTED' : '🟡 GSC PROPERTY NOT CONNECTED YET'}
               </span>
-              <span style="font-size:12px; color:var(--text-muted);">Property: <strong>https://corporatecarsmelbourne.com.au/</strong></span>
+              <span style="font-size:12px; color:var(--text-muted);">Property: <strong>https://${escapeHtml((data.site_domain || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))}/</strong></span>
             </div>
             <div style="font-size:12.5px; color:var(--text-secondary); margin-top:5px;">
-              Authenticated with Google Service Account (<code>siteFullUser</code> access). Real organic search metrics from Google.
+              ${isConnected ? 'Authenticated with Google Service Account (<code>siteFullUser</code> access). Real organic search metrics from Google.' : `Google Search Console property for <strong>${escapeHtml(data.site_name)}</strong> is not verified yet. Add the service account in GSC to see live organic search metrics.`}
             </div>
           </div>
           <button class="btn btn-primary btn-sm" onclick="runAgentNow('gsc-agent')" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; font-size:12px; font-weight:700;">
@@ -1938,22 +1939,22 @@ async function viewAgentReport(agentId) {
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:14px; margin-bottom:20px;">
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#3b82f6; text-transform:uppercase;">Total Organic Clicks</div>
-            <div style="font-size:26px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ps.total_clicks ?? 14}</div>
+            <div style="font-size:26px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${isConnected ? (ps.total_clicks ?? 0) : 0}</div>
             <div style="font-size:10.5px; color:var(--text-muted); margin-top:2px;">Last 28 Days</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Total Impressions</div>
-            <div style="font-size:26px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ps.total_impressions ?? 787}</div>
+            <div style="font-size:26px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${isConnected ? (ps.total_impressions ?? 0) : 0}</div>
             <div style="font-size:10.5px; color:var(--text-muted); margin-top:2px;">Search Visibility</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#10b981; text-transform:uppercase;">Average CTR</div>
-            <div style="font-size:26px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ps.average_ctr_percent ?? 3.72}%</div>
+            <div style="font-size:26px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${isConnected ? (ps.average_ctr_percent ?? 0) : 0}%</div>
             <div style="font-size:10.5px; color:var(--text-muted); margin-top:2px;">Organic Click Rate</div>
           </div>
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Average Position</div>
-            <div style="font-size:26px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ps.average_position ?? 28.6}</div>
+            <div style="font-size:26px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${isConnected ? (ps.average_position ?? 0) : '-'}</div>
             <div style="font-size:10.5px; color:var(--text-muted); margin-top:2px;">Overall Search Rank</div>
           </div>
         </div>
@@ -1961,7 +1962,7 @@ async function viewAgentReport(agentId) {
         <!-- Top Search Queries Table -->
         <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
           <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-            <i class="fa-brands fa-google" style="color:#38bdf8;"></i> Top Organic Search Queries from Google (${tq.length} Live Queries)
+            <i class="fa-brands fa-google" style="color:#38bdf8;"></i> Top Organic Search Queries from Google (${isConnected ? tq.length : 0} Live Queries)
           </div>
           <div style="overflow-x:auto;">
             <table class="table" style="width:100%; font-size:12px; margin-bottom:0;">
@@ -1976,7 +1977,7 @@ async function viewAgentReport(agentId) {
                 </tr>
               </thead>
               <tbody>
-                ${tq.map(q => `
+                ${(isConnected && tq.length > 0) ? tq.map(q => `
                   <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
                     <td style="padding:8px 10px; font-weight:700; color:#fff;">${q.query}</td>
                     <td style="padding:8px 10px; font-family:var(--font-mono); color:#10b981; font-weight:800;">${q.clicks}</td>
@@ -1991,45 +1992,21 @@ async function viewAgentReport(agentId) {
                       </span>
                     </td>
                   </tr>
-                `).join('')}
+                `).join('') : `
+                  <tr>
+                    <td colspan="6" style="padding: 24px 14px; text-align: center; color: var(--text-muted);">
+                      No Google Search Console data connected for <strong>${escapeHtml(data.site_name)}</strong> yet. Connect your GSC property to see live keyword clicks & impressions.
+                    </td>
+                  </tr>
+                `}
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Quick-Win Keyword Opportunities -->
-        ${qw.length > 0 ? `
-          <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.3); border-radius:14px; padding:18px 20px; margin-bottom:20px;">
-            <div style="font-size:13px; font-weight:800; color:#f59e0b; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-              <i class="fa-solid fa-bullseye"></i> High-Potential Quick-Win Keyword Targets:
-            </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              ${qw.map(w => `
-                <div style="background:rgba(15,23,42,0.6); padding:10px 14px; border-radius:10px; border-left:3px solid #f59e0b; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                  <div>
-                    <strong style="color:#fff; font-size:13px;">${w.query}</strong>
-                    <div style="font-size:11.5px; color:var(--text-secondary); margin-top:2px;">${w.potential_win}</div>
-                  </div>
-                  <div style="display:flex; gap:8px; align-items:center;">
-                    <span class="badge badge-warning" style="font-family:var(--font-mono); font-size:10.5px;">Pos #${w.current_position}</span>
-                    <span class="badge badge-info" style="font-family:var(--font-mono); font-size:10.5px;">${w.impressions} Impr</span>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        ` : ''}
-
-        <!-- Domain Growth Insights -->
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
-          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">
-            <i class="fa-solid fa-lightbulb"></i> Organic Search Growth Action Plan for ${data.site_name}:
-          </div>
-          ${(lf.actionable_insights || dm.recommendations || []).map(r => `
-            <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:flex-start; gap:8px;">
-              <i class="fa-solid fa-check" style="color:var(--accent-purple); margin-top:3px;"></i> <span>${r}</span>
-            </div>
-          `).join('')}
+          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;"><i class="fa-solid fa-lightbulb"></i> Organic Search Growth Action Plan for ${data.site_name}:</div>
+          ${(dm.recommendations || []).map(r => `<div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;"><i class="fa-solid fa-check" style="color:#10b981; margin-right:4px;"></i> ${r}</div>`).join('')}
         </div>
       `;
     } else if (agentId === 'ga4-reporting-agent') {
@@ -2038,6 +2015,8 @@ async function viewAgentReport(agentId) {
       const om = lf.overview_metrics || {};
       const channels = lf.acquisition_channel_breakdown || [];
       const topPages = lf.top_landing_pages || [];
+      const isCcm = (data.site_id === 'ccm' || currentSiteId === 'ccm');
+      const isGa4Connected = isCcm && lf.status !== 'not_connected';
 
       container.innerHTML = `
         <!-- GA4 Property & Tracking Status Banner -->
@@ -2045,14 +2024,14 @@ async function viewAgentReport(agentId) {
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
             <div>
               <div style="display:flex; align-items:center; gap:8px;">
-                <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800;">
-                  <i class="fa-solid fa-check-circle" style="font-size:10px; margin-right:4px;"></i> SITE TAG INSTALLED & ACTIVE
+                <span class="badge ${isGa4Connected ? 'badge-success' : 'badge-warning'}" style="font-size:11px; padding:4px 10px; font-weight:800;">
+                  <i class="fa-solid fa-circle" style="font-size:8px; margin-right:4px;"></i> ${isGa4Connected ? 'SITE TAG INSTALLED & ACTIVE' : '🟡 GA4 PROPERTY NOT CONFIGURED YET'}
                 </span>
-                <span style="font-size:12px; color:var(--text-muted);">Measurement ID: <strong style="color:var(--accent-cyan); font-family:var(--font-mono);">${lf.measurement_id || 'G-ZHLOK8ZLWV'}</strong></span>
+                <span style="font-size:12px; color:var(--text-muted);">Measurement ID: <strong style="color:var(--accent-cyan); font-family:var(--font-mono);">${isGa4Connected ? (lf.measurement_id || 'G-ZHLOK8ZLWV') : 'Pending Setup'}</strong></span>
               </div>
-              <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">${lf.property_name || 'Corporate Cars Melbourne GA4'}</h3>
+              <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">${isGa4Connected ? (lf.property_name || 'Corporate Cars Melbourne GA4') : `${data.site_name} GA4 (Pending Setup)`}</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
-                Property ID: <code style="color:var(--accent-cyan); font-size:11px;">${lf.property_id || '547374247'}</code> &bull; Account ID: <code style="color:var(--accent-cyan); font-size:11px;">${lf.account_id || '402540807'}</code>
+                Property ID: <code style="color:var(--accent-cyan); font-size:11px;">${isGa4Connected ? (lf.property_id || '547374247') : '-'}</code> &bull; Account ID: <code style="color:var(--accent-cyan); font-size:11px;">${isGa4Connected ? (lf.account_id || '402540807') : '-'}</code>
               </div>
             </div>
             <button class="btn btn-primary btn-sm" onclick="runAgentNow('ga4-reporting-agent')" style="background:linear-gradient(135deg, #06b6d4, #0284c7); border:none; font-size:12px; font-weight:700;">
@@ -2065,27 +2044,27 @@ async function viewAgentReport(agentId) {
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-bottom:20px;">
           <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">Total Users</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(om.total_users !== undefined ? om.total_users : 0).toLocaleString()}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Last 28 Days (Live API)</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${isGa4Connected ? ((om.total_users !== undefined ? om.total_users : 0).toLocaleString()) : 0}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Last 28 Days</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Total Sessions</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(om.total_sessions !== undefined ? om.total_sessions : 0).toLocaleString()}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${isGa4Connected ? ((om.total_sessions !== undefined ? om.total_sessions : 0).toLocaleString()) : 0}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Traffic Volume</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Conversions</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${om.total_conversions !== undefined ? om.total_conversions : 0}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${isGa4Connected ? (om.total_conversions !== undefined ? om.total_conversions : 0) : 0}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Quotes & Bookings</div>
           </div>
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Engagement Rate</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${om.average_engagement_rate || '0.0%'}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${isGa4Connected ? (om.average_engagement_rate || '0.0%') : '0.0%'}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">User Interaction</div>
           </div>
           <div style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#ec4899; text-transform:uppercase;">Conversion Rate</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${om.conversion_rate || '0.0%'}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${isGa4Connected ? (om.conversion_rate || '0.0%') : '0.0%'}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Session to Lead</div>
           </div>
         </div>
