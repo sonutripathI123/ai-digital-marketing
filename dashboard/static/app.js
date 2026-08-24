@@ -110,24 +110,26 @@ function openAdminLoginModal(customMessage) {
       alertBox.textContent = customMessage;
       alertBox.style.display = 'block';
     } else {
+      alertBox.textContent = '';
       alertBox.style.display = 'none';
     }
   }
   const emailInput = document.getElementById('admin-login-email');
   const passInput = document.getElementById('admin-login-password');
+  if (emailInput) emailInput.value = '';
   if (passInput) passInput.value = '';
   openModal('modal-admin-login');
-  if (emailInput && !emailInput.value) {
+  if (emailInput) {
     emailInput.focus();
-  } else if (passInput) {
-    passInput.focus();
   }
 }
 
 async function handleAdminLogin(e) {
   e.preventDefault();
-  const email = document.getElementById('admin-login-email').value.trim();
-  const password = document.getElementById('admin-login-password').value;
+  const emailInput = document.getElementById('admin-login-email');
+  const passInput = document.getElementById('admin-login-password');
+  const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+  const password = passInput ? passInput.value : '';
   const alertBox = document.getElementById('admin-login-alert');
   const btn = document.getElementById('btn-submit-admin-login');
 
@@ -152,9 +154,16 @@ async function handleAdminLogin(e) {
     btn.disabled = false;
     btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin';
 
-    if (!res.ok || data.status === 'error') {
+    if (!res.ok || data.status === 'error' || !data.token) {
+      authToken = null;
+      currentUserRole = 'viewer';
+      localStorage.removeItem('ccm_admin_token');
+      sessionStorage.removeItem('ccm_admin_token');
+      renderAuthHeaderUI();
+
+      if (passInput) passInput.value = '';
       if (alertBox) {
-        alertBox.textContent = data.detail || 'Invalid Admin credentials. Only authorized Admin can log in.';
+        alertBox.textContent = data.detail || 'Access Denied: Invalid Admin Email or Password. Only authorized Super Admin can log in.';
         alertBox.style.display = 'block';
       }
       return;
@@ -162,15 +171,21 @@ async function handleAdminLogin(e) {
 
     authToken = data.token;
     localStorage.setItem('ccm_admin_token', authToken);
+    sessionStorage.setItem('ccm_admin_token', authToken);
     currentUserRole = 'admin';
 
     closeModal('modal-admin-login');
     renderAuthHeaderUI();
-    alert('Super Admin session unlocked! You now have Full Control to run tasks, add topics, and create campaigns.');
+    alert('Super Admin session authenticated successfully! You now have Full Control.');
     await loadCurrentView(activeView);
   } catch (err) {
     btn.disabled = false;
     btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin';
+    authToken = null;
+    currentUserRole = 'viewer';
+    localStorage.removeItem('ccm_admin_token');
+    sessionStorage.removeItem('ccm_admin_token');
+    renderAuthHeaderUI();
     if (alertBox) {
       alertBox.textContent = `Connection error: ${err.message}`;
       alertBox.style.display = 'block';

@@ -1350,8 +1350,11 @@ body {
   }
 
   #workspace {
-    padding: 14px 12px 30px 12px;
+    padding: 14px 10px 30px 10px;
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
 
   /* Grid Layouts Stacked on Mobile */
@@ -1373,34 +1376,107 @@ body {
   /* Touch-Friendly Responsive Table Containers */
   .table-card, .data-table-wrap, .panel {
     overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
     margin-bottom: 16px;
-  }
-
-  table {
-    min-width: 620px;
+    display: block !important;
   }
 
   /* Full-Screen Adaptive Mobile Modals */
   .modal-overlay {
-    padding: 10px;
-    align-items: flex-start;
-    overflow-y: auto;
+    padding: 8px !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
   }
 
   .modal-card {
     width: 100% !important;
     max-width: 100% !important;
-    margin: 20px auto !important;
-    padding: 18px 14px !important;
-    max-height: calc(100vh - 40px) !important;
-    border-radius: 16px !important;
+    margin: 10px auto !important;
+    padding: 14px 10px !important;
+    max-height: calc(100vh - 20px) !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Dynamic Multi-Column Grid Overrides inside Modals & Reports */
+  .modal-card div[style*="grid-template-columns"],
+  .report-container div[style*="grid-template-columns"],
+  #report-content div[style*="grid-template-columns"],
+  div[style*="grid-template-columns: 1fr 1fr 1fr"],
+  div[style*="grid-template-columns:1fr 1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr"],
+  div[style*="grid-template-columns:1fr 1fr"],
+  div[style*="grid-template-columns: repeat"],
+  #live-serp-summary-cards {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* Ensure flex headers & banners wrap naturally without horizontal stretching */
+  .modal-header,
+  .modal-card div[style*="display: flex"],
+  .modal-card div[style*="display:flex"],
+  .modal-card div[style*="justify-content: space-between"],
+  .modal-card div[style*="justify-content:space-between"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* Safe text wrapping inside modal elements */
+  .modal-card p, .modal-card span, .modal-card h1, .modal-card h2, .modal-card h3, .modal-card h4 {
+    max-width: 100% !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .modal-card div[style*="overflow-x: auto"],
+  .modal-card div[style*="overflow-x:auto"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+
+  .modal-card table, table {
+    min-width: 520px !important;
+    word-break: normal !important;
+  }
+
+  #live-serp-bucket-filters, .filter-bar, .btn-group {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  #live-serp-bucket-filters button {
+    flex: 1 1 auto !important;
+    text-align: center !important;
+  }
+
+  #live-serp-search-input {
+    min-width: 100% !important;
   }
 }
 
 /* --- Small Mobile Phones (max-width: 480px) --- */
 @media (max-width: 480px) {
+  html, body, #app-layout, #main-container, #workspace {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+
   .header-title-group h1 {
     font-size: 15px;
   }
@@ -1442,12 +1518,12 @@ body {
   }
 
   .metric-card {
-    padding: 16px;
+    padding: 14px;
     border-radius: 14px;
   }
 
   .metric-value {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   .form-group label {
@@ -1457,5 +1533,14 @@ body {
   .form-control {
     padding: 10px 12px;
     font-size: 12px;
+  }
+
+  .modal-overlay {
+    padding: 4px !important;
+  }
+
+  .modal-card {
+    padding: 12px 8px !important;
+    margin: 6px 0 !important;
   }
 }
