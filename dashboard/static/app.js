@@ -3180,16 +3180,16 @@ async function viewAgentReport(agentId) {
             <span class="badge badge-info" style="font-size:11px;">LATEST GENERATED BRIEF STRUCTURE</span>
             <span style="font-size:11px; color:var(--accent-cyan); font-family:var(--font-mono);"><i class="fa-solid fa-check-circle"></i> Schema & FAQ Injected</span>
           </div>
-          <h3 style="font-size:16px; font-weight:800; color:#fff; margin-bottom:10px;">${(lb.suggested_h1_titles && lb.suggested_h1_titles[0]) || 'Ultimate Guide to Luxury Airport Transfers & Corporate Chauffeurs'}</h3>
+          <h3 style="font-size:16px; font-weight:800; color:#fff; margin-bottom:10px;">${lb.primary_h1 || (lb.title_suggestions && lb.title_suggestions[0]) || (lb.suggested_h1_titles && lb.suggested_h1_titles[0]) || `Ultimate Guide to ${escapeHtml(lb.target_keyword || 'Airport Transfers')} for ${escapeHtml(data.site_name)}`}</h3>
           <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
-            <span class="action-chip" style="color:var(--accent-cyan);">Target Keyword: <strong>${lb.target_keyword || 'Melbourne Airport Transfer'}</strong></span>
-            <span class="action-chip" style="color:#10b981;">Target Word Count: <strong>${lb.recommended_word_count || '1,200 - 1,400'}</strong></span>
-            <span class="action-chip" style="color:#f59e0b;">Target Location: <strong>${lb.location || 'Melbourne, VIC'}</strong></span>
+            <span class="action-chip" style="color:var(--accent-cyan);">Target Keyword: <strong>${escapeHtml(lb.target_keyword || 'Melbourne Airport Transfer')}</strong></span>
+            <span class="action-chip" style="color:#10b981;">Target Word Count: <strong>${escapeHtml(lb.recommended_word_count || '1,200 - 1,500')}</strong></span>
+            <span class="action-chip" style="color:#f59e0b;">Target Location: <strong>${escapeHtml(lb.location || 'Melbourne, VIC')}</strong></span>
           </div>
 
           <div style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px;">H2 / H3 Content Hierarchy Blueprint:</div>
           <div style="display:flex; flex-direction:column; gap:8px;">
-            ${(lb.outline || []).slice(0, 4).map(sec => `
+            ${((lb.structured_outline || lb.outline) || []).slice(0, 4).map(sec => `
               <div style="background:rgba(30,41,59,0.5); padding:10px 14px; border-radius:8px; border-left:3px solid var(--accent-purple);">
                 <div style="font-size:13px; font-weight:700; color:#fff;">${sec.heading} <span style="font-size:10px; color:var(--accent-purple);">[${sec.level}]</span></div>
                 <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">Key points: ${(sec.key_points || []).join(' &bull; ')}</div>
