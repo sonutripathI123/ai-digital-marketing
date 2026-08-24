@@ -5694,7 +5694,14 @@ async function handleSaveSocialCampaign(e) {
         auto_schedule: true
       })
     });
-    const data = await res.json();
+    
+    let data = {};
+    try {
+      data = await res.json();
+    } catch (parseErr) {
+      data = { detail: `Server response error (${res.status} ${res.statusText})` };
+    }
+
     btn.disabled = false;
     btn.innerHTML = '<i class="fa-solid fa-calendar-plus"></i> Generate Campaign & Auto-Schedule';
 
@@ -5704,7 +5711,7 @@ async function handleSaveSocialCampaign(e) {
     }
 
     closeModal('modal-add-social-campaign');
-    alert(`Success! Generated and scheduled ${data.scheduled_posts_count} new social posts across ${data.platforms.length} platforms for [${site.toUpperCase()}].\nPosts are queued in auto-publish scheduler.`);
+    alert(`🎉 Success! Generated and scheduled ${data.scheduled_posts_count} new social posts across ${data.platforms.length} platforms for [${site.toUpperCase()}].\nPosts are queued in auto-publish scheduler.`);
     await loadAgents();
   } catch (err) {
     btn.disabled = false;

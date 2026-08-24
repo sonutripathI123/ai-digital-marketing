@@ -1568,8 +1568,8 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
     if not platforms:
         platforms = ["instagram", "facebook", "linkedin"]
 
-    site_prof = websites_mgr.get_website(site)
-    brand_name = site_prof.name if site_prof else "Corporate Cars Melbourne"
+    site_prof = websites_mgr.get(site)
+    brand_name = site_prof.name if site_prof else ("Opal Chauffeurs" if site == "opal" else "Corporate Cars Melbourne")
 
     scheduled_posts = []
     base_time = datetime.now(timezone.utc) + timedelta(hours=2)
