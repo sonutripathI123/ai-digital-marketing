@@ -1455,12 +1455,13 @@ async function viewAgentReport(agentId) {
       const li = sm.platforms?.linkedin || { published: 0, scheduled: 0, followers: 0, impressions: 0, clicks: 0, engagement_rate: "0%" };
       const acc = sm.live_connected_accounts || {};
       const pubHistory = sm.published_posts_history || [];
+      const schedQueue = sm.scheduled_queue_posts || [];
 
       container.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.3); padding:14px 18px; border-radius:14px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
           <div>
             <div style="font-size:13.5px; font-weight:800; color:var(--accent-purple);"><i class="fa-solid fa-share-nodes"></i> Live Social Media Analytics & Multi-Platform Engine</div>
-            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Target: <strong>${data.site_name}</strong> &bull; Total Published: <strong>${sm.total_published_posts || (fb.published + ig.published + li.published)}</strong> &bull; Scheduled Queue: <strong>${sm.total_scheduled_queue || (fb.scheduled + ig.scheduled + li.scheduled)}</strong></div>
+            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Target: <strong>${data.site_name}</strong> &bull; Total Published: <strong>${sm.total_published_posts || (fb.published + ig.published + li.published)}</strong> &bull; Scheduled Queue: <strong>${sm.total_scheduled_queue || schedQueue.length || (fb.scheduled + ig.scheduled + li.scheduled)}</strong></div>
           </div>
           <button class="btn btn-primary btn-sm" onclick="openAddSocialCampaignModal('${currentSiteId}')" style="font-size:12px; padding:8px 16px; background:linear-gradient(135deg, var(--accent-purple), #ec4899); border:none; font-weight:700;">
             <i class="fa-solid fa-plus"></i> + Add Keywords & Auto-Generate
@@ -1478,7 +1479,7 @@ async function viewAgentReport(agentId) {
                 <span class="badge ${acc.facebook?.connected ? 'badge-success' : 'badge-secondary'}" style="font-size:10px;">${acc.facebook?.connected ? 'CONNECTED' : 'NOT CONNECTED'}</span>
               </div>
               <div style="font-size:12.5px; font-weight:700; color:#fff; margin-top:6px;">${acc.facebook?.name || `${data.site_name} Facebook`}</div>
-              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Meta Page ID: <code style="color:var(--accent-cyan); font-size:10px;">${acc.facebook?.page_id || '-'}</code></div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Meta Page: <code style="color:var(--accent-cyan); font-size:10px;">${acc.facebook?.page_id || '-'}</code> &bull; ${acc.facebook?.followers || 0} Followers</div>
             </div>
             <div style="background:rgba(236,72,153,0.08); border:1px solid rgba(236,72,153,0.3); padding:12px; border-radius:10px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -1515,6 +1516,68 @@ async function viewAgentReport(agentId) {
             <div style="font-size:12px; color:var(--text-primary); margin-top:6px;">Published: <strong>${li.published}</strong> | Scheduled: <strong>${li.scheduled}</strong></div>
             <div style="font-size:11px; color:#0ea5e9; margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${li.next_scheduled_at || 'None scheduled'}</strong></div>
           </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; margin-top:10px;">
+          <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin:0;">
+            <i class="fa-solid fa-calendar-days" style="color:var(--accent-purple);"></i> Upcoming Scheduled Social Posts Queue (${data.site_name}):
+          </h3>
+          <span class="badge ${schedQueue.length > 0 ? 'badge-info' : 'badge-secondary'}" style="font-size:11px; font-weight:700;">
+            ${schedQueue.length} Post${schedQueue.length === 1 ? '' : 's'} Scheduled
+          </span>
+        </div>
+
+        <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:24px; width:100%; box-sizing:border-box;">
+          <table style="width:100%; min-width:700px; border-collapse:collapse; text-align:left; font-size:12px;">
+            <thead>
+              <tr style="background:rgba(15,23,42,0.8); color:var(--text-muted); text-transform:uppercase;">
+                <th style="padding:10px 12px; width:65px; white-space:nowrap;">ID</th>
+                <th style="padding:10px 12px; width:105px; white-space:nowrap;">Platform</th>
+                <th style="padding:10px 12px; width:200px; white-space:nowrap;">Scheduled Date & Time</th>
+                <th style="padding:10px 12px; width:160px; white-space:nowrap;">Target Keyword</th>
+                <th style="padding:10px 12px; min-width:240px;">AI Caption & Hashtags Preview</th>
+                <th style="padding:10px 12px; width:110px; text-align:center; white-space:nowrap;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${schedQueue.length > 0 ? schedQueue.map((sq, sIdx) => {
+                const plat = (sq.platform || '').toLowerCase();
+                let iconClass = 'fa-solid fa-share-nodes';
+                let chipColor = 'var(--accent-purple)';
+                if (plat.includes('insta')) { iconClass = 'fa-brands fa-instagram'; chipColor = '#ec4899'; }
+                else if (plat.includes('face')) { iconClass = 'fa-brands fa-facebook'; chipColor = '#3b82f6'; }
+                else if (plat.includes('link')) { iconClass = 'fa-brands fa-linkedin'; chipColor = '#0ea5e9'; }
+
+                return `
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px 12px; font-family:var(--font-mono); color:var(--accent-cyan); font-weight:700; white-space:nowrap;">${sq.id || `sq_${sIdx+1}`}</td>
+                  <td style="padding:10px 12px; white-space:nowrap;">
+                    <span class="action-chip" style="color:${chipColor}; border-color:${chipColor};"><i class="${iconClass}"></i> ${sq.platform}</span>
+                  </td>
+                  <td style="padding:10px 12px; font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:#38bdf8;">
+                    <i class="fa-solid fa-clock"></i> ${sq.scheduled_for}
+                  </td>
+                  <td style="padding:10px 12px; font-weight:700; color:var(--accent-cyan); white-space:nowrap;">${escapeHtml(sq.keyword || '')}</td>
+                  <td style="padding:10px 12px; font-size:11.5px; color:#cbd5e1; line-height:1.4;">
+                    <div>${escapeHtml((sq.caption || '').substring(0, 110))}...</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${escapeHtml(sq.hashtags || '')}</div>
+                  </td>
+                  <td style="padding:10px 12px; text-align:center; white-space:nowrap;">
+                    <span class="badge badge-warning" style="font-weight:700;"><i class="fa-solid fa-hourglass-half"></i> Scheduled</span>
+                  </td>
+                </tr>
+                `;
+              }).join('') : `
+                <tr>
+                  <td colspan="6" style="padding:24px 14px; text-align:center; color:var(--text-muted);">
+                    <i class="fa-solid fa-calendar-xmark" style="font-size:22px; margin-bottom:6px; display:block; color:var(--accent-purple); opacity:0.6;"></i>
+                    No upcoming scheduled posts in queue for <strong>${escapeHtml(data.site_name)}</strong>.
+                    <div style="font-size:11px; margin-top:4px; color:var(--text-secondary);">Click <strong>+ Add Keywords & Auto-Generate</strong> to queue new date-wise posts.</div>
+                  </td>
+                </tr>
+              `}
+            </tbody>
+          </table>
         </div>
 
         <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-square-check" style="color:var(--status-success);"></i> Date-Wise Published Social Posts History (${data.site_name}):</h3>

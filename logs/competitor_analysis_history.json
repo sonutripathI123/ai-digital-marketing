@@ -1,5 +1,199 @@
 [
   {
+    "analysis_id": "comp-analysis-1787533602",
+    "created_at": "2026-08-24T06:36:42.789475Z",
+    "target_keyword": "Melbourne airport transfers",
+    "location": "Melbourne Metropolitan & Regional VIC",
+    "site_id": "opal",
+    "site_name": "Opal Chauffeurs",
+    "data": {
+      "analysis_id": "comp-analysis-1787533602",
+      "timestamp": "2026-08-24T06:36:42.789475Z",
+      "action": "find_by_keyword",
+      "target_keyword": "Melbourne airport transfers",
+      "location": "Melbourne Metropolitan & Regional VIC",
+      "my_brand": "Opal Chauffeurs",
+      "my_domain": "https://www.opalchauffeurs.com.au",
+      "competitors_analyzed_count": 3,
+      "competitors_discovered": [
+        "chauffeurcarsmelbourne.com.au",
+        "melbourneairportchauffeurs.com.au",
+        "crownchauffeursmelbourne.com.au"
+      ],
+      "competitor_insights": [
+        {
+          "competitor_name": "Chauffeurcarsmelbourne Chauffeurs",
+          "competitor_url": "https://chauffeurcarsmelbourne.com.au",
+          "competitor_domain": "chauffeurcarsmelbourne.com.au",
+          "domain_authority": 35,
+          "content_depth_score": "70/100",
+          "organic_traffic_tier": "Medium",
+          "targeted_keywords": [
+            "Melbourne airport transfers",
+            "luxury chauffeur Melbourne Metropolitan & Regional VIC",
+            "airport transfer Melbourne Metropolitan & Regional VIC",
+            "private driver Melbourne Metropolitan & Regional VIC"
+          ],
+          "content_gaps": [
+            "Missing dedicated suburb landing page for 'Melbourne airport transfers' with local schema",
+            "No instant pricing calculator or fixed-fare transparency table",
+            "Lacks Schema.org 'PrivateChauffeurService' and 'FAQPage' structured markup",
+            "Thin content under 600 words without E-E-A-T credentials or driver profiles"
+          ],
+          "positioning_strengths": "Established domain age for broad 'Melbourne Metropolitan & Regional VIC' searches and strong brand review volume.",
+          "weaknesses": "Slow mobile PageSpeed (< 45/100), missing FAQ sections, and generic non-optimized H2/H3 subheadings.",
+          "difficulty_to_outrank": "EASY",
+          "counter_strategy": "Publish a 1,200+ word localized pillar guide for 'Melbourne airport transfers' with rich Schema.org FAQ markup."
+        },
+        {
+          "competitor_name": "Melbourneairportchauffeurs Chauffeurs",
+          "competitor_url": "https://melbourneairportchauffeurs.com.au",
+          "competitor_domain": "melbourneairportchauffeurs.com.au",
+          "domain_authority": 45,
+          "content_depth_score": "79/100",
+          "organic_traffic_tier": "High",
+          "targeted_keywords": [
+            "Melbourne airport transfers",
+            "luxury chauffeur Melbourne Metropolitan & Regional VIC",
+            "airport transfer Melbourne Metropolitan & Regional VIC",
+            "private driver Melbourne Metropolitan & Regional VIC"
+          ],
+          "content_gaps": [
+            "Missing dedicated suburb landing page for 'Melbourne airport transfers' with local schema",
+            "No instant pricing calculator or fixed-fare transparency table",
+            "Lacks Schema.org 'PrivateChauffeurService' and 'FAQPage' structured markup",
+            "Thin content under 600 words without E-E-A-T credentials or driver profiles"
+          ],
+          "positioning_strengths": "Established domain age for broad 'Melbourne Metropolitan & Regional VIC' searches and strong brand review volume.",
+          "weaknesses": "Slow mobile PageSpeed (< 45/100), missing FAQ sections, and generic non-optimized H2/H3 subheadings.",
+          "difficulty_to_outrank": "MEDIUM",
+          "counter_strategy": "Publish a 1,200+ word localized pillar guide for 'Melbourne airport transfers' with rich Schema.org FAQ markup."
+        },
+        {
+          "competitor_name": "Crownchauffeursmelbourne Chauffeurs",
+          "competitor_url": "https://crownchauffeursmelbourne.com.au",
+          "competitor_domain": "crownchauffeursmelbourne.com.au",
+          "domain_authority": 49,
+          "content_depth_score": "82/100",
+          "organic_traffic_tier": "High",
+          "targeted_keywords": [
+            "Melbourne airport transfers",
+            "luxury chauffeur Melbourne Metropolitan & Regional VIC",
+            "airport transfer Melbourne Metropolitan & Regional VIC",
+            "private driver Melbourne Metropolitan & Regional VIC"
+          ],
+          "content_gaps": [
+            "Missing dedicated suburb landing page for 'Melbourne airport transfers' with local schema",
+            "No instant pricing calculator or fixed-fare transparency table",
+            "Lacks Schema.org 'PrivateChauffeurService' and 'FAQPage' structured markup",
+            "Thin content under 600 words without E-E-A-T credentials or driver profiles"
+          ],
+          "positioning_strengths": "Established domain age for broad 'Melbourne Metropolitan & Regional VIC' searches and strong brand review volume.",
+          "weaknesses": "Slow mobile PageSpeed (< 45/100), missing FAQ sections, and generic non-optimized H2/H3 subheadings.",
+          "difficulty_to_outrank": "HARD",
+          "counter_strategy": "Publish a 1,200+ word localized pillar guide for 'Melbourne airport transfers' with rich Schema.org FAQ markup."
+        }
+      ],
+      "identified_content_gaps_count": 12,
+      "actionable_recommendations": [
+        "Target 'Melbourne airport transfers' as the primary H1 title on a dedicated Opal Chauffeurs landing page.",
+        "Exploit competitor content gaps by adding a transparent vehicle fleet breakdown (Mercedes S-Class, V-Class, GLS SUV).",
+        "Implement LocalBusiness & Service Schema.org markup to capture Google rich snippet cards before competitors.",
+        "Add internal links from high-authority pillar pages to your new 'Melbourne airport transfers' page using exact match anchors."
+      ],
+      "win_strategy_summary": "By targeting long-tail suburb variations of 'Melbourne airport transfers' and adding structured E-E-A-T trust signals, Opal Chauffeurs can outrank these 3 competitors within 30-45 days.",
+      "ai_insights": {
+        "brand": "Opal Chauffeurs",
+        "target_keyword": "Melbourne airport transfers",
+        "analysis_date": "2025",
+        "location": "Melbourne Metropolitan & Regional VIC",
+        "competitive_edge": {
+          "strategy_title": "3-Step Authority Domination Plan",
+          "steps": [
+            {
+              "step": 1,
+              "action": "Hyper-Local Landing Page Architecture",
+              "description": "Build dedicated SEO landing pages for every major Melbourne suburb and regional VIC corridor feeding into airport transfers. Target pages like '/melbourne-airport-transfers-from-geelong', '/toorak-to-melbourne-airport-chauffeur', '/ballarat-airport-transfer-service'. Competitors are broadly targeting 'Melbourne airport transfers' as a single page \u2014 Opal can capture long-tail geo-modified traffic at scale with low competition. Each page must include structured schema markup (LocalBusiness + Service), embedded Google Maps, real suburb-specific pricing anchors, and 800+ words of unique geo-contextual content.",
+              "priority": "HIGH",
+              "estimated_timeline": "6-10 weeks",
+              "expected_impact": "35-50% increase in organic impressions within 90 days"
+            },
+            {
+              "step": 2,
+              "action": "E-E-A-T Authority Content Hub & Trust Signal Amplification",
+              "description": "Create a pillar content hub titled 'Melbourne Airport Transfer Guide' targeting informational intent queries that competitors have entirely ignored (e.g., 'what to expect from a chauffeur airport transfer Melbourne', 'MEL airport pickup process explained'). Support with cluster articles, driver credential highlights, fleet safety certifications, and verified Google Business Profile optimisation with keyword-rich Q&A responses. Actively pursue featured snippet positions by structuring FAQ schema across all key pages. Build trust signals by embedding real driver profiles, ASIC/ABN verification badge, and publicly visible fleet insurance documentation links \u2014 none of the three competitors display these credibility anchors prominently.",
+              "priority": "HIGH",
+              "estimated_timeline": "8-12 weeks",
+              "expected_impact": "Improved CTR by 20-30% through authority differentiation and featured snippet capture"
+            },
+            {
+              "step": 3,
+              "action": "Strategic Link Acquisition via Melbourne Corporate & Travel Ecosystem",
+              "description": "Execute a targeted digital PR and link-building campaign targeting Melbourne-based corporate travel blogs, hotel concierge partnership pages, Melbourne Airport (MEL) affiliate resources, Victorian tourism directories, and event venue websites (Crown, MCEC, Marvel Stadium). Pitch co-branded 'Preferred Transfer Partner' content to luxury Melbourne hotels and serviced apartments. Competitors rely heavily on generic directory citations \u2014 Opal should pursue high-authority contextual backlinks from DA 40+ local and national travel/business publications. Supplement with a 'Melbourne Airport Transfer Reviews' rich snippet strategy using aggregated Schema to showcase superior ratings in SERPs.",
+              "priority": "MEDIUM-HIGH",
+              "estimated_timeline": "12-20 weeks ongoing",
+              "expected_impact": "Domain authority uplift + top 3 SERP positioning for primary and secondary keywords"
+            }
+          ]
+        },
+        "high_opportunity_keywords": {
+          "strategy_note": "These LSI and long-tail variants show strong commercial intent but have minimal optimised competitor content targeting them directly, representing low-competition, high-conversion opportunities.",
+          "keywords": [
+            {
+              "rank": 1,
+              "keyword": "chauffeur transfer Melbourne Airport early morning",
+              "intent": "Transactional",
+              "why_competitors_missed": "No competitor has dedicated content addressing time-specific transfers (pre-dawn flights, 4AM pickups) \u2014 a high-anxiety, high-converting segment of airport travellers",
+              "recommended_content_type": "Dedicated service page + FAQ schema targeting 'early morning airport transfers Melbourne'"
+            },
+            {
+              "rank": 2,
+              "keyword": "Melbourne airport transfer for large groups corporate",
+              "intent": "Transactional / Commercial Investigation",
+              "why_competitors_missed": "Competitors focus on solo/couple transfers; corporate fleet and group transfer pages are either absent or poorly optimised, leaving B2B corporate travel bookers underserved",
+              "recommended_content_type": "Corporate accounts landing page with fleet capacity specs, ABN invoicing mention, and group booking CTA"
+            },
+            {
+              "rank": 3,
+              "keyword": "regional Victoria to Melbourne Airport chauffeur",
+              "intent": "Transactional",
+              "why_competitors_missed": "All three competitors are metro-Melbourne centric with zero visible content targeting regional VIC travellers (Geelong, Ballarat, Bendigo, Shepparton corridors) despite significant demand",
+              "recommended_content_type": "Regional hub page with suburb-specific child pages, distance/pricing transparency, and regional schema markup"
+            },
+            {
+              "rank": 4,
+              "keyword": "meet and greet chauffeur Melbourne Airport Tullamarine",
+              "intent": "Transactional",
+              "why_competitors_missed": "Airport-specific terminal detail (Tullamarine, T1/T2/T3/T4 meeting points) is vague or absent across competitor sites \u2014 travellers searching for precise arrival logistics are underserved",
+              "recommended_content_type": "Visual 'How It Works' service page with terminal map embed, real driver meet-and-greet photos, and step-by-step arrival guide"
+            },
+            {
+              "rank": 5,
+              "keyword": "fixed price airport transfer Melbourne no surge pricing",
+              "intent": "Commercial Investigation / Transactional",
+              "why_competitors_missed": "Post-rideshare era travellers actively search for price certainty and are fatigued by Uber surge pricing \u2014 none of the competitors explicitly use 'fixed price' or 'no surge' as a keyword anchor or content differentiator despite it being a primary chauffeur value proposition",
+              "recommended_content_type": "Comparison-style landing page: 'Chauffeur vs Uber to Melbourne Airport \u2014 Why Fixed Pricing Wins' with schema pricing markup"
+            }
+          ]
+        },
+        "content_differentiation_angle": {
+          "unique_selling_hook": "Melbourne's Only Airport Transfer Service Where Your Driver Knows Before You Do",
+          "hook_elaboration": "Position Opal Chauffeurs around proactive flight-tracking technology and zero-stress arrival certainty \u2014 every booking automatically monitors live MEL flight data so drivers adjust in real time for delays, early landings, or gate changes. Competitors market generic 'luxury' and 'professional drivers' \u2014 Opal should own the specific emotional territory of 'effortless certainty' for time-pressured business travellers and premium leisure clients.",
+          "brand_narrative": "While competitors sell a car ride, Opal Chauffeurs sells a controlled, predictable experience in an unpredictable airport environment. The content angle should humanise this through storytelling: 'Your flight lands 40 minutes early at 6AM \u2014 your Opal driver already knows. They're already there.'",
+          "primary_content_pillars": [
+            "Real-time flight monitoring transparency (show the tech, name the process)",
+            "Fixed-price guarantee with zero hidden tolls or surcharges \u2014 price certainty messaging",
+            "Regional Victoria coverage \u2014 the only premium chauffeur serving beyond metro Melbourne",
+            "Corporate account management with monthly invoicing and travel policy compliance",
+            "Verified, licensed, background-checked drivers with named driver profiles"
+          ],
+          "tone_of_voice": "Confident, calm, premium \u2014 never flashy. Speak to the frequent business traveller who has been burned by unreliable transfers and values quiet competence over luxury showmanship.",
+          "homepage_hero_copy_suggestion": "Melbourne Airport Transfers, Tracked to the Minute. Fixed Price. No Surprises. \u2014 Book Opal Chauffeurs."
+        }
+      }
+    }
+  },
+  {
     "analysis_id": "comp-analysis-1787477671",
     "created_at": "2026-08-23T15:04:31.023425Z",
     "target_keyword": "executive chauffeur melbourne",

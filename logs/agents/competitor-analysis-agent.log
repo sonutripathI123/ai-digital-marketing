@@ -283,3 +283,6 @@
 2026-08-23 20:34:31,016 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-73924b9c
 2026-08-23 20:34:31,020 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent: action=find_by_keyword, kw='executive chauffeur melbourne', location='Melbourne & Tullamarine, VIC', competitors=['https://chauffeurcarsmelbourne.com.au', 'https://luxurydriver.com.au', 'https://silverexecutivetravel.com.au']
 2026-08-23 20:34:39,376 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-73924b9c successfully.
+2026-08-24 12:06:42,776 [INFO] [agent:agent.competitor-analysis-agent] Starting execution for task task-fb437a73
+2026-08-24 12:06:42,784 [INFO] [agent:agent.competitor-analysis-agent] Executing CompetitorAnalysisAgent: action=find_by_keyword, kw='Melbourne airport transfers', location='Melbourne Metropolitan & Regional VIC', competitors=['https://chauffeurcarsmelbourne.com.au', 'https://melbourneairportchauffeurs.com.au', 'https://crownchauffeursmelbourne.com.au']
+2026-08-24 12:07:29,912 [INFO] [agent:agent.competitor-analysis-agent] Completed task task-fb437a73 successfully.
