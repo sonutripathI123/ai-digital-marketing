@@ -1518,16 +1518,16 @@ async function viewAgentReport(agentId) {
         </div>
 
         <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-square-check" style="color:var(--status-success);"></i> Date-Wise Published Social Posts History (${data.site_name}):</h3>
-        <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; margin-bottom:20px;">
-          <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
+        <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:20px; width:100%; box-sizing:border-box;">
+          <table style="width:100%; min-width:680px; border-collapse:collapse; text-align:left; font-size:12px;">
             <thead>
               <tr style="background:rgba(15,23,42,0.8); color:var(--text-muted); text-transform:uppercase;">
-                <th style="padding:10px 14px;">ID</th>
-                <th style="padding:10px 14px;">Platform</th>
-                <th style="padding:10px 14px;">Published Date & Time</th>
-                <th style="padding:10px 14px;">Content Title / Topic</th>
-                <th style="padding:10px 14px;">Live Interactions</th>
-                <th style="padding:10px 14px;">Action</th>
+                <th style="padding:10px 12px; width:65px; white-space:nowrap;">ID</th>
+                <th style="padding:10px 12px; width:95px; white-space:nowrap;">Platform</th>
+                <th style="padding:10px 12px; width:170px; white-space:nowrap;">Published Date & Time</th>
+                <th style="padding:10px 12px; min-width:200px;">Content Title / Topic</th>
+                <th style="padding:10px 12px; width:140px; white-space:nowrap;">Live Interactions</th>
+                <th style="padding:10px 12px; width:120px; text-align:center; white-space:nowrap;">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -1554,15 +1554,15 @@ async function viewAgentReport(agentId) {
 
                 return `
                 <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                  <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--accent-cyan); font-weight:700;">${p.id}</td>
-                  <td style="padding:10px 14px;"><span class="action-chip">${p.platform}</span></td>
-                  <td style="padding:10px 14px; font-family:var(--font-mono); font-size:11px;">${p.published_at}</td>
-                  <td style="padding:10px 14px; font-weight:700; color:#fff;">${escapeHtml(p.title || p.topic || '')}</td>
-                  <td style="padding:10px 14px; white-space:nowrap;">
+                  <td style="padding:10px 12px; font-family:var(--font-mono); color:var(--accent-cyan); font-weight:700; white-space:nowrap;">${p.id}</td>
+                  <td style="padding:10px 12px; white-space:nowrap;"><span class="action-chip">${p.platform}</span></td>
+                  <td style="padding:10px 12px; font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--text-secondary);">${p.published_at}</td>
+                  <td style="padding:10px 12px; font-weight:600; color:#fff; line-height:1.4;">${escapeHtml(p.title || p.topic || '')}</td>
+                  <td style="padding:10px 12px; white-space:nowrap;">
                     <span class="badge badge-success" style="font-weight:700; margin-right:4px;">${p.likes || 0} Likes</span>
                     <span class="badge badge-info" style="font-weight:700;">${p.comments || 0} Comments</span>
                   </td>
-                  <td style="padding:10px 14px; white-space:nowrap;">
+                  <td style="padding:10px 12px; text-align:center; white-space:nowrap;">
                     ${targetUrl ? `<a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="action-chip" style="color:${btnColor}; border-color:${btnColor}; text-decoration:none; font-weight:700;"><i class="${iconClass}"></i> ${btnLabel}</a>` : '<span style="color:var(--text-muted);">-</span>'}
                   </td>
                 </tr>

@@ -1450,10 +1450,10 @@ body {
   }
 
   /* Safe text wrapping inside modal elements */
-  .modal-card p, .modal-card span, .modal-card h1, .modal-card h2, .modal-card h3, .modal-card h4, .modal-card div {
-    max-width: 100% !important;
-    word-break: break-word !important;
-    overflow-wrap: anywhere !important;
+  .modal-card p, .modal-card h1, .modal-card h2, .modal-card h3, .modal-card h4 {
+    max-width: 100%;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
 
   .modal-card div[style*="overflow-x: auto"],
@@ -1468,9 +1468,27 @@ body {
     box-sizing: border-box !important;
   }
 
-  .modal-card table, table {
-    min-width: 480px !important;
+  .modal-card table,
+  #agent-report-content table,
+  .table-card table,
+  table {
+    width: 100% !important;
+    min-width: 680px !important;
+    border-collapse: collapse !important;
+    table-layout: auto !important;
+  }
+
+  .modal-card th,
+  .modal-card td,
+  #agent-report-content th,
+  #agent-report-content td,
+  table th,
+  table td {
     word-break: normal !important;
+    overflow-wrap: normal !important;
+    white-space: normal !important;
+    line-height: 1.4 !important;
+    padding: 10px 12px !important;
   }
 
   #live-serp-bucket-filters, .filter-bar, .btn-group {
