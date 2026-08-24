@@ -1578,7 +1578,15 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
     for kw in lines:
         for platform in platforms:
             post_index += 1
-            days_offset = post_index * (2 if req.posts_per_week <= 3 else 1)
+            if req.posts_per_week == 2:
+                days_offset = (post_index - 1) * 3 + (1 if post_index % 2 == 0 else 0)
+            elif req.posts_per_week == 1:
+                days_offset = (post_index - 1) * 7
+            elif req.posts_per_week == 7:
+                days_offset = post_index - 1
+            else:
+                days_offset = (post_index - 1) * 2  # Default 3 posts/week
+
             publish_time = base_time + timedelta(days=days_offset)
 
             caption = f"Experience unmatched elegance with {brand_name}. From luxury airport transfers to corporate executive chauffeur travel across {kw}, we deliver discretion, comfort, and punctuality every single journey."
