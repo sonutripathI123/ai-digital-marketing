@@ -2231,23 +2231,23 @@ async function viewAgentReport(agentId) {
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(135px, 1fr)); gap:12px; margin-bottom:20px;">
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Total Ad Spend</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${(acc.total_spend_usd || 2220.50).toLocaleString()}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${(acc.total_spend_usd ?? 0).toLocaleString()}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Last 30 Days</div>
           </div>
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Paid Clicks</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(acc.total_clicks || 1270).toLocaleString()}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CTR: ${acc.avg_ctr_percent || 4.94}%</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(acc.total_clicks ?? 0).toLocaleString()}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CTR: ${acc.avg_ctr_percent ?? 0}%</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Average CPC</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${acc.avg_cpc_usd || 1.75}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${acc.avg_cpc_usd ?? 0}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Cost Per Click</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Conversions (Leads)</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${acc.total_conversions || 100}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CPA: $${acc.avg_cpa_usd || 22.21}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${acc.total_conversions ?? 0}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CPA: $${acc.avg_cpa_usd ?? 0}</div>
           </div>
         </div>
 
@@ -2478,28 +2478,28 @@ async function viewAgentReport(agentId) {
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-bottom:20px;">
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Total Meta Spend</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${(acc.total_spend_usd || 1120.00).toLocaleString()}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${(acc.total_spend_usd ?? 0).toLocaleString()}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Last 30 Days</div>
           </div>
           <div style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#ec4899; text-transform:uppercase;">Audience Reach</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(acc.total_reach || 44000).toLocaleString()}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(acc.total_reach ?? 0).toLocaleString()}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Unique People</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Paid Clicks</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(acc.total_clicks || 950).toLocaleString()}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CTR: ${acc.avg_ctr_percent || 1.35}%</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(acc.total_clicks ?? 0).toLocaleString()}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CTR: ${acc.avg_ctr_percent ?? 0}%</div>
           </div>
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Ad Frequency</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${acc.avg_frequency || 1.60}x</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${acc.avg_frequency ?? 0}x</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Safe &bull; No Ad Fatigue</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Conversions</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${acc.total_conversions || 50}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CPA: $${acc.avg_cpa_usd || 22.40}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${acc.total_conversions ?? 0}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CPA: $${acc.avg_cpa_usd ?? 0}</div>
           </div>
         </div>
 
@@ -2595,22 +2595,22 @@ async function viewAgentReport(agentId) {
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-bottom:20px;">
           <div style="background:rgba(234,179,8,0.1); border:1px solid rgba(234,179,8,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#facc15; text-transform:uppercase;">Overall Rating</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.average_rating || 4.8} <span style="font-size:14px; color:#facc15;">★</span></div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.average_rating ?? 0} <span style="font-size:14px; color:#facc15;">★</span></div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Out of 5.0 Stars</div>
           </div>
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Total Reviews</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.total_reviews || 142}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.total_reviews ?? 0}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Aggregated Feed</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">5-Star Reviews</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.five_star_count || 124}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">87.3% Top Rating</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.five_star_count ?? 0}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Top Rating</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Positive Sentiment</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sb.positive_percent || 91.5}%</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sb.positive_percent ?? 0}%</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">AI Sentiment Score</div>
           </div>
         </div>
@@ -2626,23 +2626,23 @@ async function viewAgentReport(agentId) {
               <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; font-size:12px;">
                 <span style="color:#facc15; font-weight:700; width:50px;">5 Star</span>
                 <div style="flex:1; background:rgba(255,255,255,0.08); height:8px; border-radius:4px; overflow:hidden;">
-                  <div style="width:87%; background:#10b981; height:100%;"></div>
+                  <div style="width:${ro.total_reviews ? (Math.round(((ro.five_star_count || 0) / ro.total_reviews) * 100)) : 0}%; background:#10b981; height:100%;"></div>
                 </div>
-                <span style="font-family:var(--font-mono); color:#fff; width:30px;">${ro.five_star_count || 124}</span>
+                <span style="font-family:var(--font-mono); color:#fff; width:30px;">${ro.five_star_count ?? 0}</span>
               </div>
               <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; font-size:12px;">
                 <span style="color:#facc15; font-weight:700; width:50px;">4 Star</span>
                 <div style="flex:1; background:rgba(255,255,255,0.08); height:8px; border-radius:4px; overflow:hidden;">
-                  <div style="width:10%; background:#38bdf8; height:100%;"></div>
+                  <div style="width:${ro.total_reviews ? (Math.round(((ro.four_star_count || 0) / ro.total_reviews) * 100)) : 0}%; background:#38bdf8; height:100%;"></div>
                 </div>
-                <span style="font-family:var(--font-mono); color:#fff; width:30px;">${ro.four_star_count || 14}</span>
+                <span style="font-family:var(--font-mono); color:#fff; width:30px;">${ro.four_star_count ?? 0}</span>
               </div>
               <div style="display:flex; align-items:center; gap:10px; font-size:12px;">
                 <span style="color:#facc15; font-weight:700; width:50px;">≤3 Star</span>
                 <div style="flex:1; background:rgba(255,255,255,0.08); height:8px; border-radius:4px; overflow:hidden;">
-                  <div style="width:3%; background:#ef4444; height:100%;"></div>
+                  <div style="width:${ro.total_reviews ? (Math.round(((ro.three_star_and_below_count || 0) / ro.total_reviews) * 100)) : 0}%; background:#ef4444; height:100%;"></div>
                 </div>
-                <span style="font-family:var(--font-mono); color:#fff; width:30px;">${ro.three_star_and_below_count || 4}</span>
+                <span style="font-family:var(--font-mono); color:#fff; width:30px;">${ro.three_star_and_below_count ?? 0}</span>
               </div>
             </div>
             <div>
@@ -2650,15 +2650,15 @@ async function viewAgentReport(agentId) {
               <div style="background:rgba(15,23,42,0.6); padding:12px; border-radius:10px; display:flex; flex-direction:column; gap:8px;">
                 <div style="display:flex; justify-content:space-between; font-size:12px;">
                   <span style="color:#10b981;"><i class="fa-solid fa-face-smile"></i> Positive Customer Sentiment</span>
-                  <strong style="color:#10b981; font-family:var(--font-mono);">${sb.positive_percent || 91.5}%</strong>
+                  <strong style="color:#10b981; font-family:var(--font-mono);">${sb.positive_percent ?? 0}%</strong>
                 </div>
                 <div style="display:flex; justify-content:space-between; font-size:12px;">
                   <span style="color:#f59e0b;"><i class="fa-solid fa-face-meh"></i> Neutral / Informative</span>
-                  <strong style="color:#f59e0b; font-family:var(--font-mono);">${sb.neutral_percent || 5.6}%</strong>
+                  <strong style="color:#f59e0b; font-family:var(--font-mono);">${sb.neutral_percent ?? 0}%</strong>
                 </div>
                 <div style="display:flex; justify-content:space-between; font-size:12px;">
                   <span style="color:#ef4444;"><i class="fa-solid fa-face-frown"></i> Negative Feedback</span>
-                  <strong style="color:#ef4444; font-family:var(--font-mono);">${sb.negative_percent || 2.9}%</strong>
+                  <strong style="color:#ef4444; font-family:var(--font-mono);">${sb.negative_percent ?? 0}%</strong>
                 </div>
               </div>
             </div>
@@ -2770,22 +2770,22 @@ async function viewAgentReport(agentId) {
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-bottom:20px;">
           <div style="background:rgba(14,165,233,0.1); border:1px solid rgba(14,165,233,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Pipeline Value</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${(pipe.total_pipeline_value_usd || 18400).toLocaleString()}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${(pipe.total_pipeline_value_usd ?? 0).toLocaleString()}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Active Deal Flow (AUD)</div>
           </div>
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#3b82f6; text-transform:uppercase;">Inbound Leads</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${pipe.active_leads || 42}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${pipe.active_leads ?? 0}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Total Quotes / Month</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">VIP Corporate Tier</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">18</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${pipe.vip_tier_count ?? 0}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Recurring Accounts</div>
           </div>
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Avg Lead Score</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${pipe.avg_lead_score || 91.5}/100</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${pipe.avg_lead_score ?? 0}/100</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">High Booking Intent</div>
           </div>
         </div>
@@ -2897,22 +2897,22 @@ async function viewAgentReport(agentId) {
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(135px, 1fr)); gap:12px; margin-bottom:20px;">
           <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">Live Published Blogs</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.blogs_published || 13} Posts</div>
-            <div style="font-size:10px; color:#10b981; margin-top:2px;">[LIVE WordPress Verified]</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.blogs_published ?? 0} Posts</div>
+            <div style="font-size:10px; color:#10b981; margin-top:2px;">[WordPress Verified]</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Organic Search Clicks</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.gsc_clicks || 15} Clicks</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${seo.gsc_impressions || 810} Impressions [GSC API]</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.gsc_clicks ?? 0} Clicks</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${seo.gsc_impressions ?? 0} Impressions [GSC API]</div>
           </div>
           <div style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#ec4899; text-transform:uppercase;">Verified Social Posts</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${soc.total_published_posts || 18} Live</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${soc.total_published_posts ?? 0} Live</div>
             <div style="font-size:10px; color:#10b981; margin-top:2px;">[Meta & LinkedIn Connected]</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">SEO Site Health</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.site_health_score || '96 / 100'}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.site_health_score || (currentSiteId === 'ccm' ? '96 / 100' : '0 / 100')}</div>
             <div style="font-size:10px; color:#10b981; margin-top:2px;">[Core Web Vitals Passed]</div>
           </div>
         </div>
@@ -2925,11 +2925,11 @@ async function viewAgentReport(agentId) {
               <i class="fa-solid fa-magnifying-glass"></i> 1. SEO & Organic Engine
             </div>
             <div style="font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
-              <div>• <strong>Published Blogs:</strong> <span style="color:#fff; font-weight:700;">${seo.blogs_published || 13} Live Posts</span></div>
-              <div>• <strong>Approved Queue:</strong> <span style="color:var(--accent-purple);">${seo.approved_queue_count || 14} Posts Queued</span></div>
-              <div>• <strong>GSC Organic Clicks:</strong> <span style="color:#10b981; font-weight:700;">${seo.gsc_clicks || 15} Clicks</span></div>
-              <div>• <strong>GSC Impressions:</strong> <span style="color:#38bdf8;">${seo.gsc_impressions || 810} Views</span></div>
-              <div>• <strong>Average Position:</strong> <span style="color:#fff;">${seo.avg_position || 26.4}</span></div>
+              <div>• <strong>Published Blogs:</strong> <span style="color:#fff; font-weight:700;">${seo.blogs_published ?? 0} Live Posts</span></div>
+              <div>• <strong>Approved Queue:</strong> <span style="color:var(--accent-purple);">${seo.approved_queue_count ?? 0} Posts Queued</span></div>
+              <div>• <strong>GSC Organic Clicks:</strong> <span style="color:#10b981; font-weight:700;">${seo.gsc_clicks ?? 0} Clicks</span></div>
+              <div>• <strong>GSC Impressions:</strong> <span style="color:#38bdf8;">${seo.gsc_impressions ?? 0} Views</span></div>
+              <div>• <strong>Average Position:</strong> <span style="color:#fff;">${seo.avg_position ?? '-'}</span></div>
             </div>
           </div>
 
@@ -2939,10 +2939,10 @@ async function viewAgentReport(agentId) {
               <i class="fa-brands fa-instagram"></i> 2. Multi-Platform Social
             </div>
             <div style="font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
-              <div>• <strong>Verified Live Posts:</strong> <span style="color:#fff; font-weight:700;">${soc.total_published_posts || 18} Posts</span></div>
-              <div>• <strong>Connected:</strong> <span style="color:#10b981; font-weight:700;">FB, IG, LinkedIn (Live)</span></div>
-              <div>• <strong>Est. Social Reach:</strong> <span style="color:#38bdf8;">${(soc.total_reach || 44000).toLocaleString()}</span></div>
-              <div>• <strong>Avg Engagement:</strong> <span style="color:#10b981; font-weight:700;">${soc.avg_engagement_rate_percent || 5.77}%</span></div>
+              <div>• <strong>Verified Live Posts:</strong> <span style="color:#fff; font-weight:700;">${soc.total_published_posts ?? 0} Posts</span></div>
+              <div>• <strong>Connected:</strong> <span style="color:#10b981; font-weight:700;">FB, IG, LinkedIn</span></div>
+              <div>• <strong>Est. Social Reach:</strong> <span style="color:#38bdf8;">${(soc.total_reach ?? 0).toLocaleString()}</span></div>
+              <div>• <strong>Avg Engagement:</strong> <span style="color:#10b981; font-weight:700;">${soc.avg_engagement_rate_percent ?? 0}%</span></div>
             </div>
           </div>
 
@@ -2965,9 +2965,9 @@ async function viewAgentReport(agentId) {
               <i class="fa-solid fa-star"></i> 4. Reviews & Reputation
             </div>
             <div style="font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
-              <div>• <strong>Aggregated Rating:</strong> <span style="color:#facc15; font-weight:700;">${rep.average_rating || 4.8} / 5.0 ★</span></div>
-              <div>• <strong>Total Reviews:</strong> <span style="color:#fff;">${rep.total_reviews || 142} Reviews</span></div>
-              <div>• <strong>Positive Sentiment:</strong> <span style="color:#10b981;">${rep.positive_sentiment_percent || 91.5}%</span></div>
+              <div>• <strong>Aggregated Rating:</strong> <span style="color:#facc15; font-weight:700;">${rep.average_rating ?? 0} / 5.0 ★</span></div>
+              <div>• <strong>Total Reviews:</strong> <span style="color:#fff;">${rep.total_reviews ?? 0} Reviews</span></div>
+              <div>• <strong>Positive Sentiment:</strong> <span style="color:#10b981;">${rep.positive_sentiment_percent ?? 0}%</span></div>
             </div>
           </div>
 
@@ -3061,25 +3061,25 @@ async function viewAgentReport(agentId) {
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-bottom:20px;">
           <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">Tracked Keywords</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sum.total_tracked_keywords || 168}</div>
+            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sum.total_tracked_keywords ?? 0}</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#10b981; text-transform:uppercase;">Transactional Intent</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sum.high_intent_transactional || 84}</div>
+            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sum.high_intent_transactional ?? 0}</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Avg Keyword Difficulty</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sum.average_keyword_difficulty || 28}% <span style="font-size:11px; color:#10b981;">(Low)</span></div>
+            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sum.average_keyword_difficulty ?? 0}% <span style="font-size:11px; color:${sum.average_keyword_difficulty ? '#10b981' : 'var(--text-muted)'};">${sum.average_keyword_difficulty ? '(Low)' : ''}</span></div>
           </div>
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Est. Monthly Searches</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(sum.estimated_monthly_searches || 24800).toLocaleString()}</div>
+            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(sum.estimated_monthly_searches ?? 0).toLocaleString()}</div>
           </div>
         </div>
 
         <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-layer-group" style="color:var(--accent-purple);"></i> Categorized Keyword Opportunity Clusters:</h3>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
-          ${(km.clusters || []).map(c => `
+          ${(km.clusters && km.clusters.length > 0) ? km.clusters.map(c => `
             <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); padding:14px; border-radius:12px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:13px; font-weight:800; color:#fff;">${c.name}</span>
@@ -3091,12 +3091,16 @@ async function viewAgentReport(agentId) {
                 <span>Avg CPC: <strong style="color:#f59e0b;">${c.cpc}</strong></span>
               </div>
             </div>
-          `).join('')}
+          `).join('') : `
+            <div style="grid-column: 1 / -1; padding: 20px; text-align: center; background: rgba(30,41,59,0.5); border: 1px solid var(--glass-border); border-radius: 12px; color: var(--text-muted);">
+              No keyword clusters configured for <strong>${escapeHtml(data.site_name)}</strong> yet. Use <strong>+ Auto-Cluster Sync</strong> or <strong>🔍 + Research Any Custom Keyword</strong> above.
+            </div>
+          `}
         </div>
 
         <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-fire" style="color:#f59e0b;"></i> High-Converting Keyword Opportunities (${data.site_name}):</h3>
         <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; margin-bottom:20px;">
-          <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
+          <table style="width:100%; min-width:680px; border-collapse:collapse; text-align:left; font-size:12px;">
             <thead>
               <tr style="background:rgba(15,23,42,0.8); color:var(--text-muted); text-transform:uppercase;">
                 <th style="padding:10px 14px;">Target Keyword</th>
@@ -3108,7 +3112,7 @@ async function viewAgentReport(agentId) {
               </tr>
             </thead>
             <tbody>
-              ${(km.top_keyword_opportunities || []).map(k => `
+              ${(km.top_keyword_opportunities && km.top_keyword_opportunities.length > 0) ? km.top_keyword_opportunities.map(k => `
                 <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
                   <td style="padding:10px 14px; font-weight:700; color:var(--accent-cyan);">${k.keyword}</td>
                   <td style="padding:10px 14px;"><span class="action-chip" style="font-size:11px;">${k.intent}</span></td>
@@ -3117,7 +3121,13 @@ async function viewAgentReport(agentId) {
                   <td style="padding:10px 14px; font-family:var(--font-mono); color:#f59e0b;">${k.cpc}</td>
                   <td style="padding:10px 14px; font-size:11px; color:var(--text-muted);">${k.serp_feature}</td>
                 </tr>
-              `).join('')}
+              `).join('') : `
+                <tr>
+                  <td colspan="6" style="padding: 24px 14px; text-align: center; color: var(--text-muted);">
+                    No high-converting keyword opportunities tracked for <strong>${escapeHtml(data.site_name)}</strong> yet.
+                  </td>
+                </tr>
+              `}
             </tbody>
           </table>
         </div>
