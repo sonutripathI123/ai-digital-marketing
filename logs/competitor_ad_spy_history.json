@@ -1,5 +1,566 @@
 [
   {
+    "report_id": "adspy-20260824150428",
+    "competitor_url": "https://chauffeurcarsmelbourne.com.au/",
+    "competitor_domain": "chauffeurcarsmelbourne.com.au",
+    "competitor_brand": "Chauffeurcarsmelbourne",
+    "target_brand": "Opal Chauffeurs",
+    "target_domain": "https://www.opalchauffeurs.com.au",
+    "analyzed_at": "2026-08-24T15:04:28.442131",
+    "location": "Melbourne Metropolitan & Regional VIC",
+    "official_verification_links": {
+      "meta_ad_library": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q=chauffeurcarsmelbourne.com.au&search_type=keyword_unordered&media_type=all",
+      "google_ads_transparency": "https://adstransparency.google.com/?region=AU&domain=chauffeurcarsmelbourne.com.au"
+    },
+    "google_ads_intelligence": {
+      "platform": "Google Ads (Search & Performance Max)",
+      "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD",
+      "ad_variations": [
+        {
+          "ad_id": "g-ad-276-1",
+          "ad_type": "Responsive Search Ad (RSA)",
+          "headline_1": "Luxury Chauffeur Melbourne | Chauffeurcarsmelbourne",
+          "headline_2": "Fixed Price Airport Transfers",
+          "headline_3": "Mercedes S-Class & V-Class Fleet",
+          "description_1": "Punctual, professional chauffeur car service across Melbourne CBD & Victoria. Book online in 60 seconds.",
+          "description_2": "24/7 flight telemetry tracking. Free meet & greet with complimentary waiting time. Reserve your luxury ride now.",
+          "display_path": "chauffeurcarsmelbourne.com.au/Airport-Transfers",
+          "sitelinks": [
+            {
+              "title": "Airport Transfers",
+              "url": "https://chauffeurcarsmelbourne.com.au/services/airport-transfers"
+            },
+            {
+              "title": "Corporate Chauffeurs",
+              "url": "https://chauffeurcarsmelbourne.com.au/services/corporate"
+            },
+            {
+              "title": "Luxury Fleet",
+              "url": "https://chauffeurcarsmelbourne.com.au/fleet"
+            },
+            {
+              "title": "Get Instant Quote",
+              "url": "https://chauffeurcarsmelbourne.com.au/quote"
+            }
+          ],
+          "callouts": [
+            "24/7 Available",
+            "Flight Monitoring",
+            "Fixed Fare Guarantee",
+            "Immaculate European Fleet"
+          ],
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/services/airport-transfers"
+        },
+        {
+          "ad_id": "g-ad-276-2",
+          "ad_type": "Corporate Account Search Ad",
+          "headline_1": "Executive Corporate Car Hire | Melbourne",
+          "headline_2": "Priority Business Travel",
+          "headline_3": "Monthly Invoicing Available",
+          "description_1": "Seamless corporate transfers for CEOs, executives & VIP clients. Discrete, licensed Victorian chauffeurs.",
+          "description_2": "On-time arrival guarantee. Executive sedans, luxury SUVs & people movers for corporate events.",
+          "display_path": "chauffeurcarsmelbourne.com.au/Corporate-Travel",
+          "sitelinks": [
+            {
+              "title": "Corporate Accounts",
+              "url": "https://chauffeurcarsmelbourne.com.au/corporate"
+            },
+            {
+              "title": "Hourly Hire",
+              "url": "https://chauffeurcarsmelbourne.com.au/hourly"
+            }
+          ],
+          "callouts": [
+            "B2B Billing",
+            "VIP Airport Meet",
+            "Leather Interior Luxury"
+          ],
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/corporate-hire"
+        }
+      ],
+      "targeted_keywords": [
+        {
+          "keyword": "chauffeur melbourne airport",
+          "match_type": "[Exact]",
+          "estimated_cpc": "$7.20 AUD",
+          "intent": "High Transactional",
+          "search_volume": "2,400/mo"
+        },
+        {
+          "keyword": "luxury chauffeur car hire melbourne",
+          "match_type": "\"Phrase\"",
+          "estimated_cpc": "$5.90 AUD",
+          "intent": "Commercial",
+          "search_volume": "1,300/mo"
+        },
+        {
+          "keyword": "private airport transfer tullamarine",
+          "match_type": "[Exact]",
+          "estimated_cpc": "$8.10 AUD",
+          "intent": "High Transactional",
+          "search_volume": "1,600/mo"
+        },
+        {
+          "keyword": "executive private driver melbourne",
+          "match_type": "\"Phrase\"",
+          "estimated_cpc": "$6.40 AUD",
+          "intent": "B2B Commercial",
+          "search_volume": "1,100/mo"
+        },
+        {
+          "keyword": "wedding car hire melbourne",
+          "match_type": "\"Phrase\"",
+          "estimated_cpc": "$4.50 AUD",
+          "intent": "Event / High Ticket",
+          "search_volume": "3,100/mo"
+        },
+        {
+          "keyword": "yarra valley winery tour chauffeur",
+          "match_type": "Broad Modified",
+          "estimated_cpc": "$5.80 AUD",
+          "intent": "Leisure & VIP High Intent",
+          "search_volume": "950/mo"
+        }
+      ],
+      "official_transparency_url": "https://adstransparency.google.com/?region=AU&domain=chauffeurcarsmelbourne.com.au",
+      "data_source": "Google Ads Transparency Center (AU) & Live SERP Query"
+    },
+    "meta_ads_intelligence": {
+      "platform": "Meta Ads (Facebook & Instagram)",
+      "estimated_active_creatives_count": 4,
+      "active_ads": [
+        {
+          "ad_id": "meta-ad-276-1",
+          "platforms": [
+            "Instagram Feed & Stories",
+            "Facebook Feed"
+          ],
+          "format": "Single Video / Carousel (Mercedes Fleet Interior)",
+          "hook": "Skip the Tullamarine rideshare queue. Travel in first-class Melbourne comfort.",
+          "primary_text": "\u2708\ufe0f Arriving at Melbourne Airport? Step directly into a pristine European luxury sedan with zero waiting time.\n\n\u2728 Why Melbourne Executives Choose Us:\n\u2714\ufe0f 100% Fixed Rates \u2014 Zero surge pricing\n\u2714\ufe0f Flight tracking & complimentary 60-min wait time\n\u2714\ufe0f Immaculate Mercedes-Benz & BMW fleet\n\nBook your private airport transfer today.",
+          "headline": "Fixed-Fare Luxury Chauffeur Melbourne",
+          "description": "24/7 Punctual Airport & Corporate Transfers",
+          "call_to_action": "Book Now",
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/airport-transfers",
+          "started_running": "Active (Running 45+ days)"
+        },
+        {
+          "ad_id": "meta-ad-276-2",
+          "platforms": [
+            "Facebook Feed",
+            "Instagram Reels"
+          ],
+          "format": "Carousel (V-Class & Sedan Showcase)",
+          "hook": "Group executive travel made effortless across Melbourne CBD.",
+          "primary_text": "Heading to a corporate conference, Yarra Valley wine tour, or VIP dinner? Our 7-seater Mercedes V-Class delivers unmatched comfort with onboard Wi-Fi and leather captains chairs.\n\n\ud83d\udcbc Open a Corporate Travel Account for streamlined monthly billing.",
+          "headline": "Melbourne Mercedes V-Class Group Chauffeur",
+          "description": "Luxury People Movers & Executive Sedans",
+          "call_to_action": "Get Quote",
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/fleet",
+          "started_running": "Active (Running 20+ days)"
+        }
+      ],
+      "official_ad_library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q=chauffeurcarsmelbourne.com.au&search_type=keyword_unordered&media_type=all",
+      "data_source": "Meta Ad Library (Facebook & Instagram Australia Public Database)"
+    },
+    "winning_counter_strategy": {
+      "vulnerabilities_in_competitor_ads": [
+        "Chauffeurcarsmelbourne does not highlight guaranteed on-time arrival refund policies.",
+        "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
+        "Their Google Ads lack deep localized sitelinks for affluent areas in Melbourne Metropolitan & Regional VIC."
+      ],
+      "recommended_counter_google_ad": {
+        "headline_1": "Opal Chauffeurs | Fixed Rates From $95",
+        "headline_2": "100% On-Time Guarantee | No Surge Fares",
+        "headline_3": "Luxury Chauffeur Fleet 24/7",
+        "description_1": "Why gamble with rideshares? Opal Chauffeurs provides fixed transparent fares, VIP flight tracking & European luxury.",
+        "description_2": "Instant online quote in 30 seconds. Licensed accredited chauffeurs ready across Melbourne Metropolitan & Regional VIC.",
+        "target_url": "https://www.opalchauffeurs.com.au/services/airport-transfers"
+      },
+      "recommended_counter_meta_ad": {
+        "hook": "Tired of unpredictable rideshares in Melbourne Metropolitan & Regional VIC? Experience true luxury with Opal Chauffeurs at fixed rates.",
+        "primary_text": "Say goodbye to surge pricing and cancelled rides. Opal Chauffeurs delivers executive chauffeur travel at transparent fixed rates.\n\n\ud83c\udfc6 The Opal Chauffeurs Difference:\n\u2022 100% On-Time Guarantee\n\u2022 Live flight telemetry tracking\n\u2022 Pristine European luxury fleet\n\u2022 Professional, suited accredited chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
+        "headline": "Opal Chauffeurs Airport Transfers \u2014 Book in 60s",
+        "call_to_action": "Book Now",
+        "target_url": "https://www.opalchauffeurs.com.au/"
+      }
+    }
+  },
+  {
+    "report_id": "adspy-20260824150133",
+    "competitor_url": "https://chauffeurcarsmelbourne.com.au/",
+    "competitor_domain": "chauffeurcarsmelbourne.com.au",
+    "competitor_brand": "Chauffeurcarsmelbourne",
+    "target_brand": "Corporate Cars Melbourne",
+    "target_domain": "https://corporatecarsmelbourne.com.au",
+    "analyzed_at": "2026-08-24T15:01:33.894068",
+    "location": "Melbourne & Tullamarine, VIC",
+    "official_verification_links": {
+      "meta_ad_library": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q=chauffeurcarsmelbourne.com.au&search_type=keyword_unordered&media_type=all",
+      "google_ads_transparency": "https://adstransparency.google.com/?region=AU&domain=chauffeurcarsmelbourne.com.au"
+    },
+    "google_ads_intelligence": {
+      "platform": "Google Ads (Search & Performance Max)",
+      "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD",
+      "ad_variations": [
+        {
+          "ad_id": "g-ad-691-1",
+          "ad_type": "Responsive Search Ad (RSA)",
+          "headline_1": "Luxury Chauffeur Melbourne | Chauffeurcarsmelbourne",
+          "headline_2": "Fixed Price Airport Transfers",
+          "headline_3": "Mercedes S-Class & V-Class Fleet",
+          "description_1": "Punctual, professional chauffeur car service across Melbourne CBD & Victoria. Book online in 60 seconds.",
+          "description_2": "24/7 flight telemetry tracking. Free meet & greet with complimentary waiting time. Reserve your luxury ride now.",
+          "display_path": "chauffeurcarsmelbourne.com.au/Airport-Transfers",
+          "sitelinks": [
+            {
+              "title": "Airport Transfers",
+              "url": "https://chauffeurcarsmelbourne.com.au/services/airport-transfers"
+            },
+            {
+              "title": "Corporate Chauffeurs",
+              "url": "https://chauffeurcarsmelbourne.com.au/services/corporate"
+            },
+            {
+              "title": "Luxury Fleet",
+              "url": "https://chauffeurcarsmelbourne.com.au/fleet"
+            },
+            {
+              "title": "Get Instant Quote",
+              "url": "https://chauffeurcarsmelbourne.com.au/quote"
+            }
+          ],
+          "callouts": [
+            "24/7 Available",
+            "Flight Monitoring",
+            "Fixed Fare Guarantee",
+            "Immaculate European Fleet"
+          ],
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/services/airport-transfers"
+        },
+        {
+          "ad_id": "g-ad-691-2",
+          "ad_type": "Corporate Account Search Ad",
+          "headline_1": "Executive Corporate Car Hire | Melbourne",
+          "headline_2": "Priority Business Travel",
+          "headline_3": "Monthly Invoicing Available",
+          "description_1": "Seamless corporate transfers for CEOs, executives & VIP clients. Discrete, licensed Victorian chauffeurs.",
+          "description_2": "On-time arrival guarantee. Executive sedans, luxury SUVs & people movers for corporate events.",
+          "display_path": "chauffeurcarsmelbourne.com.au/Corporate-Travel",
+          "sitelinks": [
+            {
+              "title": "Corporate Accounts",
+              "url": "https://chauffeurcarsmelbourne.com.au/corporate"
+            },
+            {
+              "title": "Hourly Hire",
+              "url": "https://chauffeurcarsmelbourne.com.au/hourly"
+            }
+          ],
+          "callouts": [
+            "B2B Billing",
+            "VIP Airport Meet",
+            "Leather Interior Luxury"
+          ],
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/corporate-hire"
+        }
+      ],
+      "targeted_keywords": [
+        {
+          "keyword": "chauffeur melbourne airport",
+          "match_type": "[Exact]",
+          "estimated_cpc": "$7.20 AUD",
+          "intent": "High Transactional",
+          "search_volume": "2,400/mo"
+        },
+        {
+          "keyword": "corporate cars melbourne",
+          "match_type": "\"Phrase\"",
+          "estimated_cpc": "$6.80 AUD",
+          "intent": "B2B Commercial",
+          "search_volume": "1,900/mo"
+        },
+        {
+          "keyword": "private airport transfer tullamarine",
+          "match_type": "[Exact]",
+          "estimated_cpc": "$8.10 AUD",
+          "intent": "High Transactional",
+          "search_volume": "1,600/mo"
+        },
+        {
+          "keyword": "luxury chauffeur car hire melbourne",
+          "match_type": "\"Phrase\"",
+          "estimated_cpc": "$5.90 AUD",
+          "intent": "Commercial",
+          "search_volume": "1,300/mo"
+        },
+        {
+          "keyword": "wedding car hire melbourne",
+          "match_type": "\"Phrase\"",
+          "estimated_cpc": "$4.50 AUD",
+          "intent": "Event / High Ticket",
+          "search_volume": "3,100/mo"
+        },
+        {
+          "keyword": "executive transfer south yarra to airport",
+          "match_type": "Broad Modified",
+          "estimated_cpc": "$6.10 AUD",
+          "intent": "Local Suburb High Intent",
+          "search_volume": "720/mo"
+        }
+      ],
+      "official_transparency_url": "https://adstransparency.google.com/?region=AU&domain=chauffeurcarsmelbourne.com.au",
+      "data_source": "Google Ads Transparency Center (AU) & Live SERP Query"
+    },
+    "meta_ads_intelligence": {
+      "platform": "Meta Ads (Facebook & Instagram)",
+      "estimated_active_creatives_count": 4,
+      "active_ads": [
+        {
+          "ad_id": "meta-ad-691-1",
+          "platforms": [
+            "Instagram Feed & Stories",
+            "Facebook Feed"
+          ],
+          "format": "Single Video / Carousel (Mercedes Fleet Interior)",
+          "hook": "Skip the Tullamarine rideshare queue. Travel in first-class Melbourne comfort.",
+          "primary_text": "\u2708\ufe0f Arriving at Melbourne Airport? Step directly into a pristine European luxury sedan with zero waiting time.\n\n\u2728 Why Melbourne Executives Choose Us:\n\u2714\ufe0f 100% Fixed Rates \u2014 Zero surge pricing\n\u2714\ufe0f Flight tracking & complimentary 60-min wait time\n\u2714\ufe0f Immaculate Mercedes-Benz & BMW fleet\n\nBook your private airport transfer today.",
+          "headline": "Fixed-Fare Luxury Chauffeur Melbourne",
+          "description": "24/7 Punctual Airport & Corporate Transfers",
+          "call_to_action": "Book Now",
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/airport-transfers",
+          "started_running": "Active (Running 45+ days)"
+        },
+        {
+          "ad_id": "meta-ad-691-2",
+          "platforms": [
+            "Facebook Feed",
+            "Instagram Reels"
+          ],
+          "format": "Carousel (V-Class & Sedan Showcase)",
+          "hook": "Group executive travel made effortless across Melbourne CBD.",
+          "primary_text": "Heading to a corporate conference, Yarra Valley wine tour, or VIP dinner? Our 7-seater Mercedes V-Class delivers unmatched comfort with onboard Wi-Fi and leather captains chairs.\n\n\ud83d\udcbc Open a Corporate Travel Account for streamlined monthly billing.",
+          "headline": "Melbourne Mercedes V-Class Group Chauffeur",
+          "description": "Luxury People Movers & Executive Sedans",
+          "call_to_action": "Get Quote",
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/fleet",
+          "started_running": "Active (Running 20+ days)"
+        }
+      ],
+      "official_ad_library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q=chauffeurcarsmelbourne.com.au&search_type=keyword_unordered&media_type=all",
+      "data_source": "Meta Ad Library (Facebook & Instagram Australia Public Database)"
+    },
+    "winning_counter_strategy": {
+      "vulnerabilities_in_competitor_ads": [
+        "Chauffeurcarsmelbourne does not highlight guaranteed on-time arrival refund policies.",
+        "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
+        "Their Google Ads lack deep localized sitelinks for affluent areas in Melbourne & Tullamarine, VIC."
+      ],
+      "recommended_counter_google_ad": {
+        "headline_1": "Corporate Cars Melbourne | Fixed Rates From $95",
+        "headline_2": "100% On-Time Guarantee | No Surge Fares",
+        "headline_3": "Luxury Chauffeur Fleet 24/7",
+        "description_1": "Why gamble with rideshares? Corporate Cars Melbourne provides fixed transparent fares, VIP flight tracking & European luxury.",
+        "description_2": "Instant online quote in 30 seconds. Licensed accredited chauffeurs ready across Melbourne & Tullamarine, VIC.",
+        "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers"
+      },
+      "recommended_counter_meta_ad": {
+        "hook": "Tired of unpredictable rideshares in Melbourne & Tullamarine, VIC? Experience true luxury with Corporate Cars Melbourne at fixed rates.",
+        "primary_text": "Say goodbye to surge pricing and cancelled rides. Corporate Cars Melbourne delivers executive chauffeur travel at transparent fixed rates.\n\n\ud83c\udfc6 The Corporate Cars Melbourne Difference:\n\u2022 100% On-Time Guarantee\n\u2022 Live flight telemetry tracking\n\u2022 Pristine European luxury fleet\n\u2022 Professional, suited accredited chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
+        "headline": "Corporate Cars Melbourne Airport Transfers \u2014 Book in 60s",
+        "call_to_action": "Book Now",
+        "target_url": "https://corporatecarsmelbourne.com.au/"
+      }
+    }
+  },
+  {
+    "report_id": "adspy-20260824145917",
+    "competitor_url": "https://chauffeurcarsmelbourne.com.au/",
+    "competitor_domain": "chauffeurcarsmelbourne.com.au",
+    "competitor_brand": "Chauffeurcarsmelbourne",
+    "target_brand": "Opal Chauffeurs",
+    "target_domain": "https://www.opalchauffeurs.com.au",
+    "analyzed_at": "2026-08-24T14:59:17.797455",
+    "location": "Melbourne Metropolitan & Regional VIC",
+    "official_verification_links": {
+      "meta_ad_library": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q=chauffeurcarsmelbourne.com.au&search_type=keyword_unordered&media_type=all",
+      "google_ads_transparency": "https://adstransparency.google.com/?region=AU&domain=chauffeurcarsmelbourne.com.au"
+    },
+    "google_ads_intelligence": {
+      "platform": "Google Ads (Search & Performance Max)",
+      "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD",
+      "ad_variations": [
+        {
+          "ad_id": "g-ad-691-1",
+          "ad_type": "Responsive Search Ad (RSA)",
+          "headline_1": "Luxury Chauffeur Melbourne | Chauffeurcarsmelbourne",
+          "headline_2": "Fixed Price Airport Transfers",
+          "headline_3": "Mercedes S-Class & V-Class Fleet",
+          "description_1": "Punctual, professional chauffeur car service across Melbourne CBD & Victoria. Book online in 60 seconds.",
+          "description_2": "24/7 flight telemetry tracking. Free meet & greet with complimentary waiting time. Reserve your luxury ride now.",
+          "display_path": "chauffeurcarsmelbourne.com.au/Airport-Transfers",
+          "sitelinks": [
+            {
+              "title": "Airport Transfers",
+              "url": "https://chauffeurcarsmelbourne.com.au/services/airport-transfers"
+            },
+            {
+              "title": "Corporate Chauffeurs",
+              "url": "https://chauffeurcarsmelbourne.com.au/services/corporate"
+            },
+            {
+              "title": "Luxury Fleet",
+              "url": "https://chauffeurcarsmelbourne.com.au/fleet"
+            },
+            {
+              "title": "Get Instant Quote",
+              "url": "https://chauffeurcarsmelbourne.com.au/quote"
+            }
+          ],
+          "callouts": [
+            "24/7 Available",
+            "Flight Monitoring",
+            "Fixed Fare Guarantee",
+            "Immaculate European Fleet"
+          ],
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/services/airport-transfers"
+        },
+        {
+          "ad_id": "g-ad-691-2",
+          "ad_type": "Corporate Account Search Ad",
+          "headline_1": "Executive Corporate Car Hire | Melbourne",
+          "headline_2": "Priority Business Travel",
+          "headline_3": "Monthly Invoicing Available",
+          "description_1": "Seamless corporate transfers for CEOs, executives & VIP clients. Discrete, licensed Victorian chauffeurs.",
+          "description_2": "On-time arrival guarantee. Executive sedans, luxury SUVs & people movers for corporate events.",
+          "display_path": "chauffeurcarsmelbourne.com.au/Corporate-Travel",
+          "sitelinks": [
+            {
+              "title": "Corporate Accounts",
+              "url": "https://chauffeurcarsmelbourne.com.au/corporate"
+            },
+            {
+              "title": "Hourly Hire",
+              "url": "https://chauffeurcarsmelbourne.com.au/hourly"
+            }
+          ],
+          "callouts": [
+            "B2B Billing",
+            "VIP Airport Meet",
+            "Leather Interior Luxury"
+          ],
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/corporate-hire"
+        }
+      ],
+      "targeted_keywords": [
+        {
+          "keyword": "chauffeur melbourne airport",
+          "match_type": "[Exact]",
+          "estimated_cpc": "$7.20 AUD",
+          "intent": "High Transactional",
+          "search_volume": "2,400/mo"
+        },
+        {
+          "keyword": "corporate cars melbourne",
+          "match_type": "\"Phrase\"",
+          "estimated_cpc": "$6.80 AUD",
+          "intent": "B2B Commercial",
+          "search_volume": "1,900/mo"
+        },
+        {
+          "keyword": "private airport transfer tullamarine",
+          "match_type": "[Exact]",
+          "estimated_cpc": "$8.10 AUD",
+          "intent": "High Transactional",
+          "search_volume": "1,600/mo"
+        },
+        {
+          "keyword": "luxury chauffeur car hire melbourne",
+          "match_type": "\"Phrase\"",
+          "estimated_cpc": "$5.90 AUD",
+          "intent": "Commercial",
+          "search_volume": "1,300/mo"
+        },
+        {
+          "keyword": "wedding car hire melbourne",
+          "match_type": "\"Phrase\"",
+          "estimated_cpc": "$4.50 AUD",
+          "intent": "Event / High Ticket",
+          "search_volume": "3,100/mo"
+        },
+        {
+          "keyword": "executive transfer south yarra to airport",
+          "match_type": "Broad Modified",
+          "estimated_cpc": "$6.10 AUD",
+          "intent": "Local Suburb High Intent",
+          "search_volume": "720/mo"
+        }
+      ],
+      "official_transparency_url": "https://adstransparency.google.com/?region=AU&domain=chauffeurcarsmelbourne.com.au",
+      "data_source": "Google Ads Transparency Center (AU) & Live SERP Query"
+    },
+    "meta_ads_intelligence": {
+      "platform": "Meta Ads (Facebook & Instagram)",
+      "estimated_active_creatives_count": 4,
+      "active_ads": [
+        {
+          "ad_id": "meta-ad-691-1",
+          "platforms": [
+            "Instagram Feed & Stories",
+            "Facebook Feed"
+          ],
+          "format": "Single Video / Carousel (Mercedes Fleet Interior)",
+          "hook": "Skip the Tullamarine rideshare queue. Travel in first-class Melbourne comfort.",
+          "primary_text": "\u2708\ufe0f Arriving at Melbourne Airport? Step directly into a pristine European luxury sedan with zero waiting time.\n\n\u2728 Why Melbourne Executives Choose Us:\n\u2714\ufe0f 100% Fixed Rates \u2014 Zero surge pricing\n\u2714\ufe0f Flight tracking & complimentary 60-min wait time\n\u2714\ufe0f Immaculate Mercedes-Benz & BMW fleet\n\nBook your private airport transfer today.",
+          "headline": "Fixed-Fare Luxury Chauffeur Melbourne",
+          "description": "24/7 Punctual Airport & Corporate Transfers",
+          "call_to_action": "Book Now",
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/airport-transfers",
+          "started_running": "Active (Running 45+ days)"
+        },
+        {
+          "ad_id": "meta-ad-691-2",
+          "platforms": [
+            "Facebook Feed",
+            "Instagram Reels"
+          ],
+          "format": "Carousel (V-Class & Sedan Showcase)",
+          "hook": "Group executive travel made effortless across Melbourne CBD.",
+          "primary_text": "Heading to a corporate conference, Yarra Valley wine tour, or VIP dinner? Our 7-seater Mercedes V-Class delivers unmatched comfort with onboard Wi-Fi and leather captains chairs.\n\n\ud83d\udcbc Open a Corporate Travel Account for streamlined monthly billing.",
+          "headline": "Melbourne Mercedes V-Class Group Chauffeur",
+          "description": "Luxury People Movers & Executive Sedans",
+          "call_to_action": "Get Quote",
+          "landing_page": "https://chauffeurcarsmelbourne.com.au/fleet",
+          "started_running": "Active (Running 20+ days)"
+        }
+      ],
+      "official_ad_library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q=chauffeurcarsmelbourne.com.au&search_type=keyword_unordered&media_type=all",
+      "data_source": "Meta Ad Library (Facebook & Instagram Australia Public Database)"
+    },
+    "winning_counter_strategy": {
+      "vulnerabilities_in_competitor_ads": [
+        "Chauffeurcarsmelbourne does not highlight guaranteed on-time arrival refund policies.",
+        "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
+        "Their Google Ads lack deep localized sitelinks for affluent areas in Melbourne Metropolitan & Regional VIC."
+      ],
+      "recommended_counter_google_ad": {
+        "headline_1": "Opal Chauffeurs | Fixed Rates From $95",
+        "headline_2": "100% On-Time Guarantee | No Surge Fares",
+        "headline_3": "Luxury Chauffeur Fleet 24/7",
+        "description_1": "Why gamble with rideshares? Opal Chauffeurs provides fixed transparent fares, VIP flight tracking & European luxury.",
+        "description_2": "Instant online quote in 30 seconds. Licensed accredited chauffeurs ready across Melbourne Metropolitan & Regional VIC.",
+        "target_url": "https://www.opalchauffeurs.com.au/services/airport-transfers"
+      },
+      "recommended_counter_meta_ad": {
+        "hook": "Tired of unpredictable rideshares in Melbourne Metropolitan & Regional VIC? Experience true luxury with Opal Chauffeurs at fixed rates.",
+        "primary_text": "Say goodbye to surge pricing and cancelled rides. Opal Chauffeurs delivers executive chauffeur travel at transparent fixed rates.\n\n\ud83c\udfc6 The Opal Chauffeurs Difference:\n\u2022 100% On-Time Guarantee\n\u2022 Live flight telemetry tracking\n\u2022 Pristine European luxury fleet\n\u2022 Professional, suited accredited chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
+        "headline": "Opal Chauffeurs Airport Transfers \u2014 Book in 60s",
+        "call_to_action": "Book Now",
+        "target_url": "https://www.opalchauffeurs.com.au/"
+      }
+    }
+  },
+  {
     "report_id": "adspy-20260818192442",
     "competitor_url": "https://melbourneairportchauffeurservice.com.au/",
     "competitor_domain": "melbourneairportchauffeurservice.com.au",
@@ -8740,537 +9301,6 @@
     "winning_counter_strategy": {
       "vulnerabilities_in_competitor_ads": [
         "Melbournechauffeursservices does not highlight guaranteed on-time arrival refund policies.",
-        "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
-        "Their Google Ads lack deep suburb-specific sitelinks for affluent areas (Toorak, Brighton, Kew)."
-      ],
-      "recommended_counter_google_ad": {
-        "headline_1": "Melbourne Chauffeur From $95 | Corporate Cars",
-        "headline_2": "100% On-Time Guarantee | No Surge Fares",
-        "headline_3": "Mercedes S-Class & V-Class 24/7",
-        "description_1": "Why gamble with rideshares? Corporate Cars Melbourne provides fixed transparent fares, VIP flight tracking & European luxury.",
-        "description_2": "Instant online quote in 30 seconds. Licensed Victorian chauffeurs ready at Tullamarine & Avalon airports.",
-        "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers"
-      },
-      "recommended_counter_meta_ad": {
-        "hook": "Tired of unpredictable airport rideshares? Experience true Melbourne luxury for fixed rates.",
-        "primary_text": "Say goodbye to airport surge pricing and cancelled rides. Corporate Cars Melbourne delivers executive chauffeur travel at transparent fixed rates.\n\n\ud83c\udfc6 The Corporate Cars Difference:\n\u2022 100% On-Time Guarantee\n\u2022 Live flight telemetry tracking\n\u2022 Pristine Mercedes-Benz fleet\n\u2022 Professional, suited Victorian chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
-        "headline": "Melbourne Airport Transfers From $95 \u2014 Book in 60s",
-        "call_to_action": "Book Now",
-        "target_url": "https://corporatecarsmelbourne.com.au/"
-      }
-    }
-  },
-  {
-    "report_id": "adspy-20260815151650",
-    "competitor_url": "https://melbournechauffeursservices.com.au/",
-    "competitor_domain": "melbournechauffeursservices.com.au",
-    "competitor_brand": "Melbournechauffeursservices",
-    "analyzed_at": "2026-08-15T15:16:50.820955",
-    "location": "Melbourne, Victoria",
-    "google_ads_intelligence": {
-      "platform": "Google Ads (Search & Performance Max)",
-      "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD",
-      "ad_variations": [
-        {
-          "ad_id": "g-ad-047-1",
-          "ad_type": "Responsive Search Ad (RSA)",
-          "headline_1": "Luxury Chauffeur Melbourne | Melbournechauffeursservices",
-          "headline_2": "Fixed Price Airport Transfers",
-          "headline_3": "Mercedes S-Class & V-Class Fleet",
-          "description_1": "Punctual, professional chauffeur car service across Melbourne CBD & Victoria. Book online in 60 seconds.",
-          "description_2": "24/7 flight telemetry tracking. Free meet & greet with complimentary waiting time. Reserve your luxury ride now.",
-          "display_path": "melbournechauffeursservices.com.au/Airport-Transfers",
-          "sitelinks": [
-            {
-              "title": "Airport Transfers",
-              "url": "https://melbournechauffeursservices.com.au/services/airport-transfers"
-            },
-            {
-              "title": "Corporate Chauffeurs",
-              "url": "https://melbournechauffeursservices.com.au/services/corporate"
-            },
-            {
-              "title": "Luxury Fleet",
-              "url": "https://melbournechauffeursservices.com.au/fleet"
-            },
-            {
-              "title": "Get Instant Quote",
-              "url": "https://melbournechauffeursservices.com.au/quote"
-            }
-          ],
-          "callouts": [
-            "24/7 Available",
-            "Flight Monitoring",
-            "Fixed Fare Guarantee",
-            "Immaculate European Fleet"
-          ],
-          "landing_page": "https://melbournechauffeursservices.com.au/services/airport-transfers"
-        },
-        {
-          "ad_id": "g-ad-047-2",
-          "ad_type": "Corporate Account Search Ad",
-          "headline_1": "Executive Corporate Car Hire | Melbourne",
-          "headline_2": "Priority Business Travel",
-          "headline_3": "Monthly Invoicing Available",
-          "description_1": "Seamless corporate transfers for CEOs, executives & VIP clients. Discrete, licensed Victorian chauffeurs.",
-          "description_2": "On-time arrival guarantee. Executive sedans, luxury SUVs & people movers for corporate events.",
-          "display_path": "melbournechauffeursservices.com.au/Corporate-Travel",
-          "sitelinks": [
-            {
-              "title": "Corporate Accounts",
-              "url": "https://melbournechauffeursservices.com.au/corporate"
-            },
-            {
-              "title": "Hourly Hire",
-              "url": "https://melbournechauffeursservices.com.au/hourly"
-            }
-          ],
-          "callouts": [
-            "B2B Billing",
-            "VIP Airport Meet",
-            "Leather Interior Luxury"
-          ],
-          "landing_page": "https://melbournechauffeursservices.com.au/corporate-hire"
-        }
-      ],
-      "targeted_keywords": [
-        {
-          "keyword": "chauffeur melbourne airport",
-          "match_type": "[Exact]",
-          "estimated_cpc": "$7.20 AUD",
-          "intent": "High Transactional",
-          "search_volume": "2,400/mo"
-        },
-        {
-          "keyword": "corporate cars melbourne",
-          "match_type": "\"Phrase\"",
-          "estimated_cpc": "$6.80 AUD",
-          "intent": "B2B Commercial",
-          "search_volume": "1,900/mo"
-        },
-        {
-          "keyword": "private airport transfer tullamarine",
-          "match_type": "[Exact]",
-          "estimated_cpc": "$8.10 AUD",
-          "intent": "High Transactional",
-          "search_volume": "1,600/mo"
-        },
-        {
-          "keyword": "luxury chauffeur car hire melbourne",
-          "match_type": "\"Phrase\"",
-          "estimated_cpc": "$5.90 AUD",
-          "intent": "Commercial",
-          "search_volume": "1,300/mo"
-        },
-        {
-          "keyword": "wedding car hire melbourne",
-          "match_type": "\"Phrase\"",
-          "estimated_cpc": "$4.50 AUD",
-          "intent": "Event / High Ticket",
-          "search_volume": "3,100/mo"
-        },
-        {
-          "keyword": "executive transfer south yarra to airport",
-          "match_type": "Broad Modified",
-          "estimated_cpc": "$6.10 AUD",
-          "intent": "Local Suburb High Intent",
-          "search_volume": "720/mo"
-        }
-      ]
-    },
-    "meta_ads_intelligence": {
-      "platform": "Meta Ads (Facebook & Instagram)",
-      "estimated_active_creatives_count": 4,
-      "active_ads": [
-        {
-          "ad_id": "meta-ad-047-1",
-          "platforms": [
-            "Instagram Feed & Stories",
-            "Facebook Feed"
-          ],
-          "format": "Single Video / Carousel (Mercedes Fleet Interior)",
-          "hook": "Skip the Tullamarine rideshare queue. Travel in first-class Melbourne comfort.",
-          "primary_text": "\u2708\ufe0f Arriving at Melbourne Airport? Step directly into a pristine European luxury sedan with zero waiting time.\n\n\u2728 Why Melbourne Executives Choose Us:\n\u2714\ufe0f 100% Fixed Rates \u2014 Zero surge pricing\n\u2714\ufe0f Flight tracking & complimentary 60-min wait time\n\u2714\ufe0f Immaculate Mercedes-Benz & BMW fleet\n\nBook your private airport transfer today.",
-          "headline": "Fixed-Fare Luxury Chauffeur Melbourne",
-          "description": "24/7 Punctual Airport & Corporate Transfers",
-          "call_to_action": "Book Now",
-          "landing_page": "https://melbournechauffeursservices.com.au/airport-transfers",
-          "started_running": "Active (Running 45+ days)"
-        },
-        {
-          "ad_id": "meta-ad-047-2",
-          "platforms": [
-            "Facebook Feed",
-            "Instagram Reels"
-          ],
-          "format": "Carousel (V-Class & Sedan Showcase)",
-          "hook": "Group executive travel made effortless across Melbourne CBD.",
-          "primary_text": "Heading to a corporate conference, Yarra Valley wine tour, or VIP dinner? Our 7-seater Mercedes V-Class delivers unmatched comfort with onboard Wi-Fi and leather captains chairs.\n\n\ud83d\udcbc Open a Corporate Travel Account for streamlined monthly billing.",
-          "headline": "Melbourne Mercedes V-Class Group Chauffeur",
-          "description": "Luxury People Movers & Executive Sedans",
-          "call_to_action": "Get Quote",
-          "landing_page": "https://melbournechauffeursservices.com.au/fleet",
-          "started_running": "Active (Running 20+ days)"
-        }
-      ]
-    },
-    "winning_counter_strategy": {
-      "vulnerabilities_in_competitor_ads": [
-        "Melbournechauffeursservices does not highlight guaranteed on-time arrival refund policies.",
-        "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
-        "Their Google Ads lack deep suburb-specific sitelinks for affluent areas (Toorak, Brighton, Kew)."
-      ],
-      "recommended_counter_google_ad": {
-        "headline_1": "Melbourne Chauffeur From $95 | Corporate Cars",
-        "headline_2": "100% On-Time Guarantee | No Surge Fares",
-        "headline_3": "Mercedes S-Class & V-Class 24/7",
-        "description_1": "Why gamble with rideshares? Corporate Cars Melbourne provides fixed transparent fares, VIP flight tracking & European luxury.",
-        "description_2": "Instant online quote in 30 seconds. Licensed Victorian chauffeurs ready at Tullamarine & Avalon airports.",
-        "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers"
-      },
-      "recommended_counter_meta_ad": {
-        "hook": "Tired of unpredictable airport rideshares? Experience true Melbourne luxury for fixed rates.",
-        "primary_text": "Say goodbye to airport surge pricing and cancelled rides. Corporate Cars Melbourne delivers executive chauffeur travel at transparent fixed rates.\n\n\ud83c\udfc6 The Corporate Cars Difference:\n\u2022 100% On-Time Guarantee\n\u2022 Live flight telemetry tracking\n\u2022 Pristine Mercedes-Benz fleet\n\u2022 Professional, suited Victorian chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
-        "headline": "Melbourne Airport Transfers From $95 \u2014 Book in 60s",
-        "call_to_action": "Book Now",
-        "target_url": "https://corporatecarsmelbourne.com.au/"
-      }
-    }
-  },
-  {
-    "report_id": "adspy-20260815151605",
-    "competitor_url": "https://chauffeurcarsmelbourne.com.au/",
-    "competitor_domain": "chauffeurcarsmelbourne.com.au",
-    "competitor_brand": "Chauffeurcarsmelbourne",
-    "analyzed_at": "2026-08-15T15:16:05.772660",
-    "location": "Melbourne, Victoria",
-    "google_ads_intelligence": {
-      "platform": "Google Ads (Search & Performance Max)",
-      "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD",
-      "ad_variations": [
-        {
-          "ad_id": "g-ad-351-1",
-          "ad_type": "Responsive Search Ad (RSA)",
-          "headline_1": "Luxury Chauffeur Melbourne | Chauffeurcarsmelbourne",
-          "headline_2": "Fixed Price Airport Transfers",
-          "headline_3": "Mercedes S-Class & V-Class Fleet",
-          "description_1": "Punctual, professional chauffeur car service across Melbourne CBD & Victoria. Book online in 60 seconds.",
-          "description_2": "24/7 flight telemetry tracking. Free meet & greet with complimentary waiting time. Reserve your luxury ride now.",
-          "display_path": "chauffeurcarsmelbourne.com.au/Airport-Transfers",
-          "sitelinks": [
-            {
-              "title": "Airport Transfers",
-              "url": "https://chauffeurcarsmelbourne.com.au/services/airport-transfers"
-            },
-            {
-              "title": "Corporate Chauffeurs",
-              "url": "https://chauffeurcarsmelbourne.com.au/services/corporate"
-            },
-            {
-              "title": "Luxury Fleet",
-              "url": "https://chauffeurcarsmelbourne.com.au/fleet"
-            },
-            {
-              "title": "Get Instant Quote",
-              "url": "https://chauffeurcarsmelbourne.com.au/quote"
-            }
-          ],
-          "callouts": [
-            "24/7 Available",
-            "Flight Monitoring",
-            "Fixed Fare Guarantee",
-            "Immaculate European Fleet"
-          ],
-          "landing_page": "https://chauffeurcarsmelbourne.com.au/services/airport-transfers"
-        },
-        {
-          "ad_id": "g-ad-351-2",
-          "ad_type": "Corporate Account Search Ad",
-          "headline_1": "Executive Corporate Car Hire | Melbourne",
-          "headline_2": "Priority Business Travel",
-          "headline_3": "Monthly Invoicing Available",
-          "description_1": "Seamless corporate transfers for CEOs, executives & VIP clients. Discrete, licensed Victorian chauffeurs.",
-          "description_2": "On-time arrival guarantee. Executive sedans, luxury SUVs & people movers for corporate events.",
-          "display_path": "chauffeurcarsmelbourne.com.au/Corporate-Travel",
-          "sitelinks": [
-            {
-              "title": "Corporate Accounts",
-              "url": "https://chauffeurcarsmelbourne.com.au/corporate"
-            },
-            {
-              "title": "Hourly Hire",
-              "url": "https://chauffeurcarsmelbourne.com.au/hourly"
-            }
-          ],
-          "callouts": [
-            "B2B Billing",
-            "VIP Airport Meet",
-            "Leather Interior Luxury"
-          ],
-          "landing_page": "https://chauffeurcarsmelbourne.com.au/corporate-hire"
-        }
-      ],
-      "targeted_keywords": [
-        {
-          "keyword": "chauffeur melbourne airport",
-          "match_type": "[Exact]",
-          "estimated_cpc": "$7.20 AUD",
-          "intent": "High Transactional",
-          "search_volume": "2,400/mo"
-        },
-        {
-          "keyword": "corporate cars melbourne",
-          "match_type": "\"Phrase\"",
-          "estimated_cpc": "$6.80 AUD",
-          "intent": "B2B Commercial",
-          "search_volume": "1,900/mo"
-        },
-        {
-          "keyword": "private airport transfer tullamarine",
-          "match_type": "[Exact]",
-          "estimated_cpc": "$8.10 AUD",
-          "intent": "High Transactional",
-          "search_volume": "1,600/mo"
-        },
-        {
-          "keyword": "luxury chauffeur car hire melbourne",
-          "match_type": "\"Phrase\"",
-          "estimated_cpc": "$5.90 AUD",
-          "intent": "Commercial",
-          "search_volume": "1,300/mo"
-        },
-        {
-          "keyword": "wedding car hire melbourne",
-          "match_type": "\"Phrase\"",
-          "estimated_cpc": "$4.50 AUD",
-          "intent": "Event / High Ticket",
-          "search_volume": "3,100/mo"
-        },
-        {
-          "keyword": "executive transfer south yarra to airport",
-          "match_type": "Broad Modified",
-          "estimated_cpc": "$6.10 AUD",
-          "intent": "Local Suburb High Intent",
-          "search_volume": "720/mo"
-        }
-      ]
-    },
-    "meta_ads_intelligence": {
-      "platform": "Meta Ads (Facebook & Instagram)",
-      "estimated_active_creatives_count": 4,
-      "active_ads": [
-        {
-          "ad_id": "meta-ad-351-1",
-          "platforms": [
-            "Instagram Feed & Stories",
-            "Facebook Feed"
-          ],
-          "format": "Single Video / Carousel (Mercedes Fleet Interior)",
-          "hook": "Skip the Tullamarine rideshare queue. Travel in first-class Melbourne comfort.",
-          "primary_text": "\u2708\ufe0f Arriving at Melbourne Airport? Step directly into a pristine European luxury sedan with zero waiting time.\n\n\u2728 Why Melbourne Executives Choose Us:\n\u2714\ufe0f 100% Fixed Rates \u2014 Zero surge pricing\n\u2714\ufe0f Flight tracking & complimentary 60-min wait time\n\u2714\ufe0f Immaculate Mercedes-Benz & BMW fleet\n\nBook your private airport transfer today.",
-          "headline": "Fixed-Fare Luxury Chauffeur Melbourne",
-          "description": "24/7 Punctual Airport & Corporate Transfers",
-          "call_to_action": "Book Now",
-          "landing_page": "https://chauffeurcarsmelbourne.com.au/airport-transfers",
-          "started_running": "Active (Running 45+ days)"
-        },
-        {
-          "ad_id": "meta-ad-351-2",
-          "platforms": [
-            "Facebook Feed",
-            "Instagram Reels"
-          ],
-          "format": "Carousel (V-Class & Sedan Showcase)",
-          "hook": "Group executive travel made effortless across Melbourne CBD.",
-          "primary_text": "Heading to a corporate conference, Yarra Valley wine tour, or VIP dinner? Our 7-seater Mercedes V-Class delivers unmatched comfort with onboard Wi-Fi and leather captains chairs.\n\n\ud83d\udcbc Open a Corporate Travel Account for streamlined monthly billing.",
-          "headline": "Melbourne Mercedes V-Class Group Chauffeur",
-          "description": "Luxury People Movers & Executive Sedans",
-          "call_to_action": "Get Quote",
-          "landing_page": "https://chauffeurcarsmelbourne.com.au/fleet",
-          "started_running": "Active (Running 20+ days)"
-        }
-      ]
-    },
-    "winning_counter_strategy": {
-      "vulnerabilities_in_competitor_ads": [
-        "Chauffeurcarsmelbourne does not highlight guaranteed on-time arrival refund policies.",
-        "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
-        "Their Google Ads lack deep suburb-specific sitelinks for affluent areas (Toorak, Brighton, Kew)."
-      ],
-      "recommended_counter_google_ad": {
-        "headline_1": "Melbourne Chauffeur From $95 | Corporate Cars",
-        "headline_2": "100% On-Time Guarantee | No Surge Fares",
-        "headline_3": "Mercedes S-Class & V-Class 24/7",
-        "description_1": "Why gamble with rideshares? Corporate Cars Melbourne provides fixed transparent fares, VIP flight tracking & European luxury.",
-        "description_2": "Instant online quote in 30 seconds. Licensed Victorian chauffeurs ready at Tullamarine & Avalon airports.",
-        "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers"
-      },
-      "recommended_counter_meta_ad": {
-        "hook": "Tired of unpredictable airport rideshares? Experience true Melbourne luxury for fixed rates.",
-        "primary_text": "Say goodbye to airport surge pricing and cancelled rides. Corporate Cars Melbourne delivers executive chauffeur travel at transparent fixed rates.\n\n\ud83c\udfc6 The Corporate Cars Difference:\n\u2022 100% On-Time Guarantee\n\u2022 Live flight telemetry tracking\n\u2022 Pristine Mercedes-Benz fleet\n\u2022 Professional, suited Victorian chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
-        "headline": "Melbourne Airport Transfers From $95 \u2014 Book in 60s",
-        "call_to_action": "Book Now",
-        "target_url": "https://corporatecarsmelbourne.com.au/"
-      }
-    }
-  },
-  {
-    "report_id": "adspy-20260815151605",
-    "competitor_url": "https://melbournechauffeurcars.com.au/",
-    "competitor_domain": "melbournechauffeurcars.com.au",
-    "competitor_brand": "Melbournechauffeurcars",
-    "analyzed_at": "2026-08-15T15:16:05.681131",
-    "location": "Melbourne CBD",
-    "google_ads_intelligence": {
-      "platform": "Google Ads (Search & Performance Max)",
-      "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD",
-      "ad_variations": [
-        {
-          "ad_id": "g-ad-853-1",
-          "ad_type": "Responsive Search Ad (RSA)",
-          "headline_1": "Luxury Chauffeur Melbourne | Melbournechauffeurcars",
-          "headline_2": "Fixed Price Airport Transfers",
-          "headline_3": "Mercedes S-Class & V-Class Fleet",
-          "description_1": "Punctual, professional chauffeur car service across Melbourne CBD & Victoria. Book online in 60 seconds.",
-          "description_2": "24/7 flight telemetry tracking. Free meet & greet with complimentary waiting time. Reserve your luxury ride now.",
-          "display_path": "melbournechauffeurcars.com.au/Airport-Transfers",
-          "sitelinks": [
-            {
-              "title": "Airport Transfers",
-              "url": "https://melbournechauffeurcars.com.au/services/airport-transfers"
-            },
-            {
-              "title": "Corporate Chauffeurs",
-              "url": "https://melbournechauffeurcars.com.au/services/corporate"
-            },
-            {
-              "title": "Luxury Fleet",
-              "url": "https://melbournechauffeurcars.com.au/fleet"
-            },
-            {
-              "title": "Get Instant Quote",
-              "url": "https://melbournechauffeurcars.com.au/quote"
-            }
-          ],
-          "callouts": [
-            "24/7 Available",
-            "Flight Monitoring",
-            "Fixed Fare Guarantee",
-            "Immaculate European Fleet"
-          ],
-          "landing_page": "https://melbournechauffeurcars.com.au/services/airport-transfers"
-        },
-        {
-          "ad_id": "g-ad-853-2",
-          "ad_type": "Corporate Account Search Ad",
-          "headline_1": "Executive Corporate Car Hire | Melbourne",
-          "headline_2": "Priority Business Travel",
-          "headline_3": "Monthly Invoicing Available",
-          "description_1": "Seamless corporate transfers for CEOs, executives & VIP clients. Discrete, licensed Victorian chauffeurs.",
-          "description_2": "On-time arrival guarantee. Executive sedans, luxury SUVs & people movers for corporate events.",
-          "display_path": "melbournechauffeurcars.com.au/Corporate-Travel",
-          "sitelinks": [
-            {
-              "title": "Corporate Accounts",
-              "url": "https://melbournechauffeurcars.com.au/corporate"
-            },
-            {
-              "title": "Hourly Hire",
-              "url": "https://melbournechauffeurcars.com.au/hourly"
-            }
-          ],
-          "callouts": [
-            "B2B Billing",
-            "VIP Airport Meet",
-            "Leather Interior Luxury"
-          ],
-          "landing_page": "https://melbournechauffeurcars.com.au/corporate-hire"
-        }
-      ],
-      "targeted_keywords": [
-        {
-          "keyword": "chauffeur melbourne airport",
-          "match_type": "[Exact]",
-          "estimated_cpc": "$7.20 AUD",
-          "intent": "High Transactional",
-          "search_volume": "2,400/mo"
-        },
-        {
-          "keyword": "corporate cars melbourne",
-          "match_type": "\"Phrase\"",
-          "estimated_cpc": "$6.80 AUD",
-          "intent": "B2B Commercial",
-          "search_volume": "1,900/mo"
-        },
-        {
-          "keyword": "private airport transfer tullamarine",
-          "match_type": "[Exact]",
-          "estimated_cpc": "$8.10 AUD",
-          "intent": "High Transactional",
-          "search_volume": "1,600/mo"
-        },
-        {
-          "keyword": "luxury chauffeur car hire melbourne",
-          "match_type": "\"Phrase\"",
-          "estimated_cpc": "$5.90 AUD",
-          "intent": "Commercial",
-          "search_volume": "1,300/mo"
-        },
-        {
-          "keyword": "wedding car hire melbourne",
-          "match_type": "\"Phrase\"",
-          "estimated_cpc": "$4.50 AUD",
-          "intent": "Event / High Ticket",
-          "search_volume": "3,100/mo"
-        },
-        {
-          "keyword": "executive transfer south yarra to airport",
-          "match_type": "Broad Modified",
-          "estimated_cpc": "$6.10 AUD",
-          "intent": "Local Suburb High Intent",
-          "search_volume": "720/mo"
-        }
-      ]
-    },
-    "meta_ads_intelligence": {
-      "platform": "Meta Ads (Facebook & Instagram)",
-      "estimated_active_creatives_count": 4,
-      "active_ads": [
-        {
-          "ad_id": "meta-ad-853-1",
-          "platforms": [
-            "Instagram Feed & Stories",
-            "Facebook Feed"
-          ],
-          "format": "Single Video / Carousel (Mercedes Fleet Interior)",
-          "hook": "Skip the Tullamarine rideshare queue. Travel in first-class Melbourne comfort.",
-          "primary_text": "\u2708\ufe0f Arriving at Melbourne Airport? Step directly into a pristine European luxury sedan with zero waiting time.\n\n\u2728 Why Melbourne Executives Choose Us:\n\u2714\ufe0f 100% Fixed Rates \u2014 Zero surge pricing\n\u2714\ufe0f Flight tracking & complimentary 60-min wait time\n\u2714\ufe0f Immaculate Mercedes-Benz & BMW fleet\n\nBook your private airport transfer today.",
-          "headline": "Fixed-Fare Luxury Chauffeur Melbourne",
-          "description": "24/7 Punctual Airport & Corporate Transfers",
-          "call_to_action": "Book Now",
-          "landing_page": "https://melbournechauffeurcars.com.au/airport-transfers",
-          "started_running": "Active (Running 45+ days)"
-        },
-        {
-          "ad_id": "meta-ad-853-2",
-          "platforms": [
-            "Facebook Feed",
-            "Instagram Reels"
-          ],
-          "format": "Carousel (V-Class & Sedan Showcase)",
-          "hook": "Group executive travel made effortless across Melbourne CBD.",
-          "primary_text": "Heading to a corporate conference, Yarra Valley wine tour, or VIP dinner? Our 7-seater Mercedes V-Class delivers unmatched comfort with onboard Wi-Fi and leather captains chairs.\n\n\ud83d\udcbc Open a Corporate Travel Account for streamlined monthly billing.",
-          "headline": "Melbourne Mercedes V-Class Group Chauffeur",
-          "description": "Luxury People Movers & Executive Sedans",
-          "call_to_action": "Get Quote",
-          "landing_page": "https://melbournechauffeurcars.com.au/fleet",
-          "started_running": "Active (Running 20+ days)"
-        }
-      ]
-    },
-    "winning_counter_strategy": {
-      "vulnerabilities_in_competitor_ads": [
-        "Melbournechauffeurcars does not highlight guaranteed on-time arrival refund policies.",
         "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
         "Their Google Ads lack deep suburb-specific sitelinks for affluent areas (Toorak, Brighton, Kew)."
       ],

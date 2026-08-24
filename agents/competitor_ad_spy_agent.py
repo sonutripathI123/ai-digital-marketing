@@ -91,7 +91,7 @@ class CompetitorAdSpyAgent(AgentInterface):
         google_transparency_url = f"https://adstransparency.google.com/?region=AU&domain={clean_domain}"
 
         # 1. Base Intelligence Templates with official live URLs
-        google_ads_data = self._generate_google_ads_intelligence(clean_domain, brand_name, target_loc)
+        google_ads_data = self._generate_google_ads_intelligence(clean_domain, brand_name, target_loc, site_id=site_id or "ccm")
         google_ads_data["official_transparency_url"] = google_transparency_url
         google_ads_data["data_source"] = "Google Ads Transparency Center (AU) & Live SERP Query"
 
@@ -178,8 +178,27 @@ Respond with valid JSON containing keys:
             "cost_usd": cost_usd
         }
 
-    def _generate_google_ads_intelligence(self, domain: str, brand: str, location: str) -> Dict[str, Any]:
+    def _generate_google_ads_intelligence(self, domain: str, brand: str, location: str, site_id: str = "ccm") -> Dict[str, Any]:
         """Generates Google Search Ad copy and keyword bidding breakdown."""
+        if site_id == "opal":
+            targeted_kws = [
+                {"keyword": "chauffeur melbourne airport", "match_type": "[Exact]", "estimated_cpc": "$7.20 AUD", "intent": "High Transactional", "search_volume": "2,400/mo"},
+                {"keyword": "luxury chauffeur car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$5.90 AUD", "intent": "Commercial", "search_volume": "1,300/mo"},
+                {"keyword": "private airport transfer tullamarine", "match_type": "[Exact]", "estimated_cpc": "$8.10 AUD", "intent": "High Transactional", "search_volume": "1,600/mo"},
+                {"keyword": "executive private driver melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$6.40 AUD", "intent": "B2B Commercial", "search_volume": "1,100/mo"},
+                {"keyword": "wedding car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$4.50 AUD", "intent": "Event / High Ticket", "search_volume": "3,100/mo"},
+                {"keyword": "yarra valley winery tour chauffeur", "match_type": "Broad Modified", "estimated_cpc": "$5.80 AUD", "intent": "Leisure & VIP High Intent", "search_volume": "950/mo"}
+            ]
+        else:
+            targeted_kws = [
+                {"keyword": "chauffeur melbourne airport", "match_type": "[Exact]", "estimated_cpc": "$7.20 AUD", "intent": "High Transactional", "search_volume": "2,400/mo"},
+                {"keyword": "corporate cars melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$6.80 AUD", "intent": "B2B Commercial", "search_volume": "1,900/mo"},
+                {"keyword": "private airport transfer tullamarine", "match_type": "[Exact]", "estimated_cpc": "$8.10 AUD", "intent": "High Transactional", "search_volume": "1,600/mo"},
+                {"keyword": "luxury chauffeur car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$5.90 AUD", "intent": "Commercial", "search_volume": "1,300/mo"},
+                {"keyword": "wedding car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$4.50 AUD", "intent": "Event / High Ticket", "search_volume": "3,100/mo"},
+                {"keyword": "executive transfer south yarra to airport", "match_type": "Broad Modified", "estimated_cpc": "$6.10 AUD", "intent": "Local Suburb High Intent", "search_volume": "720/mo"}
+            ]
+
         return {
             "platform": "Google Ads (Search & Performance Max)",
             "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD",
@@ -219,14 +238,7 @@ Respond with valid JSON containing keys:
                     "landing_page": f"https://{domain}/corporate-hire"
                 }
             ],
-            "targeted_keywords": [
-                {"keyword": "chauffeur melbourne airport", "match_type": "[Exact]", "estimated_cpc": "$7.20 AUD", "intent": "High Transactional", "search_volume": "2,400/mo"},
-                {"keyword": "corporate cars melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$6.80 AUD", "intent": "B2B Commercial", "search_volume": "1,900/mo"},
-                {"keyword": "private airport transfer tullamarine", "match_type": "[Exact]", "estimated_cpc": "$8.10 AUD", "intent": "High Transactional", "search_volume": "1,600/mo"},
-                {"keyword": "luxury chauffeur car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$5.90 AUD", "intent": "Commercial", "search_volume": "1,300/mo"},
-                {"keyword": "wedding car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$4.50 AUD", "intent": "Event / High Ticket", "search_volume": "3,100/mo"},
-                {"keyword": "executive transfer south yarra to airport", "match_type": "Broad Modified", "estimated_cpc": "$6.10 AUD", "intent": "Local Suburb High Intent", "search_volume": "720/mo"}
-            ]
+            "targeted_keywords": targeted_kws
         }
 
     def _generate_meta_ads_intelligence(self, domain: str, brand: str, location: str) -> Dict[str, Any]:

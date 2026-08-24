@@ -1046,51 +1046,40 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
         }
 
     elif agent_id == "competitor-ad-spy-agent":
-        if effective_site == "ccm":
-            from agents.competitor_ad_spy_agent import load_ad_spy_history
-            hist = load_ad_spy_history()
-            latest = hist[0] if hist else None
-            report["ad_spy_metrics"] = {
-                "total_competitors_analyzed": len(hist),
-                "latest_report": latest,
-                "all_reports": hist[:10]
-            }
-        else:
-            report["ad_spy_metrics"] = {
-                "total_competitors_analyzed": 0,
-                "latest_report": None,
-                "all_reports": [],
-                "recommendations": [
-                    f"No ad spy intelligence reports for {site_name} yet.",
-                    f"Run Ad Spy analysis to discover active competitor PPC ads for {site_name} ({site_loc})."
-                ]
-            }
+        from agents.competitor_ad_spy_agent import load_ad_spy_history
+        all_hist = load_ad_spy_history()
+        hist = [h for h in all_hist if h.get("target_brand", "").lower() == site_name.lower() or h.get("site_id", "") == effective_site]
+        latest = hist[0] if hist else None
+        report["ad_spy_metrics"] = {
+            "total_competitors_analyzed": len(hist),
+            "latest_report": latest,
+            "all_reports": hist[:10]
+        }
+        if not hist:
+            report["ad_spy_metrics"]["recommendations"] = [
+                f"No ad spy intelligence reports for {site_name} yet.",
+                f"Run Ad Spy analysis to discover active competitor PPC ads for {site_name} ({site_loc})."
+            ]
 
     elif agent_id == "page-optimizer-agent":
-        if effective_site == "ccm":
-            from agents.page_optimizer_agent import load_page_optimizer_history
-            hist = load_page_optimizer_history()
-            latest = hist[0] if hist else None
-            report["page_optimizer_metrics"] = {
-                "total_audits_performed": len(hist),
-                "latest_audit": latest,
-                "all_audits": hist[:10],
-                "recommendations": [
-                    f"Audit top landing pages on {site_name} for Google E-E-A-T trust signals.",
-                    f"Maintain minimum 1,100 word count for high-intent {site_name} service pages.",
-                    f"Implement LocalBusiness & FAQPage Schema.org structured data on all pillar pages."
-                ]
-            }
-        else:
-            report["page_optimizer_metrics"] = {
-                "total_audits_performed": 0,
-                "latest_audit": None,
-                "all_audits": [],
-                "recommendations": [
-                    f"No landing page audits for {site_name} yet.",
-                    f"Enter a {site_domain} URL above to run a live Google algorithm SEO content audit."
-                ]
-            }
+        from agents.page_optimizer_agent import load_page_optimizer_history
+        all_hist = load_page_optimizer_history()
+        domain_clean = site_domain.replace("https://", "").replace("http://", "").replace("www.", "").strip("/")
+        hist = [h for h in all_hist if domain_clean in (h.get("page_url", "") or "")]
+        latest = hist[0] if hist else None
+        report["page_optimizer_metrics"] = {
+            "total_audits_performed": len(hist),
+            "latest_audit": latest,
+            "all_audits": hist[:10],
+            "recommendations": [
+                f"Audit top landing pages on {site_name} for Google E-E-A-T trust signals.",
+                f"Maintain minimum 1,100 word count for high-intent {site_name} service pages.",
+                f"Implement LocalBusiness & FAQPage Schema.org structured data on all pillar pages."
+            ] if hist else [
+                f"No landing page audits for {site_name} yet.",
+                f"Enter a {site_domain} URL above to run a live Google algorithm SEO content audit."
+            ]
+        }
 
     elif agent_id == "monthly-report-agent":
         if effective_site == "ccm":
