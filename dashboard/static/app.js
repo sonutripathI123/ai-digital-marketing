@@ -4,7 +4,7 @@ let allWebsitesList = [];
 let activityChartInstance = null;
 let categoryChartInstance = null;
 let currentUserRole = 'viewer';
-let authToken = localStorage.getItem('ccm_admin_token') || sessionStorage.getItem('ccm_admin_token') || null;
+let authToken = sessionStorage.getItem('ccm_admin_token') || null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   initClock();
@@ -44,11 +44,17 @@ function getAuthHeaders(customHeaders = {}) {
 }
 
 async function checkAuthSession() {
-  if (!authToken) {
+  // Always check for 3-failed-attempts lockout on this browser client
+  const isLocked = localStorage.getItem('ccm_admin_locked') === 'true';
+  if (isLocked || !authToken) {
     currentUserRole = 'viewer';
+    authToken = null;
+    sessionStorage.removeItem('ccm_admin_token');
+    localStorage.removeItem('ccm_admin_token');
     renderAuthHeaderUI();
     return;
   }
+
   try {
     const res = await fetch('/api/auth/session', {
       headers: getAuthHeaders()
@@ -59,11 +65,12 @@ async function checkAuthSession() {
     } else {
       currentUserRole = 'viewer';
       authToken = null;
-      localStorage.removeItem('ccm_admin_token');
       sessionStorage.removeItem('ccm_admin_token');
+      localStorage.removeItem('ccm_admin_token');
     }
   } catch (err) {
     currentUserRole = 'viewer';
+    authToken = null;
   }
   renderAuthHeaderUI();
 }
@@ -105,19 +112,53 @@ function requireAdminAction(actionName = 'perform this action') {
 
 function openAdminLoginModal(customMessage) {
   const alertBox = document.getElementById('admin-login-alert');
+  const emailInput = document.getElementById('admin-login-email');
+  const passInput = document.getElementById('admin-login-password');
+  const btnSubmit = document.getElementById('btn-submit-admin-login');
+
+  const isLocked = localStorage.getItem('ccm_admin_locked') === 'true';
+  const failedCount = parseInt(localStorage.getItem('ccm_failed_login_count') || '0', 10);
+
+  if (isLocked || failedCount >= 3) {
+    if (alertBox) {
+      alertBox.innerHTML = `
+        <div style="background:rgba(239,68,68,0.18); border:1px solid rgba(239,68,68,0.6); padding:12px 14px; border-radius:10px; color:#fca5a5; font-size:12.5px; line-height:1.5;">
+          <div style="font-weight:800; font-size:13.5px; margin-bottom:4px; color:#ef4444;"><i class="fa-solid fa-ban"></i> Security Lockout Active</div>
+          3 failed admin login attempts were detected on this browser. Admin login has been permanently locked. You are restricted to <strong>Read-Only Mode</strong>.
+        </div>
+      `;
+      alertBox.style.display = 'block';
+    }
+    if (emailInput) { emailInput.value = ''; emailInput.disabled = true; }
+    if (passInput) { passInput.value = ''; passInput.disabled = true; }
+    if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.innerHTML = '<i class="fa-solid fa-lock"></i> Login Locked (Read-Only Mode)'; }
+    openModal('modal-admin-login');
+    return;
+  }
+
+  // Active un-locked state
+  if (emailInput) { emailInput.disabled = false; emailInput.value = ''; }
+  if (passInput) { passInput.disabled = false; passInput.value = ''; }
+  if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin'; }
+
   if (alertBox) {
-    if (customMessage) {
-      alertBox.textContent = customMessage;
+    if (failedCount > 0) {
+      const remaining = 3 - failedCount;
+      alertBox.innerHTML = `
+        <div style="background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.5); padding:10px 12px; border-radius:10px; color:#fbbf24; font-size:12px;">
+          ⚠️ <strong>Notice:</strong> ${failedCount} failed login attempt recorded. (${remaining} attempt${remaining > 1 ? 's' : ''} remaining before permanent browser lockout).
+        </div>
+      `;
+      alertBox.style.display = 'block';
+    } else if (customMessage) {
+      alertBox.innerHTML = `<div style="background:rgba(6,182,212,0.12); border:1px solid rgba(6,182,212,0.4); padding:10px 12px; border-radius:10px; color:var(--accent-cyan); font-size:12px;">${customMessage}</div>`;
       alertBox.style.display = 'block';
     } else {
-      alertBox.textContent = '';
+      alertBox.innerHTML = '';
       alertBox.style.display = 'none';
     }
   }
-  const emailInput = document.getElementById('admin-login-email');
-  const passInput = document.getElementById('admin-login-password');
-  if (emailInput) emailInput.value = '';
-  if (passInput) passInput.value = '';
+
   openModal('modal-admin-login');
   if (emailInput) {
     emailInput.focus();
@@ -126,16 +167,26 @@ function openAdminLoginModal(customMessage) {
 
 async function handleAdminLogin(e) {
   e.preventDefault();
-  const emailInput = document.getElementById('admin-login-email');
-  const passInput = document.getElementById('admin-login-password');
-  const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
-  const password = passInput ? passInput.value : '';
+  const isLocked = localStorage.getItem('ccm_admin_locked') === 'true';
   const alertBox = document.getElementById('admin-login-alert');
   const btn = document.getElementById('btn-submit-admin-login');
+  const emailInput = document.getElementById('admin-login-email');
+  const passInput = document.getElementById('admin-login-password');
+
+  if (isLocked) {
+    if (alertBox) {
+      alertBox.innerHTML = '<div style="color:#ef4444; font-weight:700;">⛔ Security Lockout: Admin login is locked on this browser.</div>';
+      alertBox.style.display = 'block';
+    }
+    return;
+  }
+
+  const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+  const password = passInput ? passInput.value : '';
 
   if (!email || !password) {
     if (alertBox) {
-      alertBox.textContent = 'Please enter both Admin Email and Password.';
+      alertBox.innerHTML = '<div style="color:#ef4444; font-weight:700;">Please enter both Admin Email and Password.</div>';
       alertBox.style.display = 'block';
     }
     return;
@@ -151,43 +202,76 @@ async function handleAdminLogin(e) {
       body: JSON.stringify({ email, password })
     });
     const data = await res.json();
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin';
 
     if (!res.ok || data.status === 'error' || !data.token) {
+      // Calculate failed attempt
+      let failedAttempts = parseInt(localStorage.getItem('ccm_failed_login_count') || '0', 10) + 1;
+      localStorage.setItem('ccm_failed_login_count', failedAttempts.toString());
+
       authToken = null;
       currentUserRole = 'viewer';
-      localStorage.removeItem('ccm_admin_token');
       sessionStorage.removeItem('ccm_admin_token');
+      localStorage.removeItem('ccm_admin_token');
       renderAuthHeaderUI();
 
       if (passInput) passInput.value = '';
-      if (alertBox) {
-        alertBox.textContent = data.detail || 'Access Denied: Invalid Admin Email or Password. Only authorized Super Admin can log in.';
-        alertBox.style.display = 'block';
+
+      if (failedAttempts >= 3) {
+        localStorage.setItem('ccm_admin_locked', 'true');
+        if (emailInput) emailInput.disabled = true;
+        if (passInput) passInput.disabled = true;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Login Locked (Read-Only Mode)';
+        if (alertBox) {
+          alertBox.innerHTML = `
+            <div style="background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.7); padding:12px 14px; border-radius:10px; color:#fca5a5; font-size:12.5px; line-height:1.5;">
+              <div style="font-weight:800; font-size:13.5px; margin-bottom:4px; color:#ef4444;"><i class="fa-solid fa-ban"></i> ⛔ Security Lockout: 3 Failed Attempts</div>
+              You have entered incorrect credentials 3 times. Admin login is now locked on this browser. You are restricted to <strong>Read-Only Mode</strong>.
+            </div>
+          `;
+          alertBox.style.display = 'block';
+        }
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin';
+        const remaining = 3 - failedAttempts;
+        if (alertBox) {
+          alertBox.innerHTML = `
+            <div style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.5); padding:10px 12px; border-radius:10px; color:#fca5a5; font-size:12px;">
+              ❌ <strong>Access Denied:</strong> Invalid Admin Email or Password.<br>
+              Failed Attempt <strong>${failedAttempts} of 3</strong> (${remaining} attempt${remaining > 1 ? 's' : ''} remaining before browser lockout).
+            </div>
+          `;
+          alertBox.style.display = 'block';
+        }
       }
       return;
     }
 
+    // Success: Exact Admin credentials verified!
+    localStorage.removeItem('ccm_failed_login_count');
+    localStorage.removeItem('ccm_admin_locked');
     authToken = data.token;
-    localStorage.setItem('ccm_admin_token', authToken);
     sessionStorage.setItem('ccm_admin_token', authToken);
     currentUserRole = 'admin';
 
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin';
+
     closeModal('modal-admin-login');
     renderAuthHeaderUI();
-    alert('Super Admin session authenticated successfully! You now have Full Control.');
+    alert('🎉 Super Admin session authenticated successfully! You now have Full Control.');
     await loadCurrentView(activeView);
   } catch (err) {
     btn.disabled = false;
     btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin';
     authToken = null;
     currentUserRole = 'viewer';
-    localStorage.removeItem('ccm_admin_token');
     sessionStorage.removeItem('ccm_admin_token');
+    localStorage.removeItem('ccm_admin_token');
     renderAuthHeaderUI();
     if (alertBox) {
-      alertBox.textContent = `Connection error: ${err.message}`;
+      alertBox.innerHTML = `<div style="color:#ef4444;">Connection error: ${err.message}</div>`;
       alertBox.style.display = 'block';
     }
   }
@@ -200,8 +284,8 @@ async function logoutAdmin() {
   } catch (e) {}
   authToken = null;
   currentUserRole = 'viewer';
-  localStorage.removeItem('ccm_admin_token');
   sessionStorage.removeItem('ccm_admin_token');
+  localStorage.removeItem('ccm_admin_token');
   renderAuthHeaderUI();
   alert('You are now viewing in Public Read-Only mode.');
   await loadCurrentView(activeView);
@@ -1225,7 +1309,7 @@ async function viewAgentReport(agentId) {
         </div>
 
         <!-- 3 Top Metric KPI Cards -->
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:20px;">
+        <div class="responsive-grid-3" style="margin-bottom:20px;">
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#10b981; text-transform:uppercase;">Live Published Posts</div>
             <div style="font-size:28px; font-weight:800; color:#10b981; font-family:var(--font-mono); margin-top:2px;">${bm.total_published}</div>
@@ -1244,7 +1328,7 @@ async function viewAgentReport(agentId) {
         </div>
 
         <!-- 2 Status Banners: Latest Published Today vs Next Scheduled Post -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px;">
+        <div class="responsive-grid-2" style="margin-bottom:20px;">
           <!-- Latest Published Today Banner -->
           <div style="background:linear-gradient(135deg, rgba(16,185,129,0.15), rgba(6,182,212,0.12)); border:1px solid rgba(16,185,129,0.4); padding:16px; border-radius:14px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -1387,7 +1471,7 @@ async function viewAgentReport(agentId) {
           <div style="font-size:11.5px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
             <i class="fa-solid fa-link"></i> Live Verified Social Media Accounts Telemetry (${data.site_name}):
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+          <div class="responsive-grid-3" style="gap:12px;">
             <div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.3); padding:12px; border-radius:10px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:12px; font-weight:800; color:#3b82f6;"><i class="fa-brands fa-facebook"></i> Facebook Page</span>
@@ -1415,7 +1499,7 @@ async function viewAgentReport(agentId) {
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:20px;">
+        <div class="responsive-grid-3" style="margin-bottom:20px;">
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#3b82f6; text-transform:uppercase;"><i class="fa-brands fa-facebook"></i> Facebook Overview</div>
             <div style="font-size:12px; color:var(--text-primary); margin-top:6px;">Published: <strong>${fb.published}</strong> | Scheduled: <strong>${fb.scheduled}</strong></div>
