@@ -1599,8 +1599,9 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
     site_prof = websites_mgr.get(site)
     brand_name = site_prof.name if site_prof else ("Opal Chauffeurs" if site == "opal" else "Corporate Cars Melbourne")
 
-    scheduled_posts = []
-    base_time = datetime.now(timezone.utc) + timedelta(hours=2)
+    now_utc = datetime.now(timezone.utc)
+    tomorrow = now_utc + timedelta(days=1)
+    base_time = tomorrow.replace(hour=0, minute=0, second=0, microsecond=0)
     post_index = 0
 
     for kw in lines:
@@ -1627,7 +1628,7 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
                 "keyword": kw,
                 "caption": caption,
                 "hashtags": hashtags,
-                "scheduled_for": publish_time.strftime("%a %d %b %Y at %H:%M UTC"),
+                "scheduled_for": publish_time.strftime("%a %d %b %Y at 09:30 AM (Melbourne Time)"),
                 "status": "scheduled"
             })
 
