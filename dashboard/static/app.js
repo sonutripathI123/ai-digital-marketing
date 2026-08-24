@@ -1542,14 +1542,23 @@ async function viewAgentReport(agentId) {
                   iconClass = 'fa-brands fa-instagram';
                   btnColor = '#ec4899';
                   btnLabel = 'View on Instagram';
+                  if (!targetUrl) {
+                    targetUrl = acc.instagram?.url || 'https://www.instagram.com/corporatecarsmelbourne/';
+                  }
                 } else if (plat.includes('face')) {
                   iconClass = 'fa-brands fa-facebook';
                   btnColor = '#3b82f6';
                   btnLabel = 'View on Facebook';
+                  if (!targetUrl) {
+                    targetUrl = acc.facebook?.url || 'https://www.facebook.com/profile.php?id=791630667378039';
+                  }
                 } else if (plat.includes('link')) {
                   iconClass = 'fa-brands fa-linkedin';
                   btnColor = '#0ea5e9';
                   btnLabel = 'View on LinkedIn';
+                  if (!targetUrl) {
+                    targetUrl = acc.linkedin?.url || 'https://www.linkedin.com/company/corporate-cars-melbourne/';
+                  }
                 }
 
                 return `

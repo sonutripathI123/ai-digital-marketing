@@ -7609,3 +7609,25 @@ monitoring-agent
 2026-08-24 11:30:01,198 [INFO] [central] Created task task-66052379 for agent corporate-cars-social-agent (Status: QUEUED)
 2026-08-24 11:35:02,075 [INFO] [central] Created task task-0968ffaa for agent corporate-cars-social-agent (Status: QUEUED)
 2026-08-24 11:40:03,065 [INFO] [central] Created task task-7962fdfb for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-24 11:40:21,586 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-24 11:40:21,586 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-24 11:40:21,586 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-24 11:40:21,587 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-24 11:40:21,587 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-24 11:40:21,587 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-24 11:40:21,587 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-24 11:40:21,587 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-24 11:40:21,587 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-24 11:40:21,588 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-24 11:40:21,588 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-24 11:40:21,588 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-24 11:40:21,589 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-24 11:40:21,589 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-24 11:40:21,589 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-24 11:40:21,589 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-24 11:40:21,589 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-24 11:40:21,589 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-24 11:40:21,589 [INFO] [central] Registered agent implementation: page-optimizer-agent
+2026-08-24 11:40:21,692 [INFO] [central] Created task task-d6c4f5a7 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-24 11:45:07,618 [INFO] [central] Created task task-e0c450b4 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-24 11:50:08,574 [INFO] [central] Created task task-a8975410 for agent corporate-cars-social-agent (Status: QUEUED)
