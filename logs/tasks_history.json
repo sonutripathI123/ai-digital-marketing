@@ -53885,5 +53885,47 @@
     "cost_usd": 0.0,
     "created_at": "2026-08-24T09:11:10.981992+00:00",
     "updated_at": "2026-08-24T09:11:10.981992+00:00"
+  },
+  {
+    "task_id": "task-a081de35",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-24T09:15:05.395092+00:00",
+    "updated_at": "2026-08-24T09:15:05.395092+00:00"
+  },
+  {
+    "task_id": "task-3d46f605",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-24T09:20:03.418232+00:00",
+    "updated_at": "2026-08-24T09:20:03.418232+00:00"
   }
 ]

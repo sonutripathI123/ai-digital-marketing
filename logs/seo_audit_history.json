@@ -1,5 +1,335 @@
 [
   {
+    "timestamp": "2026-08-24 14:49:11",
+    "url": "https://www.opalchauffeurs.com.au",
+    "audit_mode": "single_page",
+    "score": 94,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://www.opalchauffeurs.com.au",
+      "page_title": "Chauffeur Service and Airport Transfers - Opal Chauffeurs",
+      "overall_seo_health_score": 94,
+      "status_code": 200,
+      "response_time_ms": 1974,
+      "page_size_kb": 526.1,
+      "word_count": 2026,
+      "h1_count": 1,
+      "h2_count": 13,
+      "h3_count": 13,
+      "images_count": 62,
+      "missing_alt_count": 8,
+      "internal_links_count": 81,
+      "external_links_count": 31,
+      "has_schema": true,
+      "schema_types": [
+        "WebSite",
+        "Product",
+        "PostalAddress",
+        "Answer",
+        "LocalBusiness",
+        "Service",
+        "Question",
+        "ListItem",
+        "SearchAction",
+        "AggregateRating",
+        "ItemList",
+        "ImageObject",
+        "ReadAction",
+        "WebPage",
+        "Country",
+        "BreadcrumbList",
+        "Offer",
+        "FAQPage",
+        "EntryPoint",
+        "PropertyValueSpecification",
+        "OfferCatalog",
+        "City"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 2,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Moderate response time (1974ms, Page Size: 526.1 KB).",
+          "recommendation": "Consider WP Rocket or Cloudflare CDN caching to bring response under 1.2s."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (57 chars): \"Chauffeur Service and Airport Transfers - Opal Chauffeurs\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (158 chars): \"Experience premium chauffeur service and airport transfers in Mel...\"",
+          "recommendation": "Meta description length and CTA structure are optimal."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Book Airport &amp; City Transfers   Anywhere in Australia...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (13 H2s, 13 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~2026 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: WebSite, Product, PostalAddress, Answer.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "81 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "31 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "8 of 62 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://www.opalchauffeurs.com.au/...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-08-24 14:49:11",
+    "url": "https://www.opalchauffeurs.com.au",
+    "audit_mode": "single_page",
+    "score": 94,
+    "data": {
+      "audit_mode": "single_page",
+      "audited_url": "https://www.opalchauffeurs.com.au",
+      "page_title": "Chauffeur Service and Airport Transfers - Opal Chauffeurs",
+      "overall_seo_health_score": 94,
+      "status_code": 200,
+      "response_time_ms": 1974,
+      "page_size_kb": 526.1,
+      "word_count": 2026,
+      "h1_count": 1,
+      "h2_count": 13,
+      "h3_count": 13,
+      "images_count": 62,
+      "missing_alt_count": 8,
+      "internal_links_count": 81,
+      "external_links_count": 31,
+      "has_schema": true,
+      "schema_types": [
+        "WebSite",
+        "Product",
+        "PostalAddress",
+        "Answer",
+        "LocalBusiness",
+        "Service",
+        "Question",
+        "ListItem",
+        "SearchAction",
+        "AggregateRating",
+        "ItemList",
+        "ImageObject",
+        "ReadAction",
+        "WebPage",
+        "Country",
+        "BreadcrumbList",
+        "Offer",
+        "FAQPage",
+        "EntryPoint",
+        "PropertyValueSpecification",
+        "OfferCatalog",
+        "City"
+      ],
+      "issues_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 2,
+        "low": 0,
+        "total_checks": 13
+      },
+      "audit_findings": [
+        {
+          "category": "Performance",
+          "check": "Server Latency (TTFB)",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Moderate response time (1974ms, Page Size: 526.1 KB).",
+          "recommendation": "Consider WP Rocket or Cloudflare CDN caching to bring response under 1.2s."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Title Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (57 chars): \"Chauffeur Service and Airport Transfers - Opal Chauffeurs\"",
+          "recommendation": "Title tag length is within Google SERP display limits."
+        },
+        {
+          "category": "Meta Tags",
+          "check": "Meta Description",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Optimal length (158 chars): \"Experience premium chauffeur service and airport transfers in Mel...\"",
+          "recommendation": "Meta description length and CTA structure are optimal."
+        },
+        {
+          "category": "Headings",
+          "check": "H1 Heading",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "1 H1 found: \"Book Airport &amp; City Transfers   Anywhere in Australia...\"",
+          "recommendation": "Single H1 structure adheres to Google ranking standards."
+        },
+        {
+          "category": "Headings",
+          "check": "H2 Subheadings",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Good subheading hierarchy (13 H2s, 13 H3s).",
+          "recommendation": "Heading hierarchy organizes topical content effectively."
+        },
+        {
+          "category": "Content Depth",
+          "check": "Word Count & Topical Depth",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Comprehensive content depth (~2026 words).",
+          "recommendation": "Word count demonstrates high topical authority."
+        },
+        {
+          "category": "Structured Data",
+          "check": "Schema.org Markup",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Active JSON-LD schemas detected: WebSite, Product, PostalAddress, Answer.",
+          "recommendation": "Rich snippet schema is active and indexed."
+        },
+        {
+          "category": "Linking",
+          "check": "Internal Links Count",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "81 internal links distributed across page.",
+          "recommendation": "Internal link equity distribution is healthy."
+        },
+        {
+          "category": "Linking",
+          "check": "External Citations",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "31 external reference link(s) found.",
+          "recommendation": "Ensure all external links have rel='noopener' and open in new tab."
+        },
+        {
+          "category": "Linking",
+          "check": "Anchor Text Quality",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "6 generic anchor texts detected (e.g. \"Learn More\").",
+          "recommendation": "Replace generic text with keyword-rich descriptive anchors."
+        },
+        {
+          "category": "Media",
+          "check": "Image Alt Attributes",
+          "status": "WARNING",
+          "severity": "MEDIUM",
+          "details": "8 of 62 images are missing descriptive alt text.",
+          "recommendation": "Add descriptive alt attributes with target keyword variations to all images."
+        },
+        {
+          "category": "Indexability",
+          "check": "Canonical Tag",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "Canonical URL configured: https://www.opalchauffeurs.com.au/...",
+          "recommendation": "Canonical tag prevents duplicate content indexing."
+        },
+        {
+          "category": "Social Meta",
+          "check": "OpenGraph Social Cards",
+          "status": "PASS",
+          "severity": "LOW",
+          "details": "OpenGraph social tags (og:title, og:image) are installed.",
+          "recommendation": "Social sharing tags are active."
+        }
+      ],
+      "actionable_priorities": [
+        "[MEDIUM] Anchor Text Quality: Replace generic text with keyword-rich descriptive anchors.",
+        "[MEDIUM] Image Alt Attributes: Add descriptive alt attributes with target keyword variations to all images."
+      ]
+    }
+  },
+  {
     "timestamp": "2026-08-18 17:41:46",
     "url": "https://corporatecarsmelbourne.com.au/about-us/",
     "audit_mode": "single_page",

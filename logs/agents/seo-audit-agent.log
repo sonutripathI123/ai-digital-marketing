@@ -344,3 +344,4 @@
 2026-08-18 17:41:43,583 [INFO] [agent:agent.seo-audit-agent] Executing SEOAuditAgent task: action=audit_page, mode=single_page, url='https://corporatecarsmelbourne.com.au/about-us/'
 2026-08-18 17:41:43,583 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://corporatecarsmelbourne.com.au/about-us/
 2026-08-18 17:41:46,526 [INFO] [agent:agent.seo-audit-agent] Completed task task-c8dca2c3 successfully.
+2026-08-24 14:49:09,551 [INFO] [agent:agent.seo-audit-agent] Auditing single page SEO for URL: https://www.opalchauffeurs.com.au
