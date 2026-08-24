@@ -700,3 +700,9 @@ ValueError: conflicting subparser: status
 2026-08-22 11:06:13,883 [INFO] [agent:agent.blog-agent] Starting execution for task task-7b5e5642
 2026-08-22 11:06:13,886 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=publish, site=ccm
 2026-08-22 11:06:24,234 [INFO] [agent:agent.blog-agent] Completed task task-7b5e5642 successfully.
+2026-08-24 10:18:25,067 [INFO] [agent:agent.blog-agent] Starting execution for task task-6398469a
+2026-08-24 10:18:25,067 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=write, site=ccm
+2026-08-24 10:20:19,094 [INFO] [agent:agent.blog-agent] Completed task task-6398469a successfully.
+2026-08-24 10:20:19,922 [INFO] [agent:agent.blog-agent] Starting execution for task task-4ab47392
+2026-08-24 10:20:19,923 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=publish, site=ccm
+2026-08-24 10:20:32,081 [INFO] [agent:agent.blog-agent] Completed task task-4ab47392 successfully.

@@ -806,12 +806,15 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
         if topics_file.exists():
             import csv
             try:
+                today_str = datetime.now().strftime("%Y-%m-%d")
                 with open(topics_file, newline="", encoding="utf-8") as f:
                     rows = list(csv.DictReader(f))
                     for r in rows:
                         row_site = r.get("site", "ccm").lower()
                         if effective_site != "all" and row_site != effective_site:
                             continue
+                        pub_at = r.get("go_live_at") or ""
+                        is_today = bool(pub_at and today_str in pub_at)
                         if r.get("status") == "published":
                             published_posts.append({
                                 "id": r.get("id"),
@@ -819,26 +822,36 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                                 "keyword": r.get("keyword"),
                                 "title": r.get("title_hint"),
                                 "suburb": r.get("suburb"),
-                                "published_at": r.get("go_live_at"),
-                                "url": r.get("notes") or f"{site_domain}/{r.get('id')}/"
+                                "published_at": pub_at,
+                                "wp_post_id": r.get("wp_post_id"),
+                                "url": r.get("notes") or f"{site_domain}/{r.get('id')}/",
+                                "is_today": is_today
                             })
-                        elif r.get("status") == "approved":
+                        elif r.get("status") in ("approved", "pending"):
                             approved_drafts.append({
                                 "id": r.get("id"),
                                 "site": r.get("site"),
                                 "keyword": r.get("keyword"),
                                 "title": r.get("title_hint"),
-                                "suburb": r.get("suburb")
+                                "suburb": r.get("suburb"),
+                                "status": r.get("status")
                             })
             except Exception:
                 pass
 
+        # Sort published posts newest first (reverse chronological order)
+        published_posts_sorted = list(reversed(published_posts))
+        latest_published = published_posts_sorted[0] if published_posts_sorted else None
         next_scheduled = approved_drafts[0] if approved_drafts else None
+
         report["blog_metrics"] = {
             "total_published": len(published_posts),
             "total_approved_queue": len(approved_drafts),
-            "published_posts_history": published_posts,
+            "latest_published_post": latest_published,
+            "published_posts_history": published_posts_sorted,
+            "approved_drafts_queue": approved_drafts,
             "next_scheduled_post_tomorrow": {
+                "id": next_scheduled["id"] if next_scheduled else "t0016",
                 "title": next_scheduled["title"] if next_scheduled else f"Executive Chauffeur Service in {site_loc}",
                 "keyword": next_scheduled["keyword"] if next_scheduled else f"{effective_site} luxury airport transfer",
                 "suburb": next_scheduled["suburb"] if next_scheduled else "CBD Transfer",
@@ -850,8 +863,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                 "scheduled_for": "Tomorrow at 09:00 AM (Local Time)"
             },
             "recommendations": [
-                f"Queue 5 new suburb keywords for {site_name} targeting {site_loc}.",
-                f"Maintain daily 9 AM post cadence on {site_name} to boost organic search indexation."
+                f"Successfully published '{latest_published['title'] if latest_published else 'latest post'}' to {site_name}.",
+                f"Queue currently has {len(approved_drafts)} approved topics ready for daily 9 AM autonomous posting cadence."
             ]
         }
 

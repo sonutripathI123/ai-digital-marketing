@@ -173,3 +173,10 @@
 2026-08-22 11:06:12,849  INFO  write run complete. 1 draft(s) created.
 2026-08-22 11:06:23,141  INFO  Published: east melbourne corporate car service guide -> https://corporatecarsmelbourne.com.au/east-melbourne-corporate-car-service-guide/
 2026-08-22 11:06:23,148  INFO  publish run complete. 1 post(s) went live.
+2026-08-24 10:18:44,453  INFO  Writing: best time to leave elwood for the airport (ccm)
+2026-08-24 10:19:24,710  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-24 10:19:24,899  INFO  SEO Content Brief Agent auto-optimized post: Best Time to Leave Elwood for the Airport - Best Time Leave Elwood (Schema.org JSON-LD injected, LSI checked)
+2026-08-24 10:20:18,148  INFO  Draft created. post_id=20556, featured_media=18990, auto-live at 2026-08-24T04:50:18.147830+00:00
+2026-08-24 10:20:18,160  INFO  write run complete. 1 draft(s) created.
+2026-08-24 10:20:31,695  INFO  Published: best time to leave elwood for the airport -> https://corporatecarsmelbourne.com.au/best-time-to-leave-elwood-for-the-airport/
+2026-08-24 10:20:31,700  INFO  publish run complete. 1 post(s) went live.
