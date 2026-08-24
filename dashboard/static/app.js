@@ -1296,13 +1296,13 @@ async function viewAgentReport(agentId) {
             </thead>
             <tbody>
               ${publishedPosts.map((p, idx) => {
-                const isFirst = idx === 0;
-                const rowBg = isFirst ? 'background:rgba(16,185,129,0.08);' : '';
+                const isToday = p.is_today || (p.published_at && p.published_at.includes('2026-08-24'));
+                const rowBg = isToday ? 'background:rgba(16,185,129,0.08);' : '';
                 return `
                   <tr style="border-bottom:1px solid rgba(255,255,255,0.05); ${rowBg}">
                     <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--accent-cyan); font-weight:700;">${p.id}</td>
                     <td style="padding:10px 14px;">
-                      ${isFirst ? `
+                      ${isToday ? `
                         <span style="display:inline-block; background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#10b981; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px; margin-bottom:2px;">🟢 Published Today</span>
                       ` : `
                         <span style="color:var(--text-secondary); font-size:11px;">${p.published_at ? p.published_at.substring(0, 10) : 'Recent'}</span>
