@@ -870,310 +870,483 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
 
     # Special handling for Social Media Agent and Social Analytics Agent
     elif agent_id in ("corporate-cars-social-agent", "social-analytics-agent"):
-        from agents.social_analytics_agent import fetch_real_social_analytics
-        real_social = fetch_real_social_analytics(site_domain=site_domain, site_name=site_name)
+        if effective_site == "ccm":
+            from agents.social_analytics_agent import fetch_real_social_analytics
+            real_social = fetch_real_social_analytics(site_domain=site_domain, site_name=site_name)
+        else:
+            real_social = {
+                "is_connected": False,
+                "site_id": effective_site,
+                "site_name": site_name,
+                "site_domain": site_domain,
+                "total_published_posts": 0,
+                "total_scheduled_queue": 0,
+                "live_connected_accounts": {
+                    "facebook": {"connected": False, "name": f"{site_name} Facebook Page", "page_id": "-", "followers": 0, "status": "Not Connected"},
+                    "instagram": {"connected": False, "username": "Not Connected", "account_id": "-", "followers": 0, "media_count": 0, "status": "Not Connected"},
+                    "linkedin": {"connected": False, "name": f"{site_name} LinkedIn Page", "org_id": "-", "status": "Not Connected"}
+                },
+                "platforms": {
+                    "facebook": {"published": 0, "scheduled": 0, "followers": 0, "impressions": 0, "clicks": 0, "likes": 0, "engagement_rate": "0%"},
+                    "instagram": {"published": 0, "scheduled": 0, "followers": 0, "impressions": 0, "clicks": 0, "likes": 0, "engagement_rate": "0%"},
+                    "linkedin": {"published": 0, "scheduled": 0, "followers": 0, "impressions": 0, "clicks": 0, "likes": 0, "engagement_rate": "0%"}
+                },
+                "published_posts_history": [],
+                "recommendations": [
+                    f"Social media channels for {site_name} are not connected yet.",
+                    f"Use '+ Add Keywords & Auto-Generate' to queue initial social media campaigns for {site_name}."
+                ]
+            }
         report["social_metrics"] = real_social
         report["social_analytics_metrics"] = real_social
 
     elif agent_id == "external-link-building-agent":
-        from agents.external_link_agent import load_backlink_history
-        hist = load_backlink_history()
-        all_articles = hist.get("web2_published_articles", [])
-        all_citations = hist.get("directory_citations", [])
-        custom_links = hist.get("custom_outreach_links", [])
-
-        # Adapt citations to active site domain
-        tailored_citations = [
-            {**c, "target_url": c.get("target_url", site_domain).replace("https://corporatecarsmelbourne.com.au", site_domain)}
-            for c in all_citations
-        ]
-
-        report["external_link_metrics"] = {
-            "backlink_health_summary": {
-                "total_active_backlinks": len(all_articles) + len(all_citations),
-                "referring_domains": hist.get("referring_domains", 32),
-                "dofollow_percent": hist.get("dofollow_ratio", "78%"),
-                "nofollow_percent": "22%",
-                "spam_score": "0.4% (Safe)",
-                "domain_authority": hist.get("domain_authority", 34)
-            },
-            "directory_citations": tailored_citations,
-            "web2_published_articles": all_articles,
-            "custom_outreach_links": custom_links,
-            "recommendations": [
-                f"Maintain 75/25 Dofollow to Nofollow ratio for {site_name} link profile.",
-                f"Submit {site_name} business profile to newly discovered {site_loc} Business Directories.",
-                f"Publish daily Web 2.0 citations with contextual deep links to {site_name} landing pages."
-            ]
-        }
+        if effective_site == "ccm":
+            from agents.external_link_agent import load_backlink_history
+            hist = load_backlink_history()
+            all_articles = hist.get("web2_published_articles", [])
+            all_citations = hist.get("directory_citations", [])
+            custom_links = hist.get("custom_outreach_links", [])
+            report["external_link_metrics"] = {
+                "backlink_health_summary": {
+                    "total_active_backlinks": len(all_articles) + len(all_citations),
+                    "referring_domains": hist.get("referring_domains", 32),
+                    "dofollow_percent": hist.get("dofollow_ratio", "78%"),
+                    "nofollow_percent": "22%",
+                    "spam_score": "0.4% (Safe)",
+                    "domain_authority": hist.get("domain_authority", 34)
+                },
+                "directory_citations": all_citations,
+                "web2_published_articles": all_articles,
+                "custom_outreach_links": custom_links,
+                "recommendations": [
+                    f"Maintain 75/25 Dofollow to Nofollow ratio for {site_name} link profile.",
+                    f"Submit {site_name} business profile to newly discovered {site_loc} Business Directories.",
+                    f"Publish daily Web 2.0 citations with contextual deep links to {site_name} landing pages."
+                ]
+            }
+        else:
+            report["external_link_metrics"] = {
+                "backlink_health_summary": {
+                    "total_active_backlinks": 0,
+                    "referring_domains": 0,
+                    "dofollow_percent": "0%",
+                    "nofollow_percent": "0%",
+                    "spam_score": "0% (Safe)",
+                    "domain_authority": 0
+                },
+                "directory_citations": [],
+                "web2_published_articles": [],
+                "custom_outreach_links": [],
+                "recommendations": [
+                    f"No backlink history recorded for {site_name} ({site_domain}) yet.",
+                    f"Click 'Run Backlink Outreach' to start building directory citations and Web 2.0 links for {site_name}."
+                ]
+            }
 
     elif agent_id == "competitor-analysis-agent":
-        from agents.competitor_agent import load_competitor_history
-        hist = load_competitor_history()
-        latest = hist[0] if hist else None
-        report["competitor_analysis_metrics"] = {
-            "total_keyword_analyses": len(hist),
-            "latest_analysis": latest,
-            "all_analyses": hist[:10],
-            "recommendations": [
-                f"Target missing suburb keyword variations identified across competitors for {site_name}.",
-                f"Deploy localized Schema.org FAQPage markup on all {site_name} service pillars.",
-                f"Maintain 1,200+ word content depth on high-converting transactional pages."
-            ]
-        }
+        if effective_site == "ccm":
+            from agents.competitor_agent import load_competitor_history
+            hist = load_competitor_history()
+            latest = hist[0] if hist else None
+            report["competitor_analysis_metrics"] = {
+                "total_keyword_analyses": len(hist),
+                "latest_analysis": latest,
+                "all_analyses": hist[:10],
+                "recommendations": [
+                    f"Target missing suburb keyword variations identified across competitors for {site_name}.",
+                    f"Deploy localized Schema.org FAQPage markup on all {site_name} service pillars.",
+                    f"Maintain 1,200+ word content depth on high-converting transactional pages."
+                ]
+            }
+        else:
+            report["competitor_analysis_metrics"] = {
+                "total_keyword_analyses": 0,
+                "latest_analysis": None,
+                "all_analyses": [],
+                "recommendations": [
+                    f"No competitor analyses run for {site_name} yet.",
+                    f"Enter a target keyword in the Competitor Analysis tab to analyze competing domains for {site_name}."
+                ]
+            }
 
     elif agent_id == "competitor-ad-spy-agent":
-        from agents.competitor_ad_spy_agent import load_ad_spy_history
-        hist = load_ad_spy_history()
-        latest = hist[0] if hist else None
-        report["ad_spy_metrics"] = {
-            "total_competitors_analyzed": len(hist),
-            "latest_report": latest,
-            "all_reports": hist[:10]
-        }
+        if effective_site == "ccm":
+            from agents.competitor_ad_spy_agent import load_ad_spy_history
+            hist = load_ad_spy_history()
+            latest = hist[0] if hist else None
+            report["ad_spy_metrics"] = {
+                "total_competitors_analyzed": len(hist),
+                "latest_report": latest,
+                "all_reports": hist[:10]
+            }
+        else:
+            report["ad_spy_metrics"] = {
+                "total_competitors_analyzed": 0,
+                "latest_report": None,
+                "all_reports": [],
+                "recommendations": [
+                    f"No ad spy intelligence reports for {site_name} yet.",
+                    f"Run Ad Spy analysis to discover active competitor PPC ads for {site_name} ({site_loc})."
+                ]
+            }
 
     elif agent_id == "page-optimizer-agent":
-        from agents.page_optimizer_agent import load_page_optimizer_history
-        hist = load_page_optimizer_history()
-        latest = hist[0] if hist else None
-        report["page_optimizer_metrics"] = {
-            "total_audits_performed": len(hist),
-            "latest_audit": latest,
-            "all_audits": hist[:10],
-            "recommendations": [
-                f"Audit top landing pages on {site_name} for Google E-E-A-T trust signals.",
-                f"Maintain minimum 1,100 word count for high-intent {site_name} service pages.",
-                f"Implement LocalBusiness & FAQPage Schema.org structured data on all pillar pages."
-            ]
-        }
+        if effective_site == "ccm":
+            from agents.page_optimizer_agent import load_page_optimizer_history
+            hist = load_page_optimizer_history()
+            latest = hist[0] if hist else None
+            report["page_optimizer_metrics"] = {
+                "total_audits_performed": len(hist),
+                "latest_audit": latest,
+                "all_audits": hist[:10],
+                "recommendations": [
+                    f"Audit top landing pages on {site_name} for Google E-E-A-T trust signals.",
+                    f"Maintain minimum 1,100 word count for high-intent {site_name} service pages.",
+                    f"Implement LocalBusiness & FAQPage Schema.org structured data on all pillar pages."
+                ]
+            }
+        else:
+            report["page_optimizer_metrics"] = {
+                "total_audits_performed": 0,
+                "latest_audit": None,
+                "all_audits": [],
+                "recommendations": [
+                    f"No landing page audits for {site_name} yet.",
+                    f"Enter a {site_domain} URL above to run a live Google algorithm SEO content audit."
+                ]
+            }
 
     elif agent_id == "monthly-report-agent":
-        from agents.monthly_report_agent import MonthlyReportAgent
-        from core.models.task import AgentTask
-        monthly_agent = MonthlyReportAgent()
-        task_stub = AgentTask(
-            task_id="monthly-live-query",
-            agent_id="monthly-report-agent",
-            task_type="generate_instant_mtd_report",
-            input_data={"action": "generate_instant_mtd_report", "site_id": effective_site},
-            site_id=effective_site
-        )
-        try:
-            task_res = monthly_agent.run_task(task_stub, router=orchestrator.router)
-            out_data = task_res.get("output", {})
-        except Exception as e:
-            out_data = {"error": str(e)}
-        report["domain_metrics"] = {
-            "recent_tasks_count": len(completed_tasks) or 1,
-            "latest_findings": out_data,
-            "recommendations": out_data.get("top_strategic_recommendations", [
-                f"Continue daily blog publishing cadence to expand {site_name} organic keyword dominance.",
-                f"Maintain high-ROAS Google Ads campaigns (Airport Transfers - 4.8x ROAS).",
-                f"Rapidly respond to VIP corporate leads within 15 minutes to maximize close rate.",
-                f"Maintain active review collection requests post-ride to safeguard 4.8-star brand equity."
-            ])
-        }
+        if effective_site == "ccm":
+            from agents.monthly_report_agent import MonthlyReportAgent
+            from core.models.task import AgentTask
+            monthly_agent = MonthlyReportAgent()
+            task_stub = AgentTask(
+                task_id="monthly-live-query",
+                agent_id="monthly-report-agent",
+                task_type="generate_instant_mtd_report",
+                input_data={"action": "generate_instant_mtd_report", "site_id": effective_site},
+                site_id=effective_site
+            )
+            try:
+                task_res = monthly_agent.run_task(task_stub, router=orchestrator.router)
+                out_data = task_res.get("output", {})
+            except Exception as e:
+                out_data = {"error": str(e)}
+            report["domain_metrics"] = {
+                "recent_tasks_count": len(completed_tasks) or 1,
+                "latest_findings": out_data,
+                "recommendations": out_data.get("top_strategic_recommendations", [
+                    f"Continue daily blog publishing cadence to expand {site_name} organic keyword dominance.",
+                    f"Maintain high-ROAS Google Ads campaigns.",
+                    f"Rapidly respond to VIP corporate leads within 15 minutes to maximize close rate."
+                ])
+            }
+        else:
+            report["domain_metrics"] = {
+                "recent_tasks_count": 0,
+                "latest_findings": {
+                    "status": "pending_data",
+                    "message": f"No historical reporting data recorded for {site_name} ({site_domain}) yet."
+                },
+                "recommendations": [
+                    f"Execute agent tasks for {site_name} to generate multi-channel performance data.",
+                    f"Connect Google Analytics 4 and Google Search Console for {site_name}."
+                ]
+            }
 
     elif agent_id == "gsc-agent":
-        from agents.gsc_agent import GSCAgent
-        from core.models.task import AgentTask
-        gsc_inst = GSCAgent()
-        task_stub = AgentTask(
-            task_id="gsc-live-query",
-            agent_id="gsc-agent",
-            task_type="fetch_performance",
-            input_data={"action": "fetch_performance", "site_id": effective_site, "site_url": site_domain},
-            site_id=effective_site
-        )
-        try:
-            task_res = gsc_inst.run_task(task_stub, router=orchestrator.router)
-            out_data = task_res.get("output", {})
-        except Exception as e:
-            out_data = {"error": str(e)}
-        report["domain_metrics"] = {
-            "recent_tasks_count": len(completed_tasks) or 1,
-            "latest_findings": out_data,
-            "recommendations": out_data.get("actionable_insights", [])
-        }
+        if effective_site == "ccm":
+            from agents.gsc_agent import GSCAgent
+            from core.models.task import AgentTask
+            gsc_inst = GSCAgent()
+            task_stub = AgentTask(
+                task_id="gsc-live-query",
+                agent_id="gsc-agent",
+                task_type="fetch_performance",
+                input_data={"action": "fetch_performance", "site_id": effective_site, "site_url": site_domain},
+                site_id=effective_site
+            )
+            try:
+                task_res = gsc_inst.run_task(task_stub, router=orchestrator.router)
+                out_data = task_res.get("output", {})
+            except Exception as e:
+                out_data = {"error": str(e)}
+            report["domain_metrics"] = {
+                "recent_tasks_count": len(completed_tasks) or 1,
+                "latest_findings": out_data,
+                "recommendations": out_data.get("actionable_insights", [])
+            }
+        else:
+            report["domain_metrics"] = {
+                "recent_tasks_count": 0,
+                "latest_findings": {
+                    "status": "not_connected",
+                    "message": f"Google Search Console property for {site_name} ({site_domain}) is not connected yet."
+                },
+                "recommendations": [
+                    f"Add Google Search Console service account or domain verification for {site_domain}."
+                ]
+            }
 
     elif agent_id == "ga4-reporting-agent":
-        from agents.ga4_reporting_agent import GA4ReportingAgent
-        from core.models.task import AgentTask
-        ga4_inst = GA4ReportingAgent()
-        task_stub = AgentTask(
-            task_id="ga4-live-query",
-            agent_id="ga4-reporting-agent",
-            task_type="fetch_overview",
-            input_data={"action": "fetch_overview", "site_id": effective_site},
-            site_id=effective_site
-        )
-        try:
-            task_res = ga4_inst.run_task(task_stub, router=orchestrator.router)
-            out_data = task_res.get("output", {})
-        except Exception as e:
-            out_data = {"error": str(e)}
-        report["domain_metrics"] = {
-            "recent_tasks_count": len(completed_tasks) or 1,
-            "latest_findings": out_data,
-            "recommendations": out_data.get("actionable_insights", [])
-        }
+        if effective_site == "ccm":
+            from agents.ga4_reporting_agent import GA4ReportingAgent
+            from core.models.task import AgentTask
+            ga4_inst = GA4ReportingAgent()
+            task_stub = AgentTask(
+                task_id="ga4-live-query",
+                agent_id="ga4-reporting-agent",
+                task_type="fetch_overview",
+                input_data={"action": "fetch_overview", "site_id": effective_site},
+                site_id=effective_site
+            )
+            try:
+                task_res = ga4_inst.run_task(task_stub, router=orchestrator.router)
+                out_data = task_res.get("output", {})
+            except Exception as e:
+                out_data = {"error": str(e)}
+            report["domain_metrics"] = {
+                "recent_tasks_count": len(completed_tasks) or 1,
+                "latest_findings": out_data,
+                "recommendations": out_data.get("actionable_insights", [])
+            }
+        else:
+            report["domain_metrics"] = {
+                "recent_tasks_count": 0,
+                "latest_findings": {
+                    "status": "not_connected",
+                    "message": f"Google Analytics 4 property for {site_name} is not connected yet."
+                },
+                "recommendations": [
+                    f"Configure GA4 Measurement ID & Property ID for {site_name} in Settings."
+                ]
+            }
 
     elif agent_id == "lead-management-agent":
-        from agents.lead_management_agent import LeadManagementAgent
-        from core.models.task import AgentTask
-        lead_agent = LeadManagementAgent()
-        task_stub = AgentTask(
-            task_id="lead-live-query",
-            agent_id="lead-management-agent",
-            task_type="lead_report",
-            input_data={"action": "lead_report", "site_id": effective_site},
-            site_id=effective_site
-        )
-        try:
-            task_res = lead_agent.run_task(task_stub, router=orchestrator.router)
-            out_data = task_res.get("output", {})
-        except Exception as e:
-            out_data = {"error": str(e)}
-        report["domain_metrics"] = {
-            "recent_tasks_count": len(completed_tasks) or 1,
-            "latest_findings": out_data,
-            "recommendations": out_data.get("actionable_recommendations", [])
-        }
+        if effective_site == "ccm":
+            from agents.lead_management_agent import LeadManagementAgent
+            from core.models.task import AgentTask
+            lead_agent = LeadManagementAgent()
+            task_stub = AgentTask(
+                task_id="lead-live-query",
+                agent_id="lead-management-agent",
+                task_type="lead_report",
+                input_data={"action": "lead_report", "site_id": effective_site},
+                site_id=effective_site
+            )
+            try:
+                task_res = lead_agent.run_task(task_stub, router=orchestrator.router)
+                out_data = task_res.get("output", {})
+            except Exception as e:
+                out_data = {"error": str(e)}
+            report["domain_metrics"] = {
+                "recent_tasks_count": len(completed_tasks) or 1,
+                "latest_findings": out_data,
+                "recommendations": out_data.get("actionable_recommendations", [])
+            }
+        else:
+            report["domain_metrics"] = {
+                "recent_tasks_count": 0,
+                "latest_findings": {
+                    "status": "pending_leads",
+                    "message": f"No leads recorded for {site_name} ({site_domain}) yet."
+                },
+                "recommendations": [
+                    f"Integrate website quote form webhook for {site_name}."
+                ]
+            }
 
     elif agent_id == "seo-keyword-agent":
-        loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
-        report["seo_keyword_metrics"] = {
-            "summary": {
-                "total_tracked_keywords": 168,
-                "high_intent_transactional": 84,
-                "average_keyword_difficulty": 28,
-                "estimated_monthly_searches": 24800,
-                "avg_cpc_aud": "$6.40 AUD",
-                "top_performing_suburb": f"{loc_city} Airport / CBD Corridor"
-            },
-            "clusters": [
-                {"name": "Airport Transfers & Corporate Commutes", "intent": "Transactional", "count": 48, "volume": 12400, "kd": "24% (Easy)", "cpc": "$7.20"},
-                {"name": "Luxury Event & Wedding Chauffeur", "intent": "Commercial", "count": 36, "volume": 5800, "kd": "31% (Medium)", "cpc": "$5.80"},
-                {"name": "Local Suburb Pillar Landing Pages", "intent": "Local High-Intent", "count": 52, "volume": 4600, "kd": "22% (Very Easy)", "cpc": "$4.50"},
-                {"name": "Executive Fleet & VIP Private Driver", "intent": "Transactional", "count": 32, "volume": 2000, "kd": "36% (Medium)", "cpc": "$8.10"}
-            ],
-            "top_keyword_opportunities": [
-                {"keyword": f"corporate chauffeur {loc_city.lower()}", "intent": "Transactional", "volume": 3600, "kd": 28, "cpc": "$8.40", "serp_feature": "Local Pack + FAQ"},
-                {"keyword": f"{loc_city.lower()} airport transfer luxury car", "intent": "Transactional", "volume": 4800, "kd": 25, "cpc": "$7.90", "serp_feature": "Featured Snippet"},
-                {"keyword": f"executive private driver {loc_city.lower()} cbd", "intent": "High Intent", "volume": 1900, "kd": 22, "cpc": "$9.20", "serp_feature": "Local Map 3-Pack"},
-                {"keyword": f"mercedes van airport group transfer {loc_city.lower()}", "intent": "Commercial", "volume": 1400, "kd": 20, "cpc": "$6.50", "serp_feature": "Product / Fleet Rich Snippet"},
-                {"keyword": f"hotel transfer to {loc_city.lower()} airport reliable", "intent": "Informational/Commercial", "volume": 1100, "kd": 18, "cpc": "$5.10", "serp_feature": "FAQ Schema"}
-            ],
-            "recommendations": [
-                f"Deploy 5 dedicated suburban landing pages targeting high-converting search intent across {loc_city}.",
-                f"Target long-tail search queries with structured FAQ Schema to capture Google AI Overviews and Featured Snippets for {site_name}.",
-                f"Prioritize transactional keywords with low KD (<30%) to secure rapid page-1 Google rankings."
-            ]
-        }
+        if effective_site == "ccm":
+            loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
+            report["seo_keyword_metrics"] = {
+                "summary": {
+                    "total_tracked_keywords": 168,
+                    "high_intent_transactional": 84,
+                    "average_keyword_difficulty": 28,
+                    "estimated_monthly_searches": 24800,
+                    "avg_cpc_aud": "$6.40 AUD",
+                    "top_performing_suburb": f"{loc_city} Airport / CBD Corridor"
+                },
+                "clusters": [
+                    {"name": "Airport Transfers & Corporate Commutes", "intent": "Transactional", "count": 48, "volume": 12400, "kd": "24% (Easy)", "cpc": "$7.20"},
+                    {"name": "Luxury Event & Wedding Chauffeur", "intent": "Commercial", "count": 36, "volume": 5800, "kd": "31% (Medium)", "cpc": "$5.80"},
+                    {"name": "Local Suburb Pillar Landing Pages", "intent": "Local High-Intent", "count": 52, "volume": 4600, "kd": "22% (Very Easy)", "cpc": "$4.50"},
+                    {"name": "Executive Fleet & VIP Private Driver", "intent": "Transactional", "count": 32, "volume": 2000, "kd": "36% (Medium)", "cpc": "$8.10"}
+                ],
+                "top_keyword_opportunities": [
+                    {"keyword": f"corporate chauffeur {loc_city.lower()}", "intent": "Transactional", "volume": 3600, "kd": 28, "cpc": "$8.40", "serp_feature": "Local Pack + FAQ"},
+                    {"keyword": f"{loc_city.lower()} airport transfer luxury car", "intent": "Transactional", "volume": 4800, "kd": 25, "cpc": "$7.90", "serp_feature": "Featured Snippet"},
+                    {"keyword": f"executive private driver {loc_city.lower()} cbd", "intent": "High Intent", "volume": 1900, "kd": 22, "cpc": "$9.20", "serp_feature": "Local Map 3-Pack"},
+                    {"keyword": f"mercedes van airport group transfer {loc_city.lower()}", "intent": "Commercial", "volume": 1400, "kd": 20, "cpc": "$6.50", "serp_feature": "Product / Fleet Rich Snippet"},
+                    {"keyword": f"hotel transfer to {loc_city.lower()} airport reliable", "intent": "Informational/Commercial", "volume": 1100, "kd": 18, "cpc": "$5.10", "serp_feature": "FAQ Schema"}
+                ],
+                "recommendations": [
+                    f"Deploy 5 dedicated suburban landing pages targeting high-converting search intent across {loc_city}.",
+                    f"Target long-tail search queries with structured FAQ Schema to capture Google AI Overviews for {site_name}.",
+                    f"Prioritize transactional keywords with low KD (<30%) to secure rapid page-1 Google rankings."
+                ]
+            }
+        else:
+            report["seo_keyword_metrics"] = {
+                "summary": {
+                    "total_tracked_keywords": 0,
+                    "high_intent_transactional": 0,
+                    "average_keyword_difficulty": 0,
+                    "estimated_monthly_searches": 0,
+                    "avg_cpc_aud": "$0.00 AUD",
+                    "top_performing_suburb": f"{site_loc}"
+                },
+                "clusters": [],
+                "top_keyword_opportunities": [],
+                "recommendations": [
+                    f"No tracked keywords configured for {site_name} yet.",
+                    f"Use 'Research High Intent Keywords' or 'Custom Keyword Search' above to discover keywords for {site_name}."
+                ]
+            }
 
     elif agent_id == "seo-content-brief-agent":
-        from agents.seo_content_brief_agent import generate_brief_for_topic
-        loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
-        brief_data = generate_brief_for_topic(
-            target_keyword=f"{loc_city.lower()} airport luxury transfer",
-            location=loc_city,
-            suburb=f"{loc_city} CBD",
-            site_name=site_name,
-            site_domain=site_domain
-        )
-        report["seo_content_brief_metrics"] = {
-            "summary": {
-                "total_briefs_generated": 38,
-                "target_word_count_avg": "1,200 - 1,500 words",
-                "schema_json_ld_coverage": "100% (FAQPage + LocalBusiness)",
-                "target_lsi_density": "3.8% Optimal",
-                "eeat_score": "95/100 (Google Helpful Content Compliant)"
-            },
-            "latest_brief": brief_data,
-            "recommendations": [
-                f"Always inject Schema.org JSON-LD FAQ structured data into every new post on {site_name}.",
-                f"Ensure H2 and H3 headings directly address customer intent and local {loc_city} travel logistics.",
-                f"Embed clear transactional CTAs linking directly to the {site_name} booking form."
-            ]
-        }
+        if effective_site == "ccm":
+            from agents.seo_content_brief_agent import generate_brief_for_topic
+            loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
+            brief_data = generate_brief_for_topic(
+                target_keyword=f"{loc_city.lower()} airport luxury transfer",
+                location=loc_city,
+                suburb=f"{loc_city} CBD",
+                site_name=site_name,
+                site_domain=site_domain
+            )
+            report["seo_content_brief_metrics"] = {
+                "summary": {
+                    "total_briefs_generated": 38,
+                    "target_word_count_avg": "1,200 - 1,500 words",
+                    "schema_json_ld_coverage": "100% (FAQPage + LocalBusiness)",
+                    "target_lsi_density": "3.8% Optimal",
+                    "eeat_score": "95/100 (Google Helpful Content Compliant)"
+                },
+                "latest_brief": brief_data,
+                "recommendations": [
+                    f"Always inject Schema.org JSON-LD FAQ structured data into every new post on {site_name}.",
+                    f"Ensure H2 and H3 headings directly address customer intent and local travel logistics.",
+                    f"Embed clear transactional CTAs linking directly to the {site_name} booking form."
+                ]
+            }
+        else:
+            report["seo_content_brief_metrics"] = {
+                "summary": {
+                    "total_briefs_generated": 0,
+                    "target_word_count_avg": "-",
+                    "schema_json_ld_coverage": "-",
+                    "target_lsi_density": "-",
+                    "eeat_score": "-"
+                },
+                "latest_brief": None,
+                "recommendations": [
+                    f"No content briefs generated for {site_name} yet.",
+                    f"Generate a content brief for {site_name} targeting {site_loc}."
+                ]
+            }
 
     elif agent_id == "internal-linking-agent":
-        loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
-        report["internal_linking_metrics"] = {
-            "summary": {
-                "indexed_linkable_pages": 312,
-                "link_equity_health_score": "94/100 (Optimal)",
-                "avg_internal_links_per_post": 4.8,
-                "orphan_pages_count": 0,
-                "anchor_text_diversity": "88% Natural Distribution"
-            },
-            "recent_link_opportunities": [
-                {
-                    "source_title": "Essendon Airport Travel Time: What to Expect",
-                    "target_page": f"{site_domain}/melbourne-airport-transfers/",
-                    "anchor_text": "Melbourne Airport Transfers",
-                    "link_type": "Contextual In-Content",
-                    "equity_boost": "+18% Authority Flow",
-                    "status": "APPLIED"
+        if effective_site == "ccm":
+            loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
+            report["internal_linking_metrics"] = {
+                "summary": {
+                    "indexed_linkable_pages": 312,
+                    "link_equity_health_score": "94/100 (Optimal)",
+                    "avg_internal_links_per_post": 4.8,
+                    "orphan_pages_count": 0,
+                    "anchor_text_diversity": "88% Natural Distribution"
                 },
-                {
-                    "source_title": "Airport Transfer Tips Blackburn: A Traveller's Guide",
-                    "target_page": f"{site_domain}/fleet/mercedes-benz-s-class/",
-                    "anchor_text": "luxury Mercedes chauffeur fleet",
-                    "link_type": "Contextual In-Content",
-                    "equity_boost": "+15% Authority Flow",
-                    "status": "APPLIED"
+                "recent_link_opportunities": [
+                    {
+                        "source_title": "Essendon Airport Travel Time: What to Expect",
+                        "target_page": f"{site_domain}/melbourne-airport-transfers/",
+                        "anchor_text": "Melbourne Airport Transfers",
+                        "link_type": "Contextual In-Content",
+                        "equity_boost": "+18% Authority Flow",
+                        "status": "APPLIED"
+                    },
+                    {
+                        "source_title": "Airport Transfer Tips Blackburn: A Traveller's Guide",
+                        "target_page": f"{site_domain}/fleet/mercedes-benz-s-class/",
+                        "anchor_text": "luxury Mercedes chauffeur fleet",
+                        "link_type": "Contextual In-Content",
+                        "equity_boost": "+15% Authority Flow",
+                        "status": "APPLIED"
+                    }
+                ],
+                "recommendations": [
+                    f"Ensure newly published blog posts link to at least 2 suburb service pages on {site_name}.",
+                    f"Maintain natural anchor text variation (Avoid over-optimizing exact-match keywords)."
+                ]
+            }
+        else:
+            report["internal_linking_metrics"] = {
+                "summary": {
+                    "indexed_linkable_pages": 0,
+                    "link_equity_health_score": "0/100 (Uninitialized)",
+                    "avg_internal_links_per_post": 0,
+                    "orphan_pages_count": 0,
+                    "anchor_text_diversity": "N/A"
                 },
-                {
-                    "source_title": "Corporate Travel Guide: Melbourne CBD & Suburbs",
-                    "target_page": f"{site_domain}/contact-us/",
-                    "anchor_text": "book a corporate chauffeur online",
-                    "link_type": "Transactional CTA Link",
-                    "equity_boost": "+24% Conversion Equity",
-                    "status": "READY"
-                }
-            ],
-            "recommendations": [
-                f"Ensure every newly published blog post links to at least 2 suburb service pages and 1 fleet pillar on {site_name}.",
-                f"Maintain natural anchor text variation (Avoid over-optimizing exact-match keywords).",
-                f"Distribute PageRank equity evenly from high-authority pillar pages to newly added suburb guides."
-            ]
-        }
+                "recent_link_opportunities": [],
+                "recommendations": [
+                    f"No internal linking audits performed for {site_name} yet.",
+                    f"Audit {site_domain} pages to discover internal linking opportunities."
+                ]
+            }
 
     elif agent_id == "seo-audit-agent":
-        from agents.seo_audit_agent import load_seo_audit_history
-        hist = load_seo_audit_history()
-        latest = hist[0] if hist else None
-        loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
-        report["seo_audit_metrics"] = {
-            "summary": {
-                "site_health_score": latest.get("score") if latest else 96,
-                "grade": "A+ (Excellent)",
-                "core_web_vitals": "PASSED (Mobile & Desktop)",
-                "technical_errors_count": 0,
-                "https_ssl_status": "Valid (TLS 1.3 Active)",
-                "sitemap_status": "Clean (Indexed & Live)"
-            },
-            "technical_checklist": [
-                {"item": "HTTPS / SSL Certificate", "status": "Secure (256-bit)", "result": "PASS", "impact": "High"},
-                {"item": "Robots.txt & Sitemap.xml", "status": "Properly Configured", "result": "PASS", "impact": "Critical"},
-                {"item": "Mobile Viewport & Responsiveness", "status": "100% Mobile-Friendly", "result": "PASS", "impact": "Critical"},
-                {"item": "Schema.org Structured Data", "status": "LocalBusiness + FAQ Injected", "result": "PASS", "impact": "High"},
-                {"item": "Heading Hierarchies (H1-H4)", "status": "Strict Single H1 Structure", "result": "PASS", "impact": "Medium"},
-                {"item": "OpenGraph & Social Meta Tags", "status": "Facebook & Twitter Cards Active", "result": "PASS", "impact": "Medium"},
-                {"item": "Image Alt Attributes & WebP", "status": "Descriptive Alt Tags Applied", "result": "PASS", "impact": "Medium"}
-            ],
-            "core_web_vitals": {
-                "lcp": "1.2s (Fast - Good)",
-                "fid": "12ms (Instant Response)",
-                "cls": "0.01 (Zero Layout Shift)"
-            },
-            "recommendations": [
-                f"Continue automated technical crawl monitoring to catch any broken internal links on {site_name}.",
-                f"Maintain WebP compressed imagery to preserve sub-1.5s mobile page load times.",
-                f"Review Google Search Console coverage weekly to verify zero 404 or canonical errors for {site_name}."
-            ]
-        }
+        if effective_site == "ccm":
+            from agents.seo_audit_agent import load_seo_audit_history
+            hist = load_seo_audit_history()
+            latest = hist[0] if hist else None
+            loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
+            report["seo_audit_metrics"] = {
+                "summary": {
+                    "site_health_score": latest.get("score") if latest else 96,
+                    "grade": "A+ (Excellent)",
+                    "core_web_vitals": "PASSED (Mobile & Desktop)",
+                    "technical_errors_count": 0,
+                    "https_ssl_status": "Valid (TLS 1.3 Active)",
+                    "sitemap_status": "Clean (Indexed & Live)"
+                },
+                "technical_checklist": [
+                    {"item": "HTTPS / SSL Certificate", "status": "Secure (256-bit)", "result": "PASS", "impact": "High"},
+                    {"item": "Robots.txt & Sitemap.xml", "status": "Properly Configured", "result": "PASS", "impact": "Critical"},
+                    {"item": "Mobile Viewport & Responsiveness", "status": "100% Mobile-Friendly", "result": "PASS", "impact": "Critical"},
+                    {"item": "Schema.org Structured Data", "status": "LocalBusiness + FAQ Injected", "result": "PASS", "impact": "High"},
+                    {"item": "Heading Hierarchies (H1-H4)", "status": "Strict Single H1 Structure", "result": "PASS", "impact": "Medium"}
+                ],
+                "core_web_vitals": {
+                    "lcp": "1.2s (Fast - Good)",
+                    "fid": "12ms (Instant Response)",
+                    "cls": "0.01 (Zero Layout Shift)"
+                },
+                "recommendations": [
+                    f"Continue automated technical crawl monitoring on {site_name}.",
+                    f"Maintain WebP compressed imagery to preserve sub-1.5s mobile page load times."
+                ]
+            }
+        else:
+            report["seo_audit_metrics"] = {
+                "summary": {
+                    "site_health_score": 0,
+                    "grade": "Pending Initial Audit",
+                    "core_web_vitals": "Not Audited Yet",
+                    "technical_errors_count": 0,
+                    "https_ssl_status": "Pending Crawl",
+                    "sitemap_status": "Pending Crawl"
+                },
+                "technical_checklist": [],
+                "core_web_vitals": {"lcp": "-", "fid": "-", "cls": "-"},
+                "recommendations": [
+                    f"Click 'Run Full Site Audit' to crawl and diagnose {site_domain}."
+                ]
+            }
 
     # Handling for all other agents
     else:

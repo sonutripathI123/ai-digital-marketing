@@ -1366,10 +1366,11 @@ async function viewAgentReport(agentId) {
       `;
     } else if ((agentId === 'corporate-cars-social-agent' || agentId === 'social-analytics-agent') && (data.social_metrics || data.social_analytics_metrics)) {
       const sm = data.social_metrics || data.social_analytics_metrics;
-      const fb = sm.platforms?.facebook || { published: 6, scheduled: 7, followers: 1, impressions: 18400, clicks: 820, likes: 340, engagement_rate: "4.8%" };
-      const ig = sm.platforms?.instagram || { published: 6, scheduled: 7, followers: 4, impressions: 24500, clicks: 1210, likes: 890, engagement_rate: "6.2%" };
-      const li = sm.platforms?.linkedin || { published: 6, scheduled: 7, engagement_rate: "5.3%", impressions: 12100, clicks: 640 };
+      const fb = sm.platforms?.facebook || { published: 0, scheduled: 0, followers: 0, impressions: 0, clicks: 0, likes: 0, engagement_rate: "0%" };
+      const ig = sm.platforms?.instagram || { published: 0, scheduled: 0, followers: 0, impressions: 0, clicks: 0, likes: 0, engagement_rate: "0%" };
+      const li = sm.platforms?.linkedin || { published: 0, scheduled: 0, followers: 0, impressions: 0, clicks: 0, engagement_rate: "0%" };
       const acc = sm.live_connected_accounts || {};
+      const pubHistory = sm.published_posts_history || [];
 
       container.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.3); padding:14px 18px; border-radius:14px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
@@ -1384,32 +1385,32 @@ async function viewAgentReport(agentId) {
 
         <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px 18px; margin-bottom:20px;">
           <div style="font-size:11.5px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-            <i class="fa-solid fa-link"></i> Live Verified Social Media Accounts Telemetry:
+            <i class="fa-solid fa-link"></i> Live Verified Social Media Accounts Telemetry (${data.site_name}):
           </div>
           <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
             <div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.3); padding:12px; border-radius:10px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:12px; font-weight:800; color:#3b82f6;"><i class="fa-brands fa-facebook"></i> Facebook Page</span>
-                <span class="badge badge-success" style="font-size:10px;">CONNECTED</span>
+                <span class="badge ${acc.facebook?.connected ? 'badge-success' : 'badge-secondary'}" style="font-size:10px;">${acc.facebook?.connected ? 'CONNECTED' : 'NOT CONNECTED'}</span>
               </div>
-              <div style="font-size:12.5px; font-weight:700; color:#fff; margin-top:6px;">${acc.facebook?.name || 'Corporate Cars Melbourne'}</div>
-              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Meta Page ID: <code style="color:var(--accent-cyan); font-size:10px;">${acc.facebook?.page_id || '791630667378039'}</code></div>
+              <div style="font-size:12.5px; font-weight:700; color:#fff; margin-top:6px;">${acc.facebook?.name || `${data.site_name} Facebook`}</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Meta Page ID: <code style="color:var(--accent-cyan); font-size:10px;">${acc.facebook?.page_id || '-'}</code></div>
             </div>
             <div style="background:rgba(236,72,153,0.08); border:1px solid rgba(236,72,153,0.3); padding:12px; border-radius:10px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:12px; font-weight:800; color:#ec4899;"><i class="fa-brands fa-instagram"></i> Instagram Business</span>
-                <span class="badge badge-success" style="font-size:10px;">CONNECTED</span>
+                <span class="badge ${acc.instagram?.connected ? 'badge-success' : 'badge-secondary'}" style="font-size:10px;">${acc.instagram?.connected ? 'CONNECTED' : 'NOT CONNECTED'}</span>
               </div>
-              <div style="font-size:12.5px; font-weight:700; color:#fff; margin-top:6px;">@${acc.instagram?.username || 'corporatecarsmelbourne'}</div>
-              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${acc.instagram?.media_count || 18} Live Posts &bull; ${acc.instagram?.followers || 4} Followers</div>
+              <div style="font-size:12.5px; font-weight:700; color:#fff; margin-top:6px;">${acc.instagram?.connected ? '@' + acc.instagram?.username : 'Not Connected'}</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${acc.instagram?.media_count || 0} Live Posts &bull; ${acc.instagram?.followers || 0} Followers</div>
             </div>
             <div style="background:rgba(14,165,233,0.08); border:1px solid rgba(14,165,233,0.3); padding:12px; border-radius:10px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:12px; font-weight:800; color:#0ea5e9;"><i class="fa-brands fa-linkedin"></i> LinkedIn Company</span>
-                <span class="badge badge-success" style="font-size:10px;">CONNECTED</span>
+                <span class="badge ${acc.linkedin?.connected ? 'badge-success' : 'badge-secondary'}" style="font-size:10px;">${acc.linkedin?.connected ? 'CONNECTED' : 'NOT CONNECTED'}</span>
               </div>
-              <div style="font-size:12.5px; font-weight:700; color:#fff; margin-top:6px;">${acc.linkedin?.name || 'Corporate Cars Melbourne'}</div>
-              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Organization ID: <code style="color:var(--accent-cyan); font-size:10px;">109059206</code></div>
+              <div style="font-size:12.5px; font-weight:700; color:#fff; margin-top:6px;">${acc.linkedin?.name || `${data.site_name} LinkedIn`}</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Organization ID: <code style="color:var(--accent-cyan); font-size:10px;">${acc.linkedin?.org_id || '-'}</code></div>
             </div>
           </div>
         </div>
@@ -1418,17 +1419,17 @@ async function viewAgentReport(agentId) {
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#3b82f6; text-transform:uppercase;"><i class="fa-brands fa-facebook"></i> Facebook Overview</div>
             <div style="font-size:12px; color:var(--text-primary); margin-top:6px;">Published: <strong>${fb.published}</strong> | Scheduled: <strong>${fb.scheduled}</strong></div>
-            <div style="font-size:11px; color:var(--accent-cyan); margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${fb.next_scheduled_at || '18 Aug, 11:30 AM IST'}</strong></div>
+            <div style="font-size:11px; color:var(--accent-cyan); margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${fb.next_scheduled_at || 'None scheduled'}</strong></div>
           </div>
           <div style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#ec4899; text-transform:uppercase;"><i class="fa-brands fa-instagram"></i> Instagram Overview</div>
             <div style="font-size:12px; color:var(--text-primary); margin-top:6px;">Published: <strong>${ig.published}</strong> | Scheduled: <strong>${ig.scheduled}</strong></div>
-            <div style="font-size:11px; color:#ec4899; margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${ig.next_scheduled_at || '19 Aug, 09:30 AM IST'}</strong></div>
+            <div style="font-size:11px; color:#ec4899; margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${ig.next_scheduled_at || 'None scheduled'}</strong></div>
           </div>
           <div style="background:rgba(14,165,233,0.1); border:1px solid rgba(14,165,233,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:#0ea5e9; text-transform:uppercase;"><i class="fa-brands fa-linkedin"></i> LinkedIn Overview</div>
             <div style="font-size:12px; color:var(--text-primary); margin-top:6px;">Published: <strong>${li.published}</strong> | Scheduled: <strong>${li.scheduled}</strong></div>
-            <div style="font-size:11px; color:#0ea5e9; margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${li.next_scheduled_at || '18 Aug, 06:00 AM IST'}</strong></div>
+            <div style="font-size:11px; color:#0ea5e9; margin-top:4px; font-family:var(--font-mono);"><i class="fa-solid fa-clock"></i> Next: <strong>${li.next_scheduled_at || 'None scheduled'}</strong></div>
           </div>
         </div>
 
@@ -1446,7 +1447,7 @@ async function viewAgentReport(agentId) {
               </tr>
             </thead>
             <tbody>
-              ${(sm.published_posts_history || []).map(p => {
+              ${pubHistory.length > 0 ? pubHistory.map(p => {
                 const plat = (p.platform || '').toLowerCase();
                 let iconClass = 'fa-solid fa-arrow-up-right-from-square';
                 let btnColor = 'var(--accent-cyan)';
@@ -1457,43 +1458,40 @@ async function viewAgentReport(agentId) {
                   iconClass = 'fa-brands fa-instagram';
                   btnColor = '#ec4899';
                   btnLabel = 'View on Instagram';
-                  if (!targetUrl || targetUrl.includes('corporatecarsmelbourne.com.au')) {
-                    targetUrl = 'https://www.instagram.com/corporatecarsmelbourne/';
-                  }
                 } else if (plat.includes('face')) {
                   iconClass = 'fa-brands fa-facebook';
                   btnColor = '#3b82f6';
                   btnLabel = 'View on Facebook';
-                  if (!targetUrl || targetUrl.includes('corporatecarsmelbourne.com.au')) {
-                    targetUrl = 'https://www.facebook.com/profile.php?id=791630667378039';
-                  }
                 } else if (plat.includes('link')) {
                   iconClass = 'fa-brands fa-linkedin';
                   btnColor = '#0ea5e9';
                   btnLabel = 'View on LinkedIn';
-                  if (!targetUrl || targetUrl.includes('corporatecarsmelbourne.com.au')) {
-                    targetUrl = 'https://www.linkedin.com/company/corporate-cars-melbourne/';
-                  }
                 }
 
                 return `
                 <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                  <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--accent-cyan);">${p.id}</td>
+                  <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--accent-cyan); font-weight:700;">${p.id}</td>
                   <td style="padding:10px 14px;"><span class="action-chip">${p.platform}</span></td>
                   <td style="padding:10px 14px; font-family:var(--font-mono); font-size:11px;">${p.published_at}</td>
-                  <td style="padding:10px 14px; font-weight:700;">${p.title}</td>
+                  <td style="padding:10px 14px; font-weight:700; color:#fff;">${escapeHtml(p.title || p.topic || '')}</td>
                   <td style="padding:10px 14px; white-space:nowrap;">
                     <span class="badge badge-success" style="font-weight:700; margin-right:4px;">${p.likes || 0} Likes</span>
                     <span class="badge badge-info" style="font-weight:700;">${p.comments || 0} Comments</span>
                   </td>
                   <td style="padding:10px 14px; white-space:nowrap;">
-                    <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="action-chip" style="color:${btnColor}; border-color:${btnColor}; text-decoration:none; font-weight:700;">
-                      <i class="${iconClass}"></i> ${btnLabel}
-                    </a>
+                    ${targetUrl ? `<a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="action-chip" style="color:${btnColor}; border-color:${btnColor}; text-decoration:none; font-weight:700;"><i class="${iconClass}"></i> ${btnLabel}</a>` : '<span style="color:var(--text-muted);">-</span>'}
                   </td>
                 </tr>
-              `;
-              }).join('')}
+                `;
+              }).join('') : `
+                <tr>
+                  <td colspan="6" style="padding:28px 14px; text-align:center; color:var(--text-muted);">
+                    <i class="fa-solid fa-share-nodes" style="font-size:24px; margin-bottom:8px; display:block; color:var(--accent-purple); opacity:0.6;"></i>
+                    No social media posts published for <strong>${escapeHtml(data.site_name)}</strong> yet.
+                    <div style="font-size:11px; margin-top:4px; color:var(--text-secondary);">Click the <strong>+ Add Keywords & Auto-Generate</strong> button above to queue initial campaigns for this website.</div>
+                  </td>
+                </tr>
+              `}
             </tbody>
           </table>
         </div>
