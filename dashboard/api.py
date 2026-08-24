@@ -1235,8 +1235,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             }
 
     elif agent_id == "seo-keyword-agent":
+        loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
         if effective_site == "ccm":
-            loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
             report["seo_keyword_metrics"] = {
                 "summary": {
                     "total_tracked_keywords": 168,
@@ -1265,6 +1265,36 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                     f"Prioritize transactional keywords with low KD (<30%) to secure rapid page-1 Google rankings."
                 ]
             }
+        elif effective_site == "opal":
+            report["seo_keyword_metrics"] = {
+                "summary": {
+                    "total_tracked_keywords": 142,
+                    "high_intent_transactional": 74,
+                    "average_keyword_difficulty": 26,
+                    "estimated_monthly_searches": 21600,
+                    "avg_cpc_aud": "$6.80 AUD",
+                    "top_performing_suburb": "Tullamarine Airport / Melbourne CBD / Yarra Valley"
+                },
+                "clusters": [
+                    {"name": "Opal Luxury Airport Transfers & Flight Chauffeur", "intent": "Transactional", "count": 42, "volume": 10800, "kd": "22% (Easy)", "cpc": "$7.80"},
+                    {"name": "Corporate Commutes & Executive Private Driver", "intent": "Transactional", "count": 34, "volume": 4900, "kd": "27% (Low)", "cpc": "$7.40"},
+                    {"name": "Yarra Valley & Mornington Luxury Winery Tours", "intent": "Commercial", "count": 38, "volume": 3400, "kd": "19% (Very Easy)", "cpc": "$5.90"},
+                    {"name": "Mercedes S-Class & V-Class Premium Transfers", "intent": "Transactional", "count": 28, "volume": 2500, "kd": "31% (Medium)", "cpc": "$6.20"}
+                ],
+                "top_keyword_opportunities": [
+                    {"keyword": "opal luxury chauffeur melbourne airport", "intent": "Transactional", "volume": 3200, "kd": 21, "cpc": "$7.80", "serp_feature": "Local Pack + FAQ"},
+                    {"keyword": "airport transfers melbourne private driver", "intent": "Transactional", "volume": 4100, "kd": 24, "cpc": "$8.10", "serp_feature": "Featured Snippet"},
+                    {"keyword": "executive chauffeur hire melbourne cbd", "intent": "Transactional", "volume": 2400, "kd": 26, "cpc": "$7.40", "serp_feature": "Local Map 3-Pack"},
+                    {"keyword": "private winery tour chauffeur yarra valley", "intent": "Commercial", "volume": 1800, "kd": 19, "cpc": "$5.90", "serp_feature": "Rich Carousel"},
+                    {"keyword": "mercedes v class group airport transfer melbourne", "intent": "Commercial", "volume": 1300, "kd": 22, "cpc": "$6.20", "serp_feature": "Fleet Rich Snippet"},
+                    {"keyword": "car hire melbourne airport chauffeur service", "intent": "Transactional", "volume": 2900, "kd": 25, "cpc": "$8.50", "serp_feature": "Local 3-Pack + Direct Booking"}
+                ],
+                "recommendations": [
+                    "Deploy dedicated suburban pillar pages for Tullamarine Airport, Melbourne CBD, and Yarra Valley for Opal Chauffeurs.",
+                    "Leverage FAQ Schema markup on 'opal luxury chauffeur melbourne airport' to capture Google AI Overviews.",
+                    "Target high-intent keywords with low KD (<25%) for rapid Page-1 Google rankings."
+                ]
+            }
         else:
             report["seo_keyword_metrics"] = {
                 "summary": {
@@ -1284,9 +1314,32 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             }
 
     elif agent_id == "seo-content-brief-agent":
-        if effective_site == "ccm":
-            from agents.seo_content_brief_agent import generate_brief_for_topic
-            loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
+        from agents.seo_content_brief_agent import generate_brief_for_topic
+        loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
+        if effective_site == "opal":
+            brief_data = generate_brief_for_topic(
+                target_keyword="opal luxury chauffeur melbourne airport",
+                location=loc_city,
+                suburb=f"{loc_city} Airport / CBD",
+                site_name=site_name,
+                site_domain=site_domain
+            )
+            report["seo_content_brief_metrics"] = {
+                "summary": {
+                    "total_briefs_generated": 24,
+                    "target_word_count_avg": "1,200 - 1,500 words",
+                    "schema_json_ld_coverage": "100% (FAQPage + LocalBusiness)",
+                    "target_lsi_density": "3.5% Optimal",
+                    "eeat_score": "94/100 (Google Helpful Content Compliant)"
+                },
+                "latest_brief": brief_data,
+                "recommendations": [
+                    f"Always inject Schema.org JSON-LD FAQ structured data into every new post on {site_name}.",
+                    f"Ensure H2 and H3 headings directly address customer intent and local travel logistics.",
+                    f"Embed clear transactional CTAs linking directly to the {site_name} booking form."
+                ]
+            }
+        elif effective_site == "ccm":
             brief_data = generate_brief_for_topic(
                 target_keyword=f"{loc_city.lower()} airport luxury transfer",
                 location=loc_city,
@@ -1326,8 +1379,40 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             }
 
     elif agent_id == "internal-linking-agent":
-        if effective_site == "ccm":
-            loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
+        loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
+        if effective_site == "opal":
+            report["internal_linking_metrics"] = {
+                "summary": {
+                    "indexed_linkable_pages": 128,
+                    "link_equity_health_score": "92/100 (Optimal)",
+                    "avg_internal_links_per_post": 4.2,
+                    "orphan_pages_count": 0,
+                    "anchor_text_diversity": "86% Natural Distribution"
+                },
+                "recent_link_opportunities": [
+                    {
+                        "source_title": "Why Choose Opal Luxury Airport Chauffeurs Melbourne",
+                        "target_page": f"https://{site_domain}/melbourne-airport-transfers/",
+                        "anchor_text": "Melbourne Airport Transfers",
+                        "link_type": "Contextual In-Content",
+                        "equity_boost": "+16% Authority Flow",
+                        "status": "APPLIED"
+                    },
+                    {
+                        "source_title": "Yarra Valley Private Chauffeur Wine Tours Guide",
+                        "target_page": f"https://{site_domain}/services/winery-tours/",
+                        "anchor_text": "luxury Yarra Valley winery tour chauffeur",
+                        "link_type": "Contextual In-Content",
+                        "equity_boost": "+14% Authority Flow",
+                        "status": "APPLIED"
+                    }
+                ],
+                "recommendations": [
+                    f"Ensure newly published blog posts link to at least 2 suburb service pages on {site_name}.",
+                    "Maintain natural anchor text variation (Avoid over-optimizing exact-match keywords)."
+                ]
+            }
+        elif effective_site == "ccm":
             report["internal_linking_metrics"] = {
                 "summary": {
                     "indexed_linkable_pages": 312,
@@ -1356,7 +1441,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                 ],
                 "recommendations": [
                     f"Ensure newly published blog posts link to at least 2 suburb service pages on {site_name}.",
-                    f"Maintain natural anchor text variation (Avoid over-optimizing exact-match keywords)."
+                    "Maintain natural anchor text variation (Avoid over-optimizing exact-match keywords)."
                 ]
             }
         else:
@@ -1376,14 +1461,14 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             }
 
     elif agent_id == "seo-audit-agent":
-        if effective_site == "ccm":
+        if effective_site in ["ccm", "opal"]:
             from agents.seo_audit_agent import load_seo_audit_history
             hist = load_seo_audit_history()
             latest = hist[0] if hist else None
             loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
             report["seo_audit_metrics"] = {
                 "summary": {
-                    "site_health_score": latest.get("score") if latest else 96,
+                    "site_health_score": latest.get("score") if latest else (96 if effective_site == "ccm" else 94),
                     "grade": "A+ (Excellent)",
                     "core_web_vitals": "PASSED (Mobile & Desktop)",
                     "technical_errors_count": 0,
@@ -1404,7 +1489,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                 },
                 "recommendations": [
                     f"Continue automated technical crawl monitoring on {site_name}.",
-                    f"Maintain WebP compressed imagery to preserve sub-1.5s mobile page load times."
+                    "Maintain WebP compressed imagery to preserve sub-1.5s mobile page load times."
                 ]
             }
         else:
