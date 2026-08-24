@@ -177,25 +177,26 @@ class PageOptimizerAgent(AgentInterface):
         page_data = fetch_live_page_content(page_url)
         
         # Derive focus keyword if not provided
+        loc_city = location.split(",")[0].replace("& Tullamarine", "").replace("Metropolitan & Regional VIC", "").strip() or "Melbourne"
         if not focus_kw:
             url_path = urlparse(page_url).path.strip("/")
-            slug_words = [w for w in url_path.split("-") if w and w not in ["services", "suburbs", "fleet", "category", "blog"]]
+            slug_words = [w for w in url_path.split("-") if w and w not in ["services", "suburbs", "fleet", "category", "blog", "about", "contact", "us"]]
             if slug_words:
                 focus_kw = " ".join(slug_words)
             else:
-                focus_kw = f"corporate chauffeur {location.lower()}"
+                focus_kw = "luxury chauffeur & airport transfers"
 
         # If title/h1 were not fetched from live HTML, generate realistic on-page representations based on slug
         if not page_data["title"]:
-            page_data["title"] = f"{focus_kw.title()} | Premium Chauffeur Service {location} | {brand_name}"
+            page_data["title"] = f"{focus_kw.title()} | Premium Chauffeur Service {loc_city} | {brand_name}"
         if not page_data["h1s"]:
-            page_data["h1s"] = [f"{focus_kw.title()} in {location}"]
+            page_data["h1s"] = [f"{focus_kw.title()} in {loc_city}"]
         if not page_data["h2s"]:
             page_data["h2s"] = [
-                f"Why Choose Professional Chauffeurs for {focus_kw.title()}",
-                f"Airport Transfers & Executive Fleet Options in {location}",
+                f"Why Choose {brand_name} for {focus_kw.title()}",
+                f"Airport Transfers & Executive Fleet Options in {loc_city}",
                 f"Comparing Private Chauffeur vs Standard Rideshare",
-                f"How to Book Your Dedicated {location} Chauffeur"
+                f"How to Book Your Dedicated {loc_city} Chauffeur"
             ]
         if not page_data["h3s"]:
             page_data["h3s"] = [
@@ -331,17 +332,22 @@ class PageOptimizerAgent(AgentInterface):
         grade = "A" if weighted_score >= 88 else ("B+" if weighted_score >= 78 else ("B" if weighted_score >= 68 else "C"))
 
         # Strategic H1/H2/H3 Copy Suggestions
+        if loc_city.lower() in focus_kw.lower():
+            proposed_h1 = f"Premium {focus_kw.title()} | {brand_name} Luxury Fleet"
+        else:
+            proposed_h1 = f"Premium {focus_kw.title()} in {loc_city} | {brand_name}"
+
         optimized_headings = {
-            "proposed_h1": f"Premium {focus_kw.title()} in {location} | Dedicated Luxury Transport",
+            "proposed_h1": proposed_h1,
             "proposed_h2_sections": [
-                f"1. Why Executive {focus_kw.title()} Outperforms Standard Rideshare in {location}",
-                f"2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
-                f"3. Transparent Fixed Pricing & Corporate Billing Options",
-                f"4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
-                f"5. Frequently Asked Questions About {location} Chauffeurs"
+                f"1. Why {brand_name} {focus_kw.title()} Outperforms Standard Rideshare in {loc_city}",
+                f"2. Seamless Airport Transfers & Flight-Tracking Guarantee at Melbourne Tullamarine",
+                f"3. Transparent Fixed Pricing & Corporate Billing Accounts",
+                f"4. Luxury European Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+                f"5. Frequently Asked Questions About Our {loc_city} Chauffeur Services"
             ],
             "proposed_h3_faqs": [
-                f"How early should I reserve my {location} chauffeur?",
+                f"How early should I reserve my {loc_city} chauffeur?",
                 "What happens if my incoming flight is delayed?",
                 "Are toll charges and airport parking fees included in the fixed quote?"
             ]

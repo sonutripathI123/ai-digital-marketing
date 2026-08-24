@@ -4742,6 +4742,14 @@ function copyToClipboard(text, btnId) {
   });
 }
 
+function copyPageDoctorSchema(btnId, preId) {
+  const pre = document.getElementById(preId);
+  if (pre) {
+    copyToClipboard(pre.innerText || pre.textContent, btnId);
+  }
+}
+window.copyPageDoctorSchema = copyPageDoctorSchema;
+
 /* --- Page SEO Doctor & Google Algorithm Optimizer Handlers --- */
 
 function openPageOptimizerModal(defaultUrl) {
@@ -5016,12 +5024,12 @@ function renderPageOptimizerAuditResults(report) {
           </h3>
           <div style="font-size: 11.5px; color: var(--text-muted);">Paste this script into WordPress Header/Footer or HTML head tag for rich snippets in Google Search results.</div>
         </div>
-        <button id="btn-copy-schema-code" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 700;" onclick="copyToClipboard(\`<script type=&quot;application/ld+json&quot;>\n${schemaCode}\n</script>\`, 'btn-copy-schema-code')">
+        <button id="btn-copy-schema-code" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 700;" onclick="copyPageDoctorSchema('btn-copy-schema-code', 'page-doctor-schema-code')">
           <i class="fa-solid fa-copy"></i> Copy Schema Code
         </button>
       </div>
 
-      <pre style="background: #030712; padding: 14px; border-radius: 8px; color: #38bdf8; font-family: var(--font-mono); font-size: 12px; max-height: 240px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">&lt;script type="application/ld+json"&gt;
+      <pre id="page-doctor-schema-code" style="background: #030712; padding: 14px; border-radius: 8px; color: #38bdf8; font-family: var(--font-mono); font-size: 12px; max-height: 240px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">&lt;script type="application/ld+json"&gt;
 ${schemaCode}
 &lt;/script&gt;</pre>
     </div>
@@ -5283,12 +5291,12 @@ function renderPageOptimizerAuditResultsCustom(report, containerId) {
           </h3>
           <div style="font-size: 11.5px; color: var(--text-muted);">Paste this script into WordPress Header/Footer or HTML head tag for rich snippets in Google Search results.</div>
         </div>
-        <button id="btn-copy-schema-code-v" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 700;" onclick="copyToClipboard(\`<script type=&quot;application/ld+json&quot;>\n${schemaCode}\n</script>\`, 'btn-copy-schema-code-v')">
+        <button id="btn-copy-schema-code-v" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 700;" onclick="copyPageDoctorSchema('btn-copy-schema-code-v', 'page-doctor-schema-code-v')">
           <i class="fa-solid fa-copy"></i> Copy Schema Code
         </button>
       </div>
 
-      <pre style="background: #030712; padding: 14px; border-radius: 8px; color: #38bdf8; font-family: var(--font-mono); font-size: 12px; max-height: 240px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">&lt;script type="application/ld+json"&gt;
+      <pre id="page-doctor-schema-code-v" style="background: #030712; padding: 14px; border-radius: 8px; color: #38bdf8; font-family: var(--font-mono); font-size: 12px; max-height: 240px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">&lt;script type="application/ld+json"&gt;
 ${schemaCode}
 &lt;/script&gt;</pre>
     </div>
