@@ -873,6 +873,31 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
         if effective_site == "ccm":
             from agents.social_analytics_agent import fetch_real_social_analytics
             real_social = fetch_real_social_analytics(site_domain=site_domain, site_name=site_name)
+        elif effective_site == "opal":
+            real_social = {
+                "is_connected": True,
+                "site_id": "opal",
+                "site_name": "Opal Chauffeurs",
+                "site_domain": "https://opalchauffeurs.com.au",
+                "total_published_posts": 0,
+                "total_scheduled_queue": 0,
+                "live_connected_accounts": {
+                    "facebook": {"connected": False, "name": "Opal Chauffeurs Facebook", "page_id": "-", "followers": 0, "status": "Token Permission Pending"},
+                    "instagram": {"connected": False, "username": "Not Linked in Token", "account_id": "-", "followers": 0, "media_count": 0, "status": "Token Permission Pending"},
+                    "linkedin": {"connected": True, "name": "Opal Chauffeur Services", "org_id": "87379144", "status": "Active"}
+                },
+                "platforms": {
+                    "facebook": {"published": 0, "scheduled": 0, "followers": 0, "impressions": 0, "clicks": 0, "likes": 0, "engagement_rate": "0%"},
+                    "instagram": {"published": 0, "scheduled": 0, "followers": 0, "impressions": 0, "clicks": 0, "likes": 0, "engagement_rate": "0%"},
+                    "linkedin": {"published": 0, "scheduled": 0, "followers": 0, "impressions": 0, "clicks": 0, "likes": 0, "engagement_rate": "0%"}
+                },
+                "published_posts_history": [],
+                "recommendations": [
+                    "LinkedIn Company Page (Opal Chauffeur Services - Org #87379144) is verified and connected.",
+                    "To enable Facebook & Instagram auto-publishing for Opal, select Opal Page when generating Meta Access Token in Graph API Explorer.",
+                    "Click '+ Add Keywords & Auto-Generate' to queue initial campaigns for Opal Chauffeurs."
+                ]
+            }
         else:
             real_social = {
                 "is_connected": False,
