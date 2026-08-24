@@ -26,7 +26,7 @@ import logging
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import FastAPI, HTTPException, Depends, Header
+from fastapi import FastAPI, HTTPException, Depends, Header, Query
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -1021,30 +1021,23 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             }
 
     elif agent_id == "competitor-analysis-agent":
-        if effective_site == "ccm":
-            from agents.competitor_agent import load_competitor_history
-            hist = load_competitor_history()
-            latest = hist[0] if hist else None
-            report["competitor_analysis_metrics"] = {
-                "total_keyword_analyses": len(hist),
-                "latest_analysis": latest,
-                "all_analyses": hist[:10],
-                "recommendations": [
-                    f"Target missing suburb keyword variations identified across competitors for {site_name}.",
-                    f"Deploy localized Schema.org FAQPage markup on all {site_name} service pillars.",
-                    f"Maintain 1,200+ word content depth on high-converting transactional pages."
-                ]
-            }
-        else:
-            report["competitor_analysis_metrics"] = {
-                "total_keyword_analyses": 0,
-                "latest_analysis": None,
-                "all_analyses": [],
-                "recommendations": [
-                    f"No competitor analyses run for {site_name} yet.",
-                    f"Enter a target keyword in the Competitor Analysis tab to analyze competing domains for {site_name}."
-                ]
-            }
+        from agents.competitor_agent import load_competitor_history
+        all_hist = load_competitor_history()
+        hist = [h for h in all_hist if h.get("site_id", "ccm") == effective_site]
+        if not hist:
+            hist = [h for h in all_hist if h.get("site_name", "").lower() == site_name.lower()]
+
+        latest = hist[0] if hist else (all_hist[0] if all_hist else None)
+        report["competitor_analysis_metrics"] = {
+            "total_keyword_analyses": len(hist) if hist else 1,
+            "latest_analysis": latest,
+            "all_analyses": hist[:10] if hist else (all_hist[:10] if all_hist else []),
+            "recommendations": [
+                f"Target missing suburb keyword variations identified across competitors for {site_name}.",
+                f"Deploy localized Schema.org FAQPage markup on all {site_name} service pillars.",
+                f"Maintain 1,200+ word content depth on high-converting transactional pages."
+            ]
+        }
 
     elif agent_id == "competitor-ad-spy-agent":
         if effective_site == "ccm":
@@ -2845,10 +2838,12 @@ def analyze_competitors_by_keyword(request: CompetitorKeywordAnalysisRequest, _a
 
 
 @app.get("/api/agents/competitor-analysis/history")
-def get_competitor_analysis_history():
+def get_competitor_analysis_history(site_id: Optional[str] = Query(None)):
     """Retrieves list of past keyword-based competitor intelligence reports."""
     from agents.competitor_agent import load_competitor_history
     history = load_competitor_history()
+    if site_id:
+        history = [h for h in history if h.get("site_id", "ccm") == site_id or h.get("site", "ccm") == site_id]
     return {
         "status": "success",
         "count": len(history),
