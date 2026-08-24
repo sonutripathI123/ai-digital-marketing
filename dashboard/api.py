@@ -58,64 +58,9 @@ from config.settings import (
     ADMIN_PASSWORD,
     AUTH_SECRET_KEY,
     ADS_LIVE_EXECUTION_ENABLED,
-    MAX_DAILY_BUDGET_AUD,
-    DATA_RETENTION_DAYS,
-    ENVIRONMENT,
-    PORT,
-    LOG_LEVEL,
-    AGENT_STATUS_INTERVAL_SEC,
-    TASK_CLEANUP_INTERVAL_SEC,
-    AI_PROVIDERS,
-    CLAUDE_MODEL,
-    OPENAI_MODEL,
-    GEMINI_MODEL,
-    OLLAMA_MODEL,
-    DEFAULT_AI_PROVIDER,
-    WEBSITES_CONFIG_FILE,
     LOGS_DIR,
     ROOT_DIR,
 )
-
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SCHEDULED_SOCIAL_FILE = PROJECT_ROOT / "data" / "social_scheduled_campaigns.json"
-
-def load_social_scheduled_posts(site_id: str = "ccm") -> List[Dict[str, Any]]:
-    """Load persisted scheduled social posts for a specific website."""
-    if not SCHEDULED_SOCIAL_FILE.exists():
-        return []
-    try:
-        with open(SCHEDULED_SOCIAL_FILE, "r", encoding="utf-8") as f:
-            all_posts = json.load(f)
-            return [p for p in all_posts if str(p.get("site", "ccm")).lower() == str(site_id).lower()]
-    except Exception as e:
-        logger.error(f"Error reading scheduled social posts: {e}")
-        return []
-
-def save_social_scheduled_posts(site_id: str, new_posts: List[Dict[str, Any]]) -> None:
-    """Save newly generated scheduled social posts into persistent store."""
-    SCHEDULED_SOCIAL_FILE.parent.mkdir(parents=True, exist_ok=True)
-    all_posts = []
-    if SCHEDULED_SOCIAL_FILE.exists():
-        try:
-            with open(SCHEDULED_SOCIAL_FILE, "r", encoding="utf-8") as f:
-                all_posts = json.load(f)
-        except Exception:
-            all_posts = []
-
-    # Preserve other sites, merge or replace site posts
-    existing_other = [p for p in all_posts if str(p.get("site", "ccm")).lower() != str(site_id).lower()]
-    existing_site = [p for p in all_posts if str(p.get("site", "ccm")).lower() == str(site_id).lower()]
-    
-    # Assign unique IDs
-    start_num = len(existing_site) + 1
-    for idx, p in enumerate(new_posts, start_num):
-        if not p.get("id") or p.get("id", "").startswith("soc_"):
-            p["id"] = f"soc_{site_id[:4]}_{idx:04d}"
-
-    combined = existing_other + existing_site + new_posts
-    with open(SCHEDULED_SOCIAL_FILE, "w", encoding="utf-8") as f:
-        json.dump(combined, f, indent=2)
-
 from config.websites import WebsiteManager, WebsiteProfile
 from core.ai_layer.router import ModelRouter
 from core.models.task import AgentTask, TaskPriority, TaskStatus
@@ -925,22 +870,44 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
 
     # Special handling for Social Media Agent and Social Analytics Agent
     elif agent_id in ("corporate-cars-social-agent", "social-analytics-agent"):
-        scheduled_queue = load_social_scheduled_posts(effective_site)
+        sched_file = Path("data/social_scheduled_campaigns.json")
+        all_sched = []
+        if sched_file.exists():
+            try:
+                with open(sched_file, "r", encoding="utf-8") as f:
+                    all_sched = json.load(f)
+            except Exception:
+                all_sched = []
+        
+        site_sched = [p for p in all_sched if p.get("site") == effective_site]
+        fb_sched = len([p for p in site_sched if p.get("platform", "").lower() == "facebook"])
+        ig_sched = len([p for p in site_sched if p.get("platform", "").lower() == "instagram"])
+        li_sched = len([p for p in site_sched if p.get("platform", "").lower() == "linkedin"])
+        fb_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "facebook"), None)
+        ig_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "instagram"), None)
+        li_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "linkedin"), None)
+
         if effective_site == "ccm":
             from agents.social_analytics_agent import fetch_real_social_analytics
             real_social = fetch_real_social_analytics(site_domain=site_domain, site_name=site_name)
+            real_social["scheduled_posts_queue"] = site_sched
+            real_social["total_scheduled_queue"] = len(site_sched) or real_social.get("total_scheduled_queue", 0)
+            if site_sched:
+                real_social["platforms"]["facebook"]["scheduled"] = fb_sched
+                real_social["platforms"]["instagram"]["scheduled"] = ig_sched
+                real_social["platforms"]["linkedin"]["scheduled"] = li_sched
+                if fb_next: real_social["platforms"]["facebook"]["next_scheduled_at"] = fb_next
+                if ig_next: real_social["platforms"]["instagram"]["next_scheduled_at"] = ig_next
+                if li_next: real_social["platforms"]["linkedin"]["next_scheduled_at"] = li_next
         elif effective_site == "opal":
-            fb_sched = len([p for p in scheduled_queue if str(p.get('platform', '')).lower() == 'facebook'])
-            ig_sched = len([p for p in scheduled_queue if str(p.get('platform', '')).lower() == 'instagram'])
-            li_sched = len([p for p in scheduled_queue if str(p.get('platform', '')).lower() == 'linkedin'])
-            next_sched = scheduled_queue[0]["scheduled_for"] if scheduled_queue else "None scheduled"
             real_social = {
                 "is_connected": True,
                 "site_id": "opal",
                 "site_name": "Opal Chauffeurs",
                 "site_domain": "https://opalchauffeurs.com.au",
                 "total_published_posts": 40,
-                "total_scheduled_queue": len(scheduled_queue),
+                "total_scheduled_queue": len(site_sched),
+                "scheduled_posts_queue": site_sched,
                 "live_connected_accounts": {
                     "facebook": {
                         "connected": True,
@@ -969,16 +936,16 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                     }
                 },
                 "platforms": {
-                    "facebook": {"published": 0, "scheduled": fb_sched, "followers": 27, "impressions": 1400, "clicks": 80, "likes": 24, "engagement_rate": "4.2%", "next_scheduled_at": next_sched},
-                    "instagram": {"published": 40, "scheduled": ig_sched, "followers": 100, "impressions": 4800, "clicks": 210, "likes": 160, "engagement_rate": "5.6%", "next_scheduled_at": next_sched},
-                    "linkedin": {"published": 0, "scheduled": li_sched, "followers": 12, "impressions": 850, "clicks": 45, "likes": 18, "engagement_rate": "4.8%", "next_scheduled_at": next_sched}
+                    "facebook": {"published": 0, "scheduled": fb_sched, "next_scheduled_at": fb_next or "None scheduled", "followers": 27, "impressions": 1400, "clicks": 80, "likes": 24, "engagement_rate": "4.2%"},
+                    "instagram": {"published": 40, "scheduled": ig_sched, "next_scheduled_at": ig_next or "None scheduled", "followers": 100, "impressions": 4800, "clicks": 210, "likes": 160, "engagement_rate": "5.6%"},
+                    "linkedin": {"published": 0, "scheduled": li_sched, "next_scheduled_at": li_next or "None scheduled", "followers": 12, "impressions": 850, "clicks": 45, "likes": 18, "engagement_rate": "4.8%"}
                 },
                 "published_posts_history": [],
                 "recommendations": [
                     "Facebook Page (Opal Chauffeur Services & Airport Transfers Melbourne - 27 followers) is connected.",
                     "Instagram Business (@chauffeursopal - 40 posts, 100 followers) is connected.",
                     "LinkedIn Company Page (Opal Chauffeur Services - Org #87379144) is connected.",
-                    f"Scheduled Queue has {len(scheduled_queue)} automated posts ready to publish on cadence."
+                    f"There are currently {len(site_sched)} upcoming social posts scheduled in queue."
                 ]
             }
         else:
@@ -988,7 +955,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                 "site_name": site_name,
                 "site_domain": site_domain,
                 "total_published_posts": 0,
-                "total_scheduled_queue": len(scheduled_queue),
+                "total_scheduled_queue": len(site_sched),
+                "scheduled_posts_queue": site_sched,
                 "live_connected_accounts": {
                     "facebook": {"connected": False, "name": f"{site_name} Facebook Page", "page_id": "-", "followers": 0, "status": "Not Connected"},
                     "instagram": {"connected": False, "username": "Not Connected", "account_id": "-", "followers": 0, "media_count": 0, "status": "Not Connected"},
@@ -1005,9 +973,6 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                     f"Use '+ Add Keywords & Auto-Generate' to queue initial social media campaigns for {site_name}."
                 ]
             }
-        real_social["scheduled_queue_posts"] = scheduled_queue
-        if scheduled_queue:
-            real_social["total_scheduled_queue"] = len(scheduled_queue)
         report["social_metrics"] = real_social
         report["social_analytics_metrics"] = real_social
 
@@ -1656,7 +1621,7 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
             hashtags = f"#{brand_name.replace(' ', '')} #{kw.replace(' ', '')} #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur"
 
             scheduled_posts.append({
-                "id": f"soc_{site[:4]}_{post_index:04d}",
+                "id": f"soc_{site}_{post_index:04d}",
                 "site": site,
                 "platform": platform.capitalize(),
                 "keyword": kw,
@@ -1666,11 +1631,26 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
                 "status": "scheduled"
             })
 
-    save_social_scheduled_posts(site, scheduled_posts)
+    # Persist to data/social_scheduled_campaigns.json
+    sched_file = Path("data/social_scheduled_campaigns.json")
+    sched_file.parent.mkdir(parents=True, exist_ok=True)
+    existing_all = []
+    if sched_file.exists():
+        try:
+            with open(sched_file, "r", encoding="utf-8") as f:
+                existing_all = json.load(f)
+        except Exception:
+            existing_all = []
+
+    # Merge avoiding duplicate IDs
+    new_ids = {sp["id"] for sp in scheduled_posts}
+    updated_all = scheduled_posts + [p for p in existing_all if p.get("id") not in new_ids]
+    with open(sched_file, "w", encoding="utf-8") as f:
+        json.dump(updated_all, f, indent=2)
 
     return {
         "status": "success",
-        "message": f"Successfully generated and scheduled {len(scheduled_posts)} social posts across {len(platforms)} platforms.",
+        "message": f"Successfully generated and scheduled {len(scheduled_posts)} social posts across {len(platforms)} platforms for [{site.upper()}].",
         "site": site,
         "keywords_count": len(lines),
         "scheduled_posts_count": len(scheduled_posts),
