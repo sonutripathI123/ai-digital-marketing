@@ -12,7 +12,12 @@ import logging
 
 import requests
 
-from config import INSTAGRAM_BUSINESS_ACCOUNT_ID, META_ACCESS_TOKEN
+from config import (
+    INSTAGRAM_BUSINESS_ACCOUNT_ID,
+    META_ACCESS_TOKEN,
+    OPAL_INSTAGRAM_BUSINESS_ACCOUNT_ID,
+    OPAL_META_ACCESS_TOKEN,
+)
 from models import Post
 from publishers.base import PublishError, full_text, image_public_url, require, validate_post_integrity
 
@@ -21,9 +26,17 @@ GRAPH = "https://graph.facebook.com/v21.0"
 
 
 def publish(post: Post) -> str:
+    site = getattr(post, "site", getattr(post, "site_id", "ccm"))
+    if str(site).lower() == "opal":
+        access_token = OPAL_META_ACCESS_TOKEN or META_ACCESS_TOKEN
+        ig_id = OPAL_INSTAGRAM_BUSINESS_ACCOUNT_ID or "17841456911741892"
+    else:
+        access_token = META_ACCESS_TOKEN
+        ig_id = INSTAGRAM_BUSINESS_ACCOUNT_ID
+
     require("instagram",
-            META_ACCESS_TOKEN=META_ACCESS_TOKEN,
-            INSTAGRAM_BUSINESS_ACCOUNT_ID=INSTAGRAM_BUSINESS_ACCOUNT_ID)
+            META_ACCESS_TOKEN=access_token,
+            INSTAGRAM_BUSINESS_ACCOUNT_ID=ig_id)
     validate_post_integrity(post, "instagram")
 
     image_url = image_public_url(post)
@@ -34,9 +47,9 @@ def publish(post: Post) -> str:
         )
 
     r = requests.post(
-        f"{GRAPH}/{INSTAGRAM_BUSINESS_ACCOUNT_ID}/media",
+        f"{GRAPH}/{ig_id}/media",
         data={"image_url": image_url, "caption": full_text(post),
-              "access_token": META_ACCESS_TOKEN},
+              "access_token": access_token},
         timeout=60,
     )
     if r.status_code != 200:
@@ -44,8 +57,8 @@ def publish(post: Post) -> str:
     creation_id = r.json()["id"]
 
     r = requests.post(
-        f"{GRAPH}/{INSTAGRAM_BUSINESS_ACCOUNT_ID}/media_publish",
-        data={"creation_id": creation_id, "access_token": META_ACCESS_TOKEN},
+        f"{GRAPH}/{ig_id}/media_publish",
+        data={"creation_id": creation_id, "access_token": access_token},
         timeout=60,
     )
     if r.status_code != 200:

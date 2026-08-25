@@ -881,8 +881,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                     "facebook": {
                         "connected": True,
                         "name": "Opal Chauffeur Services & Airport Transfers Melbourne",
-                        "page_id": "opalchauffeurs",
-                        "url": "https://www.facebook.com/opalchauffeurs/",
+                        "page_id": "102034409405004",
+                        "url": "https://www.facebook.com/102034409405004",
                         "followers": 27,
                         "status": "Active"
                     },
@@ -890,7 +890,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                         "connected": True,
                         "name": "Opal Chauffeurs",
                         "username": "chauffeursopal",
-                        "account_id": "chauffeursopal",
+                        "account_id": "17841456911741892",
                         "url": "https://www.instagram.com/chauffeursopal/",
                         "followers": 100,
                         "media_count": 40,
