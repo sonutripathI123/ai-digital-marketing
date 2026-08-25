@@ -8,7 +8,8 @@ post is marked failed with the error stored on the row.
 """
 
 import logging
-from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy.orm import Session
 
@@ -20,6 +21,17 @@ from publishers.base import full_text, image_public_url, validate_post_integrity
 log = logging.getLogger(__name__)
 
 
+def _is_same_melbourne_day(dt_obj, target_date_melbourne) -> bool:
+    if not dt_obj:
+        return False
+    if dt_obj.tzinfo is None:
+        dt_utc = dt_obj.replace(tzinfo=timezone.utc)
+    else:
+        dt_utc = dt_obj.astimezone(timezone.utc)
+    dt_mel = dt_utc.astimezone(ZoneInfo("Australia/Melbourne"))
+    return dt_mel.date() == target_date_melbourne
+
+
 def _retry_due(entry: Schedule, now: datetime) -> bool:
     if entry.attempts == 0 or entry.last_attempt_at is None:
         return True
@@ -28,30 +40,24 @@ def _retry_due(entry: Schedule, now: datetime) -> bool:
 
 
 def publish_due(session: Session, dry_run: bool = True) -> dict:
-    """Publish all scheduled posts whose publish_at has passed. Enforces strict 1-post/day/platform rate limit and dual image+content guard."""
-    now = datetime.utcnow()
-    today_start = datetime(now.year, now.month, now.day, 0, 0, 0)
+    """Publish all scheduled posts whose publish_at has passed. Enforces strict 1-post/day/platform rate limit in Melbourne timezone and dual image+content guard."""
+    now_utc = datetime.utcnow()
+    now_mel = datetime.now(ZoneInfo("Australia/Melbourne"))
+    today_mel_date = now_mel.date()
 
-    # Track platforms that have already published today (strict 1 post per platform per day limit)
+    # Track platforms that have already published today in Melbourne timezone (strict 1 post per platform per day limit)
     already_published_today = set()
-    today_published_rows = (
-        session.query(Post.platform)
-        .join(Schedule)
-        .filter(
-            Schedule.published == True,
-            Schedule.last_attempt_at >= today_start
-        )
-        .all()
-    )
-    for row in today_published_rows:
-        already_published_today.add(row[0])
+    published_posts = session.query(Post).filter(Post.status == PostStatus.published).all()
+    for p in published_posts:
+        if _is_same_melbourne_day(p.updated_at, today_mel_date) or (p.schedule_entry and _is_same_melbourne_day(p.schedule_entry.last_attempt_at, today_mel_date)):
+            already_published_today.add(p.platform)
 
     due = (
         session.query(Schedule)
         .join(Post)
         .filter(
             Schedule.published == False,  # noqa: E712
-            Schedule.publish_at <= now,
+            Schedule.publish_at <= now_utc,
             Post.status == PostStatus.scheduled,
         )
         .order_by(Schedule.publish_at.asc())
