@@ -19,6 +19,17 @@ from publishers.base import PublishError, full_text, image_local_path, require, 
 log = logging.getLogger(__name__)
 API = "https://api.linkedin.com/v2"
 
+OPAL_LINKEDIN_ORG_URN = "urn:li:organization:87379144"
+CCM_LINKEDIN_ORG_URN = LINKEDIN_ORGANIZATION_URN or "urn:li:organization:109059206"
+
+
+def get_org_urn(post: Post = None) -> str:
+    if post is not None:
+        site = getattr(post, "site", getattr(post, "site_id", "ccm"))
+        if str(site).lower() == "opal":
+            return OPAL_LINKEDIN_ORG_URN
+    return CCM_LINKEDIN_ORG_URN
+
 
 def _headers() -> dict:
     return {
@@ -27,14 +38,14 @@ def _headers() -> dict:
     }
 
 
-def _upload_image(path) -> str:
+def _upload_image(path, org_urn: str = CCM_LINKEDIN_ORG_URN) -> str:
     register = requests.post(
         f"{API}/assets?action=registerUpload",
         headers=_headers(),
         json={
             "registerUploadRequest": {
                 "recipes": ["urn:li:digitalmediaRecipe:feedshare-image"],
-                "owner": LINKEDIN_ORGANIZATION_URN,
+                "owner": org_urn,
                 "serviceRelationships": [{
                     "relationshipType": "OWNER",
                     "identifier": "urn:li:userGeneratedContent",
@@ -60,20 +71,21 @@ def _upload_image(path) -> str:
 
 
 def publish(post: Post) -> str:
+    org_urn = get_org_urn(post)
     require("linkedin",
             LINKEDIN_ACCESS_TOKEN=LINKEDIN_ACCESS_TOKEN,
-            LINKEDIN_ORGANIZATION_URN=LINKEDIN_ORGANIZATION_URN)
+            LINKEDIN_ORGANIZATION_URN=org_urn)
     validate_post_integrity(post, "linkedin")
 
     path = image_local_path(post)
     if not path:
         raise PublishError("linkedin: Local image file missing — image is strictly mandatory.", retryable=False)
 
-    asset = _upload_image(path)
+    asset = _upload_image(path, org_urn=org_urn)
     media = [{"status": "READY", "media": asset}]
 
     body = {
-        "author": LINKEDIN_ORGANIZATION_URN,
+        "author": org_urn,
         "lifecycleState": "PUBLISHED",
         "specificContent": {
             "com.linkedin.ugc.ShareContent": {
