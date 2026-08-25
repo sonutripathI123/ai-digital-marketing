@@ -8,7 +8,9 @@
     "hashtags": "#OpalChauffeurs #Melbourneairporttransfers #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Tue 25 Aug 2026 at 09:30 AM (Melbourne Time)",
     "week_number": 1,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/minibus/minibus-01.jpg",
+    "image_name": "minibus-01.jpg"
   },
   {
     "id": "soc_opal_0002",
@@ -19,7 +21,9 @@
     "hashtags": "#OpalChauffeurs #Melbourneairporttransfers #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Tue 25 Aug 2026 at 02:30 PM (Melbourne Time)",
     "week_number": 1,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/minibus/minibus-interior-01.jpg",
+    "image_name": "minibus-interior-01.jpg"
   },
   {
     "id": "soc_opal_0003",
@@ -31,7 +35,10 @@
     "scheduled_for": "Tue 25 Aug 2026 at 05:20 PM (Melbourne Time)",
     "week_number": 1,
     "status": "published",
-    "post_id": "urn:li:share:7497915630671671296"
+    "post_id": "urn:li:share:7497920317714161664",
+    "image_path": "images/sedan/0H5A5040 (1).jpg",
+    "image_name": "0H5A5040 (1).jpg",
+    "published_at": "Tue 25 Aug 2026 at 05:38 PM (Melbourne Time)"
   },
   {
     "id": "soc_opal_0004",
@@ -42,7 +49,9 @@
     "hashtags": "#OpalChauffeurs #airporttransfersmelbourne #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Thu 27 Aug 2026 at 02:30 PM (Melbourne Time)",
     "week_number": 1,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/people-mover/people-mover-02.jpg",
+    "image_name": "people-mover-02.jpg"
   },
   {
     "id": "soc_opal_0005",
@@ -53,7 +62,9 @@
     "hashtags": "#OpalChauffeurs #airporttransfersmelbourne #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Sat 29 Aug 2026 at 09:30 AM (Melbourne Time)",
     "week_number": 1,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/people-mover/people-mover-interior-01.jpg",
+    "image_name": "people-mover-interior-01.jpg"
   },
   {
     "id": "soc_opal_0006",
@@ -64,7 +75,9 @@
     "hashtags": "#OpalChauffeurs #airporttransfersmelbourne #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Sat 29 Aug 2026 at 02:30 PM (Melbourne Time)",
     "week_number": 1,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A4921 (1).jpg",
+    "image_name": "0H5A4921 (1).jpg"
   },
   {
     "id": "soc_opal_0007",
@@ -75,7 +88,9 @@
     "hashtags": "#OpalChauffeurs #transferstoandfromairport #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Tue 01 Sep 2026 at 09:30 AM (Melbourne Time)",
     "week_number": 2,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A4924 (1) (1).jpg",
+    "image_name": "0H5A4924 (1) (1).jpg"
   },
   {
     "id": "soc_opal_0008",
@@ -86,7 +101,9 @@
     "hashtags": "#OpalChauffeurs #transferstoandfromairport #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Tue 01 Sep 2026 at 02:30 PM (Melbourne Time)",
     "week_number": 2,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A4934 (1).jpg",
+    "image_name": "0H5A4934 (1).jpg"
   },
   {
     "id": "soc_opal_0009",
@@ -97,7 +114,9 @@
     "hashtags": "#OpalChauffeurs #transferstoandfromairport #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Thu 03 Sep 2026 at 09:30 AM (Melbourne Time)",
     "week_number": 2,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A4953 (1).jpg",
+    "image_name": "0H5A4953 (1).jpg"
   },
   {
     "id": "soc_opal_0010",
@@ -108,7 +127,9 @@
     "hashtags": "#OpalChauffeurs #airporttransferbooking #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Thu 03 Sep 2026 at 02:30 PM (Melbourne Time)",
     "week_number": 2,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A4958 (2).jpg",
+    "image_name": "0H5A4958 (2).jpg"
   },
   {
     "id": "soc_opal_0011",
@@ -119,7 +140,9 @@
     "hashtags": "#OpalChauffeurs #airporttransferbooking #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Sat 05 Sep 2026 at 09:30 AM (Melbourne Time)",
     "week_number": 2,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A4981 (1).jpg",
+    "image_name": "0H5A4981 (1).jpg"
   },
   {
     "id": "soc_opal_0012",
@@ -130,7 +153,9 @@
     "hashtags": "#OpalChauffeurs #airporttransferbooking #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Sat 05 Sep 2026 at 02:30 PM (Melbourne Time)",
     "week_number": 2,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A4985 (1).jpg",
+    "image_name": "0H5A4985 (1).jpg"
   },
   {
     "id": "soc_opal_0013",
@@ -141,7 +166,9 @@
     "hashtags": "#OpalChauffeurs #chauffeurcarsmelbourneairport #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Tue 08 Sep 2026 at 09:30 AM (Melbourne Time)",
     "week_number": 3,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A5003 (1).jpg",
+    "image_name": "0H5A5003 (1).jpg"
   },
   {
     "id": "soc_opal_0014",
@@ -152,7 +179,9 @@
     "hashtags": "#OpalChauffeurs #chauffeurcarsmelbourneairport #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Tue 08 Sep 2026 at 02:30 PM (Melbourne Time)",
     "week_number": 3,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A5007 (1).jpg",
+    "image_name": "0H5A5007 (1).jpg"
   },
   {
     "id": "soc_opal_0015",
@@ -163,6 +192,8 @@
     "hashtags": "#OpalChauffeurs #chauffeurcarsmelbourneairport #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur",
     "scheduled_for": "Thu 10 Sep 2026 at 09:30 AM (Melbourne Time)",
     "week_number": 3,
-    "status": "scheduled"
+    "status": "scheduled",
+    "image_path": "images/sedan/0H5A5040 (1).jpg",
+    "image_name": "0H5A5040 (1).jpg"
   }
 ]

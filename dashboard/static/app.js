@@ -1560,13 +1560,19 @@ async function viewAgentReport(agentId) {
                   <td style="padding:10px 12px; font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:#38bdf8; font-weight:700;">
                     <i class="fa-solid fa-clock"></i> ${escapeHtml(p.scheduled_for || '')}
                   </td>
-                  <td style="padding:10px 12px; font-weight:700; color:#fff;">${escapeHtml(p.keyword || p.topic || '')}</td>
+                  <td style="padding:10px 12px; font-weight:700; color:#fff;">
+                    <div>${escapeHtml(p.keyword || p.topic || '')}</div>
+                    <div style="margin-top:4px;"><span class="badge" style="background:rgba(16,185,129,0.12); color:#10b981; font-size:10px; border:1px solid rgba(16,185,129,0.25);"><i class="fa-solid fa-image"></i> ${escapeHtml(p.image_name || 'luxury-fleet.jpg')}</span></div>
+                  </td>
                   <td style="padding:10px 12px; font-size:11px; color:var(--text-secondary); line-height:1.4;">
                     <div style="color:var(--text-primary); margin-bottom:3px;">"${escapeHtml((p.caption || '').substring(0, 90))}..."</div>
                     <code style="color:var(--accent-purple); font-size:10px;">${escapeHtml(p.hashtags || '')}</code>
                   </td>
                   <td style="padding:10px 12px; text-align:center; white-space:nowrap;">
-                    <span class="badge badge-success" style="font-size:10px; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Scheduled</span>
+                    ${p.status === 'published' ? 
+                      `<span class="badge badge-success" style="font-size:10px; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Published Live</span>` :
+                      `<span class="badge" style="background:rgba(56,189,248,0.15); color:#38bdf8; border:1px solid rgba(56,189,248,0.3); font-size:10px; font-weight:700;"><i class="fa-solid fa-clock"></i> Scheduled</span>`
+                    }
                   </td>
                 </tr>
                 `;

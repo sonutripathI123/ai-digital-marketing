@@ -1682,8 +1682,16 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
         target_date = start_tue + timedelta(days=week_offset_days + day_delta)
         sched_time_str = target_date.strftime(f"%a %d %b %Y at {time_str} (Melbourne Time)")
 
-        caption = f"Experience unmatched elegance with {brand_name}. From luxury airport transfers to corporate executive chauffeur travel across {kw}, we deliver discretion, comfort, and punctuality every single journey."
-        hashtags = f"#{brand_name.replace(' ', '')} #{kw.replace(' ', '')} #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur"
+        # Assign rotating image from luxury fleet image library (29 high-res fleet photos)
+        img_dir = Path(ROOT_DIR) / "corporate-cars-social-agent" / "images"
+        all_imgs = []
+        if img_dir.exists():
+            for ext in ("*.jpg", "*.jpeg", "*.png"):
+                all_imgs.extend(list(img_dir.rglob(ext)))
+        all_imgs = sorted(all_imgs)
+        assigned_img = all_imgs[idx % len(all_imgs)] if all_imgs else None
+        img_rel = str(assigned_img.relative_to(img_dir.parent)).replace("\\", "/") if assigned_img else ""
+        img_name = assigned_img.name if assigned_img else "luxury-fleet.jpg"
 
         scheduled_posts.append({
             "id": f"soc_{site}_{idx+1:04d}",
@@ -1694,6 +1702,8 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
             "hashtags": hashtags,
             "scheduled_for": sched_time_str,
             "week_number": week_num,
+            "image_path": img_rel,
+            "image_name": img_name,
             "status": "scheduled"
         })
 
