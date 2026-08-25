@@ -26,7 +26,7 @@ import logging
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import FastAPI, HTTPException, Depends, Header, Query
+from fastapi import FastAPI, HTTPException, Depends, Header, Query, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -528,6 +528,136 @@ def get_auth_session(
         "is_admin": False,
         "display_role": "Read-Only Viewer (Public)"
     }
+
+
+class VisitorLoginRequest(BaseModel):
+    email: str
+
+
+VISITOR_LOGS_FILE = Path(ROOT_DIR) / "data" / "user_access_logs.json"
+
+
+def load_visitor_logs() -> List[Dict[str, Any]]:
+    if VISITOR_LOGS_FILE.exists():
+        try:
+            with open(VISITOR_LOGS_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return []
+    return []
+
+
+def save_visitor_logs(logs: List[Dict[str, Any]]) -> None:
+    VISITOR_LOGS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(VISITOR_LOGS_FILE, "w", encoding="utf-8") as f:
+        json.dump(logs, f, indent=2)
+
+
+@app.post("/api/auth/visitor-login")
+def visitor_login(req: VisitorLoginRequest, request: Request):
+    """Authenticate visitor email, record audit telemetry (IP, device, timestamps), and issue access session."""
+    email_clean = req.email.strip().lower()
+    if not email_clean or "@" not in email_clean or "." not in email_clean:
+        raise HTTPException(status_code=400, detail="Please enter a valid email address.")
+
+    # Determine IP and User-Agent
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        ip = forwarded.split(",")[0].strip()
+    else:
+        ip = request.client.host if request.client else "Unknown IP"
+
+    user_agent = request.headers.get("user-agent", "Unknown Device/Browser")
+
+    # Time formatting in IST and Melbourne
+    now_utc = datetime.utcnow()
+    dt_ist = now_utc + timedelta(hours=5, minutes=30)
+    dt_mel = now_utc + timedelta(hours=10)
+    time_str = f"{dt_ist.strftime('%d %b %Y, %I:%M %p IST')} ({dt_mel.strftime('%I:%M %p Melbourne')})"
+
+    logs = load_visitor_logs()
+
+    # Check if user already exists
+    existing = next((u for u in logs if u.get("email") == email_clean), None)
+    if existing:
+        existing["total_sessions"] = existing.get("total_sessions", 1) + 1
+        existing["last_active"] = time_str
+        existing["last_ip"] = ip
+        existing["last_user_agent"] = user_agent
+        if "session_history" not in existing:
+            existing["session_history"] = []
+        existing["session_history"].append({
+            "timestamp": time_str,
+            "ip": ip,
+            "user_agent": user_agent
+        })
+    else:
+        new_entry = {
+            "id": f"usr_{len(logs) + 1:04d}",
+            "email": email_clean,
+            "first_login": time_str,
+            "last_active": time_str,
+            "last_ip": ip,
+            "last_user_agent": user_agent,
+            "total_sessions": 1,
+            "session_history": [
+                {
+                    "timestamp": time_str,
+                    "ip": ip,
+                    "user_agent": user_agent
+                }
+            ]
+        }
+        logs.insert(0, new_entry)
+
+    save_visitor_logs(logs)
+
+    # Generate visitor session token
+    payload = {
+        "email": email_clean,
+        "role": "visitor",
+        "exp": int(time.time()) + (30 * 86400)
+    }
+    payload_b64 = base64.urlsafe_b64encode(json.dumps(payload).encode()).decode()
+    sig = hmac.new(AUTH_SECRET_KEY.encode(), payload_b64.encode(), hashlib.sha256).hexdigest()
+    session_token = f"{payload_b64}.{sig}"
+
+    return {
+        "status": "success",
+        "message": f"Welcome! Access granted for {email_clean}",
+        "session_token": session_token,
+        "email": email_clean
+    }
+
+
+@app.get("/api/admin/visitor-logs")
+def get_visitor_audit_logs(_admin: Dict[str, Any] = Depends(require_admin)):
+    """Retrieve full visitor access logs and audit telemetry (Super Admin Only)."""
+    logs = load_visitor_logs()
+
+    total_unique = len(logs)
+    total_sessions = sum(u.get("total_sessions", 1) for u in logs)
+
+    now_utc = datetime.utcnow()
+    dt_ist_today = (now_utc + timedelta(hours=5, minutes=30)).strftime("%d %b %Y")
+    today_active = len([u for u in logs if dt_ist_today in str(u.get("last_active", ""))])
+
+    return {
+        "status": "success",
+        "summary": {
+            "total_unique_visitors": total_unique,
+            "total_sessions_recorded": total_sessions,
+            "active_today": today_active
+        },
+        "visitors": logs
+    }
+
+
+@app.delete("/api/admin/visitor-logs")
+def clear_visitor_audit_logs(_admin: Dict[str, Any] = Depends(require_admin)):
+    """Reset / clear visitor access logs (Super Admin Only)."""
+    save_visitor_logs([])
+    return {"status": "success", "message": "Visitor audit logs cleared successfully."}
 
 
 @app.post("/api/auth/logout")

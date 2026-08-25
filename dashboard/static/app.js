@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   init3DCyberCore();
   init3DCardTilt();
   await checkAuthSession();
+  checkVisitorAccess();
 
   // Restore saved active view from hash or sessionStorage
   const hashView = window.location.hash.replace('#', '').trim();
@@ -259,6 +260,8 @@ async function handleAdminLogin(e) {
     btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> Sign In as Admin';
 
     closeModal('modal-admin-login');
+    const gate = document.getElementById('visitor-login-gate');
+    if (gate) gate.style.display = 'none';
     renderAuthHeaderUI();
     alert('🎉 Super Admin session authenticated successfully! You now have Full Control.');
     await loadCurrentView(activeView);
@@ -287,8 +290,245 @@ async function logoutAdmin() {
   sessionStorage.removeItem('ccm_admin_token');
   localStorage.removeItem('ccm_admin_token');
   renderAuthHeaderUI();
-  alert('You are now viewing in Public Read-Only mode.');
-  await loadCurrentView(activeView);
+  alert('Logged out from Super Admin session.');
+}
+
+/* ============================================================
+   Visitor Email Gate & Master Admin User Audit Telemetry
+   ============================================================ */
+
+function checkVisitorAccess() {
+  const visitorSession = localStorage.getItem('ai_visitor_session');
+  const adminToken = sessionStorage.getItem('ccm_admin_token') || localStorage.getItem('ccm_admin_token');
+  const gate = document.getElementById('visitor-login-gate');
+  if (!gate) return;
+
+  if (visitorSession || adminToken || currentUserRole === 'admin') {
+    gate.style.display = 'none';
+  } else {
+    gate.style.display = 'flex';
+    const emailInput = document.getElementById('visitor-gate-email');
+    if (emailInput) setTimeout(() => emailInput.focus(), 200);
+  }
+}
+
+async function handleVisitorGateLogin(e) {
+  if (e) e.preventDefault();
+  const emailInput = document.getElementById('visitor-gate-email');
+  const alertBox = document.getElementById('visitor-gate-alert');
+  const btn = document.getElementById('btn-submit-visitor-gate');
+
+  const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    if (alertBox) {
+      alertBox.innerHTML = '<div style="color:#ef4444;"><i class="fa-solid fa-circle-exclamation"></i> Please enter a valid email address.</div>';
+      alertBox.style.display = 'block';
+    }
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Launching AI Dashboard...';
+
+  try {
+    const res = await fetch('/api/auth/visitor-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.status !== 'success') {
+      btn.disabled = false;
+      btn.innerHTML = '<span>Enter AI Dashboard</span> <i class="fa-solid fa-arrow-right"></i>';
+      if (alertBox) {
+        alertBox.innerHTML = `<div style="color:#ef4444;"><i class="fa-solid fa-circle-exclamation"></i> ${data.detail || data.message || 'Access failed.'}</div>`;
+        alertBox.style.display = 'block';
+      }
+      return;
+    }
+
+    // Success: save visitor session
+    localStorage.setItem('ai_visitor_session', data.session_token);
+    localStorage.setItem('ai_visitor_email', data.email);
+
+    const gate = document.getElementById('visitor-login-gate');
+    if (gate) {
+      gate.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      gate.style.opacity = '0';
+      gate.style.pointerEvents = 'none';
+      setTimeout(() => { gate.style.display = 'none'; }, 400);
+    }
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<span>Enter AI Dashboard</span> <i class="fa-solid fa-arrow-right"></i>';
+    if (alertBox) {
+      alertBox.innerHTML = `<div style="color:#ef4444;">Network connection error: ${err.message}</div>`;
+      alertBox.style.display = 'block';
+    }
+  }
+}
+
+function openAdminLoginFromGate() {
+  openAdminLoginModal('Enter Master Admin credentials to unlock Full Control.');
+}
+
+let _cachedVisitorLogs = [];
+
+async function openVisitorAuditModal() {
+  if (currentUserRole !== 'admin') {
+    openAdminLoginModal('Master Admin Authentication Required: Only the Super Admin can view User Audit Logs & Visitor Telemetry.');
+    return;
+  }
+  openModal('modal-visitor-audit');
+  await fetchAndRenderVisitorAuditLogs();
+}
+
+async function fetchAndRenderVisitorAuditLogs() {
+  const tbody = document.getElementById('audit-visitor-tbody');
+  const totalVisitorsEl = document.getElementById('audit-total-visitors');
+  const totalSessionsEl = document.getElementById('audit-total-sessions');
+  const todayActiveEl = document.getElementById('audit-today-active');
+
+  if (tbody) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="padding: 30px; text-align: center; color: var(--text-muted);">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size: 20px; color: var(--accent-purple); margin-bottom: 8px;"></i>
+          <div>Loading Live Visitor Access Telemetry...</div>
+        </td>
+      </tr>
+    `;
+  }
+
+  try {
+    const res = await fetch('/api/admin/visitor-logs', {
+      headers: getAuthHeaders()
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.status !== 'success') {
+      if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="6" style="padding:20px; text-align:center; color:#ef4444;">Failed to load logs: ${data.detail || data.message || 'Access Denied'}</td></tr>`;
+      }
+      return;
+    }
+
+    const summary = data.summary || {};
+    if (totalVisitorsEl) totalVisitorsEl.textContent = summary.total_unique_visitors || 0;
+    if (totalSessionsEl) totalSessionsEl.textContent = summary.total_sessions_recorded || 0;
+    if (todayActiveEl) todayActiveEl.textContent = summary.active_today || 0;
+
+    _cachedVisitorLogs = data.visitors || [];
+    renderVisitorLogsRows(_cachedVisitorLogs);
+  } catch (err) {
+    if (tbody) {
+      tbody.innerHTML = `<tr><td colspan="6" style="padding:20px; text-align:center; color:#ef4444;">Error fetching visitor logs: ${err.message}</td></tr>`;
+    }
+  }
+}
+
+function renderVisitorLogsRows(logs) {
+  const tbody = document.getElementById('audit-visitor-tbody');
+  if (!tbody) return;
+
+  if (!logs || logs.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="padding: 30px; text-align: center; color: var(--text-muted);">
+          <i class="fa-solid fa-user-slash" style="font-size: 22px; color: var(--text-muted); margin-bottom: 8px; opacity: 0.5;"></i>
+          <div>No visitor access logs recorded yet.</div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = logs.map(u => {
+    const ua = u.last_user_agent || '';
+    let deviceBadge = '<span class="badge" style="background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:10px;"><i class="fa-solid fa-desktop"></i> Desktop</span>';
+    if (/mobile|android|iphone|ipad/i.test(ua)) {
+      deviceBadge = '<span class="badge" style="background:rgba(6,182,212,0.12); color:var(--accent-cyan); font-size:10px;"><i class="fa-solid fa-mobile-screen"></i> Mobile Device</span>';
+    }
+
+    return `
+      <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+        <td style="padding: 10px 14px; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700; white-space: nowrap;">${escapeHtml(u.id)}</td>
+        <td style="padding: 10px 14px; font-weight: 700; color: #fff;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg, rgba(168,85,247,0.3), rgba(6,182,212,0.3)); border:1px solid rgba(168,85,247,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; color:#c084fc; font-weight:800;">
+              ${(u.email || 'U').charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <div>${escapeHtml(u.email)}</div>
+              <div style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); margin-top:2px;">First joined: ${escapeHtml(u.first_login || 'N/A')}</div>
+            </div>
+          </div>
+        </td>
+        <td style="padding: 10px 14px; font-family: var(--font-mono); font-size: 11px; color: #38bdf8; white-space: nowrap;">
+          <i class="fa-solid fa-clock"></i> ${escapeHtml(u.last_active || '')}
+        </td>
+        <td style="padding: 10px 14px; text-align: center;">
+          <span class="badge badge-info" style="font-weight: 800; font-size: 11px; padding: 3px 8px;">
+            ${u.total_sessions || 1}
+          </span>
+        </td>
+        <td style="padding: 10px 14px; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); white-space: nowrap;">
+          <i class="fa-solid fa-network-wired" style="color:var(--accent-cyan); font-size:10px;"></i> ${escapeHtml(u.last_ip || 'Hidden')}
+        </td>
+        <td style="padding: 10px 14px; font-size: 11px; color: var(--text-secondary);">
+          ${deviceBadge}
+          <div style="font-size: 10px; color: var(--text-muted); margin-top: 3px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(ua)}">
+            ${escapeHtml(ua.substring(0, 50))}...
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterVisitorLogsTable() {
+  const query = (document.getElementById('audit-search-input')?.value || '').toLowerCase().trim();
+  if (!query) {
+    renderVisitorLogsRows(_cachedVisitorLogs);
+    return;
+  }
+
+  const filtered = _cachedVisitorLogs.filter(u => {
+    return (u.email || '').toLowerCase().includes(query) ||
+           (u.last_ip || '').toLowerCase().includes(query) ||
+           (u.last_user_agent || '').toLowerCase().includes(query) ||
+           (u.last_active || '').toLowerCase().includes(query);
+  });
+
+  renderVisitorLogsRows(filtered);
+}
+
+function exportVisitorLogsCSV() {
+  if (!_cachedVisitorLogs || _cachedVisitorLogs.length === 0) {
+    alert('No visitor logs available to export.');
+    return;
+  }
+
+  const headers = ['User ID', 'Email Address', 'First Login Time', 'Last Active Time', 'Total Sessions', 'Last IP Address', 'User Agent'];
+  const rows = _cachedVisitorLogs.map(u => [
+    `"${u.id || ''}"`,
+    `"${u.email || ''}"`,
+    `"${u.first_login || ''}"`,
+    `"${u.last_active || ''}"`,
+    `"${u.total_sessions || 1}"`,
+    `"${u.last_ip || ''}"`,
+    `"${(u.last_user_agent || '').replace(/"/g, '""')}"`
+  ]);
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `AI_Visitor_Access_Audit_Logs_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 function toggleAdminPasswordVisibility() {
@@ -7183,6 +7423,15 @@ function downloadMasterHandbookPDF() {
   window.open('/api/docs/download-master-handbook', '_blank');
 }
 window.downloadMasterHandbookPDF = downloadMasterHandbookPDF;
+
+// Visitor Gate & Master Admin Audit exports
+window.handleVisitorGateLogin = handleVisitorGateLogin;
+window.openAdminLoginFromGate = openAdminLoginFromGate;
+window.openVisitorAuditModal = openVisitorAuditModal;
+window.fetchAndRenderVisitorAuditLogs = fetchAndRenderVisitorAuditLogs;
+window.filterVisitorLogsTable = filterVisitorLogsTable;
+window.exportVisitorLogsCSV = exportVisitorLogsCSV;
+
 
 
 
