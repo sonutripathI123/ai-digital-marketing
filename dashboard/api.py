@@ -856,67 +856,20 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
         ig_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "instagram"), None)
         li_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "linkedin"), None)
 
-        if effective_site == "ccm":
-            from agents.social_analytics_agent import fetch_real_social_analytics
-            real_social = fetch_real_social_analytics(site_domain=site_domain, site_name=site_name)
-            real_social["scheduled_posts_queue"] = site_sched
-            real_social["total_scheduled_queue"] = len(site_sched) or real_social.get("total_scheduled_queue", 0)
-            if site_sched:
+        from agents.social_analytics_agent import fetch_real_social_analytics
+        real_social = fetch_real_social_analytics(site_id=effective_site, site_domain=site_domain, site_name=site_name)
+        real_social["scheduled_posts_queue"] = site_sched
+        real_social["total_scheduled_queue"] = len(site_sched) or real_social.get("total_scheduled_queue", 0)
+        if "platforms" in real_social:
+            if "facebook" in real_social["platforms"]:
                 real_social["platforms"]["facebook"]["scheduled"] = fb_sched
-                real_social["platforms"]["instagram"]["scheduled"] = ig_sched
-                real_social["platforms"]["linkedin"]["scheduled"] = li_sched
                 if fb_next: real_social["platforms"]["facebook"]["next_scheduled_at"] = fb_next
+            if "instagram" in real_social["platforms"]:
+                real_social["platforms"]["instagram"]["scheduled"] = ig_sched
                 if ig_next: real_social["platforms"]["instagram"]["next_scheduled_at"] = ig_next
+            if "linkedin" in real_social["platforms"]:
+                real_social["platforms"]["linkedin"]["scheduled"] = li_sched
                 if li_next: real_social["platforms"]["linkedin"]["next_scheduled_at"] = li_next
-        elif effective_site == "opal":
-            real_social = {
-                "is_connected": True,
-                "site_id": "opal",
-                "site_name": "Opal Chauffeurs",
-                "site_domain": "https://opalchauffeurs.com.au",
-                "total_published_posts": 40,
-                "total_scheduled_queue": len(site_sched),
-                "scheduled_posts_queue": site_sched,
-                "live_connected_accounts": {
-                    "facebook": {
-                        "connected": True,
-                        "name": "Opal Chauffeur Services & Airport Transfers Melbourne",
-                        "page_id": "102034409405004",
-                        "url": "https://www.facebook.com/102034409405004",
-                        "followers": 27,
-                        "status": "Active"
-                    },
-                    "instagram": {
-                        "connected": True,
-                        "name": "Opal Chauffeurs",
-                        "username": "chauffeursopal",
-                        "account_id": "17841456911741892",
-                        "url": "https://www.instagram.com/chauffeursopal/",
-                        "followers": 100,
-                        "media_count": 40,
-                        "status": "Active"
-                    },
-                    "linkedin": {
-                        "connected": True,
-                        "name": "Opal Chauffeur Services",
-                        "org_id": "87379144",
-                        "url": "https://www.linkedin.com/company/opalchauffeurs/",
-                        "status": "Active"
-                    }
-                },
-                "platforms": {
-                    "facebook": {"published": 0, "scheduled": fb_sched, "next_scheduled_at": fb_next or "None scheduled", "followers": 27, "impressions": 1400, "clicks": 80, "likes": 24, "engagement_rate": "4.2%"},
-                    "instagram": {"published": 40, "scheduled": ig_sched, "next_scheduled_at": ig_next or "None scheduled", "followers": 100, "impressions": 4800, "clicks": 210, "likes": 160, "engagement_rate": "5.6%"},
-                    "linkedin": {"published": 0, "scheduled": li_sched, "next_scheduled_at": li_next or "None scheduled", "followers": 12, "impressions": 850, "clicks": 45, "likes": 18, "engagement_rate": "4.8%"}
-                },
-                "published_posts_history": [],
-                "recommendations": [
-                    "Facebook Page (Opal Chauffeur Services & Airport Transfers Melbourne - 27 followers) is connected.",
-                    "Instagram Business (@chauffeursopal - 40 posts, 100 followers) is connected.",
-                    "LinkedIn Company Page (Opal Chauffeur Services - Org #87379144) is connected.",
-                    f"There are currently {len(site_sched)} upcoming social posts scheduled in queue."
-                ]
-            }
         else:
             real_social = {
                 "is_connected": False,
