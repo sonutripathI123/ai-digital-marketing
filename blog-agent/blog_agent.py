@@ -509,10 +509,47 @@ def cmd_suggest(args, cfg):
              "to 'approved' for the ones you want.", len(ideas), args.site)
 
 
+def check_already_posted_today(site: str, cfg: dict) -> bool:
+    """Checks if a post for this site has already been drafted or published today in local timezone."""
+    now_local = local_now(cfg)
+    today_date_str = now_local.strftime("%Y-%m-%d")
+    today_utc_str = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
+
+    # 1. Check local topics.csv
+    rows = read_topics()
+    for r in rows:
+        if r.get("site") == site and r.get("status") in ["drafted", "published"]:
+            go_live = r.get("go_live_at", "")
+            if today_date_str in go_live or today_utc_str in go_live:
+                return True
+
+    # 2. Check live WordPress REST API (failsafe check)
+    try:
+        site_cfg = get_site(cfg, site)
+        api, auth = wp_auth(site, site_cfg)
+        resp = api.get("posts", auth=auth, params={"per_page": 5, "status": "publish,draft,future"})
+        if resp.status_code == 200:
+            posts = resp.json()
+            for p in posts:
+                p_date = p.get("date", "")
+                if today_date_str in p_date or today_utc_str in p_date:
+                    return True
+    except Exception as e:
+        log.warning("WordPress live posts check notice: %s", e)
+
+    return False
+
+
 def cmd_write(args, cfg):
     if cfg.get("skip_sunday", True) and is_sunday(cfg):
         log.info("Sunday: skipping write run (no posting on Sunday).")
         return
+
+    target_site = getattr(args, "site", None) or "ccm"
+    if not getattr(args, "force", False) and check_already_posted_today(target_site, cfg):
+        log.info("Daily Limit Guard: A blog post for site '%s' has already been drafted or published today (%s). Skipping write to enforce strict 1 post per day.", target_site, local_now(cfg).strftime("%Y-%m-%d"))
+        return
+
     client = anthropic_client()
     rows = read_topics()
     done = 0

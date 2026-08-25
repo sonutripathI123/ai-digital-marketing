@@ -180,3 +180,11 @@
 2026-08-24 10:20:18,160  INFO  write run complete. 1 draft(s) created.
 2026-08-24 10:20:31,695  INFO  Published: best time to leave elwood for the airport -> https://corporatecarsmelbourne.com.au/best-time-to-leave-elwood-for-the-airport/
 2026-08-24 10:20:31,700  INFO  publish run complete. 1 post(s) went live.
+2026-08-25 12:01:04,320  INFO  Writing: lynbrook airport pickup planning (ccm)
+2026-08-25 12:01:48,068  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-08-25 12:01:48,135  INFO  SEO Content Brief Agent auto-optimized post: Planning an Airport Pickup From Lynbrook: What to Know - Planning Airport Pickup Lynbrook (Schema.org JSON-LD injected, LSI checked)
+2026-08-25 12:02:11,922  INFO  Draft created. post_id=20560, featured_media=18891, auto-live at 2026-08-25T06:32:11.922330+00:00
+2026-08-25 12:02:11,927  INFO  write run complete. 1 draft(s) created.
+2026-08-25 12:02:16,467  INFO  Published: lynbrook airport pickup planning -> https://corporatecarsmelbourne.com.au/planning-airport-pickup-lynbrook/
+2026-08-25 12:02:16,471  INFO  publish run complete. 1 post(s) went live.
+2026-08-25 12:21:32,897  INFO  Daily Limit Guard: A blog post for site 'ccm' has already been drafted or published today (2026-08-25). Skipping write to enforce strict 1 post per day.

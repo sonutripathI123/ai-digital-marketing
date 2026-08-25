@@ -2370,3 +2370,65 @@ INFO:     127.0.0.1:51273 - "GET /api/agents/blog-agent/report?site_id=ccm&_t=17
 2026-08-24 10:25:02,377 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
 2026-08-24 10:25:03,812 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-17bdf8b8 successfully.
 INFO:     127.0.0.1:54922 - "GET /api/agents/blog-agent/report?site_id=ccm HTTP/1.1" 200 OK
+2026-08-25 12:01:00,684 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-25 12:01:00,686 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-25 12:01:00,686 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-25 12:01:00,686 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-25 12:01:00,686 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-25 12:01:00,686 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-25 12:01:00,686 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-25 12:01:00,686 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-25 12:01:00,686 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-25 12:01:00,687 [INFO] [central] Registered agent implementation: page-optimizer-agent
+2026-08-25 12:01:00,805 [INFO] [central] Created task task-18bd180a for agent blog-agent (Status: QUEUED)
+2026-08-25 12:01:00,806 [INFO] [agent:agent.blog-agent] Starting execution for task task-18bd180a
+2026-08-25 12:01:00,806 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=write, site=ccm
+INFO:     Started server process [1828]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:50879 - "GET /api/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61284 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61284 - "GET /static/styles.css?v=11.25.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64900 - "GET /static/app.js?v=11.36.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61284 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61284 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64900 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64900 - "GET /api/overview?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61284 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63953 - "GET /api/audit-trail?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63953 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+2026-08-25 12:02:12,229 [INFO] [agent:agent.blog-agent] Completed task task-18bd180a successfully.
+2026-08-25 12:02:12,307 [INFO] [central] Created task task-7b86d8f6 for agent blog-agent (Status: QUEUED)
+2026-08-25 12:02:12,307 [INFO] [agent:agent.blog-agent] Starting execution for task task-7b86d8f6
+2026-08-25 12:02:12,307 [INFO] [agent:agent.blog-agent] Executing BlogAgent task: action=publish, site=ccm
+2026-08-25 12:02:16,777 [INFO] [agent:agent.blog-agent] Completed task task-7b86d8f6 successfully.
+INFO:     127.0.0.1:59779 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59779 - "GET /api/agents/blog-agent/report?site_id=ccm&_t=1787639643075 HTTP/1.1" 200 OK
+2026-08-25 12:05:00,891 [INFO] [central] Created task task-b29e0935 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-25 12:05:00,892 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-b29e0935
+2026-08-25 12:05:00,894 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-25 12:05:13,862 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-b29e0935 successfully.
+INFO:     127.0.0.1:60376 - "GET /api/agents?site_id=opal HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60376 - "GET /api/agents/corporate-cars-social-agent/report?site_id=opal&_t=1787639838851 HTTP/1.1" 200 OK
+2026-08-25 12:10:14,041 [INFO] [central] Created task task-eb5188e8 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-25 12:10:14,042 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-eb5188e8
+2026-08-25 12:10:14,043 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-25 12:10:14,936 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-eb5188e8 successfully.
+2026-08-25 12:15:15,072 [INFO] [central] Created task task-5d7580fb for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-25 12:15:15,073 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-5d7580fb
+2026-08-25 12:15:15,075 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-25 12:15:20,128 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-5d7580fb successfully.
+2026-08-25 12:20:05,321 [INFO] [central] Created task task-906725c9 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-25 12:20:05,321 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-906725c9
+2026-08-25 12:20:05,322 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-25 12:20:06,015 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-906725c9 successfully.

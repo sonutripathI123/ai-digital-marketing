@@ -54460,6 +54460,191 @@
     "input_data": {
       "action": "publish-due"
     },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-24T09:40:05.793009+00:00",
+    "updated_at": "2026-08-24T09:40:05.793009+00:00"
+  },
+  {
+    "task_id": "task-8e7cc869",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-24T09:45:06.681002+00:00",
+    "updated_at": "2026-08-24T09:45:06.681002+00:00"
+  },
+  {
+    "task_id": "task-3a09088a",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-24T09:50:07.543385+00:00",
+    "updated_at": "2026-08-24T09:50:07.543385+00:00"
+  },
+  {
+    "task_id": "task-03e29a75",
+    "agent_id": "page-optimizer-agent",
+    "task_type": "audit_page",
+    "input_data": {
+      "action": "audit_page",
+      "url": "https://corporatecarsmelbourne.com.au/",
+      "focus_keyword": "",
+      "location": "Melbourne & Tullamarine, VIC",
+      "use_ai": true,
+      "site_id": "ccm",
+      "site": "ccm"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "audit_page",
+      "audited_url": "https://corporatecarsmelbourne.com.au/",
+      "focus_keyword": "corporate chauffeur melbourne & tullamarine, vic",
+      "location": "Melbourne & Tullamarine, VIC",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "overall_health_score": 80,
+      "grade": "B+",
+      "algorithm_scores": {
+        "title_and_meta": 75,
+        "heading_hierarchy": 85,
+        "helpful_content": 78,
+        "eeat_trust": 80,
+        "internal_linking": 85
+      },
+      "on_page_metrics": {
+        "title": "Corporate Chauffeur Melbourne & Tullamarine, Vic | Premium Chauffeur Service Melbourne & Tullamarine, VIC | Corporate Cars Melbourne",
+        "title_length": 132,
+        "meta_description": "Experience executive corporate chauffeur melbourne & tullamarine, vic in Melbourne & Tullamarine, VIC with Corporate Cars Melbourne. Punctual, luxury vehicles and 24/7 flight tracking. Book online now.",
+        "current_h1": "Corporate Chauffeur Melbourne & Tullamarine, Vic in Melbourne & Tullamarine, VIC",
+        "total_h2_count": 4,
+        "current_word_count": 840,
+        "recommended_word_count": "1,100 - 1,400 words",
+        "has_schema_markup": false,
+        "has_canonical": false
+      },
+      "optimized_headings_recommendations": {
+        "proposed_h1": "Premium Corporate Chauffeur Melbourne & Tullamarine, Vic in Melbourne & Tullamarine, VIC | Dedicated Luxury Transport",
+        "proposed_h2_sections": [
+          "1. Why Executive Corporate Chauffeur Melbourne & Tullamarine, Vic Outperforms Standard Rideshare in Melbourne & Tullamarine, VIC",
+          "2. Seamless Airport Transfers & Flight-Tracking Guarantee at Tullamarine",
+          "3. Transparent Fixed Pricing & Corporate Billing Options",
+          "4. Our Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+          "5. Frequently Asked Questions About Melbourne & Tullamarine, VIC Chauffeurs"
+        ],
+        "proposed_h3_faqs": [
+          "How early should I reserve my Melbourne & Tullamarine, VIC chauffeur?",
+          "What happens if my incoming flight is delayed?",
+          "Are toll charges and airport parking fees included in the fixed quote?"
+        ]
+      },
+      "internal_linking_recommendations": [
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "recommended_anchor": "Melbourne & Tullamarine, VIC Airport Transfers",
+          "context": "Contextual link from the airport transportation section to primary airport pillar page.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "recommended_anchor": "Executive Luxury Fleet",
+          "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
+          "importance": "HIGH"
+        },
+        {
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "recommended_anchor": "Corporate Chauffeur Accounts",
+          "context": "Link from business travel section to capture high-value corporate billing leads.",
+          "importance": "MEDIUM"
+        }
+      ],
+      "eeat_trust_recommendations": [
+        "Add verified Google Review rating badge / Trustpilot widget snippet directly on page.",
+        "Display transparent fixed-price estimate chart or instant booking calculator.",
+        "Include chauffeur driver qualification credentials (police check, commercial accreditation, flight tracking)."
+      ],
+      "identified_issues": [
+        {
+          "level": "MEDIUM",
+          "item": "Word Count Below Top Competitor Average",
+          "fix": "Expand from 840 to ~1,250 words by adding an Executive Chauffeur Comparison section."
+        }
+      ],
+      "ready_to_paste_schema_json": "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"LocalBusiness\",\n  \"name\": \"Corporate Cars Melbourne\",\n  \"url\": \"https://corporatecarsmelbourne.com.au/\",\n  \"description\": \"Premium private chauffeur and executive airport transfer service in Melbourne & Tullamarine, VIC.\",\n  \"areaServed\": {\n    \"@type\": \"City\",\n    \"name\": \"Melbourne & Tullamarine, VIC\"\n  },\n  \"priceRange\": \"$$$\",\n  \"aggregateRating\": {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": \"4.9\",\n    \"reviewCount\": \"142\"\n  }\n}",
+      "executive_action_checklist": [
+        "1. [H1 FIX] Update main heading to: 'Premium Corporate Chauffeur Melbourne & Tullamarine, Vic in Melbourne & Tullamarine, VIC | Dedicated Luxury Transport'.",
+        "2. [INTERNAL LINKS] Insert 3 deep links to Airport Transfers, Fleet, and Corporate Services.",
+        "3. [HCU EXPANSION] Add FAQ section with 3 schema-marked questions to capture Google Featured Snippets.",
+        "4. [SCHEMA] Embed the generated LocalBusiness JSON-LD markup into page footer."
+      ],
+      "audited_at": "2026-08-24 09:54:21 UTC",
+      "ai_summary": ""
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "claude-sonnet-4-6",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-24T09:54:09.731289+00:00",
+    "updated_at": "2026-08-24T09:54:09.731289+00:00"
+  },
+  {
+    "task_id": "task-58fcfa34",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
     "status": "QUEUED",
     "priority": "NORMAL",
     "requires_approval": false,
@@ -54471,7 +54656,153 @@
     "model_used": null,
     "tokens_used": 0,
     "cost_usd": 0.0,
-    "created_at": "2026-08-24T09:40:05.793009+00:00",
-    "updated_at": "2026-08-24T09:40:05.793009+00:00"
+    "created_at": "2026-08-24T09:55:08.545060+00:00",
+    "updated_at": "2026-08-24T09:55:08.545060+00:00"
+  },
+  {
+    "task_id": "task-18bd180a",
+    "agent_id": "blog-agent",
+    "task_type": "write",
+    "input_data": {
+      "action": "write"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "write",
+      "site": "ccm",
+      "details": "2026-08-25 12:01:04,320  INFO  Writing: lynbrook airport pickup planning (ccm)\n2026-08-25 12:01:48,068  INFO  HTTP Request: POST https://api.anthropic.com/v1/messages \"HTTP/1.1 200 OK\"\n2026-08-25 12:01:48,135  INFO  SEO Content Brief Agent auto-optimized post: Planning an Airport Pickup From Lynbrook: What to Know - Planning Airport Pickup Lynbrook (Schema.org JSON-LD injected, LSI checked)\n2026-08-25 12:02:11,922  INFO  Draft created. post_id=20560, featured_media=18891, auto-live at 2026-08-25T06:32:11.922330+00:00\n2026-08-25 12:02:11,927  INFO  write run complete. 1 draft(s) created."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-25T06:31:00.726783+00:00",
+    "updated_at": "2026-08-25T06:31:00.726783+00:00"
+  },
+  {
+    "task_id": "task-7b86d8f6",
+    "agent_id": "blog-agent",
+    "task_type": "publish",
+    "input_data": {
+      "action": "publish"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish",
+      "site": "ccm",
+      "details": "2026-08-25 12:02:16,467  INFO  Published: lynbrook airport pickup planning -> https://corporatecarsmelbourne.com.au/planning-airport-pickup-lynbrook/\n2026-08-25 12:02:16,471  INFO  publish run complete. 1 post(s) went live."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-25T06:32:12.230114+00:00",
+    "updated_at": "2026-08-25T06:32:12.230114+00:00"
+  },
+  {
+    "task_id": "task-b29e0935",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 2, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}\n\n2026-08-25 12:05:05,465 INFO    publishing: Published post 38 to linkedin (platform id urn:li:share:7497904376821444609)\n2026-08-25 12:05:13,746 INFO    publishing: Published post 36 to facebook (platform id 791630667378039_122150776245049450)"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-25T06:35:00.698222+00:00",
+    "updated_at": "2026-08-25T06:35:00.698222+00:00"
+  },
+  {
+    "task_id": "task-eb5188e8",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-25T06:40:13.876037+00:00",
+    "updated_at": "2026-08-25T06:40:13.876037+00:00"
+  },
+  {
+    "task_id": "task-5d7580fb",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "publish-due",
+      "platform": "all",
+      "details": "Result: {'published': 0, 'failed': 0, 'skipped_backoff': 0, 'skipped_daily_limit': 0, 'skipped_integrity': 0, 'dry_run': 0}"
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "subprocess-agent-flow",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-25T06:45:14.970921+00:00",
+    "updated_at": "2026-08-25T06:45:14.970921+00:00"
+  },
+  {
+    "task_id": "task-906725c9",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-25T06:50:05.141156+00:00",
+    "updated_at": "2026-08-25T06:50:05.141156+00:00"
   }
 ]

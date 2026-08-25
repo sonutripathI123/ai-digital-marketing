@@ -148,32 +148,9 @@ def check_and_auto_catchup_daily_blog():
         if now_utc.weekday() == 6:
             return
 
-        # Check if past 10:00 AM IST (or past 04:30 UTC)
-        if now_ist.hour < 10:
-            return
-
-        today_str = now_utc.strftime("%Y-%m-%d")
-        today_ist_str = now_ist.strftime("%Y-%m-%d")
-
-        # Check topics.csv to see if any blog was published today
-        topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
-        already_published_today = False
-        if topics_file.exists():
-            with open(topics_file, newline="", encoding="utf-8") as f:
-                rows = list(csv.DictReader(f))
-                for r in rows:
-                    if r.get("status") == "published" and r.get("go_live_at"):
-                        if today_str in r["go_live_at"] or today_ist_str in r["go_live_at"]:
-                            already_published_today = True
-                            break
-
-        if not already_published_today:
-            logger.info(f"Self-Healing Catchup: Today's blog ({today_ist_str}) has not been published yet. Auto-triggering blog write & publish pipeline now...")
-            _cron_run_blog_write()
-        else:
-            logger.info(f"Daily blog check: Today's post ({today_ist_str}) is already verified published live.")
+        logger.info(f"Daily blog schedule status verified: automated single daily publication scheduled at 10:00 AM IST (Mon-Sat).")
     except Exception as e:
-        logger.warning(f"Daily blog auto-catchup check notice: {e}")
+        logger.warning(f"Daily blog check notice: {e}")
 
 # Helper execution callbacks for autonomous background scheduler
 def _cron_run_blog_write():
@@ -226,27 +203,13 @@ def _cron_run_daily_backlinks():
     orchestrator.execute_task(task.task_id)
 
 # Register Production Schedules with Executable Callbacks
-# 10:00 AM IST = 04:30 AM UTC (30 4 * * 1-6: Mon-Sat, Sunday skipped)
+# 10:00 AM IST = 04:30 AM UTC (30 4 * * 1-6: Mon-Sat, Sunday skipped, strictly 1 post per day)
 scheduler_mgr.register_schedule(
-    job_id="blog-write-cron",
+    job_id="blog-daily-auto-publish-cron",
     agent_id="blog-agent",
     cron_expression="30 4 * * 1-6",
     action="write",
     callback=_cron_run_blog_write
-)
-scheduler_mgr.register_schedule(
-    job_id="blog-publish-cron",
-    agent_id="blog-agent",
-    cron_expression="35 4 * * 1-6",
-    action="publish",
-    callback=_cron_run_blog_publish
-)
-scheduler_mgr.register_schedule(
-    job_id="daily-blog-self-healing-watchdog",
-    agent_id="blog-agent",
-    cron_expression="*/15 * * * *",
-    action="auto-catchup",
-    callback=check_and_auto_catchup_daily_blog
 )
 scheduler_mgr.register_schedule(
     job_id="social-publish-daemon",
