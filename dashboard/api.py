@@ -1643,38 +1643,59 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
     site_prof = websites_mgr.get(site)
     brand_name = site_prof.name if site_prof else ("Opal Chauffeurs" if site == "opal" else "Corporate Cars Melbourne")
 
-    now_utc = datetime.now(timezone.utc)
-    tomorrow = now_utc + timedelta(days=1)
-    base_time = tomorrow.replace(hour=0, minute=0, second=0, microsecond=0)
-    post_index = 0
-
+    # Build list of scheduled posts distributed evenly (2 posts per platform per week = 6 posts/week across Tue/Thu/Sat)
+    raw_posts = []
     for kw in lines:
         for platform in platforms:
-            post_index += 1
-            if req.posts_per_week == 2:
-                days_offset = (post_index - 1) * 3 + (1 if post_index % 2 == 0 else 0)
-            elif req.posts_per_week == 1:
-                days_offset = (post_index - 1) * 7
-            elif req.posts_per_week == 7:
-                days_offset = post_index - 1
-            else:
-                days_offset = (post_index - 1) * 2  # Default 3 posts/week
+            raw_posts.append((kw, platform.capitalize()))
 
-            publish_time = base_time + timedelta(days=days_offset)
+    # Calculate dates: Week 1, Week 2, Week 3...
+    # Each week has 6 slots:
+    # Slot 0: Tue Morning (09:30 AM)
+    # Slot 1: Tue Afternoon (02:30 PM)
+    # Slot 2: Thu Morning (09:30 AM)
+    # Slot 3: Thu Afternoon (02:30 PM)
+    # Slot 4: Sat Morning (09:30 AM)
+    # Slot 5: Sat Afternoon (02:30 PM)
+    
+    # Calculate start Tuesday
+    # If today is Tuesday, start today, else find current/next Tuesday
+    now_local = datetime.now(ZoneInfo("Australia/Melbourne"))
+    days_to_tue = (1 - now_local.weekday()) % 7
+    start_tue = (now_local + timedelta(days=days_to_tue)).date()
 
-            caption = f"Experience unmatched elegance with {brand_name}. From luxury airport transfers to corporate executive chauffeur travel across {kw}, we deliver discretion, comfort, and punctuality every single journey."
-            hashtags = f"#{brand_name.replace(' ', '')} #{kw.replace(' ', '')} #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur"
+    for idx, (kw, platform) in enumerate(raw_posts):
+        week_num = (idx // 6) + 1
+        slot_in_week = idx % 6
+        
+        week_offset_days = (week_num - 1) * 7
+        if slot_in_week in (0, 1):
+            day_delta = 0  # Tuesday
+            time_str = "09:30 AM" if slot_in_week == 0 else "02:30 PM"
+        elif slot_in_week in (2, 3):
+            day_delta = 2  # Thursday
+            time_str = "09:30 AM" if slot_in_week == 2 else "02:30 PM"
+        else:
+            day_delta = 4  # Saturday
+            time_str = "09:30 AM" if slot_in_week == 4 else "02:30 PM"
 
-            scheduled_posts.append({
-                "id": f"soc_{site}_{post_index:04d}",
-                "site": site,
-                "platform": platform.capitalize(),
-                "keyword": kw,
-                "caption": caption,
-                "hashtags": hashtags,
-                "scheduled_for": publish_time.strftime("%a %d %b %Y at 09:30 AM (Melbourne Time)"),
-                "status": "scheduled"
-            })
+        target_date = start_tue + timedelta(days=week_offset_days + day_delta)
+        sched_time_str = target_date.strftime(f"%a %d %b %Y at {time_str} (Melbourne Time)")
+
+        caption = f"Experience unmatched elegance with {brand_name}. From luxury airport transfers to corporate executive chauffeur travel across {kw}, we deliver discretion, comfort, and punctuality every single journey."
+        hashtags = f"#{brand_name.replace(' ', '')} #{kw.replace(' ', '')} #ChauffeurService #LuxuryTravel #ExecutiveTransfer #AirportChauffeur"
+
+        scheduled_posts.append({
+            "id": f"soc_{site}_{idx+1:04d}",
+            "site": site,
+            "platform": platform,
+            "keyword": kw,
+            "caption": caption,
+            "hashtags": hashtags,
+            "scheduled_for": sched_time_str,
+            "week_number": week_num,
+            "status": "scheduled"
+        })
 
     # Persist to data/social_scheduled_campaigns.json
     sched_file = Path("data/social_scheduled_campaigns.json")

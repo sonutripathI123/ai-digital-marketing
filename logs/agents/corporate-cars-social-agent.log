@@ -1006,3 +1006,12 @@
 2026-08-25 12:20:05,321 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-906725c9
 2026-08-25 12:20:05,322 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
 2026-08-25 12:20:06,015 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-906725c9 successfully.
+2026-08-25 12:25:03,929 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-a91efadf
+2026-08-25 12:25:03,930 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-25 12:25:04,772 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-a91efadf successfully.
+2026-08-25 12:30:04,851 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-1cc30f46
+2026-08-25 12:30:04,851 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-25 12:30:05,767 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-1cc30f46 successfully.
+2026-08-25 12:35:05,852 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-94d43c91
+2026-08-25 12:35:05,853 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-25 12:35:06,599 [INFO] [agent:agent.corporate-cars-social-agent] Completed task task-94d43c91 successfully.
