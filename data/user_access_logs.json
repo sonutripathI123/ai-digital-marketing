@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "usr_0001",
+    "email": "sonundmitteamb@gmail.com",
+    "first_login": "26 Aug 2026, 10:07 AM IST (02:37 PM Melbourne)",
+    "last_active": "26 Aug 2026, 10:07 AM IST (02:37 PM Melbourne)",
+    "last_ip": "127.0.0.1",
+    "last_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "total_sessions": 1,
+    "session_history": [
+      {
+        "timestamp": "26 Aug 2026, 10:07 AM IST (02:37 PM Melbourne)",
+        "ip": "127.0.0.1",
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
+      }
+    ]
+  }
+]

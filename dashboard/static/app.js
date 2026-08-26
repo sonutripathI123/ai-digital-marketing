@@ -5940,6 +5940,8 @@ function openAddSocialCampaignModal(siteId) {
       </option>
     `).join('');
   }
+  const freqSelect = document.getElementById('social-frequency-select');
+  if (freqSelect) freqSelect.value = '2';
   const textarea = document.getElementById('social-keywords-textarea');
   if (textarea) textarea.value = '';
   updateSocialKeywordCounter();
@@ -5959,7 +5961,7 @@ async function handleSaveSocialCampaign(e) {
   if (!requireAdminAction('create and schedule social campaigns')) return;
   const site = document.getElementById('social-campaign-site-select').value;
   const rawKeywords = document.getElementById('social-keywords-textarea').value.trim();
-  const frequency = parseInt(document.getElementById('social-frequency-select').value) || 3;
+  const frequency = parseInt(document.getElementById('social-frequency-select').value) || 2;
   const btn = document.getElementById('btn-save-social-campaign');
 
   if (!rawKeywords) {
