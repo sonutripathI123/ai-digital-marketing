@@ -24,6 +24,7 @@ import json
 import base64
 import logging
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from fastapi import FastAPI, HTTPException, Depends, Header, Query, Request
@@ -1723,74 +1724,42 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
     if not platforms:
         platforms = ["instagram", "facebook", "linkedin"]
 
+    posts_per_week = req.posts_per_week or 2
     site_prof = websites_mgr.get(site)
     brand_name = site_prof.name if site_prof else ("Opal Chauffeurs" if site == "opal" else "Corporate Cars Melbourne")
+    site_domain = site_prof.domain if site_prof else ("https://opalchauffeurs.com.au" if site == "opal" else "https://corporatecarsmelbourne.com.au")
 
-    # Build list of scheduled posts distributed evenly (2 posts per platform per week = 6 posts/week across Tue/Thu/Sat)
+    # Build list of scheduled posts distributed evenly
     raw_posts = []
     for kw in lines:
         for platform in platforms:
             raw_posts.append((kw, platform.capitalize()))
 
-    # Calculate dates: Week 1, Week 2, Week 3...
-    # Each week has 6 slots:
-    # Slot 0: Tue Morning (09:30 AM)
-    # Slot 1: Tue Afternoon (02:30 PM)
-    # Slot 2: Thu Morning (09:30 AM)
-    # Slot 3: Thu Afternoon (02:30 PM)
-    # Slot 4: Sat Morning (09:30 AM)
-    # Slot 5: Sat Afternoon (02:30 PM)
-    
-    # Calculate start Tuesday
-    # If today is Tuesday, start today, else find current/next Tuesday
+    # Build schedule slots in Melbourne local timezone
     now_local = datetime.now(ZoneInfo("Australia/Melbourne"))
     days_to_tue = (1 - now_local.weekday()) % 7
+    if days_to_tue == 0 and now_local.hour >= 15:
+        days_to_tue = 7
     start_tue = (now_local + timedelta(days=days_to_tue)).date()
 
-    for idx, (kw, platform) in enumerate(raw_posts):
-        week_num = (idx // 6) + 1
-        slot_in_week = idx % 6
+    schedule_slots = []
+    for w in range(12):
+        tue_date = start_tue + timedelta(days=w * 7)
+        thu_date = tue_date + timedelta(days=2)
+        sat_date = tue_date + timedelta(days=4)
         
-        week_offset_days = (week_num - 1) * 7
-        if slot_in_week in (0, 1):
-            day_delta = 0  # Tuesday
-            time_str = "09:30 AM" if slot_in_week == 0 else "02:30 PM"
-        elif slot_in_week in (2, 3):
-            day_delta = 2  # Thursday
-            time_str = "09:30 AM" if slot_in_week == 2 else "02:30 PM"
-        else:
-            day_delta = 4  # Saturday
-            time_str = "09:30 AM" if slot_in_week == 4 else "02:30 PM"
+        schedule_slots.append((tue_date.strftime("%a %d %b %Y at 09:30 AM (Melbourne Time)"), w + 1))
+        schedule_slots.append((tue_date.strftime("%a %d %b %Y at 02:30 PM (Melbourne Time)"), w + 1))
+        schedule_slots.append((thu_date.strftime("%a %d %b %Y at 09:30 AM (Melbourne Time)"), w + 1))
+        schedule_slots.append((thu_date.strftime("%a %d %b %Y at 02:30 PM (Melbourne Time)"), w + 1))
+        schedule_slots.append((sat_date.strftime("%a %d %b %Y at 09:30 AM (Melbourne Time)"), w + 1))
+        schedule_slots.append((sat_date.strftime("%a %d %b %Y at 02:30 PM (Melbourne Time)"), w + 1))
 
-        target_date = start_tue + timedelta(days=week_offset_days + day_delta)
-        sched_time_str = target_date.strftime(f"%a %d %b %Y at {time_str} (Melbourne Time)")
+    # Retrieve rotating images from luxury fleet image library (29 high-res fleet photos)
+    img_dir = Path(ROOT_DIR) / "corporate-cars-social-agent" / "images"
+    all_imgs = sorted(list(img_dir.rglob("*.jpg"))) if img_dir.exists() else []
 
-        # Assign rotating image from luxury fleet image library (29 high-res fleet photos)
-        img_dir = Path(ROOT_DIR) / "corporate-cars-social-agent" / "images"
-        all_imgs = []
-        if img_dir.exists():
-            for ext in ("*.jpg", "*.jpeg", "*.png"):
-                all_imgs.extend(list(img_dir.rglob(ext)))
-        all_imgs = sorted(all_imgs)
-        assigned_img = all_imgs[idx % len(all_imgs)] if all_imgs else None
-        img_rel = str(assigned_img.relative_to(img_dir.parent)).replace("\\", "/") if assigned_img else ""
-        img_name = assigned_img.name if assigned_img else "luxury-fleet.jpg"
-
-        scheduled_posts.append({
-            "id": f"soc_{site}_{idx+1:04d}",
-            "site": site,
-            "platform": platform,
-            "keyword": kw,
-            "caption": caption,
-            "hashtags": hashtags,
-            "scheduled_for": sched_time_str,
-            "week_number": week_num,
-            "image_path": img_rel,
-            "image_name": img_name,
-            "status": "scheduled"
-        })
-
-    # Persist to data/social_scheduled_campaigns.json
+    # Read existing campaigns to determine ID offset
     sched_file = Path("data/social_scheduled_campaigns.json")
     sched_file.parent.mkdir(parents=True, exist_ok=True)
     existing_all = []
@@ -1801,15 +1770,52 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
         except Exception:
             existing_all = []
 
-    # Merge avoiding duplicate IDs
+    site_existing_count = len([p for p in existing_all if p.get("site") == site])
+    start_id_num = site_existing_count + 1
+
+    scheduled_posts = []
+    for idx, (kw, platform) in enumerate(raw_posts):
+        sched_time_str, week_num = schedule_slots[idx % len(schedule_slots)]
+        
+        assigned_img = all_imgs[(idx + (15 if site == "opal" else 0)) % len(all_imgs)] if all_imgs else None
+        img_rel = str(assigned_img.relative_to(img_dir.parent)).replace("\\", "/") if assigned_img else ""
+        img_name = assigned_img.name if assigned_img else "luxury-fleet.jpg"
+
+        # Tailor caption and hashtags by platform
+        if platform.lower() == "linkedin":
+            caption = f"Elevate your corporate travel standards across Melbourne with {brand_name}. Seamless executive transfers for {kw}. Book our premium fleet today."
+            hashtags = f"#CorporateChauffeur #MelbourneBusiness #ExecutiveTravel #AirportTransfers #{brand_name.replace(' ', '')}"
+        elif platform.lower() == "instagram":
+            caption = f"Refined comfort and seamless elegance. ✨ Traveling across Melbourne for {kw.lower()}? Choose {brand_name} for an effortless luxury experience."
+            hashtags = f"#MelbourneChauffeur #LuxuryCars #MelbourneAirport #ChauffeurService #VIPTravel #{brand_name.replace(' ', '')}"
+        else:
+            caption = f"Experience premium comfort, punctual arrivals, and professional private drivers with {brand_name}. Specialists in {kw.lower()}."
+            hashtags = f"#MelbourneTransfers #AirportPickups #ChauffeurMelbourne #{brand_name.replace(' ', '')}"
+
+        scheduled_posts.append({
+            "id": f"soc_{site}_{start_id_num + idx:04d}",
+            "site": site,
+            "platform": platform,
+            "keyword": kw,
+            "caption": caption,
+            "hashtags": hashtags,
+            "scheduled_for": sched_time_str,
+            "week_number": week_num,
+            "cadence": f"{posts_per_week} Posts Per Platform Per Week",
+            "image_path": img_rel,
+            "image_name": img_name,
+            "status": "scheduled"
+        })
+
+    # Merge with existing, filtering by new IDs
     new_ids = {sp["id"] for sp in scheduled_posts}
-    updated_all = scheduled_posts + [p for p in existing_all if p.get("id") not in new_ids]
+    updated_all = [p for p in existing_all if p.get("id") not in new_ids] + scheduled_posts
     with open(sched_file, "w", encoding="utf-8") as f:
         json.dump(updated_all, f, indent=2)
 
     return {
         "status": "success",
-        "message": f"Successfully generated and scheduled {len(scheduled_posts)} social posts across {len(platforms)} platforms for [{site.upper()}].",
+        "message": f"Successfully generated and scheduled {len(scheduled_posts)} social posts across {len(platforms)} platforms for [{brand_name.upper()}].",
         "site": site,
         "keywords_count": len(lines),
         "scheduled_posts_count": len(scheduled_posts),

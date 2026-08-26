@@ -4577,3 +4577,217 @@ NameError: name 'now' is not defined
 2026-08-26 11:32:54,336 [WARNING] [agent:agent.social-analytics-agent] Failed to query live IG media: HTTPSConnectionPool(host='graph.facebook.com', port=443): Read timed out. (read timeout=3)
 INFO:     127.0.0.1:51161 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm HTTP/1.1" 200 OK
 INFO:     127.0.0.1:51168 - "GET /api/agents/corporate-cars-social-agent/report?site_id=opal HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62685 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62685 - "GET /static/styles.css?v=11.25.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /static/app.js?v=11.39.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53216 - "GET /static/app.js?v=11.39.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /api/auth/session HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62685 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62685 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62685 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62685 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62685 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787724259853 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58930 - "GET /api/agents/seo-keyword-agent/report?site_id=ccm&_t=1787724276293 HTTP/1.1" 200 OK
+2026-08-26 11:35:02,371 [INFO] [central] Created task task-be1476cf for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 11:35:02,371 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-be1476cf
+2026-08-26 11:35:02,372 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-26 11:35:04,291 [WARNING] [agent:agent.corporate-cars-social-agent] Task task-be1476cf attempt 1 failed: Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-a |
+| gent\cli.py:124 in publish_due_cmd                                          |
+|                                                                             |
+|   121     if dry_run:                                                       |
+|   122         typer.secho("DRY RUN — nothing will be posted (use --live to  |
+|       publish)",                                                            |
+|   123                     fg=typer.colors.YELLOW)                           |
+| > 124     counts = publish_due(session, dry_run=dry_run)                    |
+|   125     typer.echo(f"Result: {counts}")                                   |
+|   126     session.close()                                                   |
+|   127                                                                       |
+|                                                                             |
+| C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-a |
+| gent\publishing.py:93 in publish_due                                        |
+|                                                                             |
+|    90             log.info("Skipping post %d for %s — daily limit of 1 post |
+|       reached for today", post.id, plat.value)                              |
+|    91             continue                                                  |
+|    92                                                                       |
+| >  93         if not _retry_due(entry, now):                                |
+|    94             counts["skipped_backoff"] += 1                            |
+|    95             continue                                                  |
+|    96                                                                       |
++-----------------------------------------------------------------------------+
+NameError: name 'now' is not defined. Retrying.
+2026-08-26 11:35:04,296 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-be1476cf
+2026-08-26 11:35:04,297 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-26 11:35:06,178 [WARNING] [agent:agent.corporate-cars-social-agent] Task task-be1476cf attempt 2 failed: Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-a |
+| gent\cli.py:124 in publish_due_cmd                                          |
+|                                                                             |
+|   121     if dry_run:                                                       |
+|   122         typer.secho("DRY RUN — nothing will be posted (use --live to  |
+|       publish)",                                                            |
+|   123                     fg=typer.colors.YELLOW)                           |
+| > 124     counts = publish_due(session, dry_run=dry_run)                    |
+|   125     typer.echo(f"Result: {counts}")                                   |
+|   126     session.close()                                                   |
+|   127                                                                       |
+|                                                                             |
+| C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-a |
+| gent\publishing.py:93 in publish_due                                        |
+|                                                                             |
+|    90             log.info("Skipping post %d for %s — daily limit of 1 post |
+|       reached for today", post.id, plat.value)                              |
+|    91             continue                                                  |
+|    92                                                                       |
+| >  93         if not _retry_due(entry, now):                                |
+|    94             counts["skipped_backoff"] += 1                            |
+|    95             continue                                                  |
+|    96                                                                       |
++-----------------------------------------------------------------------------+
+NameError: name 'now' is not defined. Retrying.
+2026-08-26 11:35:06,185 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-be1476cf
+2026-08-26 11:35:06,186 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+INFO:     127.0.0.1:49236 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49236 - "GET /static/styles.css?v=11.25.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49714 - "GET /static/app.js?v=11.39.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49714 - "GET /static/fleet_sclass.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49714 - "GET /api/websites HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49714 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49714 - "GET /static/fleet_vclass.jpg HTTP/1.1" 200 OK
+2026-08-26 11:35:07,888 [WARNING] [agent:agent.corporate-cars-social-agent] Task task-be1476cf attempt 3 failed: Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-a |
+| gent\cli.py:124 in publish_due_cmd                                          |
+|                                                                             |
+|   121     if dry_run:                                                       |
+|   122         typer.secho("DRY RUN — nothing will be posted (use --live to  |
+|       publish)",                                                            |
+|   123                     fg=typer.colors.YELLOW)                           |
+| > 124     counts = publish_due(session, dry_run=dry_run)                    |
+|   125     typer.echo(f"Result: {counts}")                                   |
+|   126     session.close()                                                   |
+|   127                                                                       |
+|                                                                             |
+| C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-a |
+| gent\publishing.py:93 in publish_due                                        |
+|                                                                             |
+|    90             log.info("Skipping post %d for %s — daily limit of 1 post |
+|       reached for today", post.id, plat.value)                              |
+|    91             continue                                                  |
+|    92                                                                       |
+| >  93         if not _retry_due(entry, now):                                |
+|    94             counts["skipped_backoff"] += 1                            |
+|    95             continue                                                  |
+|    96                                                                       |
++-----------------------------------------------------------------------------+
+NameError: name 'now' is not defined. Retrying.
+2026-08-26 11:35:07,900 [INFO] [agent:agent.corporate-cars-social-agent] Starting execution for task task-be1476cf
+2026-08-26 11:35:07,900 [INFO] [agent:agent.corporate-cars-social-agent] Executing SocialAgent task: action=publish-due, platform=all
+2026-08-26 11:35:09,818 [ERROR] [agent:agent.corporate-cars-social-agent] Task task-be1476cf permanently failed: Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-a |
+| gent\cli.py:124 in publish_due_cmd                                          |
+|                                                                             |
+|   121     if dry_run:                                                       |
+|   122         typer.secho("DRY RUN — nothing will be posted (use --live to  |
+|       publish)",                                                            |
+|   123                     fg=typer.colors.YELLOW)                           |
+| > 124     counts = publish_due(session, dry_run=dry_run)                    |
+|   125     typer.echo(f"Result: {counts}")                                   |
+|   126     session.close()                                                   |
+|   127                                                                       |
+|                                                                             |
+| C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-a |
+| gent\publishing.py:93 in publish_due                                        |
+|                                                                             |
+|    90             log.info("Skipping post %d for %s — daily limit of 1 post |
+|       reached for today", post.id, plat.value)                              |
+|    91             continue                                                  |
+|    92                                                                       |
+| >  93         if not _retry_due(entry, now):                                |
+|    94             counts["skipped_backoff"] += 1                            |
+|    95             continue                                                  |
+|    96                                                                       |
++-----------------------------------------------------------------------------+
+NameError: name 'now' is not defined
+2026-08-26 11:35:13,387 [WARNING] [agent:agent.social-analytics-agent] Failed to query live IG media: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/17841477866530528/media?fields=id,caption,media_type,permalink,timestamp,like_count,comments_count&limit=25&access_token=[REDACTED] (Caused by ConnectTimeoutError(<HTTPSConnection(host='graph.facebook.com', port=443) at 0x2969c5bce60>, 'Connection to graph.facebook.com timed out. (connect timeout=3)'))
+2026-08-26 11:35:13,408 [WARNING] [agent:agent.social-analytics-agent] Failed to query live FB feed: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/791630667378039/feed?fields=id,message,created_time,permalink_url,likes.summary(true),comments.summary(true)&limit=15&access_token=[REDACTED] (Caused by NameResolutionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to resolve 'graph.facebook.com' ([Errno 11001] getaddrinfo failed)"))
+2026-08-26 11:35:13,426 [WARNING] [agent:agent.social-analytics-agent] Meta FB live fetch failed: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/791630667378039?fields=name,followers_count,fan_count&access_token=[REDACTED] (Caused by NameResolutionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to resolve 'graph.facebook.com' ([Errno 11001] getaddrinfo failed)"))
+2026-08-26 11:35:13,429 [WARNING] [agent:agent.social-analytics-agent] Meta IG live fetch failed: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/17841477866530528?fields=username,followers_count,media_count&access_token=[REDACTED] (Caused by NameResolutionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to resolve 'graph.facebook.com' ([Errno 11001] getaddrinfo failed)"))
+2026-08-26 11:35:13,435 [WARNING] [agent:agent.social-analytics-agent] LinkedIn live fetch failed: HTTPSConnectionPool(host='api.linkedin.com', port=443): Max retries exceeded with url: /v2/organizations/109059206 (Caused by NameResolutionError("HTTPSConnection(host='api.linkedin.com', port=443): Failed to resolve 'api.linkedin.com' ([Errno 11001] getaddrinfo failed)"))
+INFO:     127.0.0.1:49714 - "GET /api/agents/corporate-cars-social-agent/report?site_id=ccm&_t=1787724310359 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59887 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59887 - "GET /api/agents?site_id=ccm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58980 - "POST /api/agents/social-agent/campaign/add HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\uvicorn\protocols\http\h11_impl.py", line 416, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\uvicorn\middleware\proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\fastapi\applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\dashboard\api.py", line 78, in add_no_cache_headers
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2596, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\corporate-cars-social-agent\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1029, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\AI-Digital-Marketing\dashboard\api.py", line 1746, in add_social_campaign
+    now_local = datetime.now(ZoneInfo("Australia/Melbourne"))
+                             ^^^^^^^^
+NameError: name 'ZoneInfo' is not defined

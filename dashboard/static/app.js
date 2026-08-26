@@ -6011,6 +6011,10 @@ async function handleSaveSocialCampaign(e) {
     closeModal('modal-add-social-campaign');
     alert(`🎉 Success! Generated and scheduled ${data.scheduled_posts_count} new social posts across ${data.platforms.length} platforms for [${site.toUpperCase()}].\nPosts are queued in auto-publish scheduler.`);
     await loadAgents();
+    const modalReport = document.getElementById('modal-agent-report');
+    if (modalReport && modalReport.style.display !== 'none') {
+      await viewAgentReport('corporate-cars-social-agent');
+    }
   } catch (err) {
     btn.disabled = false;
     btn.innerHTML = '<i class="fa-solid fa-calendar-plus"></i> Generate Campaign & Auto-Schedule';
