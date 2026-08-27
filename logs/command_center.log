@@ -8241,3 +8241,82 @@ monitoring-agent
 2026-08-26 11:38:40,255 [INFO] [central] Registered agent implementation: external-link-building-agent
 2026-08-26 11:38:40,256 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
 2026-08-26 11:38:40,256 [INFO] [central] Registered agent implementation: page-optimizer-agent
+2026-08-26 11:40:10,369 [INFO] [central] Created task task-e6413eeb for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 11:45:14,514 [INFO] [central] Created task task-55a6591e for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 11:50:03,556 [INFO] [central] Created task task-787534fb for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 11:55:09,246 [INFO] [central] Created task task-c591407c for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:00:13,047 [INFO] [central] Created task task-4614ff26 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:05:02,056 [INFO] [central] Created task task-5a1c754c for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:10:08,025 [INFO] [central] Created task task-0ce53502 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:15:12,794 [INFO] [central] Created task task-e85ab7fa for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:20:01,590 [INFO] [central] Created task task-6119cd17 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:25:05,391 [INFO] [central] Created task task-288a2d3d for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:30:09,241 [INFO] [central] Created task task-0f18b4b1 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:40:04,862 [INFO] [central] Created task task-08f06334 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:45:09,410 [INFO] [central] Created task task-3f368ec8 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 12:50:13,738 [INFO] [central] Created task task-40169860 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:05:59,681 [INFO] [central] Created task task-9eef1224 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:10:09,599 [INFO] [central] Created task task-ce850cf8 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:15:13,988 [INFO] [central] Created task task-8afe6bc3 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:20:02,890 [INFO] [central] Created task task-8ecb5c58 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:25:06,749 [INFO] [central] Created task task-e9d88d68 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:30:11,580 [INFO] [central] Created task task-97542c7c for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:35:02,814 [INFO] [central] Created task task-8395292c for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:40:06,769 [INFO] [central] Created task task-dc13604c for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:45:10,702 [INFO] [central] Created task task-e4e525dd for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:50:14,662 [INFO] [central] Created task task-b0faf891 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 13:55:04,067 [INFO] [central] Created task task-d856c4ba for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:00:14,603 [INFO] [central] Created task task-c2aa7994 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:05:09,907 [INFO] [central] Created task task-383f30af for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:10:05,366 [INFO] [central] Created task task-8d36bd04 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:15:10,165 [INFO] [central] Created task task-69744bd5 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:20:05,794 [INFO] [central] Created task task-b550c8f0 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:25:01,572 [INFO] [central] Created task task-5e9007c4 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:30:11,480 [INFO] [central] Created task task-e8327dad for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:35:06,640 [INFO] [central] Created task task-e98bc7aa for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:40:04,533 [INFO] [central] Created task task-4848567c for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:45:15,382 [INFO] [central] Created task task-ecf547df for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:50:01,166 [INFO] [central] Created task task-f2c50558 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 14:55:13,922 [INFO] [central] Created task task-bc03d634 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:00:13,131 [INFO] [central] Created task task-1564f95a for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:05:12,756 [INFO] [central] Created task task-5f018a16 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:10:13,285 [INFO] [central] Created task task-36b96d78 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:15:02,460 [INFO] [central] Created task task-66f1f608 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:17:07,738 [INFO] [central] Created task task-42104282 for agent competitor-ad-spy-agent (Status: QUEUED)
+2026-08-26 15:20:05,724 [INFO] [central] Created task task-ad81d978 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:25:09,848 [INFO] [central] Created task task-9a6accf3 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:30:10,125 [INFO] [central] Created task task-862177ff for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:30:21,565 [INFO] [central] Created task task-a54f4dcd for agent external-link-building-agent (Status: QUEUED)
+2026-08-26 15:35:07,203 [INFO] [central] Created task task-3533ea4b for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:40:06,094 [INFO] [central] Created task task-7ea63c7a for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:45:03,405 [INFO] [central] Created task task-ce051778 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:50:05,982 [INFO] [central] Created task task-f7e9ef0b for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 15:55:07,868 [INFO] [central] Created task task-5507f53f for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 16:00:12,000 [INFO] [central] Created task task-138c4095 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 16:05:09,586 [INFO] [central] Created task task-13f92bc6 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 16:10:14,091 [INFO] [central] Created task task-497fd70e for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 16:15:04,022 [INFO] [central] Created task task-e097c6b6 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 16:20:08,232 [INFO] [central] Created task task-fd26ac3e for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 16:25:12,919 [INFO] [central] Created task task-49fdc405 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 19:00:03,975 [INFO] [central] Created task task-03e305b2 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-26 19:25:03,074 [INFO] [central] Created task task-b0a55b34 for agent corporate-cars-social-agent (Status: QUEUED)
+2026-08-28 01:48:50,952 [INFO] [central] Registered agent implementation: blog-agent
+2026-08-28 01:48:50,956 [INFO] [central] Registered agent implementation: corporate-cars-social-agent
+2026-08-28 01:48:50,957 [INFO] [central] Registered agent implementation: seo-keyword-agent
+2026-08-28 01:48:50,957 [INFO] [central] Registered agent implementation: competitor-analysis-agent
+2026-08-28 01:48:50,958 [INFO] [central] Registered agent implementation: seo-content-brief-agent
+2026-08-28 01:48:50,958 [INFO] [central] Registered agent implementation: internal-linking-agent
+2026-08-28 01:48:50,959 [INFO] [central] Registered agent implementation: seo-audit-agent
+2026-08-28 01:48:50,960 [INFO] [central] Registered agent implementation: gsc-agent
+2026-08-28 01:48:50,960 [INFO] [central] Registered agent implementation: ga4-reporting-agent
+2026-08-28 01:48:50,960 [INFO] [central] Registered agent implementation: google-ads-monitoring-agent
+2026-08-28 01:48:50,961 [INFO] [central] Registered agent implementation: google-ads-optimization-agent
+2026-08-28 01:48:50,961 [INFO] [central] Registered agent implementation: meta-ads-monitoring-agent
+2026-08-28 01:48:50,962 [INFO] [central] Registered agent implementation: social-analytics-agent
+2026-08-28 01:48:50,962 [INFO] [central] Registered agent implementation: reputation-agent
+2026-08-28 01:48:50,962 [INFO] [central] Registered agent implementation: lead-management-agent
+2026-08-28 01:48:50,963 [INFO] [central] Registered agent implementation: monthly-report-agent
+2026-08-28 01:48:50,964 [INFO] [central] Registered agent implementation: external-link-building-agent
+2026-08-28 01:48:50,964 [INFO] [central] Registered agent implementation: competitor-ad-spy-agent
+2026-08-28 01:48:50,964 [INFO] [central] Registered agent implementation: page-optimizer-agent
+2026-08-28 01:50:06,052 [INFO] [central] Created task task-e7dce64a for agent corporate-cars-social-agent (Status: QUEUED)

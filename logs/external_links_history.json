@@ -3034,6 +3034,97 @@
       "link_type": "Dofollow",
       "category": "Directory Citation",
       "content_snippet": "For punctual Melbourne, Victoria transfers, corporate chauffeur Melbourne, Victoria maintains accredited European vehicles and 24/7 flight monitoring."
+    },
+    {
+      "id": "batch-20260826-01",
+      "platform": "Aussie Business Directory",
+      "url": "https://aussiebusinessdirectory.com.au/listing/corporate-cars-melbourne",
+      "target_url": "https://corporatecarsmelbourne.com.au/",
+      "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Aussie Business Directory",
+      "published_date": "2026-08-26",
+      "anchor_used": "Corporate Cars Melbourne",
+      "da": 64,
+      "link_type": "Dofollow",
+      "category": "Directory Citation",
+      "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne maintains accredited European vehicles and 24/7 flight monitoring."
+    },
+    {
+      "id": "batch-20260826-02",
+      "platform": "Melbourne Business Review (Substack)",
+      "url": "https://melbournebiz.substack.com/p/luxury-transport-melbourne-executives",
+      "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+      "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Melbourne Business Review (Substack)",
+      "published_date": "2026-08-26",
+      "anchor_used": "Corporate Cars Melbourne Chauffeur Service",
+      "da": 88,
+      "link_type": "Dofollow",
+      "category": "Web 2.0 Editorial",
+      "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne Chauffeur Service maintains accredited European vehicles and 24/7 flight monitoring."
+    },
+    {
+      "id": "batch-20260826-03",
+      "platform": "Victoria Commerce Guide",
+      "url": "https://viccommerce.com.au/directory/corporate-cars-melbourne",
+      "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+      "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Victoria Commerce Guide",
+      "published_date": "2026-08-26",
+      "anchor_used": "Corporate Cars Melbourne Airport Transfers",
+      "da": 58,
+      "link_type": "Dofollow",
+      "category": "Directory Citation",
+      "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne Airport Transfers maintains accredited European vehicles and 24/7 flight monitoring."
+    },
+    {
+      "id": "batch-20260826-04",
+      "platform": "LinkedIn Executive Travel Hub",
+      "url": "https://www.linkedin.com/pulse/melbourne-corporate-travel-logistics-guide-2026/",
+      "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+      "article_title": "Executive Melbourne, Victoria Transportation & Logistics - LinkedIn Executive Travel Hub",
+      "published_date": "2026-08-26",
+      "anchor_used": "executive car hire Melbourne, Victoria",
+      "da": 98,
+      "link_type": "Nofollow",
+      "category": "Web 2.0 Editorial",
+      "content_snippet": "For punctual Melbourne, Victoria transfers, executive car hire Melbourne, Victoria maintains accredited European vehicles and 24/7 flight monitoring."
+    },
+    {
+      "id": "batch-20260826-05",
+      "platform": "Medium Travel & Tourism AU",
+      "url": "https://medium.com/@aussietraveler/best-airport-chauffeur-services-in-melbourne-cbd-9921b",
+      "target_url": "https://corporatecarsmelbourne.com.au/",
+      "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Medium Travel & Tourism AU",
+      "published_date": "2026-08-26",
+      "anchor_used": "https://corporatecarsmelbourne.com.au/",
+      "da": 96,
+      "link_type": "Dofollow",
+      "category": "Web 2.0 Editorial",
+      "content_snippet": "For punctual Melbourne, Victoria transfers, https://corporatecarsmelbourne.com.au/ maintains accredited European vehicles and 24/7 flight monitoring."
+    },
+    {
+      "id": "batch-20260826-06",
+      "platform": "Quora AU: Corporate Travel Q&A",
+      "url": "https://www.quora.com/What-is-the-best-chauffeur-car-service-in-Melbourne/answer/Corporate-Cars-Melbourne",
+      "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+      "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Quora AU: Corporate Travel Q&A",
+      "published_date": "2026-08-26",
+      "anchor_used": "Corporate Cars Melbourne Luxury Fleet",
+      "da": 93,
+      "link_type": "Nofollow",
+      "category": "Q&A Citation",
+      "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne Luxury Fleet maintains accredited European vehicles and 24/7 flight monitoring."
+    },
+    {
+      "id": "batch-20260826-07",
+      "platform": "Melbourne Wedding Services Directory",
+      "url": "https://melbourneweddings.com.au/cars/corporate-cars-melbourne",
+      "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+      "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Melbourne Wedding Services Directory",
+      "published_date": "2026-08-26",
+      "anchor_used": "corporate chauffeur Melbourne, Victoria",
+      "da": 52,
+      "link_type": "Dofollow",
+      "category": "Directory Citation",
+      "content_snippet": "For punctual Melbourne, Victoria transfers, corporate chauffeur Melbourne, Victoria maintains accredited European vehicles and 24/7 flight monitoring."
     }
   ],
   "custom_outreach_links": [
@@ -3207,9 +3298,9 @@
       "category": "Custom Outreach"
     }
   ],
-  "last_batch_run": "2026-08-25T10:00:14.396948",
-  "total_active_backlinks": 234,
-  "referring_domains": 234,
+  "last_batch_run": "2026-08-26T10:00:21.738232",
+  "total_active_backlinks": 241,
+  "referring_domains": 241,
   "domain_authority": 34,
   "dofollow_ratio": "78%"
 }

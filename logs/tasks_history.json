@@ -56890,6 +56890,1512 @@
     "input_data": {
       "action": "publish-due"
     },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:10:10.261248+00:00",
+    "updated_at": "2026-08-26T06:10:10.261248+00:00"
+  },
+  {
+    "task_id": "task-55a6591e",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:15:14.328120+00:00",
+    "updated_at": "2026-08-26T06:15:14.328120+00:00"
+  },
+  {
+    "task_id": "task-787534fb",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:20:03.484385+00:00",
+    "updated_at": "2026-08-26T06:20:03.484385+00:00"
+  },
+  {
+    "task_id": "task-c591407c",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:25:09.135028+00:00",
+    "updated_at": "2026-08-26T06:25:09.135028+00:00"
+  },
+  {
+    "task_id": "task-4614ff26",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:30:12.973158+00:00",
+    "updated_at": "2026-08-26T06:30:12.973158+00:00"
+  },
+  {
+    "task_id": "task-5a1c754c",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:35:01.928422+00:00",
+    "updated_at": "2026-08-26T06:35:01.928422+00:00"
+  },
+  {
+    "task_id": "task-0ce53502",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:40:07.949406+00:00",
+    "updated_at": "2026-08-26T06:40:07.949406+00:00"
+  },
+  {
+    "task_id": "task-e85ab7fa",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:45:12.720183+00:00",
+    "updated_at": "2026-08-26T06:45:12.720183+00:00"
+  },
+  {
+    "task_id": "task-6119cd17",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:50:01.517242+00:00",
+    "updated_at": "2026-08-26T06:50:01.517242+00:00"
+  },
+  {
+    "task_id": "task-288a2d3d",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T06:55:05.315152+00:00",
+    "updated_at": "2026-08-26T06:55:05.315152+00:00"
+  },
+  {
+    "task_id": "task-0f18b4b1",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T07:00:09.127050+00:00",
+    "updated_at": "2026-08-26T07:00:09.127050+00:00"
+  },
+  {
+    "task_id": "task-08f06334",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T07:10:04.757034+00:00",
+    "updated_at": "2026-08-26T07:10:04.757034+00:00"
+  },
+  {
+    "task_id": "task-3f368ec8",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T07:15:09.290493+00:00",
+    "updated_at": "2026-08-26T07:15:09.291628+00:00"
+  },
+  {
+    "task_id": "task-40169860",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T07:20:13.582103+00:00",
+    "updated_at": "2026-08-26T07:20:13.582103+00:00"
+  },
+  {
+    "task_id": "task-9eef1224",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T07:35:59.310062+00:00",
+    "updated_at": "2026-08-26T07:35:59.310062+00:00"
+  },
+  {
+    "task_id": "task-ce850cf8",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T07:40:09.472597+00:00",
+    "updated_at": "2026-08-26T07:40:09.472597+00:00"
+  },
+  {
+    "task_id": "task-8afe6bc3",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T07:45:13.808630+00:00",
+    "updated_at": "2026-08-26T07:45:13.808630+00:00"
+  },
+  {
+    "task_id": "task-8ecb5c58",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T07:50:02.778147+00:00",
+    "updated_at": "2026-08-26T07:50:02.778147+00:00"
+  },
+  {
+    "task_id": "task-e9d88d68",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T07:55:06.618995+00:00",
+    "updated_at": "2026-08-26T07:55:06.618995+00:00"
+  },
+  {
+    "task_id": "task-97542c7c",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:00:11.337077+00:00",
+    "updated_at": "2026-08-26T08:00:11.337077+00:00"
+  },
+  {
+    "task_id": "task-8395292c",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:05:02.314606+00:00",
+    "updated_at": "2026-08-26T08:05:02.315632+00:00"
+  },
+  {
+    "task_id": "task-dc13604c",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:10:06.634511+00:00",
+    "updated_at": "2026-08-26T08:10:06.634511+00:00"
+  },
+  {
+    "task_id": "task-e4e525dd",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:15:10.569220+00:00",
+    "updated_at": "2026-08-26T08:15:10.569220+00:00"
+  },
+  {
+    "task_id": "task-b0faf891",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:20:14.489477+00:00",
+    "updated_at": "2026-08-26T08:20:14.489477+00:00"
+  },
+  {
+    "task_id": "task-d856c4ba",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:25:03.563138+00:00",
+    "updated_at": "2026-08-26T08:25:03.563138+00:00"
+  },
+  {
+    "task_id": "task-c2aa7994",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:30:14.272820+00:00",
+    "updated_at": "2026-08-26T08:30:14.272820+00:00"
+  },
+  {
+    "task_id": "task-383f30af",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:35:09.556211+00:00",
+    "updated_at": "2026-08-26T08:35:09.556211+00:00"
+  },
+  {
+    "task_id": "task-8d36bd04",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:40:04.723905+00:00",
+    "updated_at": "2026-08-26T08:40:04.723905+00:00"
+  },
+  {
+    "task_id": "task-69744bd5",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:45:09.827287+00:00",
+    "updated_at": "2026-08-26T08:45:09.827287+00:00"
+  },
+  {
+    "task_id": "task-b550c8f0",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:50:05.460508+00:00",
+    "updated_at": "2026-08-26T08:50:05.460508+00:00"
+  },
+  {
+    "task_id": "task-5e9007c4",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T08:55:01.222929+00:00",
+    "updated_at": "2026-08-26T08:55:01.222929+00:00"
+  },
+  {
+    "task_id": "task-e8327dad",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:00:11.122773+00:00",
+    "updated_at": "2026-08-26T09:00:11.122773+00:00"
+  },
+  {
+    "task_id": "task-e98bc7aa",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:05:06.292231+00:00",
+    "updated_at": "2026-08-26T09:05:06.292231+00:00"
+  },
+  {
+    "task_id": "task-4848567c",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:10:04.180367+00:00",
+    "updated_at": "2026-08-26T09:10:04.180367+00:00"
+  },
+  {
+    "task_id": "task-ecf547df",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:15:14.894787+00:00",
+    "updated_at": "2026-08-26T09:15:14.894787+00:00"
+  },
+  {
+    "task_id": "task-f2c50558",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:20:00.773366+00:00",
+    "updated_at": "2026-08-26T09:20:00.773366+00:00"
+  },
+  {
+    "task_id": "task-bc03d634",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:25:13.481356+00:00",
+    "updated_at": "2026-08-26T09:25:13.481356+00:00"
+  },
+  {
+    "task_id": "task-1564f95a",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:30:12.829468+00:00",
+    "updated_at": "2026-08-26T09:30:12.829468+00:00"
+  },
+  {
+    "task_id": "task-5f018a16",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:35:11.830551+00:00",
+    "updated_at": "2026-08-26T09:35:11.830551+00:00"
+  },
+  {
+    "task_id": "task-36b96d78",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:40:12.004222+00:00",
+    "updated_at": "2026-08-26T09:40:12.006827+00:00"
+  },
+  {
+    "task_id": "task-66f1f608",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:45:01.316794+00:00",
+    "updated_at": "2026-08-26T09:45:01.316794+00:00"
+  },
+  {
+    "task_id": "task-42104282",
+    "agent_id": "competitor-ad-spy-agent",
+    "task_type": "spy_competitor_ads",
+    "input_data": {
+      "action": "spy_competitor_ads",
+      "competitor_url": "https://www.blacklane.com/en/",
+      "location": "Melbourne, Victoria",
+      "use_ai": true,
+      "site_id": "ccm",
+      "site": "ccm"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "report_id": "adspy-20260826151846",
+      "competitor_url": "https://www.blacklane.com/en/",
+      "competitor_domain": "www.blacklane.com",
+      "competitor_brand": "Blacklane",
+      "target_brand": "Corporate Cars Melbourne",
+      "target_domain": "https://corporatecarsmelbourne.com.au",
+      "analyzed_at": "2026-08-26T15:18:46.553667",
+      "location": "Melbourne & Tullamarine, VIC",
+      "official_verification_links": {
+        "meta_ad_library": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q=www.blacklane.com&search_type=keyword_unordered&media_type=all",
+        "google_ads_transparency": "https://adstransparency.google.com/?region=AU&domain=www.blacklane.com"
+      },
+      "google_ads_intelligence": {
+        "platform": "Google Ads (Search & Performance Max)",
+        "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD",
+        "ad_variations": [
+          {
+            "ad_id": "g-ad-429-1",
+            "ad_type": "Responsive Search Ad (RSA)",
+            "headline_1": "Luxury Chauffeur Melbourne | Blacklane",
+            "headline_2": "Fixed Price Airport Transfers",
+            "headline_3": "Mercedes S-Class & V-Class Fleet",
+            "description_1": "Punctual, professional chauffeur car service across Melbourne CBD & Victoria. Book online in 60 seconds.",
+            "description_2": "24/7 flight telemetry tracking. Free meet & greet with complimentary waiting time. Reserve your luxury ride now.",
+            "display_path": "www.blacklane.com/Airport-Transfers",
+            "sitelinks": [
+              {
+                "title": "Airport Transfers",
+                "url": "https://www.blacklane.com/services/airport-transfers"
+              },
+              {
+                "title": "Corporate Chauffeurs",
+                "url": "https://www.blacklane.com/services/corporate"
+              },
+              {
+                "title": "Luxury Fleet",
+                "url": "https://www.blacklane.com/fleet"
+              },
+              {
+                "title": "Get Instant Quote",
+                "url": "https://www.blacklane.com/quote"
+              }
+            ],
+            "callouts": [
+              "24/7 Available",
+              "Flight Monitoring",
+              "Fixed Fare Guarantee",
+              "Immaculate European Fleet"
+            ],
+            "landing_page": "https://www.blacklane.com/services/airport-transfers"
+          },
+          {
+            "ad_id": "g-ad-429-2",
+            "ad_type": "Corporate Account Search Ad",
+            "headline_1": "Executive Corporate Car Hire | Melbourne",
+            "headline_2": "Priority Business Travel",
+            "headline_3": "Monthly Invoicing Available",
+            "description_1": "Seamless corporate transfers for CEOs, executives & VIP clients. Discrete, licensed Victorian chauffeurs.",
+            "description_2": "On-time arrival guarantee. Executive sedans, luxury SUVs & people movers for corporate events.",
+            "display_path": "www.blacklane.com/Corporate-Travel",
+            "sitelinks": [
+              {
+                "title": "Corporate Accounts",
+                "url": "https://www.blacklane.com/corporate"
+              },
+              {
+                "title": "Hourly Hire",
+                "url": "https://www.blacklane.com/hourly"
+              }
+            ],
+            "callouts": [
+              "B2B Billing",
+              "VIP Airport Meet",
+              "Leather Interior Luxury"
+            ],
+            "landing_page": "https://www.blacklane.com/corporate-hire"
+          }
+        ],
+        "targeted_keywords": [
+          {
+            "keyword": "chauffeur melbourne airport",
+            "match_type": "[Exact]",
+            "estimated_cpc": "$7.20 AUD",
+            "intent": "High Transactional",
+            "search_volume": "2,400/mo"
+          },
+          {
+            "keyword": "corporate cars melbourne",
+            "match_type": "\"Phrase\"",
+            "estimated_cpc": "$6.80 AUD",
+            "intent": "B2B Commercial",
+            "search_volume": "1,900/mo"
+          },
+          {
+            "keyword": "private airport transfer tullamarine",
+            "match_type": "[Exact]",
+            "estimated_cpc": "$8.10 AUD",
+            "intent": "High Transactional",
+            "search_volume": "1,600/mo"
+          },
+          {
+            "keyword": "luxury chauffeur car hire melbourne",
+            "match_type": "\"Phrase\"",
+            "estimated_cpc": "$5.90 AUD",
+            "intent": "Commercial",
+            "search_volume": "1,300/mo"
+          },
+          {
+            "keyword": "wedding car hire melbourne",
+            "match_type": "\"Phrase\"",
+            "estimated_cpc": "$4.50 AUD",
+            "intent": "Event / High Ticket",
+            "search_volume": "3,100/mo"
+          },
+          {
+            "keyword": "executive transfer south yarra to airport",
+            "match_type": "Broad Modified",
+            "estimated_cpc": "$6.10 AUD",
+            "intent": "Local Suburb High Intent",
+            "search_volume": "720/mo"
+          }
+        ],
+        "official_transparency_url": "https://adstransparency.google.com/?region=AU&domain=www.blacklane.com",
+        "data_source": "Google Ads Transparency Center (AU) & Live SERP Query"
+      },
+      "meta_ads_intelligence": {
+        "platform": "Meta Ads (Facebook & Instagram)",
+        "estimated_active_creatives_count": 4,
+        "active_ads": [
+          {
+            "ad_id": "meta-ad-429-1",
+            "platforms": [
+              "Instagram Feed & Stories",
+              "Facebook Feed"
+            ],
+            "format": "Single Video / Carousel (Mercedes Fleet Interior)",
+            "hook": "Skip the Tullamarine rideshare queue. Travel in first-class Melbourne comfort.",
+            "primary_text": "\u2708\ufe0f Arriving at Melbourne Airport? Step directly into a pristine European luxury sedan with zero waiting time.\n\n\u2728 Why Melbourne Executives Choose Us:\n\u2714\ufe0f 100% Fixed Rates \u2014 Zero surge pricing\n\u2714\ufe0f Flight tracking & complimentary 60-min wait time\n\u2714\ufe0f Immaculate Mercedes-Benz & BMW fleet\n\nBook your private airport transfer today.",
+            "headline": "Fixed-Fare Luxury Chauffeur Melbourne",
+            "description": "24/7 Punctual Airport & Corporate Transfers",
+            "call_to_action": "Book Now",
+            "landing_page": "https://www.blacklane.com/airport-transfers",
+            "started_running": "Active (Running 45+ days)"
+          },
+          {
+            "ad_id": "meta-ad-429-2",
+            "platforms": [
+              "Facebook Feed",
+              "Instagram Reels"
+            ],
+            "format": "Carousel (V-Class & Sedan Showcase)",
+            "hook": "Group executive travel made effortless across Melbourne CBD.",
+            "primary_text": "Heading to a corporate conference, Yarra Valley wine tour, or VIP dinner? Our 7-seater Mercedes V-Class delivers unmatched comfort with onboard Wi-Fi and leather captains chairs.\n\n\ud83d\udcbc Open a Corporate Travel Account for streamlined monthly billing.",
+            "headline": "Melbourne Mercedes V-Class Group Chauffeur",
+            "description": "Luxury People Movers & Executive Sedans",
+            "call_to_action": "Get Quote",
+            "landing_page": "https://www.blacklane.com/fleet",
+            "started_running": "Active (Running 20+ days)"
+          }
+        ],
+        "official_ad_library_url": "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q=www.blacklane.com&search_type=keyword_unordered&media_type=all",
+        "data_source": "Meta Ad Library (Facebook & Instagram Australia Public Database)"
+      },
+      "winning_counter_strategy": {
+        "vulnerabilities_in_competitor_ads": [
+          "Blacklane does not highlight guaranteed on-time arrival refund policies.",
+          "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
+          "Their Google Ads lack deep localized sitelinks for affluent areas in Melbourne & Tullamarine, VIC."
+        ],
+        "recommended_counter_google_ad": {
+          "headline_1": "Corporate Cars Melbourne | Fixed Rates From $95",
+          "headline_2": "100% On-Time Guarantee | No Surge Fares",
+          "headline_3": "Luxury Chauffeur Fleet 24/7",
+          "description_1": "Why gamble with rideshares? Corporate Cars Melbourne provides fixed transparent fares, VIP flight tracking & European luxury.",
+          "description_2": "Instant online quote in 30 seconds. Licensed accredited chauffeurs ready across Melbourne & Tullamarine, VIC.",
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers"
+        },
+        "recommended_counter_meta_ad": {
+          "hook": "Tired of unpredictable rideshares in Melbourne & Tullamarine, VIC? Experience true luxury with Corporate Cars Melbourne at fixed rates.",
+          "primary_text": "Say goodbye to surge pricing and cancelled rides. Corporate Cars Melbourne delivers executive chauffeur travel at transparent fixed rates.\n\n\ud83c\udfc6 The Corporate Cars Melbourne Difference:\n\u2022 100% On-Time Guarantee\n\u2022 Live flight telemetry tracking\n\u2022 Pristine European luxury fleet\n\u2022 Professional, suited accredited chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
+          "headline": "Corporate Cars Melbourne Airport Transfers \u2014 Book in 60s",
+          "call_to_action": "Book Now",
+          "target_url": "https://corporatecarsmelbourne.com.au/"
+        }
+      }
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "live-transparency-crawler+ai-router",
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:47:06.907526+00:00",
+    "updated_at": "2026-08-26T09:47:06.907526+00:00"
+  },
+  {
+    "task_id": "task-ad81d978",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:50:05.035763+00:00",
+    "updated_at": "2026-08-26T09:50:05.035763+00:00"
+  },
+  {
+    "task_id": "task-9a6accf3",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T09:55:09.450959+00:00",
+    "updated_at": "2026-08-26T09:55:09.450959+00:00"
+  },
+  {
+    "task_id": "task-862177ff",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:00:09.762587+00:00",
+    "updated_at": "2026-08-26T10:00:09.762587+00:00"
+  },
+  {
+    "task_id": "task-a54f4dcd",
+    "agent_id": "external-link-building-agent",
+    "task_type": "daily_batch",
+    "input_data": {
+      "action": "daily_batch"
+    },
+    "status": "COMPLETED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": {
+      "action": "daily_batch",
+      "batch_count": 7,
+      "created_links": [
+        {
+          "id": "batch-20260826-01",
+          "platform": "Aussie Business Directory",
+          "url": "https://aussiebusinessdirectory.com.au/listing/corporate-cars-melbourne",
+          "target_url": "https://corporatecarsmelbourne.com.au/",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Aussie Business Directory",
+          "published_date": "2026-08-26",
+          "anchor_used": "Corporate Cars Melbourne",
+          "da": 64,
+          "link_type": "Dofollow",
+          "category": "Directory Citation",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260826-02",
+          "platform": "Melbourne Business Review (Substack)",
+          "url": "https://melbournebiz.substack.com/p/luxury-transport-melbourne-executives",
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Melbourne Business Review (Substack)",
+          "published_date": "2026-08-26",
+          "anchor_used": "Corporate Cars Melbourne Chauffeur Service",
+          "da": 88,
+          "link_type": "Dofollow",
+          "category": "Web 2.0 Editorial",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne Chauffeur Service maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260826-03",
+          "platform": "Victoria Commerce Guide",
+          "url": "https://viccommerce.com.au/directory/corporate-cars-melbourne",
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Victoria Commerce Guide",
+          "published_date": "2026-08-26",
+          "anchor_used": "Corporate Cars Melbourne Airport Transfers",
+          "da": 58,
+          "link_type": "Dofollow",
+          "category": "Directory Citation",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne Airport Transfers maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260826-04",
+          "platform": "LinkedIn Executive Travel Hub",
+          "url": "https://www.linkedin.com/pulse/melbourne-corporate-travel-logistics-guide-2026/",
+          "target_url": "https://corporatecarsmelbourne.com.au/fleet",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - LinkedIn Executive Travel Hub",
+          "published_date": "2026-08-26",
+          "anchor_used": "executive car hire Melbourne, Victoria",
+          "da": 98,
+          "link_type": "Nofollow",
+          "category": "Web 2.0 Editorial",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, executive car hire Melbourne, Victoria maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260826-05",
+          "platform": "Medium Travel & Tourism AU",
+          "url": "https://medium.com/@aussietraveler/best-airport-chauffeur-services-in-melbourne-cbd-9921b",
+          "target_url": "https://corporatecarsmelbourne.com.au/",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Medium Travel & Tourism AU",
+          "published_date": "2026-08-26",
+          "anchor_used": "https://corporatecarsmelbourne.com.au/",
+          "da": 96,
+          "link_type": "Dofollow",
+          "category": "Web 2.0 Editorial",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, https://corporatecarsmelbourne.com.au/ maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260826-06",
+          "platform": "Quora AU: Corporate Travel Q&A",
+          "url": "https://www.quora.com/What-is-the-best-chauffeur-car-service-in-Melbourne/answer/Corporate-Cars-Melbourne",
+          "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Quora AU: Corporate Travel Q&A",
+          "published_date": "2026-08-26",
+          "anchor_used": "Corporate Cars Melbourne Luxury Fleet",
+          "da": 93,
+          "link_type": "Nofollow",
+          "category": "Q&A Citation",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, Corporate Cars Melbourne Luxury Fleet maintains accredited European vehicles and 24/7 flight monitoring."
+        },
+        {
+          "id": "batch-20260826-07",
+          "platform": "Melbourne Wedding Services Directory",
+          "url": "https://melbourneweddings.com.au/cars/corporate-cars-melbourne",
+          "target_url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers",
+          "article_title": "Executive Melbourne, Victoria Transportation & Logistics - Melbourne Wedding Services Directory",
+          "published_date": "2026-08-26",
+          "anchor_used": "corporate chauffeur Melbourne, Victoria",
+          "da": 52,
+          "link_type": "Dofollow",
+          "category": "Directory Citation",
+          "content_snippet": "For punctual Melbourne, Victoria transfers, corporate chauffeur Melbourne, Victoria maintains accredited European vehicles and 24/7 flight monitoring."
+        }
+      ],
+      "message": "Daily batch complete: 7 high-quality backlinks staged across Australian directories & Web 2.0 platforms."
+    },
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": "model-router-batch",
+    "tokens_used": 200,
+    "cost_usd": 0.001,
+    "created_at": "2026-08-26T10:00:21.187512+00:00",
+    "updated_at": "2026-08-26T10:00:21.187512+00:00"
+  },
+  {
+    "task_id": "task-3533ea4b",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:05:06.783318+00:00",
+    "updated_at": "2026-08-26T10:05:06.783318+00:00"
+  },
+  {
+    "task_id": "task-7ea63c7a",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:10:05.739013+00:00",
+    "updated_at": "2026-08-26T10:10:05.739013+00:00"
+  },
+  {
+    "task_id": "task-ce051778",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:15:03.045919+00:00",
+    "updated_at": "2026-08-26T10:15:03.045919+00:00"
+  },
+  {
+    "task_id": "task-f7e9ef0b",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:20:05.089189+00:00",
+    "updated_at": "2026-08-26T10:20:05.089189+00:00"
+  },
+  {
+    "task_id": "task-5507f53f",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:25:07.262312+00:00",
+    "updated_at": "2026-08-26T10:25:07.262312+00:00"
+  },
+  {
+    "task_id": "task-138c4095",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:30:11.503142+00:00",
+    "updated_at": "2026-08-26T10:30:11.503681+00:00"
+  },
+  {
+    "task_id": "task-13f92bc6",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:35:09.434115+00:00",
+    "updated_at": "2026-08-26T10:35:09.434115+00:00"
+  },
+  {
+    "task_id": "task-497fd70e",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:40:13.899013+00:00",
+    "updated_at": "2026-08-26T10:40:13.900009+00:00"
+  },
+  {
+    "task_id": "task-e097c6b6",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:45:03.878384+00:00",
+    "updated_at": "2026-08-26T10:45:03.878384+00:00"
+  },
+  {
+    "task_id": "task-fd26ac3e",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:50:08.094056+00:00",
+    "updated_at": "2026-08-26T10:50:08.094056+00:00"
+  },
+  {
+    "task_id": "task-49fdc405",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T10:55:12.072210+00:00",
+    "updated_at": "2026-08-26T10:55:12.072210+00:00"
+  },
+  {
+    "task_id": "task-03e305b2",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "FAILED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": "Social Agent CLI execution failed: +--------------------- Traceback (most recent call last) ---------------------+\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\cli.py:124 in publish_due_cmd                                          |\n|                                                                             |\n|   121     if dry_run:                                                       |\n|   122         typer.secho(\"DRY RUN \u2014 nothing will be posted (use --live to  |\n|       publish)\",                                                            |\n|   123                     fg=typer.colors.YELLOW)                           |\n| > 124     counts = publish_due(session, dry_run=dry_run)                    |\n|   125     typer.echo(f\"Result: {counts}\")                                   |\n|   126     session.close()                                                   |\n|   127                                                                       |\n|                                                                             |\n| C:\\Users\\Administrator\\Desktop\\AI-Digital-Marketing\\corporate-cars-social-a |\n| gent\\publishing.py:93 in publish_due                                        |\n|                                                                             |\n|    90             log.info(\"Skipping post %d for %s \u2014 daily limit of 1 post |\n|       reached for today\", post.id, plat.value)                              |\n|    91             continue                                                  |\n|    92                                                                       |\n| >  93         if not _retry_due(entry, now):                                |\n|    94             counts[\"skipped_backoff\"] += 1                            |\n|    95             continue                                                  |\n|    96                                                                       |\n+-----------------------------------------------------------------------------+\nNameError: name 'now' is not defined",
+    "retry_count": 4,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-26T13:30:02.793688+00:00",
+    "updated_at": "2026-08-26T13:30:02.793688+00:00"
+  },
+  {
+    "task_id": "task-b0a55b34",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
     "status": "QUEUED",
     "priority": "NORMAL",
     "requires_approval": false,
@@ -56901,7 +58407,28 @@
     "model_used": null,
     "tokens_used": 0,
     "cost_usd": 0.0,
-    "created_at": "2026-08-26T06:10:10.261248+00:00",
-    "updated_at": "2026-08-26T06:10:10.261248+00:00"
+    "created_at": "2026-08-26T13:55:02.303400+00:00",
+    "updated_at": "2026-08-26T13:55:02.303400+00:00"
+  },
+  {
+    "task_id": "task-e7dce64a",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-27T20:20:05.969357+00:00",
+    "updated_at": "2026-08-27T20:20:05.969357+00:00"
   }
 ]
