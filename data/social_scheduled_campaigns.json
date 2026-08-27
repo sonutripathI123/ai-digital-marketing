@@ -11,7 +11,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/minibus/minibus-01.jpg",
     "image_name": "minibus-01.jpg",
-    "status": "scheduled"
+    "status": "published",
+    "published_at": "Fri 28 Aug 2026 at 06:56 AM (Melbourne Time)",
+    "post_id": "18127775239667259"
   },
   {
     "id": "soc_ccm_0002",
@@ -25,7 +27,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/minibus/minibus-interior-01.jpg",
     "image_name": "minibus-interior-01.jpg",
-    "status": "scheduled"
+    "status": "published",
+    "published_at": "Fri 28 Aug 2026 at 06:56 AM (Melbourne Time)",
+    "post_id": "122151366933049450"
   },
   {
     "id": "soc_ccm_0003",
@@ -223,7 +227,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/sedan/0H5A5121.jpg",
     "image_name": "0H5A5121.jpg",
-    "status": "scheduled"
+    "status": "published",
+    "published_at": "Fri 28 Aug 2026 at 06:56 AM (Melbourne Time)",
+    "post_id": "ig_live_opal_transfers"
   },
   {
     "id": "soc_opal_0002",
@@ -237,7 +243,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/sedan/0H5A5126.jpg",
     "image_name": "0H5A5126.jpg",
-    "status": "scheduled"
+    "status": "published",
+    "published_at": "Fri 28 Aug 2026 at 06:56 AM (Melbourne Time)",
+    "post_id": "1047423934853693"
   },
   {
     "id": "soc_opal_0003",
