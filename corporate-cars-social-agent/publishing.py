@@ -90,7 +90,7 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
             log.info("Skipping post %d for %s — daily limit of 1 post reached for today", post.id, plat.value)
             continue
 
-        if not _retry_due(entry, now):
+        if not _retry_due(entry, now_utc):
             counts["skipped_backoff"] += 1
             continue
 
@@ -105,7 +105,7 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
             continue
 
         entry.attempts += 1
-        entry.last_attempt_at = now
+        entry.last_attempt_at = now_utc
         try:
             platform_post_id = publish_post(post)
         except PublishError as e:

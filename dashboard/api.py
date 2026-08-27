@@ -1781,16 +1781,63 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
         img_rel = str(assigned_img.relative_to(img_dir.parent)).replace("\\", "/") if assigned_img else ""
         img_name = assigned_img.name if assigned_img else "luxury-fleet.jpg"
 
-        # Tailor caption and hashtags by platform
-        if platform.lower() == "linkedin":
-            caption = f"Elevate your corporate travel standards across Melbourne with {brand_name}. Seamless executive transfers for {kw}. Book our premium fleet today."
-            hashtags = f"#CorporateChauffeur #MelbourneBusiness #ExecutiveTravel #AirportTransfers #{brand_name.replace(' ', '')}"
-        elif platform.lower() == "instagram":
-            caption = f"Refined comfort and seamless elegance. ✨ Traveling across Melbourne for {kw.lower()}? Choose {brand_name} for an effortless luxury experience."
-            hashtags = f"#MelbourneChauffeur #LuxuryCars #MelbourneAirport #ChauffeurService #VIPTravel #{brand_name.replace(' ', '')}"
+        kw_lower = kw.lower()
+        plat_lower = platform.lower()
+
+        if "airport" in kw_lower or "tullamarine" in kw_lower or "avalon" in kw_lower:
+            if plat_lower == "linkedin":
+                caption = f"Punctuality is everything when flights are on the line. ✈️\n\nWith {brand_name}, airport transfers are managed with live flight telemetry. If your flight into Tullamarine is early or delayed, your professional chauffeur adjusts in real time.\n\n• Direct terminal meet-and-greet\n• Luggage assistance & zero waiting\n• Monthly corporate billing for executive teams\n\nBook your transfer: {site_domain}"
+                hashtags = f"#CorporateTravel #MelbourneAirport #AirportTransfers #ExecutiveTravel #{brand_name.replace(' ', '')}"
+            elif plat_lower == "instagram":
+                caption = f"Touch down at Tullamarine and step straight into luxury. ✨\n\nNo surge pricing. No waiting in cold taxi ranks. Just your dedicated {brand_name} private driver waiting inside the arrivals hall ready to take you smoothly to your destination.\n\n📍 Melbourne Airport (MEL) & Avalon\n🚘 Premium European Fleet\n\nTap link in bio to book."
+                hashtags = f"#MelbourneChauffeur #AirportTransfer #TullamarineAirport #LuxuryTransfers #VIPTravel #{brand_name.replace(' ', '')}"
+            else:
+                caption = f"Heading to or from Melbourne Airport? ✈️\n\nStart your journey stress-free with {brand_name}. We monitor flight schedules in real time so your chauffeur is ready the moment you land. Fixed transparent rates and complimentary waiting time.\n\nBook online at {site_domain}"
+                hashtags = f"#AirportTransfersMelbourne #MelbourneChauffeur #Tullamarine #FamilyTransfers #{brand_name.replace(' ', '')}"
+
+        elif "cbd" in kw_lower or "corporate" in kw_lower or "executive" in kw_lower or "business" in kw_lower:
+            if plat_lower == "linkedin":
+                caption = f"Your mobile boardroom across Melbourne CBD. 💼\n\nFrom Collins Street meetings to Southbank conferences, {brand_name} provides discreet, reliable executive chauffeur services tailored for business leaders and board members.\n\n• High-spec European sedans\n• Dedicated corporate accounts & itemized invoicing\n• Total client privacy\n\nReserve: {site_domain}"
+                hashtags = f"#CorporateChauffeur #MelbourneCBD #ExecutiveTransport #MelbourneBusiness #{brand_name.replace(' ', '')}"
+            elif plat_lower == "instagram":
+                caption = f"Arrive focused, refreshed, and exactly on time. ⏱️\n\nNavigate Melbourne's bustling CBD in supreme quiet and elegance with {brand_name}. Leather upholstery, climate control, and smooth chauffeur transit designed for the modern professional.\n\n✨ Corporate Charters & Daily Executive Commutes"
+                hashtags = f"#MelbourneStyle #ExecutiveLife #ChauffeurService #MelbourneCity #LuxurySedan #{brand_name.replace(' ', '')}"
+            else:
+                caption = f"Make an unforgettable impression at your next business meeting in Melbourne. 🏢\n\n{brand_name} offers premium executive chauffeur cars across Melbourne CBD, Docklands, and South Yarra. Punctual, professional, and immaculately presented vehicles.\n\nBook online at {site_domain}"
+                hashtags = f"#CorporateCarsMelbourne #MelbourneChauffeurs #ExecutiveDriver #MelbourneBusiness #{brand_name.replace(' ', '')}"
+
+        elif "wine" in kw_lower or "yarra" in kw_lower or "tour" in kw_lower or "mornington" in kw_lower:
+            if plat_lower == "linkedin":
+                caption = f"Host clients or celebrate company milestones with a bespoke Yarra Valley wine tour. 🍷\n\n{brand_name} arranges bespoke private winery itineraries across Victoria's premier wine regions. Relax in ultimate comfort while our experienced chauffeur navigates the day's route.\n\nIdeal for corporate hospitality and VIP client entertainment."
+                hashtags = f"#CorporateEntertainment #YarraValleyWineries #MelbourneEvents #LuxuryTours #{brand_name.replace(' ', '')}"
+            elif plat_lower == "instagram":
+                caption = f"Sip, savor, and scenic views — without worrying about the drive home. 🍇✨\n\nExperience private cellar door tastings across the Yarra Valley and Mornington Peninsula with {brand_name}. Tailored full-day luxury winery charters for couples, friends, and VIP groups.\n\n🍷 Custom winery itineraries\n🥂 Luxury Sedans & V-Class Vans"
+                hashtags = f"#YarraValleyWine #WineryTourMelbourne #MorningtonPeninsula #LuxuryChauffeur #{brand_name.replace(' ', '')}"
+            else:
+                caption = f"Planning a weekend winery escape to the Yarra Valley? 🍾\n\nEnjoy Victoria's finest cellar doors and gourmet dining in complete safety and luxury with {brand_name}. Door-to-door private chauffeur service tailored to your personal schedule.\n\nBook your private day charter today: {site_domain}"
+                hashtags = f"#YarraValleyTours #MelbourneWinery #LuxuryTransfersMelbourne #{brand_name.replace(' ', '')}"
+
+        elif "casino" in kw_lower or "crown" in kw_lower or "vip" in kw_lower or "grand prix" in kw_lower or "event" in kw_lower:
+            if plat_lower == "linkedin":
+                caption = f"Seamless transit for Melbourne's marquee sporting and entertainment events. 🏆\n\nWhether attending the Australian Open, Melbourne Grand Prix, or private functions at Crown Towers, {brand_name} delivers flawless door-to-door VIP transit with priority drop-offs.\n\nCorporate bookings: {site_domain}"
+                hashtags = f"#MelbourneEvents #VIPTransfers #CrownMelbourne #ExecutiveChauffeur #{brand_name.replace(' ', '')}"
+            elif plat_lower == "instagram":
+                caption = f"Red carpet arrivals for your biggest nights in Melbourne. 🌟\n\nHeading to Crown Casino, luxury dining, or a special celebration? Travel in undeniable sophistication with {brand_name}. Clean lines, ambient comfort, and five-star hospitality.\n\nBook your VIP chauffeur for tonight."
+                hashtags = f"#CrownCasino #MelbourneNightlife #VIPArrivals #LuxuryLifestyle #MelbourneChauffeur #{brand_name.replace(' ', '')}"
+            else:
+                caption = f"Special occasions deserve extraordinary travel. 🎉\n\nMake your night out at Crown Towers, theater shows, or Melbourne gala events truly special with {brand_name}. Dedicated private driver waiting when your evening concludes.\n\nReserve: {site_domain}"
+                hashtags = f"#SpecialEventsMelbourne #CrownTransfers #LuxuryCarHireMelbourne #{brand_name.replace(' ', '')}"
+
         else:
-            caption = f"Experience premium comfort, punctual arrivals, and professional private drivers with {brand_name}. Specialists in {kw.lower()}."
-            hashtags = f"#MelbourneTransfers #AirportPickups #ChauffeurMelbourne #{brand_name.replace(' ', '')}"
+            if plat_lower == "linkedin":
+                caption = f"Redefining corporate and private transit across Victoria. 🚘\n\nAt {brand_name}, we combine prestige European vehicles with rigorously vetted, professional chauffeurs. Every trip is guaranteed on-time, private, and exceptionally smooth.\n\nCorporate accounts: {site_domain}"
+                hashtags = f"#CorporateChauffeur #MelbourneTransfers #ExecutiveDriver #LuxuryFleet #{brand_name.replace(' ', '')}"
+            elif plat_lower == "instagram":
+                caption = f"Where precision meets pure luxury on the road. ✨\n\nExplore Melbourne in absolute comfort with {brand_name}. From airport pickups to regional luxury charters, travel the way you deserve.\n\n📍 Melbourne, Australia\nBook via link in bio."
+                hashtags = f"#MelbourneLife #LuxuryChauffeur #MercedesBenz #ExecutiveTransfers #{brand_name.replace(' ', '')}"
+            else:
+                caption = f"Experience the benchmark of luxury chauffeur transit in Melbourne. 🌟\n\nFixed pricing, immaculate European vehicles, and professional drivers ready for all your corporate and airport transfer needs.\n\nBook with {brand_name} today: {site_domain}"
+                hashtags = f"#MelbourneChauffeur #PrivateDriverMelbourne #CorporateTransfers #{brand_name.replace(' ', '')}"
 
         scheduled_posts.append({
             "id": f"soc_{site}_{start_id_num + idx:04d}",
