@@ -84,6 +84,8 @@ class SocialAgentAdapter(AgentInterface):
         elif action == "schedule":
             weeks = str(task.input_data.get("weeks", 1))
             cmd.extend(["--weeks", weeks])
+        elif action == "publish-due":
+            cmd.append("--live")
 
         result = subprocess.run(
             cmd,

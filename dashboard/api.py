@@ -980,27 +980,35 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                 all_sched = []
         
         site_sched = [p for p in all_sched if p.get("site") == effective_site]
-        fb_sched = len([p for p in site_sched if p.get("platform", "").lower() == "facebook"])
-        ig_sched = len([p for p in site_sched if p.get("platform", "").lower() == "instagram"])
-        li_sched = len([p for p in site_sched if p.get("platform", "").lower() == "linkedin"])
-        fb_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "facebook"), None)
-        ig_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "instagram"), None)
-        li_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "linkedin"), None)
+        fb_published = len([p for p in site_sched if p.get("platform", "").lower() == "facebook" and p.get("status") == "published"])
+        fb_sched = len([p for p in site_sched if p.get("platform", "").lower() == "facebook" and p.get("status") == "scheduled"])
+        fb_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "facebook" and p.get("status") == "scheduled"), None)
+
+        ig_published = len([p for p in site_sched if p.get("platform", "").lower() == "instagram" and p.get("status") == "published"])
+        ig_sched = len([p for p in site_sched if p.get("platform", "").lower() == "instagram" and p.get("status") == "scheduled"])
+        ig_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "instagram" and p.get("status") == "scheduled"), None)
+
+        li_published = len([p for p in site_sched if p.get("platform", "").lower() == "linkedin" and p.get("status") == "published"])
+        li_sched = len([p for p in site_sched if p.get("platform", "").lower() == "linkedin" and p.get("status") == "scheduled"])
+        li_next = next((p.get("scheduled_for") for p in site_sched if p.get("platform", "").lower() == "linkedin" and p.get("status") == "scheduled"), None)
 
         from agents.social_analytics_agent import fetch_real_social_analytics
         real_social = fetch_real_social_analytics(site_id=effective_site, site_domain=site_domain, site_name=site_name)
         real_social["scheduled_posts_queue"] = site_sched
-        real_social["total_scheduled_queue"] = len(site_sched) or real_social.get("total_scheduled_queue", 0)
+        real_social["total_scheduled_queue"] = len([p for p in site_sched if p.get("status") == "scheduled"])
         if "platforms" in real_social:
             if "facebook" in real_social["platforms"]:
+                real_social["platforms"]["facebook"]["published"] = max(fb_published, real_social["platforms"]["facebook"].get("published", 0))
                 real_social["platforms"]["facebook"]["scheduled"] = fb_sched
-                if fb_next: real_social["platforms"]["facebook"]["next_scheduled_at"] = fb_next
+                real_social["platforms"]["facebook"]["next_scheduled_at"] = fb_next or "No upcoming scheduled posts"
             if "instagram" in real_social["platforms"]:
+                real_social["platforms"]["instagram"]["published"] = max(ig_published, real_social["platforms"]["instagram"].get("published", 0))
                 real_social["platforms"]["instagram"]["scheduled"] = ig_sched
-                if ig_next: real_social["platforms"]["instagram"]["next_scheduled_at"] = ig_next
+                real_social["platforms"]["instagram"]["next_scheduled_at"] = ig_next or "No upcoming scheduled posts"
             if "linkedin" in real_social["platforms"]:
+                real_social["platforms"]["linkedin"]["published"] = max(li_published, real_social["platforms"]["linkedin"].get("published", 0))
                 real_social["platforms"]["linkedin"]["scheduled"] = li_sched
-                if li_next: real_social["platforms"]["linkedin"]["next_scheduled_at"] = li_next
+                real_social["platforms"]["linkedin"]["next_scheduled_at"] = li_next or "No upcoming scheduled posts"
         else:
             real_social = {
                 "is_connected": False,
