@@ -1000,8 +1000,9 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
 
         from agents.social_analytics_agent import fetch_real_social_analytics
         real_social = fetch_real_social_analytics(site_id=effective_site, site_domain=site_domain, site_name=site_name)
-        real_social["scheduled_posts_queue"] = site_sched
-        real_social["total_scheduled_queue"] = len([p for p in site_sched if p.get("status") == "scheduled"])
+        pending_queue = [p for p in site_sched if p.get("status") == "scheduled"]
+        real_social["scheduled_posts_queue"] = pending_queue
+        real_social["total_scheduled_queue"] = len(pending_queue)
         if "platforms" in real_social:
             if "facebook" in real_social["platforms"]:
                 real_social["platforms"]["facebook"]["published"] = max(fb_published, real_social["platforms"]["facebook"].get("published", 0))
@@ -1022,8 +1023,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                 "site_name": site_name,
                 "site_domain": site_domain,
                 "total_published_posts": 0,
-                "total_scheduled_queue": len(site_sched),
-                "scheduled_posts_queue": site_sched,
+                "total_scheduled_queue": len(pending_queue),
+                "scheduled_posts_queue": pending_queue,
                 "live_connected_accounts": {
                     "facebook": {"connected": False, "name": f"{site_name} Facebook Page", "page_id": "-", "followers": 0, "status": "Not Connected"},
                     "instagram": {"connected": False, "username": "Not Connected", "account_id": "-", "followers": 0, "media_count": 0, "status": "Not Connected"},

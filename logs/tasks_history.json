@@ -60598,5 +60598,26 @@
     "cost_usd": 0.0,
     "created_at": "2026-08-30T13:00:07.207093+00:00",
     "updated_at": "2026-08-30T13:00:07.207093+00:00"
+  },
+  {
+    "task_id": "task-571868b2",
+    "agent_id": "corporate-cars-social-agent",
+    "task_type": "publish-due",
+    "input_data": {
+      "action": "publish-due"
+    },
+    "status": "QUEUED",
+    "priority": "NORMAL",
+    "requires_approval": false,
+    "approval_comment": null,
+    "output_data": null,
+    "error_message": null,
+    "retry_count": 0,
+    "max_retries": 3,
+    "model_used": null,
+    "tokens_used": 0,
+    "cost_usd": 0.0,
+    "created_at": "2026-08-30T13:05:02.804402+00:00",
+    "updated_at": "2026-08-30T13:05:02.804402+00:00"
   }
 ]
