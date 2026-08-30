@@ -914,7 +914,6 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                         if effective_site != "all" and row_site != effective_site:
                             continue
                         pub_at = r.get("go_live_at") or ""
-                        is_today = bool(pub_at and today_str in pub_at)
                         if r.get("status") == "published":
                             published_posts.append({
                                 "id": r.get("id"),
@@ -925,7 +924,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                                 "published_at": pub_at,
                                 "wp_post_id": r.get("wp_post_id"),
                                 "url": r.get("notes") or f"{site_domain}/{r.get('id')}/",
-                                "is_today": is_today
+                                "is_today": False
                             })
                         elif r.get("status") in ("approved", "pending"):
                             approved_drafts.append({
@@ -939,8 +938,15 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             except Exception:
                 pass
 
-        # Sort published posts newest first (reverse chronological order)
-        published_posts_sorted = list(reversed(published_posts))
+        # Sort published posts strictly by publication date (newest first)
+        published_posts_sorted = sorted(published_posts, key=lambda x: x.get("published_at") or "", reverse=True)
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        if published_posts_sorted:
+            # Strictly at most 1 post (the latest one) can ever be marked is_today if published today
+            first_pub_date = published_posts_sorted[0].get("published_at") or ""
+            if today_str in first_pub_date:
+                published_posts_sorted[0]["is_today"] = True
+
         latest_published = published_posts_sorted[0] if published_posts_sorted else None
         next_scheduled = approved_drafts[0] if approved_drafts else None
 

@@ -1563,19 +1563,19 @@ async function viewAgentReport(agentId) {
           <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:11px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">Last Blog Published</div>
             <div style="font-size:16px; font-weight:800; color:#fff; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${escapeHtml(latestP.title || '')}">${escapeHtml(latestP.title || 'Recent Article')}</div>
-            <div style="font-size:11px; color:#10b981; font-weight:700; margin-top:2px;"><i class="fa-solid fa-circle-check"></i> ${latestP.published_at ? latestP.published_at.substring(0, 10) : '2026-08-24'} (Today)</div>
+            <div style="font-size:11px; color:#10b981; font-weight:700; margin-top:2px;"><i class="fa-solid fa-circle-check"></i> ${latestP.published_at ? latestP.published_at.substring(0, 10) : 'Live'} ${latestP.is_today ? '(Today)' : ''}</div>
           </div>
         </div>
 
-        <!-- 2 Status Banners: Latest Published Today vs Next Scheduled Post -->
+        <!-- 2 Status Banners: Latest Published vs Next Scheduled Post -->
         <div class="responsive-grid-2" style="margin-bottom:20px;">
-          <!-- Latest Published Today Banner -->
+          <!-- Latest Published Banner -->
           <div style="background:linear-gradient(135deg, rgba(16,185,129,0.15), rgba(6,182,212,0.12)); border:1px solid rgba(16,185,129,0.4); padding:16px; border-radius:14px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
               <span style="font-size:11px; font-weight:800; color:#10b981; text-transform:uppercase; display:flex; align-items:center; gap:6px;">
-                <span class="pulse-dot green"></span> 🟢 Just Published Today
+                ${latestP.is_today ? '<span class="pulse-dot green"></span> 🟢 Just Published Today' : '<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> 🟢 Latest Published Article'}
               </span>
-              <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">${latestP.published_at ? latestP.published_at.substring(0, 16).replace('T', ' ') : '2026-08-24 10:20'}</span>
+              <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">${latestP.published_at ? latestP.published_at.substring(0, 16).replace('T', ' ') : 'Live'}</span>
             </div>
             <div style="font-size:14px; font-weight:800; color:#fff; line-height:1.4; margin-bottom:6px;">"${escapeHtml(latestP.title || '')}"</div>
             <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:10px;">
@@ -1583,7 +1583,7 @@ async function viewAgentReport(agentId) {
               <span><strong>Keyword:</strong> <code>${escapeHtml(latestP.keyword || '')}</code></span>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span class="badge badge-success" style="font-size:10px; padding:3px 8px;">WP Post #${latestP.wp_post_id || '20556'} (Live 200 OK)</span>
+              <span class="badge badge-success" style="font-size:10px; padding:3px 8px;">WP Post #${latestP.wp_post_id || '20568'} (Live 200 OK)</span>
               <a href="${latestP.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; text-decoration:none; font-size:11px; font-weight:800; padding:5px 12px; border-radius:6px;">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Live Post
               </a>
@@ -1604,7 +1604,7 @@ async function viewAgentReport(agentId) {
               <span><strong>Keyword:</strong> <code>${escapeHtml(nextP.keyword || '')}</code></span>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span class="badge badge-info" style="font-size:10px; padding:3px 8px;">Queue Item #${nextP.id || 't0016'}</span>
+              <span class="badge badge-info" style="font-size:10px; padding:3px 8px;">Queue Item #${nextP.id || 't0022'}</span>
               <button type="button" class="btn btn-sm" onclick="runAgentNow('blog-agent', 'publish')" style="background:rgba(168,85,247,0.25); border:1px solid rgba(168,85,247,0.5); color:#fff; font-size:11px; font-weight:700; padding:5px 12px; border-radius:6px; cursor:pointer;">
                 <i class="fa-solid fa-bolt"></i> Publish Early
               </button>
@@ -1635,7 +1635,7 @@ async function viewAgentReport(agentId) {
             </thead>
             <tbody>
               ${publishedPosts.map((p, idx) => {
-                const isToday = p.is_today || (p.published_at && p.published_at.includes('2026-08-24'));
+                const isToday = Boolean(p.is_today);
                 const rowBg = isToday ? 'background:rgba(16,185,129,0.08);' : '';
                 return `
                   <tr style="border-bottom:1px solid rgba(255,255,255,0.05); ${rowBg}">
@@ -1652,7 +1652,7 @@ async function viewAgentReport(agentId) {
                       <div style="font-size:10.5px; color:var(--text-muted); font-weight:400; margin-top:2px;">Focus KW: <code>${escapeHtml(p.keyword || '')}</code></div>
                     </td>
                     <td style="padding:10px 14px; color:var(--accent-cyan); font-weight:600;">${escapeHtml(p.suburb || '')}</td>
-                    <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--text-muted);">#${p.wp_post_id || '20556'}</td>
+                    <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--text-muted);">#${p.wp_post_id || '20568'}</td>
                     <td style="padding:10px 14px; text-align:center;">
                       <a href="${p.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:4px; background:rgba(168,85,247,0.2); border:1px solid rgba(168,85,247,0.4); color:var(--accent-purple); text-decoration:none; font-weight:700; font-size:11px; padding:4px 10px; border-radius:6px;">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Post
