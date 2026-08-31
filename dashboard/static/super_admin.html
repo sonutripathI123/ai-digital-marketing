@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Admin Master Hub — AI Digital Marketing OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #0a0f1d;
+      --card-bg: rgba(20, 29, 47, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --gold: #facc15;
+      --gold-dark: #eab308;
+      --cyan: #06b6d4;
+      --purple: #a855f7;
+      --green: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-main: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-dark);
+      background-image: radial-gradient(circle at 50% 0%, rgba(234, 179, 8, 0.08) 0%, transparent 60%),
+                        radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(234, 179, 8, 0.2);
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .crown-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(249, 115, 22, 0.2));
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--gold);
+      box-shadow: 0 0 15px rgba(234, 179, 8, 0.25);
+    }
+
+    .brand-text h1 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #000;
+      box-shadow: 0 4px 14px rgba(234, 179, 8, 0.3);
+    }
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(234, 179, 8, 0.4); }
+
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-secondary:hover { background: rgba(51, 65, 85, 0.8); }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 28px 20px;
+      flex: 1;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); border-color: rgba(234, 179, 8, 0.3); }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .kpi-val {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+      font-family: var(--font-mono);
+      margin-top: 8px;
+    }
+
+    .kpi-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(10px);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: middle;
+    }
+
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+    .site-brand-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .site-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-client {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--green);
+    }
+
+    .badge-none {
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: #131b2e;
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 20px;
+      max-width: 520px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      animation: popIn 0.2s ease-out;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: 13.5px;
+      font-family: var(--font-main);
+      outline: none;
+    }
+    .form-control:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(234, 179, 8, 0.2); }
+
+    #login-gate {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+
+    .login-card {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 20px;
+      max-width: 420px;
+      width: 100%;
+      padding: 36px 30px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(234, 179, 8, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Master Login Screen (If Not Authenticated) -->
+  <div id="login-gate" style="display: none;">
+    <div class="login-card">
+      <div style="width: 58px; height: 58px; border-radius: 16px; background: rgba(234, 179, 8, 0.2); border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--gold); margin: 0 auto 16px auto;">
+        <i class="fa-solid fa-crown"></i>
+      </div>
+      <h2 style="font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 6px;">Super Admin Portal</h2>
+      <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 24px;">Restricted Master Command Center &bull; Sonu Tripathi</p>
+
+      <div id="login-error-alert" style="display: none; padding: 10px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; color: #fca5a5; font-size: 12px; margin-bottom: 16px; font-weight: 600;"></div>
+
+      <form onsubmit="handleMasterLogin(event)">
+        <div class="form-group" style="text-align: left;">
+          <label><i class="fa-solid fa-envelope"></i> Super Admin Email</label>
+          <input type="email" id="master-email" required value="sonutripathi9305@gmail.com" class="form-control" />
+        </div>
+        <div class="form-group" style="text-align: left;">
+          <label><i class="fa-solid fa-lock"></i> Master Password</label>
+          <input type="password" id="master-password" required placeholder="Enter master password" class="form-control" autofocus />
+        </div>
+        <button type="submit" class="btn btn-gold" style="width: 100%; padding: 12px; justify-content: center; font-size: 14px; margin-top: 8px;">
+          <i class="fa-solid fa-key"></i> Unlock Super Admin Hub
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Top Navigation Header -->
+  <header id="main-header">
+    <div class="brand-logo">
+      <div class="crown-icon">
+        <i class="fa-solid fa-crown"></i>
+      </div>
+      <div class="brand-text">
+        <h1>Super Admin Command Center</h1>
+        <p><i class="fa-solid fa-circle-check"></i> Master Control Active (Sonu Tripathi)</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-gold" onclick="openAddSiteModal()">
+        <i class="fa-solid fa-plus"></i> + Add New Client Website
+      </button>
+      <a href="/" target="_blank" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Main Dashboard
+      </a>
+      <button class="btn btn-secondary" onclick="handleLogout()" style="color: #f87171;">
+        <i class="fa-solid fa-power-off"></i> Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container" id="main-app" style="display: none;">
+    <!-- Global Master Stats Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label" style="color: var(--gold);"><i class="fa-solid fa-globe"></i> Managed Websites</div>
+        <div class="kpi-val" id="stat-total-sites">0</div>
+        <div class="kpi-desc">Total Active Business Brands</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" style="color: var(--cyan);"><i class="fa-solid fa-blog"></i> Global Published Blogs</div>
+        <div class="kpi-val" id="stat-total-blogs">0</div>
+        <div class="kpi-desc">Live on WordPress across all sites</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" style="color: var(--purple);"><i class="fa-solid fa-share-nodes"></i> Global Social Posts</div>
+        <div class="kpi-val" id="stat-total-social">0</div>
+        <div class="kpi-desc">Queued & Published (FB, Insta, LinkedIn)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" style="color: var(--green);"><i class="fa-solid fa-bolt"></i> Total AI Tasks Executed</div>
+        <div class="kpi-val" id="stat-total-tasks">0</div>
+        <div class="kpi-desc">Autonomous Tasks Across All Agents</div>
+      </div>
+    </div>
+
+    <!-- Managed Websites Table Section -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">
+          <i class="fa-solid fa-list-check" style="color: var(--gold);"></i>
+          Client Websites & 1-Click Magic Portal Links:
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="loadSuperAdminData()">
+          <i class="fa-solid fa-arrows-rotate"></i> Refresh Telemetry
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 170px;">Client Brand</th>
+              <th style="width: 190px;">Website Domain</th>
+              <th style="width: 130px;">Operating City</th>
+              <th style="width: 200px;">Assigned Client</th>
+              <th style="width: 150px; text-align: center;">AI Activity</th>
+              <th style="width: 180px; text-align: center;">1-Click Share Action</th>
+            </tr>
+          </thead>
+          <tbody id="sites-table-body">
+            <tr>
+              <td colspan="6" style="padding: 30px; text-align: center; color: var(--text-muted);">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 20px; color: var(--gold); margin-bottom: 8px;"></i>
+                <div>Loading Managed Websites...</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Client Website Modal -->
+  <div id="modal-add-site" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="font-size: 17px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-plus-circle" style="color: var(--gold);"></i> Add New Client Website
+        </h3>
+        <button onclick="closeAddSiteModal()" style="background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer;">&times;</button>
+      </div>
+
+      <form onsubmit="handleCreateSiteSubmit(event)">
+        <div class="form-group">
+          <label>Business / Brand Name *</label>
+          <input type="text" id="add-site-name" required placeholder="e.g. Sydney Executive Transfers" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>Website Domain URL *</label>
+          <input type="text" id="add-site-domain" required placeholder="https://sydneychauffeurs.com.au" class="form-control" />
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;" class="form-group">
+          <div>
+            <label>Operating City</label>
+            <input type="text" id="add-site-location" placeholder="e.g. Sydney, NSW" value="Sydney, NSW" class="form-control" />
+          </div>
+          <div>
+            <label>Theme Color</label>
+            <input type="color" id="add-site-color" value="#06b6d4" class="form-control" style="height: 42px; padding: 2px; cursor: pointer;" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Client Email Address (Optional)</label>
+          <input type="email" id="add-site-email" placeholder="client@company.com" class="form-control" />
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">An exclusive single-site access link will be generated automatically.</div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+          <button type="button" class="btn btn-secondary" onclick="closeAddSiteModal()">Cancel</button>
+          <button type="submit" class="btn btn-gold">
+            <i class="fa-solid fa-check"></i> Create & Generate Client Link
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Share Link Popup Modal -->
+  <div id="modal-share-success" class="modal-backdrop" style="display: none;">
+    <div class="modal-box" style="text-align: center; border-color: var(--green);">
+      <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); border: 1px solid var(--green); display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--green); margin: 0 auto 16px auto;">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 6px;" id="share-modal-title">Website Created Successfully!</h3>
+      <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 18px;">Share this exclusive portal link with your client:</p>
+
+      <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+        <input type="text" id="share-link-input" readonly class="form-control" style="background: transparent; border: none; font-family: var(--font-mono); font-size: 11.5px; color: var(--gold);" />
+        <button class="btn btn-gold btn-sm" onclick="copyShareInputLink()" style="font-size: 11px; white-space: nowrap;">
+          <i class="fa-solid fa-copy"></i> Copy
+        </button>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <a id="share-whatsapp-btn" href="#" target="_blank" class="btn" style="background: #25D366; color: #fff; font-weight: 700;">
+          <i class="fa-brands fa-whatsapp"></i> Share WhatsApp
+        </a>
+        <button class="btn btn-secondary" onclick="closeShareModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let authToken = localStorage.getItem('ccm_admin_token') || sessionStorage.getItem('ccm_admin_token');
+
+    async function init() {
+      if (!authToken) {
+        showLoginGate();
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/session', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.role === 'super_admin' || data.is_super_admin) {
+          showMainApp();
+          loadSuperAdminData();
+        } else {
+          showLoginGate();
+        }
+      } catch (err) {
+        showLoginGate();
+      }
+    }
+
+    function showLoginGate() {
+      document.getElementById('login-gate').style.display = 'flex';
+      document.getElementById('main-app').style.display = 'none';
+    }
+
+    function showMainApp() {
+      document.getElementById('login-gate').style.display = 'none';
+      document.getElementById('main-app').style.display = 'block';
+    }
+
+    async function handleMasterLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('master-email').value.trim();
+      const pass = document.getElementById('master-password').value;
+      const alertBox = document.getElementById('login-error-alert');
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, password: pass })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          alertBox.textContent = data.detail || 'Invalid credentials';
+          alertBox.style.display = 'block';
+          return;
+        }
+
+        authToken = data.token;
+        localStorage.setItem('ccm_admin_token', authToken);
+        showMainApp();
+        loadSuperAdminData();
+      } catch (err) {
+        alertBox.textContent = 'Connection error: ' + err.message;
+        alertBox.style.display = 'block';
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('ccm_admin_token');
+      sessionStorage.removeItem('ccm_admin_token');
+      authToken = null;
+      showLoginGate();
+    }
+
+    async function loadSuperAdminData() {
+      const tbody = document.getElementById('sites-table-body');
+      try {
+        const res = await fetch('/api/admin/super/global-telemetry', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        if (!res.ok) {
+          showLoginGate();
+          return;
+        }
+
+        const data = await res.json();
+        const glob = data.global_summary || {};
+
+        document.getElementById('stat-total-sites').textContent = glob.total_registered_websites || 0;
+        document.getElementById('stat-total-blogs').textContent = glob.total_global_published_blogs || 0;
+        document.getElementById('stat-total-social').textContent = (glob.total_global_social_scheduled + glob.total_global_social_published) || 0;
+        document.getElementById('stat-total-tasks').textContent = glob.total_global_tasks || 0;
+
+        const sites = data.sites_summary || [];
+        if (sites.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="padding:20px; text-align:center; color:var(--text-muted);">No websites registered yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = sites.map(site => {
+          const metrics = site.metrics || {};
+          const clients = site.assigned_client_emails || [];
+          const inviteUrl = window.location.origin + `/portal?token=${site.invite_token}`;
+
+          const clientsHtml = clients.length > 0 ? clients.map(c => `
+            <span class="badge badge-client">
+              <i class="fa-solid fa-user-check"></i> ${escapeHtml(c)}
+            </span>
+          `).join(' ') : `<span class="badge badge-none">No client assigned (Master Only)</span>`;
+
+          return `
+            <tr>
+              <td>
+                <div class="site-brand-cell">
+                  <span class="site-dot" style="background:${site.color_accent || '#06b6d4'};"></span>
+                  <div>
+                    <div>${escapeHtml(site.name)}</div>
+                    <div style="font-size:11px; color:var(--text-muted); font-weight:400; font-family:var(--font-mono);">ID: ${site.site_id}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <a href="${escapeHtml(site.domain)}" target="_blank" style="color:var(--cyan); text-decoration:none; font-size:12px;">
+                  <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i> ${escapeHtml(site.domain.replace('https://', ''))}
+                </a>
+              </td>
+              <td style="color:var(--text-muted); font-size:12px;">
+                <i class="fa-solid fa-location-dot" style="color:#f97316; margin-right:4px;"></i> ${escapeHtml(site.location || 'Melbourne')}
+              </td>
+              <td>
+                ${clientsHtml}
+              </td>
+              <td style="text-align:center; font-family:var(--font-mono); font-size:11px;">
+                <div style="color:var(--green);">Blogs: <strong>${metrics.published_blogs || 0}</strong></div>
+                <div style="color:var(--purple);">Social: <strong>${(metrics.social_published || 0) + (metrics.social_scheduled || 0)}</strong></div>
+                <div style="color:var(--cyan);">Tasks: <strong>${metrics.tasks_completed || 0}</strong></div>
+              </td>
+              <td style="text-align:center;">
+                <button class="btn btn-gold btn-sm" onclick="copyClientMagicLink('${inviteUrl}')" style="font-size:11px; padding:5px 10px; width:100%; margin-bottom:4px;">
+                  <i class="fa-solid fa-link"></i> Copy Magic Link
+                </button>
+                <a href="${inviteUrl}" target="_blank" class="btn btn-secondary btn-sm" style="font-size:10.5px; padding:4px 8px; width:100%; justify-content:center;">
+                  <i class="fa-solid fa-eye"></i> Open Client View
+                </a>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" style="padding:20px; text-align:center; color:#ef4444;">Error loading telemetry: ${err.message}</td></tr>`;
+      }
+    }
+
+    function copyClientMagicLink(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        alert(`🎉 Client Magic Portal Link Copied to Clipboard!\n\nShare this link with your client:\n${url}\n\nClient will be granted access strictly to manage their own website.`);
+      }).catch(() => {
+        prompt('Copy this Client Magic Link:', url);
+      });
+    }
+
+    function openAddSiteModal() {
+      document.getElementById('modal-add-site').style.display = 'flex';
+    }
+
+    function closeAddSiteModal() {
+      document.getElementById('modal-add-site').style.display = 'none';
+    }
+
+    async function handleCreateSiteSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('add-site-name').value.trim();
+      const domain = document.getElementById('add-site-domain').value.trim();
+      const location = document.getElementById('add-site-location').value.trim();
+      const color = document.getElementById('add-site-color').value;
+      const email = document.getElementById('add-site-email').value.trim();
+
+      try {
+        const res = await fetch('/api/admin/super/sites/register', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: name,
+            domain: domain,
+            location: location || 'Melbourne, VIC',
+            color_accent: color || '#06b6d4',
+            assigned_client_email: email || null
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          alert('Error: ' + (data.detail || 'Failed to add website'));
+          return;
+        }
+
+        closeAddSiteModal();
+        loadSuperAdminData();
+
+        // Show Success Share Popup
+        const fullUrl = window.location.origin + `/portal?token=${data.site.invite_token}`;
+        document.getElementById('share-modal-title').textContent = `Website '${name}' Created!`;
+        document.getElementById('share-link-input').value = fullUrl;
+        document.getElementById('share-whatsapp-btn').href = `https://wa.me/?text=${encodeURIComponent(`Here is your dedicated AI Digital Marketing portal for ${name}: ${fullUrl}`)}`;
+        document.getElementById('modal-share-success').style.display = 'flex';
+
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    function copyShareInputLink() {
+      const input = document.getElementById('share-link-input');
+      input.select();
+      navigator.clipboard.writeText(input.value);
+      alert('Link copied to clipboard!');
+    }
+
+    function closeShareModal() {
+      document.getElementById('modal-share-success').style.display = 'none';
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

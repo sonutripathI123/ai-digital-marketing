@@ -16,16 +16,43 @@ document.addEventListener('DOMContentLoaded', async () => {
   await checkAuthSession();
   checkVisitorAccess();
 
-  // Restore saved active view from hash or sessionStorage
-  const hashView = window.location.hash.replace('#', '').trim();
-  const savedView = sessionStorage.getItem('ccm_active_view');
-  const initialView = hashView || savedView || 'overview';
+  // Detect Client Portal Invite Link from Query or Hash
+  const urlParams = new URLSearchParams(window.location.search);
+  const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+  const inviteToken = urlParams.get('token') || urlParams.get('invite') || hashParams.get('token') || hashParams.get('invite');
+  const targetSiteParam = urlParams.get('site') || hashParams.get('site');
 
-  // Restore saved active website from sessionStorage or localStorage
-  const savedSite = sessionStorage.getItem('ccm_selected_site') || localStorage.getItem('ccm_selected_site');
-  if (savedSite) {
-    currentSiteId = savedSite;
+  if (inviteToken) {
+    try {
+      const validateRes = await fetch(`/api/portal/validate-invite?token=${encodeURIComponent(inviteToken)}`);
+      if (validateRes.ok) {
+        const inviteData = await validateRes.json();
+        currentSiteId = inviteData.site_id;
+        sessionStorage.setItem('ccm_selected_site', currentSiteId);
+        sessionStorage.setItem('ccm_client_invite_token', inviteToken);
+        currentUserRole = 'client';
+        isSuperAdmin = false;
+        currentAllowedSites = [inviteData.site_id];
+        clientPrimarySite = inviteData.site_id;
+      }
+    } catch (e) {
+      console.warn('Invite validation notice:', e);
+    }
+  } else if (targetSiteParam) {
+    currentSiteId = targetSiteParam;
+    sessionStorage.setItem('ccm_selected_site', currentSiteId);
+  } else {
+    // Restore saved active website from sessionStorage or localStorage
+    const savedSite = sessionStorage.getItem('ccm_selected_site') || localStorage.getItem('ccm_selected_site');
+    if (savedSite) {
+      currentSiteId = savedSite;
+    }
   }
+
+  // Restore saved active view from hash or sessionStorage
+  const hashView = window.location.hash.replace('#', '').split('&')[0].trim();
+  const savedView = sessionStorage.getItem('ccm_active_view');
+  const initialView = (hashView && !hashView.includes('=')) ? hashView : (savedView || 'overview');
 
   await initWebsiteSwitcher();
   switchToView(initialView);
@@ -800,8 +827,35 @@ async function initWebsiteSwitcher() {
 function renderWebsiteDropdown() {
   const listEl = document.getElementById('dropdown-site-list');
   const countBadge = document.getElementById('dropdown-sites-count');
+  const dropdownBtn = document.getElementById('website-dropdown-btn');
+  const addModalBtn = document.getElementById('open-add-website-modal-btn');
   if (!listEl) return;
 
+  const isClientLocked = currentUserRole === 'client' || (!isSuperAdmin && currentAllowedSites.length === 1 && !currentAllowedSites.includes('*'));
+
+  if (isClientLocked) {
+    // Hide Add Website button for client
+    if (addModalBtn) addModalBtn.style.display = 'none';
+    if (countBadge) countBadge.textContent = '1 Site (Locked)';
+    
+    // Filter strictly for allowed site
+    const clientSites = allWebsitesList.filter(s => currentAllowedSites.includes(s.site_id));
+    listEl.innerHTML = clientSites.map(site => `
+      <div class="dropdown-site-item selected" style="cursor:default;">
+        <div class="dropdown-site-left">
+          <span class="site-dot" style="background:${site.color_accent || '#06b6d4'}; box-shadow:0 0 8px ${site.color_accent || '#06b6d4'};"></span>
+          <div class="dropdown-site-info">
+            <div class="dropdown-site-title">${site.name}</div>
+            <div class="dropdown-site-sub">${site.domain.replace('https://', '').replace('http://', '')} &bull; Dedicated Client Portal</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-lock" style="color:var(--status-success);" title="Locked to your assigned website"></i>
+      </div>
+    `).join('');
+    return;
+  }
+
+  if (addModalBtn) addModalBtn.style.display = 'flex';
   if (countBadge) countBadge.textContent = `${allWebsitesList.length} Sites`;
 
   let itemsHtml = `

@@ -17,6 +17,7 @@ Provides REST API endpoints and static SPA UI serving for the AI Digital Marketi
 
 import os
 import csv
+import re
 import hmac
 import hashlib
 import time
@@ -28,7 +29,7 @@ from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from fastapi import FastAPI, HTTPException, Depends, Header, Query, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -530,6 +531,37 @@ def serve_dashboard_ui():
             "Expires": "0"
         }
     )
+
+
+@app.get("/super-admin")
+def serve_super_admin_ui():
+    """Serves the dedicated Standalone Super Admin Command Center for Sonu Tripathi."""
+    sa_path = STATIC_DIR / "super_admin.html"
+    if not sa_path.exists():
+        index_path = STATIC_DIR / "index.html"
+        return FileResponse(str(index_path))
+    return FileResponse(
+        str(sa_path),
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )
+
+
+@app.get("/portal")
+def serve_client_portal_gateway(token: Optional[str] = None, site: Optional[str] = None):
+    """Direct Magic Portal Gateway for client users."""
+    if token:
+        site_prof = websites_mgr.get_by_invite_token(token.strip())
+        if site_prof:
+            return RedirectResponse(url=f"/#client_portal=true&site={site_prof.site_id}&token={token.strip()}")
+    if site:
+        site_prof = websites_mgr.get(site.strip())
+        if site_prof:
+            return RedirectResponse(url=f"/#client_portal=true&site={site_prof.site_id}")
+    return RedirectResponse(url="/")
 
 
 @app.get("/download-handbook")

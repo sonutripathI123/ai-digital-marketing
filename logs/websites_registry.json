@@ -40,5 +40,28 @@
     "assigned_client_emails": [],
     "invite_token": "inv_opal_16bab12b",
     "created_at": null
+  },
+  {
+    "site_id": "sydney-executive-chauffeurs",
+    "name": "Sydney Executive Chauffeurs",
+    "domain": "https://sydneyexecutivechauffeurs.com.au",
+    "location": "Sydney, NSW",
+    "niche": "Luxury Chauffeur & Airport Transfers",
+    "default_category": "Chauffeur Services",
+    "gsc_site_url": null,
+    "ga4_property_id": null,
+    "google_ads_id": null,
+    "meta_ads_id": null,
+    "facebook_url": null,
+    "instagram_url": null,
+    "linkedin_url": null,
+    "is_active": true,
+    "color_accent": "#f97316",
+    "owner_email": "sonutripathi9305@gmail.com",
+    "assigned_client_emails": [
+      "client@sydneyexecutive.com.au"
+    ],
+    "invite_token": "inv_sydney-executive-chauffeurs_fea67d94",
+    "created_at": "2026-08-31T07:37:13.038305"
   }
 ]
