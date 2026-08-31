@@ -418,6 +418,10 @@ class GenerateInviteRequest(BaseModel):
     site_id: str
 
 
+class DeleteWebsiteRequest(BaseModel):
+    site_id: str
+
+
 # --- Authentication & Multi-Tenant Authorization Core ---
 def generate_auth_token(email: str, role: str = "super_admin", allowed_sites: Optional[List[str]] = None) -> str:
     payload = {
@@ -980,6 +984,26 @@ def super_admin_generate_invite(req: GenerateInviteRequest, _super: Dict[str, An
         "site_name": site.name if site else req.site_id,
         "invite_token": token,
         "invite_url": f"/?site={req.site_id}&invite={token}"
+    }
+
+
+@app.delete("/api/admin/super/sites/delete")
+def super_admin_delete_site(req: DeleteWebsiteRequest, _super: Dict[str, Any] = Depends(require_super_admin)):
+    """Permanently deletes a website from registry and revokes all client portal access."""
+    if req.site_id == "ccm":
+        raise HTTPException(status_code=400, detail="Cannot delete the primary root website (Corporate Cars Melbourne).")
+
+    site = websites_mgr.get(req.site_id)
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{req.site_id}' not found.")
+
+    deleted = websites_mgr.delete_website(req.site_id)
+    if not deleted:
+        raise HTTPException(status_code=500, detail="Failed to delete website.")
+
+    return {
+        "status": "success",
+        "message": f"Website '{site.name}' ({req.site_id}) deleted successfully and all client portal access revoked permanently."
     }
 
 

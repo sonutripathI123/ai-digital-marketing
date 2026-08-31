@@ -667,9 +667,16 @@
                 <button class="btn btn-gold btn-sm" onclick="copyClientMagicLink('${inviteUrl}')" style="font-size:11px; padding:5px 10px; width:100%; margin-bottom:4px;">
                   <i class="fa-solid fa-link"></i> Copy Magic Link
                 </button>
-                <a href="${inviteUrl}" target="_blank" class="btn btn-secondary btn-sm" style="font-size:10.5px; padding:4px 8px; width:100%; justify-content:center;">
-                  <i class="fa-solid fa-eye"></i> Open Client View
-                </a>
+                <div style="display:grid; grid-template-columns: ${site.site_id === 'ccm' ? '1fr' : '1fr 1fr'}; gap:4px;">
+                  <a href="${inviteUrl}" target="_blank" class="btn btn-secondary btn-sm" style="font-size:10.5px; padding:4px 6px; justify-content:center;">
+                    <i class="fa-solid fa-eye"></i> View
+                  </a>
+                  ${site.site_id !== 'ccm' ? `
+                    <button class="btn btn-secondary btn-sm" onclick="handleDeleteWebsite('${site.site_id}', '${escapeHtml(site.name)}')" style="font-size:10.5px; padding:4px 6px; justify-content:center; border-color:rgba(239,68,68,0.4); color:#f87171;" title="Delete website & revoke client access">
+                      <i class="fa-solid fa-trash-can"></i> Delete
+                    </button>
+                  ` : ''}
+                </div>
               </td>
             </tr>
           `;
@@ -677,6 +684,34 @@
 
       } catch (err) {
         tbody.innerHTML = `<tr><td colspan="6" style="padding:20px; text-align:center; color:#ef4444;">Error loading telemetry: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function handleDeleteWebsite(siteId, siteName) {
+      if (!confirm(`⚠️ ARE YOU SURE you want to delete '${siteName}' (${siteId})?\n\nThis will immediately:\n1. Revoke the client's portal access link.\n2. Delete this website from the registry.\n3. Disallow all client operations for this site.`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/super/sites/delete', {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ site_id: siteId })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          alert('Error: ' + (data.detail || 'Failed to delete website'));
+          return;
+        }
+
+        alert(`✅ Website '${siteName}' has been deleted and all client access revoked permanently.`);
+        loadSuperAdminData();
+      } catch (err) {
+        alert('Error: ' + err.message);
       }
     }
 
