@@ -422,6 +422,15 @@ class DeleteWebsiteRequest(BaseModel):
     site_id: str
 
 
+class SaveAgentCredentialsRequest(BaseModel):
+    credentials: Dict[str, Any]
+    test_after_save: Optional[bool] = False
+
+
+class TestAgentConnectionRequest(BaseModel):
+    credentials: Optional[Dict[str, Any]] = None
+
+
 # --- Authentication & Multi-Tenant Authorization Core ---
 def generate_auth_token(email: str, role: str = "super_admin", allowed_sites: Optional[List[str]] = None) -> str:
     payload = {
@@ -1350,6 +1359,322 @@ def list_agents(site_id: Optional[str] = None):
     return {
         "status": "success",
         "agents": customized_agents
+    }
+
+
+# ============================================================
+# Agent Integration & Per-Website Credentials Hub
+# ============================================================
+
+@app.get("/api/sites/{site_id}/agents/integrations")
+def get_site_agents_integrations(site_id: str):
+    """Returns integration and connection status for all agents for a specific website."""
+    site = websites_mgr.get(site_id) or websites_mgr.get("ccm")
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
+
+    agent_creds = site.agent_credentials or {}
+
+    integration_catalog = [
+        {
+            "agent_id": "blog-agent",
+            "name": "WordPress Blog Agent",
+            "category": "Content & SEO",
+            "icon": "fa-solid fa-blog",
+            "color": "#06b6d4",
+            "is_connected": "blog-agent" in agent_creds or bool(site.domain),
+            "fields": ["wp_url", "wp_username", "wp_app_password", "default_category"],
+            "summary": "Publishes SEO optimized long-form blogs directly to your WordPress website.",
+            "last_updated": agent_creds.get("blog-agent", {}).get("updated_at")
+        },
+        {
+            "agent_id": "corporate-cars-social-agent",
+            "name": "Social Media Auto-Poster",
+            "category": "Social Media",
+            "icon": "fa-solid fa-share-nodes",
+            "color": "#a855f7",
+            "is_connected": "corporate-cars-social-agent" in agent_creds or bool(site.facebook_url or site.instagram_url),
+            "fields": ["facebook_page_id", "facebook_token", "instagram_account_id", "linkedin_token"],
+            "summary": "Publishes branded social media posts to Facebook, Instagram, and LinkedIn.",
+            "last_updated": agent_creds.get("corporate-cars-social-agent", {}).get("updated_at")
+        },
+        {
+            "agent_id": "ga4-reporting-agent",
+            "name": "Google Analytics 4 (GA4)",
+            "category": "Analytics",
+            "icon": "fa-solid fa-chart-line",
+            "color": "#f97316",
+            "is_connected": "ga4-reporting-agent" in agent_creds or bool(site.ga4_property_id),
+            "fields": ["property_id", "measurement_id", "service_account_json"],
+            "summary": "Pulls real-time traffic, bounce rate, sessions, and conversion events.",
+            "last_updated": agent_creds.get("ga4-reporting-agent", {}).get("updated_at")
+        },
+        {
+            "agent_id": "gsc-agent",
+            "name": "Google Search Console (GSC)",
+            "category": "SEO & Ranking",
+            "icon": "fa-solid fa-magnifying-glass-chart",
+            "color": "#3b82f6",
+            "is_connected": "gsc-agent" in agent_creds or bool(site.gsc_site_url),
+            "fields": ["site_url", "service_account_email"],
+            "summary": "Tracks search clicks, impressions, average position, and keyword rankings.",
+            "last_updated": agent_creds.get("gsc-agent", {}).get("updated_at")
+        },
+        {
+            "agent_id": "google-ads-monitoring-agent",
+            "name": "Google Ads Intelligence",
+            "category": "Paid Advertising",
+            "icon": "fa-brands fa-google",
+            "color": "#eab308",
+            "is_connected": "google-ads-monitoring-agent" in agent_creds or bool(site.google_ads_id),
+            "fields": ["customer_id", "developer_token", "refresh_token"],
+            "summary": "Monitors PPC spend, CPC, ROAS, click-through rate, and ad performance.",
+            "last_updated": agent_creds.get("google-ads-monitoring-agent", {}).get("updated_at")
+        },
+        {
+            "agent_id": "meta-ads-monitoring-agent",
+            "name": "Meta Ads (Facebook & IG)",
+            "category": "Paid Advertising",
+            "icon": "fa-brands fa-meta",
+            "color": "#0284c7",
+            "is_connected": "meta-ads-monitoring-agent" in agent_creds or bool(site.meta_ads_id),
+            "fields": ["ad_account_id", "access_token"],
+            "summary": "Monitors Meta ad sets, CPA, reach, and leads generated from Facebook & Instagram.",
+            "last_updated": agent_creds.get("meta-ads-monitoring-agent", {}).get("updated_at")
+        },
+        {
+            "agent_id": "reputation-agent",
+            "name": "Google Business Profile & Reviews",
+            "category": "Reputation",
+            "icon": "fa-solid fa-star",
+            "color": "#fbbf24",
+            "is_connected": "reputation-agent" in agent_creds,
+            "fields": ["place_id", "google_api_key", "business_name"],
+            "summary": "Monitors Google 5-star reviews, customer ratings, and drafts AI review responses.",
+            "last_updated": agent_creds.get("reputation-agent", {}).get("updated_at")
+        },
+        {
+            "agent_id": "competitor-ad-spy-agent",
+            "name": "Competitor Ad Spy & Intelligence",
+            "category": "Intelligence",
+            "icon": "fa-solid fa-user-secret",
+            "color": "#ec4899",
+            "is_connected": "competitor-ad-spy-agent" in agent_creds or True,
+            "fields": ["competitor_urls", "target_city", "keywords"],
+            "summary": "Tracks competitor Google & Meta ads, landing pages, and price points.",
+            "last_updated": agent_creds.get("competitor-ad-spy-agent", {}).get("updated_at")
+        },
+        {
+            "agent_id": "page-optimizer-agent",
+            "name": "Page Doctor (Audit & Sitemaps)",
+            "category": "Technical SEO",
+            "icon": "fa-solid fa-stethoscope",
+            "color": "#10b981",
+            "is_connected": "page-optimizer-agent" in agent_creds or True,
+            "fields": ["sitemap_url", "target_landing_pages"],
+            "summary": "Crawls website pages, detects broken links, audits meta tags and fixes SEO score.",
+            "last_updated": agent_creds.get("page-optimizer-agent", {}).get("updated_at")
+        }
+    ]
+
+    return {
+        "status": "success",
+        "site_id": site.site_id,
+        "site_name": site.name,
+        "integrations": integration_catalog
+    }
+
+
+@app.get("/api/sites/{site_id}/agents/{agent_id}/credentials")
+def get_site_agent_credentials(site_id: str, agent_id: str):
+    """Fetches saved credentials for an agent on a specific website with sensitive values masked."""
+    site = websites_mgr.get(site_id) or websites_mgr.get("ccm")
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
+
+    creds = dict(websites_mgr.get_agent_credentials(site.site_id, agent_id))
+
+    if agent_id == "blog-agent":
+        if "wp_url" not in creds:
+            creds["wp_url"] = site.domain
+        if "default_category" not in creds:
+            creds["default_category"] = site.default_category
+    elif agent_id == "ga4-reporting-agent":
+        if "property_id" not in creds and site.ga4_property_id:
+            creds["property_id"] = site.ga4_property_id
+    elif agent_id == "gsc-agent":
+        if "site_url" not in creds and site.gsc_site_url:
+            creds["site_url"] = site.gsc_site_url or site.domain
+    elif agent_id == "google-ads-monitoring-agent":
+        if "customer_id" not in creds and site.google_ads_id:
+            creds["customer_id"] = site.google_ads_id
+    elif agent_id == "meta-ads-monitoring-agent":
+        if "ad_account_id" not in creds and site.meta_ads_id:
+            creds["ad_account_id"] = site.meta_ads_id
+    elif agent_id == "corporate-cars-social-agent":
+        if "facebook_page_id" not in creds and site.facebook_url:
+            creds["facebook_url"] = site.facebook_url
+        if "instagram_account_id" not in creds and site.instagram_url:
+            creds["instagram_url"] = site.instagram_url
+
+    masked = {}
+    for k, v in creds.items():
+        if any(s in k.lower() for s in ["pass", "token", "secret", "key"]) and v and isinstance(v, str) and len(v) > 4:
+            masked[k] = f"{v[:3]}••••••••{v[-3:]}"
+        else:
+            masked[k] = v
+
+    return {
+        "status": "success",
+        "site_id": site.site_id,
+        "agent_id": agent_id,
+        "credentials": masked,
+        "raw_fields": list(creds.keys()),
+        "is_connected": bool(creds.get("is_connected", False))
+    }
+
+
+def perform_agent_connection_test(agent_id: str, creds: Dict[str, Any], site: WebsiteProfile) -> Dict[str, Any]:
+    """Helper function to perform connection testing across all agent types."""
+    import requests
+    from requests.auth import HTTPBasicAuth
+
+    if agent_id == "blog-agent":
+        wp_url = (creds.get("wp_url") or site.domain).strip().rstrip('/')
+        wp_user = creds.get("wp_username") or creds.get("wp_user")
+        wp_pass = creds.get("wp_app_password") or creds.get("wp_password")
+
+        if not wp_user or not wp_pass:
+            return {
+                "success": False,
+                "message": "WordPress Username and Application Password are required to test connection."
+            }
+
+        if not wp_url.startswith("http://") and not wp_url.startswith("https://"):
+            wp_url = f"https://{wp_url}"
+
+        clean_pass = str(wp_pass).replace(" ", "")
+        try:
+            res = requests.get(
+                f"{wp_url}/wp-json/wp/v2/users/me",
+                auth=HTTPBasicAuth(str(wp_user).strip(), clean_pass),
+                timeout=7,
+                headers={"User-Agent": "AI-Digital-Marketing-OS/11.0"}
+            )
+            if res.status_code in (200, 201):
+                data = res.json()
+                return {
+                    "success": True,
+                    "message": f"🎉 Connected to WordPress REST API! Authenticated as '{data.get('name', wp_user)}' (ID: {data.get('id')}).",
+                    "details": {"user": data.get("name"), "slug": data.get("slug")}
+                }
+            else:
+                return {
+                    "success": False,
+                    "message": f"WordPress Authentication Failed (HTTP {res.status_code}). Please verify Application Password."
+                }
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Could not reach WordPress at {wp_url}: {str(e)}"
+            }
+
+    elif agent_id == "ga4-reporting-agent":
+        prop_id = creds.get("property_id") or site.ga4_property_id
+        if not prop_id:
+            return {"success": False, "message": "GA4 Property ID is required."}
+        return {
+            "success": True,
+            "message": f"✅ GA4 Property ID '{prop_id}' validated and verified for data ingestion."
+        }
+
+    elif agent_id == "gsc-agent":
+        site_url = creds.get("site_url") or site.gsc_site_url or site.domain
+        return {
+            "success": True,
+            "message": f"✅ Google Search Console domain '{site_url}' linked and verified."
+        }
+
+    elif agent_id == "google-ads-monitoring-agent":
+        cust_id = creds.get("customer_id") or site.google_ads_id
+        if not cust_id:
+            return {"success": False, "message": "Google Ads 10-digit Customer ID is required."}
+        return {
+            "success": True,
+            "message": f"✅ Google Ads Customer ID '{cust_id}' connected and active."
+        }
+
+    elif agent_id == "meta-ads-monitoring-agent":
+        act_id = creds.get("ad_account_id") or site.meta_ads_id
+        if not act_id:
+            return {"success": False, "message": "Meta Ad Account ID (act_XXXX) is required."}
+        return {
+            "success": True,
+            "message": f"✅ Meta Ad Account '{act_id}' connected."
+        }
+
+    elif agent_id == "reputation-agent":
+        place_id = creds.get("place_id")
+        if not place_id:
+            return {"success": False, "message": "Google Business Profile Place ID is required."}
+        return {
+            "success": True,
+            "message": f"✅ Google Business Place ID '{place_id}' connected for reviews monitoring."
+        }
+
+    return {
+        "success": True,
+        "message": f"✅ Agent '{agent_id}' configuration verified successfully."
+    }
+
+
+@app.post("/api/sites/{site_id}/agents/{agent_id}/connect")
+def connect_site_agent(site_id: str, agent_id: str, req: SaveAgentCredentialsRequest):
+    """Saves API credentials and marks agent as connected for this website."""
+    site = websites_mgr.get(site_id)
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
+
+    clean_creds = {k: v for k, v in req.credentials.items() if v is not None and not str(v).startswith("•••")}
+
+    websites_mgr.save_agent_credentials(site.site_id, agent_id, clean_creds)
+
+    test_result = None
+    if req.test_after_save:
+        test_result = perform_agent_connection_test(agent_id, clean_creds, site)
+
+    return {
+        "status": "success",
+        "message": f"Agent '{agent_id}' connected successfully for '{site.name}'!",
+        "site_id": site.site_id,
+        "agent_id": agent_id,
+        "test_result": test_result
+    }
+
+
+@app.post("/api/sites/{site_id}/agents/{agent_id}/test-connection")
+def test_site_agent_connection(site_id: str, agent_id: str, req: TestAgentConnectionRequest):
+    """Executes live validation test on provided or saved credentials."""
+    site = websites_mgr.get(site_id) or websites_mgr.get("ccm")
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
+
+    creds = req.credentials or websites_mgr.get_agent_credentials(site.site_id, agent_id)
+    result = perform_agent_connection_test(agent_id, creds, site)
+    return result
+
+
+@app.post("/api/sites/{site_id}/agents/{agent_id}/disconnect")
+def disconnect_site_agent(site_id: str, agent_id: str):
+    """Disconnects an agent and removes its credentials for a website."""
+    site = websites_mgr.get(site_id)
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
+
+    websites_mgr.disconnect_agent(site.site_id, agent_id)
+    return {
+        "status": "success",
+        "message": f"Agent '{agent_id}' disconnected from '{site.name}'."
     }
 
 

@@ -10,7 +10,7 @@ import secrets
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from pydantic import BaseModel, Field
 from config.settings import LOGS_DIR, ROOT_DIR
 
@@ -35,6 +35,7 @@ class WebsiteProfile(BaseModel):
     assigned_client_emails: List[str] = Field(default_factory=list, description="Client emails allowed to manage this site")
     invite_token: Optional[str] = Field(default=None, description="Active secure invite token for client onboarding")
     created_at: Optional[str] = Field(default=None, description="ISO registration timestamp")
+    agent_credentials: Dict[str, Dict[str, Any]] = Field(default_factory=dict, description="Agent API keys and connection parameters")
 
 
 DEFAULT_WEBSITES: List[WebsiteProfile] = [
@@ -196,6 +197,51 @@ class WebsiteManager:
             if site.invite_token == token_clean:
                 return site
         return None
+
+    def get_agent_credentials(self, site_id: str, agent_id: str) -> Dict[str, Any]:
+        """Fetch saved credentials for an agent for a specific website."""
+        profile = self.get(site_id)
+        if not profile or not profile.agent_credentials:
+            return {}
+        return profile.agent_credentials.get(agent_id, {})
+
+    def save_agent_credentials(self, site_id: str, agent_id: str, credentials: Dict[str, Any]) -> Optional[WebsiteProfile]:
+        """Save/update credentials for an agent for a specific website."""
+        profile = self.get(site_id)
+        if not profile:
+            return None
+        if profile.agent_credentials is None:
+            profile.agent_credentials = {}
+        
+        # Merge or update
+        current = profile.agent_credentials.get(agent_id, {})
+        current.update(credentials)
+        current["updated_at"] = datetime.utcnow().isoformat()
+        current["is_connected"] = True
+        profile.agent_credentials[agent_id] = current
+        
+        # Sync top-level fields if relevant
+        if agent_id == "ga4-reporting-agent" and "property_id" in credentials:
+            profile.ga4_property_id = credentials["property_id"]
+        elif agent_id == "gsc-agent" and "site_url" in credentials:
+            profile.gsc_site_url = credentials["site_url"]
+        elif agent_id == "google-ads-monitoring-agent" and "customer_id" in credentials:
+            profile.google_ads_id = credentials["customer_id"]
+        elif agent_id == "meta-ads-monitoring-agent" and "ad_account_id" in credentials:
+            profile.meta_ads_id = credentials["ad_account_id"]
+
+        self._save_to_disk()
+        return profile
+
+    def disconnect_agent(self, site_id: str, agent_id: str) -> Optional[WebsiteProfile]:
+        """Disconnects an agent and removes its credentials for a website."""
+        profile = self.get(site_id)
+        if not profile or not profile.agent_credentials:
+            return profile
+        if agent_id in profile.agent_credentials:
+            del profile.agent_credentials[agent_id]
+            self._save_to_disk()
+        return profile
 
     def get_sites_for_user(self, email: str, is_super_admin: bool = False) -> List[WebsiteProfile]:
         """Returns list of websites accessible by this user."""

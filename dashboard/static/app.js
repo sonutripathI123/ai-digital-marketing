@@ -1403,9 +1403,21 @@ async function loadAgents() {
             <div class="agent-avatar">
               <i class="${getIconForAgent(a.agent_id)}"></i>
             </div>
-            <div class="agent-title-box">
-              <h3>${a.name}</h3>
-              <div class="agent-category">${a.category}</div>
+            <div class="agent-title-box" style="flex:1;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+                <div>
+                  <h3>${a.name}</h3>
+                  <div class="agent-category">${a.category}</div>
+                </div>
+                <div style="display:flex; gap:5px; flex-shrink:0;">
+                  <button class="btn btn-secondary btn-sm" onclick="openAgentIntegrationModal('${a.agent_id}', 'guide')" title="Open Step-by-Step Setup Guide" style="font-size:10.5px; padding:4px 7px; color:var(--accent-cyan); border-color:rgba(6,182,212,0.3); background:rgba(6,182,212,0.08);">
+                    <i class="fa-solid fa-book-open"></i> Guide
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="openAgentIntegrationModal('${a.agent_id}', 'settings')" title="Connect Website & API Credentials" style="font-size:10.5px; padding:4px 7px; color:#facc15; border-color:rgba(234,179,8,0.3); background:rgba(234,179,8,0.08);">
+                    <i class="fa-solid fa-plug"></i> Connect
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="agent-desc">${a.description}</div>
@@ -7853,6 +7865,445 @@ window.openAllotClientModal = openAllotClientModal;
 window.closeAllotClientModal = closeAllotClientModal;
 window.handleAllotClientSubmit = handleAllotClientSubmit;
 window.handleRevokeClientAccess = handleRevokeClientAccess;
+
+/* ============================================================
+   Agent Integration & Credentials Setup Guide Hub
+   ============================================================ */
+
+let currentIntegrationAgentId = null;
+
+const AGENT_INTEGRATION_CONFIGS = {
+  'blog-agent': {
+    title: 'WordPress Blog Agent',
+    icon: 'fa-solid fa-blog',
+    color: '#06b6d4',
+    subtitle: 'Publishes AI-generated SEO articles directly into your WordPress posts.',
+    fields: [
+      { key: 'wp_url', label: 'WordPress Site URL', type: 'text', placeholder: 'https://yourwebsite.com.au', required: true, help: 'Base domain of your WordPress installation' },
+      { key: 'wp_username', label: 'WordPress Username / Email', type: 'text', placeholder: 'admin_user', required: true, help: 'Your Administrator or Editor username' },
+      { key: 'wp_app_password', label: 'Application Password', type: 'password', placeholder: 'xxxx xxxx xxxx xxxx', required: true, help: 'Generate in WP-Admin > Users > Profile > Application Passwords' },
+      { key: 'default_category', label: 'Default Blog Category', type: 'text', placeholder: 'Chauffeur Services', required: false, help: 'Category slug where posts will be assigned' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <h4 style="color:#06b6d4; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-key"></i> How to Connect WordPress in 3 Simple Steps:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <strong style="color:#fff;">Step 1: Open WP-Admin</strong><br>
+          Log in to your WordPress Admin Panel (e.g. <code>https://yourwebsite.com/wp-admin</code>).
+        </div>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <strong style="color:#fff;">Step 2: Create Application Password</strong><br>
+          Go to <strong style="color:var(--gold);">Users &gt; Profile</strong>. Scroll down to the <em>"Application Passwords"</em> section.<br>
+          Type a name like <code style="color:#06b6d4;">AI Marketing Agent</code> and click <strong>"Add New Application Password"</strong>.
+        </div>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <strong style="color:#fff;">Step 3: Paste and Test</strong><br>
+          Copy the generated 24-character password and paste it into the <em>Application Password</em> field.<br>
+          Click <strong>"Test Connection"</strong> to verify instant 2-way REST API publishing!
+        </div>
+      </div>
+    `
+  },
+  'corporate-cars-social-agent': {
+    title: 'Social Media Auto-Poster (Meta & LinkedIn)',
+    icon: 'fa-solid fa-share-nodes',
+    color: '#a855f7',
+    subtitle: 'Auto-schedules and publishes branded image posts to Facebook, Instagram, and LinkedIn.',
+    fields: [
+      { key: 'facebook_page_id', label: 'Facebook Page ID', type: 'text', placeholder: '109283746192837', required: false, help: 'Your business Facebook Page numeric ID' },
+      { key: 'facebook_token', label: 'Page Access Token (Meta)', type: 'password', placeholder: 'EAABw...', required: false, help: 'Long-lived Meta Graph API token' },
+      { key: 'instagram_account_id', label: 'Instagram Professional ID', type: 'text', placeholder: '17841400...', required: false, help: 'Instagram Business Account ID linked to Meta Business Suite' },
+      { key: 'linkedin_token', label: 'LinkedIn OAuth Token', type: 'password', placeholder: 'AQV...', required: false, help: 'OAuth 2.0 token for LinkedIn company page sharing' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <h4 style="color:#a855f7; font-size:14.5px; margin-bottom:10px;"><i class="fa-brands fa-meta"></i> How to Connect Facebook & Instagram:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <strong style="color:#fff;">1. Find Facebook Page ID:</strong><br>
+          Open <strong>Meta Business Suite</strong> &gt; Settings &gt; Page Info &gt; Copy the 15-digit Page ID.
+        </div>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <strong style="color:#fff;">2. Connect Instagram Account:</strong><br>
+          Ensure your Instagram account is switched to <em>Professional / Business</em> and linked to your Facebook Page in Meta Business Suite.
+        </div>
+      </div>
+    `
+  },
+  'ga4-reporting-agent': {
+    title: 'Google Analytics 4 (GA4)',
+    icon: 'fa-solid fa-chart-line',
+    color: '#f97316',
+    subtitle: 'Extracts real-time visitor sessions, traffic sources, bounce rate, and lead conversions.',
+    fields: [
+      { key: 'property_id', label: 'GA4 Property ID (9 Digits)', type: 'text', placeholder: '481920194', required: true, help: 'Found in Google Analytics > Admin > Property Settings' },
+      { key: 'measurement_id', label: 'Measurement ID (Optional)', type: 'text', placeholder: 'G-XXXXXXXXXX', required: false, help: 'Web Stream Measurement ID' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <h4 style="color:#f97316; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-chart-pie"></i> How to Find Your GA4 Property ID:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <strong style="color:#fff;">Step 1: Open Google Analytics</strong><br>
+          Go to <code>analytics.google.com</code> and select your website property.
+        </div>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          <strong style="color:#fff;">Step 2: Copy Property ID</strong><br>
+          Click the <strong>Admin ⚙️</strong> gear icon at bottom-left &gt; <strong>Property Settings</strong>.<br>
+          Copy the 9-digit number shown at the top-right (e.g. <code>481920194</code>).
+        </div>
+      </div>
+    `
+  },
+  'gsc-agent': {
+    title: 'Google Search Console (GSC)',
+    icon: 'fa-solid fa-magnifying-glass-chart',
+    color: '#3b82f6',
+    subtitle: 'Monitors organic Google search queries, impressions, CTR, and SERP rankings.',
+    fields: [
+      { key: 'site_url', label: 'Search Console Property URL', type: 'text', placeholder: 'https://yourwebsite.com.au', required: true, help: 'Full property URL as listed in Google Search Console' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <h4 style="color:#3b82f6; font-size:14.5px; margin-bottom:10px;"><i class="fa-brands fa-google"></i> How to Link Google Search Console:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          Enter your exact verified site URL from <code>search.google.com/search-console</code>.<br>
+          The agent uses search query logs and automated SERP scrapers to monitor your top ranking keywords.
+        </div>
+      </div>
+    `
+  },
+  'google-ads-monitoring-agent': {
+    title: 'Google Ads Intelligence',
+    icon: 'fa-brands fa-google',
+    color: '#eab308',
+    subtitle: 'Audits PPC spend, keyword cost-per-click (CPC), conversions, and ROAS.',
+    fields: [
+      { key: 'customer_id', label: '10-Digit Google Ads Customer ID', type: 'text', placeholder: '123-456-7890', required: true, help: 'Displayed in the top-right corner of Google Ads' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <h4 style="color:#eab308; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-bullhorn"></i> How to Find Google Ads ID:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          Open <code>ads.google.com</code>. Look at the top right header under your profile icon.<br>
+          Copy the 10-digit number formatted as <code>XXX-XXX-XXXX</code>.
+        </div>
+      </div>
+    `
+  },
+  'meta-ads-monitoring-agent': {
+    title: 'Meta Ads Manager (Facebook/Instagram Ads)',
+    icon: 'fa-brands fa-meta',
+    color: '#0284c7',
+    subtitle: 'Monitors Meta ad sets, click-through rate, cost per lead, and campaign ROAS.',
+    fields: [
+      { key: 'ad_account_id', label: 'Meta Ad Account ID', type: 'text', placeholder: 'act_1029384756', required: true, help: 'Starts with act_ followed by account number' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <h4 style="color:#0284c7; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-rectangle-ad"></i> How to Find Meta Ad Account ID:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          Open <strong>Meta Ads Manager</strong> (<code>adsmanager.facebook.com</code>).<br>
+          Select your ad account from the top dropdown or copy the <code>act_XXXXXXXX</code> parameter from your browser URL.
+        </div>
+      </div>
+    `
+  },
+  'reputation-agent': {
+    title: 'Google Business Profile & 5-Star Reviews',
+    icon: 'fa-solid fa-star',
+    color: '#fbbf24',
+    subtitle: 'Pulls real customer reviews, calculates sentiment, and crafts professional AI reply drafts.',
+    fields: [
+      { key: 'place_id', label: 'Google Place ID', type: 'text', placeholder: 'ChIJN1t_tDeuEmsRUsoyG83frY4', required: true, help: 'Unique Google Maps identifier for your business location' },
+      { key: 'business_name', label: 'Business Name on Google Maps', type: 'text', placeholder: 'Opal Chauffeurs Melbourne', required: false, help: 'Exact registered name on Google Business Profile' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <h4 style="color:#fbbf24; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-map-location-dot"></i> How to Find Google Place ID:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          1. Go to <a href="https://developers.google.com/maps/documentation/places/web-service/place-id" target="_blank" style="color:var(--accent-cyan); text-decoration:underline;">Google Place ID Finder</a>.<br>
+          2. Type your business name & city in the search map.<br>
+          3. Copy the generated <strong>Place ID</strong> (e.g. <code>ChIJ...</code>) and paste it here.
+        </div>
+      </div>
+    `
+  },
+  'competitor-ad-spy-agent': {
+    title: 'Competitor Ad Spy & Intelligence',
+    icon: 'fa-solid fa-user-secret',
+    color: '#ec4899',
+    subtitle: 'Spies on competitor Google search ads, Meta sponsored posts, and landing page pricing.',
+    fields: [
+      { key: 'competitor_urls', label: 'Competitor Website Domains', type: 'text', placeholder: 'competitor1.com.au, competitor2.com.au', required: true, help: 'Comma-separated domains of your top local competitors' },
+      { key: 'target_city', label: 'Target Operating City', type: 'text', placeholder: 'Melbourne, VIC', required: false, help: 'City where ad geo-targeting should be inspected' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <h4 style="color:#ec4899; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-crosshairs"></i> How Competitor Ad Spy Works:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          Simply list the top 2-5 competitors in your city.<br>
+          The AI will crawl their live ad copies, meta tags, and landing page promotions automatically.
+        </div>
+      </div>
+    `
+  },
+  'page-optimizer-agent': {
+    title: 'Page Doctor & Technical SEO Audit',
+    icon: 'fa-solid fa-stethoscope',
+    color: '#10b981',
+    subtitle: 'Crawls XML sitemaps, audits meta descriptions, detects broken links and scores pages.',
+    fields: [
+      { key: 'sitemap_url', label: 'Website XML Sitemap URL', type: 'text', placeholder: 'https://yourwebsite.com.au/sitemap.xml', required: true, help: 'Direct URL to your XML sitemap index or post sitemap' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#10b981; margin-bottom:10px;">
+        <h4 style="color:#10b981; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-sitemap"></i> How to Connect XML Sitemap:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          In WordPress (Yoast/RankMath), your sitemap is usually at <code>https://yourdomain.com/sitemap_index.xml</code> or <code>sitemap.xml</code>.<br>
+          Paste the URL here for continuous automated crawling and health fixes.
+        </div>
+      </div>
+    `
+  }
+};
+
+async function openAgentIntegrationModal(agentId, initialTab = 'settings') {
+  currentIntegrationAgentId = agentId;
+  const config = AGENT_INTEGRATION_CONFIGS[agentId] || {
+    title: `Agent Configuration (${agentId})`,
+    icon: 'fa-solid fa-gear',
+    color: '#06b6d4',
+    subtitle: 'Configure connection settings for this AI agent.',
+    fields: [
+      { key: 'api_key', label: 'API Key / Token', type: 'password', placeholder: 'Enter API key', required: false, help: 'Optional API credentials' }
+    ],
+    guide: '<p style="color:var(--text-muted);">Enter the necessary API credentials to connect this sub-agent.</p>'
+  };
+
+  document.getElementById('modal-int-title').textContent = config.title;
+  document.getElementById('modal-int-subtitle').textContent = config.subtitle;
+  const iconContainer = document.getElementById('modal-int-icon');
+  if (iconContainer) {
+    iconContainer.innerHTML = `<i class="${config.icon}"></i>`;
+    iconContainer.style.borderColor = config.color;
+    iconContainer.style.color = config.color;
+  }
+
+  // Fetch saved credentials for this agent
+  let savedCreds = {};
+  let isConnected = false;
+  try {
+    const res = await fetch(`/api/sites/${encodeURIComponent(currentSiteId)}/agents/${encodeURIComponent(agentId)}/credentials`);
+    if (res.ok) {
+      const data = await res.json();
+      savedCreds = data.credentials || {};
+      isConnected = data.is_connected || false;
+    }
+  } catch (e) {
+    console.warn('Could not fetch saved credentials:', e);
+  }
+
+  // Update Status Badge
+  const badge = document.getElementById('modal-int-badge');
+  if (badge) {
+    if (isConnected) {
+      badge.innerHTML = '🟢 Connected & Verified';
+      badge.style.color = '#10b981';
+      badge.style.borderColor = 'rgba(16,185,129,0.4)';
+      badge.style.background = 'rgba(16,185,129,0.15)';
+    } else {
+      badge.innerHTML = '⚪ Not Configured';
+      badge.style.color = 'var(--text-muted)';
+      badge.style.borderColor = 'rgba(255,255,255,0.15)';
+      badge.style.background = 'rgba(255,255,255,0.05)';
+    }
+  }
+
+  // Disconnect button visibility
+  const btnDisconnect = document.getElementById('btn-disconnect-agent');
+  if (btnDisconnect) {
+    btnDisconnect.style.display = isConnected ? 'inline-flex' : 'none';
+  }
+
+  // Render form fields
+  const fieldsContainer = document.getElementById('agent-integration-fields-container');
+  fieldsContainer.innerHTML = config.fields.map(f => {
+    const val = savedCreds[f.key] || '';
+    return `
+      <div class="form-group" style="text-align:left;">
+        <label style="display:block; font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:5px;">
+          ${f.label} ${f.required ? '<span style="color:#ef4444;">*</span>' : ''}
+        </label>
+        <input 
+          type="${f.type}" 
+          id="int-field-${f.key}" 
+          name="${f.key}" 
+          value="${escapeHtml(val)}" 
+          placeholder="${escapeHtml(f.placeholder || '')}" 
+          ${f.required ? 'required' : ''} 
+          class="form-control" 
+          style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:13px;"
+        />
+        ${f.help ? `<div style="font-size:11px; color:var(--text-secondary); margin-top:3px;">${f.help}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  // Render Guide
+  const guideBody = document.getElementById('agent-guide-body');
+  if (guideBody) {
+    guideBody.innerHTML = config.guide || '<p>No guide available.</p>';
+  }
+
+  // Reset feedback alert
+  const feedback = document.getElementById('agent-conn-feedback');
+  if (feedback) feedback.style.display = 'none';
+
+  switchIntegrationModalTab(initialTab);
+  document.getElementById('modal-agent-integration').style.display = 'flex';
+}
+
+function closeAgentIntegrationModal() {
+  document.getElementById('modal-agent-integration').style.display = 'none';
+}
+
+function switchIntegrationModalTab(tab) {
+  const settingsTab = document.getElementById('tab-content-settings');
+  const guideTab = document.getElementById('tab-content-guide');
+  const btnSettings = document.getElementById('tab-btn-conn-settings');
+  const btnGuide = document.getElementById('tab-btn-conn-guide');
+
+  if (tab === 'guide') {
+    settingsTab.style.display = 'none';
+    guideTab.style.display = 'block';
+    btnGuide.className = 'btn btn-sm btn-gold';
+    btnSettings.className = 'btn btn-sm btn-secondary';
+  } else {
+    settingsTab.style.display = 'block';
+    guideTab.style.display = 'none';
+    btnSettings.className = 'btn btn-sm btn-gold';
+    btnGuide.className = 'btn btn-sm btn-secondary';
+  }
+}
+
+async function handleTestAgentConnection() {
+  if (!currentIntegrationAgentId) return;
+  const feedback = document.getElementById('agent-conn-feedback');
+  const btn = document.getElementById('btn-test-conn');
+
+  const config = AGENT_INTEGRATION_CONFIGS[currentIntegrationAgentId] || { fields: [] };
+  const creds = {};
+  for (const f of config.fields) {
+    const input = document.getElementById(`int-field-${f.key}`);
+    if (input) creds[f.key] = input.value.trim();
+  }
+
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Testing...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`/api/sites/${encodeURIComponent(currentSiteId)}/agents/${encodeURIComponent(currentIntegrationAgentId)}/test-connection`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credentials: creds })
+    });
+    const data = await res.json();
+    feedback.style.display = 'block';
+
+    if (data.success) {
+      feedback.style.background = 'rgba(16,185,129,0.18)';
+      feedback.style.border = '1px solid rgba(16,185,129,0.5)';
+      feedback.style.color = '#6ee7b7';
+      feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${data.message || 'Connection test successful!'}`;
+    } else {
+      feedback.style.background = 'rgba(239,68,68,0.18)';
+      feedback.style.border = '1px solid rgba(239,68,68,0.5)';
+      feedback.style.color = '#fca5a5';
+      feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${data.message || 'Connection test failed.'}`;
+    }
+  } catch (err) {
+    feedback.style.display = 'block';
+    feedback.style.background = 'rgba(239,68,68,0.18)';
+    feedback.style.border = '1px solid rgba(239,68,68,0.5)';
+    feedback.style.color = '#fca5a5';
+    feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Error connecting: ${err.message}`;
+  } finally {
+    btn.innerHTML = '<i class="fa-solid fa-vial"></i> Test Connection';
+    btn.disabled = false;
+  }
+}
+
+async function handleSaveAgentConnection(e) {
+  e.preventDefault();
+  if (!currentIntegrationAgentId) return;
+  const feedback = document.getElementById('agent-conn-feedback');
+  const btn = document.getElementById('btn-save-conn');
+
+  const config = AGENT_INTEGRATION_CONFIGS[currentIntegrationAgentId] || { fields: [] };
+  const creds = {};
+  for (const f of config.fields) {
+    const input = document.getElementById(`int-field-${f.key}`);
+    if (input) creds[f.key] = input.value.trim();
+  }
+
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`/api/sites/${encodeURIComponent(currentSiteId)}/agents/${encodeURIComponent(currentIntegrationAgentId)}/connect`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credentials: creds, test_after_save: true })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      alert(`🎉 Agent connected successfully for ${activeSite || currentSiteId}!`);
+      closeAgentIntegrationModal();
+      loadAgents();
+    } else {
+      feedback.style.display = 'block';
+      feedback.style.background = 'rgba(239,68,68,0.18)';
+      feedback.style.border = '1px solid rgba(239,68,68,0.5)';
+      feedback.style.color = '#fca5a5';
+      feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${data.detail || 'Failed to save connection.'}`;
+    }
+  } catch (err) {
+    feedback.style.display = 'block';
+    feedback.style.background = 'rgba(239,68,68,0.18)';
+    feedback.style.border = '1px solid rgba(239,68,68,0.5)';
+    feedback.style.color = '#fca5a5';
+    feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Save failed: ${err.message}`;
+  } finally {
+    btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Connect';
+    btn.disabled = false;
+  }
+}
+
+async function handleDisconnectAgent() {
+  if (!currentIntegrationAgentId) return;
+  if (!confirm(`Are you sure you want to disconnect this agent for ${currentSiteId}?`)) return;
+
+  try {
+    const res = await fetch(`/api/sites/${encodeURIComponent(currentSiteId)}/agents/${encodeURIComponent(currentIntegrationAgentId)}/disconnect`, {
+      method: 'POST'
+    });
+    if (res.ok) {
+      alert('Agent disconnected successfully.');
+      closeAgentIntegrationModal();
+      loadAgents();
+    }
+  } catch (err) {
+    alert('Error disconnecting: ' + err.message);
+  }
+}
+
+// Global window bindings for Agent Integrations
+window.openAgentIntegrationModal = openAgentIntegrationModal;
+window.closeAgentIntegrationModal = closeAgentIntegrationModal;
+window.switchIntegrationModalTab = switchIntegrationModalTab;
+window.handleTestAgentConnection = handleTestAgentConnection;
+window.handleSaveAgentConnection = handleSaveAgentConnection;
+window.handleDisconnectAgent = handleDisconnectAgent;
 
 
 
