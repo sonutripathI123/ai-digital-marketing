@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 1. Detect Client Portal Invite Link from Query or Hash first
   const urlParams = new URLSearchParams(window.location.search);
   const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
-  const inviteToken = urlParams.get('token') || urlParams.get('invite') || hashParams.get('token') || hashParams.get('invite');
+  const inviteToken = urlParams.get('token') || urlParams.get('invite') || hashParams.get('token') || hashParams.get('invite') || sessionStorage.getItem('ccm_client_invite_token');
   const targetSiteParam = urlParams.get('site') || hashParams.get('site');
 
   if (inviteToken) {
@@ -22,6 +22,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         sessionStorage.setItem('ccm_selected_site', currentSiteId);
         sessionStorage.setItem('ccm_client_invite_token', inviteToken);
         localStorage.setItem('ai_visitor_session', 'client_portal_' + currentSiteId);
+
+        // Auto authenticate client session with full execution rights
+        const clientEmail = (inviteData.assigned_client_emails && inviteData.assigned_client_emails[0]) || `client@${currentSiteId}.portal`;
+        const loginRes = await fetch('/api/auth/client-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: clientEmail, invite_token: inviteToken })
+        });
+
+        if (loginRes.ok) {
+          const loginData = await loginRes.json();
+          authToken = loginData.token;
+          sessionStorage.setItem('ccm_admin_token', authToken);
+        }
+
         currentUserRole = 'client';
         isSuperAdmin = false;
         currentAllowedSites = [inviteData.site_id];
@@ -81,13 +96,21 @@ function getAuthHeaders(customHeaders = {}) {
 async function checkAuthSession() {
   // Always check for 3-failed-attempts lockout on this browser client
   const isLocked = localStorage.getItem('ccm_admin_locked') === 'true';
-  if (isLocked || !authToken) {
+  const hasClientInvite = sessionStorage.getItem('ccm_client_invite_token');
+
+  if (isLocked || (!authToken && !hasClientInvite)) {
     currentUserRole = 'viewer';
     isSuperAdmin = false;
     currentAllowedSites = ['*'];
     authToken = null;
     sessionStorage.removeItem('ccm_admin_token');
     localStorage.removeItem('ccm_admin_token');
+    renderAuthHeaderUI();
+    return;
+  }
+
+  if (currentUserRole === 'client' && hasClientInvite) {
+    // Retain client admin role with full execution rights
     renderAuthHeaderUI();
     return;
   }
@@ -105,7 +128,7 @@ async function checkAuthSession() {
       currentUserRole = 'client';
       isSuperAdmin = false;
       currentAllowedSites = data.allowed_sites || [];
-      clientPrimarySite = data.primary_site || (data.allowed_sites && data.allowed_sites[0]) || 'ccm';
+      clientPrimarySite = data.primary_site || (data.allowed_sites && data.allowed_sites[0]) || currentSiteId;
       if (activeSite !== clientPrimarySite && currentAllowedSites.includes(clientPrimarySite)) {
         activeSite = clientPrimarySite;
       }
@@ -114,18 +137,22 @@ async function checkAuthSession() {
       isSuperAdmin = false;
       currentAllowedSites = ['*'];
     } else {
+      if (!hasClientInvite) {
+        currentUserRole = 'viewer';
+        isSuperAdmin = false;
+        currentAllowedSites = ['*'];
+        authToken = null;
+        sessionStorage.removeItem('ccm_admin_token');
+        localStorage.removeItem('ccm_admin_token');
+      }
+    }
+  } catch (err) {
+    if (!hasClientInvite) {
       currentUserRole = 'viewer';
       isSuperAdmin = false;
       currentAllowedSites = ['*'];
       authToken = null;
-      sessionStorage.removeItem('ccm_admin_token');
-      localStorage.removeItem('ccm_admin_token');
     }
-  } catch (err) {
-    currentUserRole = 'viewer';
-    isSuperAdmin = false;
-    currentAllowedSites = ['*'];
-    authToken = null;
   }
   renderAuthHeaderUI();
 }
@@ -133,9 +160,14 @@ async function checkAuthSession() {
 function renderAuthHeaderUI() {
   const container = document.getElementById('auth-status-container');
   const superAdminBtn = document.getElementById('super-admin-btn');
+  const userLogsBtn = document.querySelector('button[onclick="openVisitorAuditModal()"]');
   
   if (superAdminBtn) {
     superAdminBtn.style.display = (currentUserRole === 'super_admin' || isSuperAdmin) ? 'inline-flex' : 'none';
+  }
+
+  if (userLogsBtn) {
+    userLogsBtn.style.display = (currentUserRole === 'client') ? 'none' : 'inline-flex';
   }
 
   if (!container) return;
@@ -151,22 +183,20 @@ function renderAuthHeaderUI() {
       </button>
     `;
   } else if (currentUserRole === 'client') {
+    // Client has full agent control — no Admin Login or Read-Only mode shown!
     container.innerHTML = `
-      <div class="auth-pill admin-mode" style="background:linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.2)); border:1px solid #10b981; color:#10b981;" title="Client Administrator with dedicated website access">
-        <i class="fa-solid fa-building-user" style="color:#10b981;"></i>
-        <span>Client Admin (Dedicated Website)</span>
+      <div class="auth-pill admin-mode" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(6,182,212,0.18)); border:1px solid #10b981; color:#10b981; font-weight:700;" title="Full access to run all 19 AI agents for your website">
+        <i class="fa-solid fa-circle-check" style="color:#10b981;"></i>
+        <span>Active AI Portal (19 Agents Unlocked)</span>
       </div>
-      <button class="btn btn-sm btn-secondary" onclick="logoutAdmin()" title="Log out from Client session" style="font-size:11.5px; padding:6px 12px;">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-      </button>
     `;
   } else {
     container.innerHTML = `
-      <div class="auth-pill viewer-mode" title="Only Admin can run tasks, add topics, and modify settings">
+      <div class="auth-pill viewer-mode" title="Public Visitor view mode">
         <i class="fa-solid fa-eye"></i>
-        <span>Read-Only Mode</span>
+        <span>Public Visitor Mode</span>
       </div>
-      <button class="btn btn-sm btn-admin-login" onclick="openAdminLoginModal()" title="Unlock full task execution access" style="font-size:11.5px; padding:6px 14px;">
+      <button class="btn btn-sm btn-admin-login" onclick="openAdminLoginModal()" title="Unlock admin access" style="font-size:11.5px; padding:6px 14px;">
         <i class="fa-solid fa-lock"></i> Admin Login
       </button>
     `;
@@ -174,11 +204,12 @@ function renderAuthHeaderUI() {
 }
 
 function requireAdminAction(actionName = 'perform this action') {
-  if (currentUserRole !== 'super_admin' && currentUserRole !== 'admin' && currentUserRole !== 'client' && !isSuperAdmin) {
-    openAdminLoginModal(`Authentication Required: Only authorized administrators can ${actionName}. Public visitors have Read-Only view access.`);
-    return false;
+  // Super Admin and Client Admin can perform all actions without restriction
+  if (currentUserRole === 'super_admin' || currentUserRole === 'client' || currentUserRole === 'admin' || isSuperAdmin) {
+    return true;
   }
-  return true;
+  openAdminLoginModal(`Authentication Required: Only authorized administrators can ${actionName}. Public visitors have Read-Only view access.`);
+  return false;
 }
 
 function openAdminLoginModal(customMessage) {
