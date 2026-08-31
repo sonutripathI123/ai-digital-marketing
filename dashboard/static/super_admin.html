@@ -599,6 +599,16 @@
       showLoginGate();
     }
 
+    let LIVE_PRODUCTION_BASE_URL = 'https://ai-digital-marketing-gm68.onrender.com';
+
+    function getShareableBaseUrl() {
+      // If running on local laptop, automatically output the Live Public Render URL so clients can open it from anywhere
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return LIVE_PRODUCTION_BASE_URL;
+      }
+      return window.location.origin;
+    }
+
     async function loadSuperAdminData() {
       const tbody = document.getElementById('sites-table-body');
       try {
@@ -628,7 +638,8 @@
         tbody.innerHTML = sites.map(site => {
           const metrics = site.metrics || {};
           const clients = site.assigned_client_emails || [];
-          const inviteUrl = window.location.origin + `/portal?token=${site.invite_token}`;
+          const publicInviteUrl = getShareableBaseUrl() + `/portal?token=${site.invite_token}`;
+          const localViewUrl = window.location.origin + `/portal?token=${site.invite_token}`;
 
           const clientsHtml = clients.length > 0 ? clients.map(c => `
             <span class="badge badge-client">
@@ -664,11 +675,11 @@
                 <div style="color:var(--cyan);">Tasks: <strong>${metrics.tasks_completed || 0}</strong></div>
               </td>
               <td style="text-align:center;">
-                <button class="btn btn-gold btn-sm" onclick="copyClientMagicLink('${inviteUrl}')" style="font-size:11px; padding:5px 10px; width:100%; margin-bottom:4px;">
-                  <i class="fa-solid fa-link"></i> Copy Magic Link
+                <button class="btn btn-gold btn-sm" onclick="copyClientMagicLink('${publicInviteUrl}')" style="font-size:11px; padding:5px 10px; width:100%; margin-bottom:4px;" title="Copy Live Public Link for client">
+                  <i class="fa-solid fa-link"></i> Copy Live Client Link
                 </button>
                 <div style="display:grid; grid-template-columns: ${site.site_id === 'ccm' ? '1fr' : '1fr 1fr'}; gap:4px;">
-                  <a href="${inviteUrl}" target="_blank" class="btn btn-secondary btn-sm" style="font-size:10.5px; padding:4px 6px; justify-content:center;">
+                  <a href="${localViewUrl}" target="_blank" class="btn btn-secondary btn-sm" style="font-size:10.5px; padding:4px 6px; justify-content:center;">
                     <i class="fa-solid fa-eye"></i> View
                   </a>
                   ${site.site_id !== 'ccm' ? `
@@ -717,9 +728,9 @@
 
     function copyClientMagicLink(url) {
       navigator.clipboard.writeText(url).then(() => {
-        alert(`🎉 Client Magic Portal Link Copied to Clipboard!\n\nShare this link with your client:\n${url}\n\nClient will be granted access strictly to manage their own website.`);
+        alert(`🎉 LIVE Public Client Magic Link Copied!\n\n${url}\n\nShare this link with your client (WhatsApp/Email). They can access it from anywhere in the world on mobile or laptop!`);
       }).catch(() => {
-        prompt('Copy this Client Magic Link:', url);
+        prompt('Copy this Live Public Client Link:', url);
       });
     }
 
@@ -764,11 +775,11 @@
         closeAddSiteModal();
         loadSuperAdminData();
 
-        // Show Success Share Popup
-        const fullUrl = window.location.origin + `/portal?token=${data.site.invite_token}`;
+        // Show Success Share Popup with Live Public URL
+        const fullPublicUrl = getShareableBaseUrl() + `/portal?token=${data.site.invite_token}`;
         document.getElementById('share-modal-title').textContent = `Website '${name}' Created!`;
-        document.getElementById('share-link-input').value = fullUrl;
-        document.getElementById('share-whatsapp-btn').href = `https://wa.me/?text=${encodeURIComponent(`Here is your dedicated AI Digital Marketing portal for ${name}: ${fullUrl}`)}`;
+        document.getElementById('share-link-input').value = fullPublicUrl;
+        document.getElementById('share-whatsapp-btn').href = `https://wa.me/?text=${encodeURIComponent(`Here is your dedicated AI Digital Marketing portal for ${name}: ${fullPublicUrl}`)}`;
         document.getElementById('modal-share-success').style.display = 'flex';
 
       } catch (err) {
