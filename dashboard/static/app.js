@@ -35,6 +35,10 @@ document.addEventListener('DOMContentLoaded', async () => {
    Role-Based Access Control (RBAC) & Authentication Helpers
    ============================================================ */
 
+let isSuperAdmin = false;
+let currentAllowedSites = ['*'];
+let clientPrimarySite = null;
+
 function getAuthHeaders(customHeaders = {}) {
   const headers = { ...customHeaders };
   if (authToken) {
@@ -49,6 +53,8 @@ async function checkAuthSession() {
   const isLocked = localStorage.getItem('ccm_admin_locked') === 'true';
   if (isLocked || !authToken) {
     currentUserRole = 'viewer';
+    isSuperAdmin = false;
+    currentAllowedSites = ['*'];
     authToken = null;
     sessionStorage.removeItem('ccm_admin_token');
     localStorage.removeItem('ccm_admin_token');
@@ -61,16 +67,34 @@ async function checkAuthSession() {
       headers: getAuthHeaders()
     });
     const data = await res.json();
-    if (data.is_admin) {
+    if (data.role === 'super_admin' || data.is_super_admin) {
+      currentUserRole = 'super_admin';
+      isSuperAdmin = true;
+      currentAllowedSites = ['*'];
+    } else if (data.role === 'client') {
+      currentUserRole = 'client';
+      isSuperAdmin = false;
+      currentAllowedSites = data.allowed_sites || [];
+      clientPrimarySite = data.primary_site || (data.allowed_sites && data.allowed_sites[0]) || 'ccm';
+      if (activeSite !== clientPrimarySite && currentAllowedSites.includes(clientPrimarySite)) {
+        activeSite = clientPrimarySite;
+      }
+    } else if (data.is_admin) {
       currentUserRole = 'admin';
+      isSuperAdmin = false;
+      currentAllowedSites = ['*'];
     } else {
       currentUserRole = 'viewer';
+      isSuperAdmin = false;
+      currentAllowedSites = ['*'];
       authToken = null;
       sessionStorage.removeItem('ccm_admin_token');
       localStorage.removeItem('ccm_admin_token');
     }
   } catch (err) {
     currentUserRole = 'viewer';
+    isSuperAdmin = false;
+    currentAllowedSites = ['*'];
     authToken = null;
   }
   renderAuthHeaderUI();
@@ -78,15 +102,31 @@ async function checkAuthSession() {
 
 function renderAuthHeaderUI() {
   const container = document.getElementById('auth-status-container');
+  const superAdminBtn = document.getElementById('super-admin-btn');
+  
+  if (superAdminBtn) {
+    superAdminBtn.style.display = (currentUserRole === 'super_admin' || isSuperAdmin) ? 'inline-flex' : 'none';
+  }
+
   if (!container) return;
 
-  if (currentUserRole === 'admin') {
+  if (currentUserRole === 'super_admin' || isSuperAdmin) {
     container.innerHTML = `
-      <div class="auth-pill admin-mode" title="Logged in with full administrative privileges">
-        <i class="fa-solid fa-crown"></i>
-        <span>Super Admin (Full Control)</span>
+      <div class="auth-pill admin-mode" style="background:linear-gradient(135deg, rgba(234,179,8,0.2), rgba(249,115,22,0.2)); border:1px solid #eab308; color:#facc15;" title="Master Super Admin (Sonu Tripathi) with full multi-site control">
+        <i class="fa-solid fa-crown" style="color:#facc15;"></i>
+        <span>Super Admin (Master Hub)</span>
       </div>
-      <button class="btn btn-sm btn-secondary" onclick="logoutAdmin()" title="Log out from Admin session" style="font-size:11.5px; padding:6px 12px;">
+      <button class="btn btn-sm btn-secondary" onclick="logoutAdmin()" title="Log out from Super Admin session" style="font-size:11.5px; padding:6px 12px;">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+      </button>
+    `;
+  } else if (currentUserRole === 'client') {
+    container.innerHTML = `
+      <div class="auth-pill admin-mode" style="background:linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.2)); border:1px solid #10b981; color:#10b981;" title="Client Administrator with dedicated website access">
+        <i class="fa-solid fa-building-user" style="color:#10b981;"></i>
+        <span>Client Admin (Dedicated Website)</span>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="logoutAdmin()" title="Log out from Client session" style="font-size:11.5px; padding:6px 12px;">
         <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
       </button>
     `;
@@ -94,7 +134,7 @@ function renderAuthHeaderUI() {
     container.innerHTML = `
       <div class="auth-pill viewer-mode" title="Only Admin can run tasks, add topics, and modify settings">
         <i class="fa-solid fa-eye"></i>
-        <span>Read-Only Mode (Only Admin Can Run & Create Tasks)</span>
+        <span>Read-Only Mode</span>
       </div>
       <button class="btn btn-sm btn-admin-login" onclick="openAdminLoginModal()" title="Unlock full task execution access" style="font-size:11.5px; padding:6px 14px;">
         <i class="fa-solid fa-lock"></i> Admin Login
@@ -104,10 +144,12 @@ function renderAuthHeaderUI() {
 }
 
 function requireAdminAction(actionName = 'perform this action') {
-  if (currentUserRole !== 'admin') {
-    openAdminLoginModal(`Admin Authentication Required: Only Admin can ${actionName}. Public visitors have Read-Only view access.`);
+  if (currentUserRole !== 'super_admin' && currentUserRole !== 'admin' && currentUserRole !== 'client' && !isSuperAdmin) {
+    openAdminLoginModal(`Authentication Required: Only authorized administrators can ${actionName}. Public visitors have Read-Only view access.`);
     return false;
   }
+  return true;
+}
   return true;
 }
 
@@ -7430,13 +7472,302 @@ function downloadMasterHandbookPDF() {
 }
 window.downloadMasterHandbookPDF = downloadMasterHandbookPDF;
 
-// Visitor Gate & Master Admin Audit exports
-window.handleVisitorGateLogin = handleVisitorGateLogin;
-window.openAdminLoginFromGate = openAdminLoginFromGate;
-window.openVisitorAuditModal = openVisitorAuditModal;
-window.fetchAndRenderVisitorAuditLogs = fetchAndRenderVisitorAuditLogs;
-window.filterVisitorLogsTable = filterVisitorLogsTable;
-window.exportVisitorLogsCSV = exportVisitorLogsCSV;
+// ============================================================
+// Super Admin Master Hub & Client Allotment Logic
+// ============================================================
+
+function openSuperAdminHubModal() {
+  const modal = document.getElementById('modal-super-admin');
+  if (modal) {
+    modal.style.display = 'flex';
+    loadSuperAdminTelemetry();
+  }
+}
+
+function closeSuperAdminHubModal() {
+  const modal = document.getElementById('modal-super-admin');
+  if (modal) modal.style.display = 'none';
+}
+
+async function loadSuperAdminTelemetry() {
+  const tbody = document.getElementById('sa-websites-tbody');
+  if (tbody) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="padding: 30px; text-align: center; color: var(--text-muted);">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size: 20px; color: #facc15; margin-bottom: 8px;"></i>
+          <div>Loading Super Admin Telemetry...</div>
+        </td>
+      </tr>
+    `;
+  }
+
+  try {
+    const res = await fetch('/api/admin/super/global-telemetry', {
+      headers: getAuthHeaders()
+    });
+
+    if (!res.ok) {
+      if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="6" style="padding:20px; text-align:center; color:#ef4444;">Super Admin Master Access Required.</td></tr>`;
+      }
+      return;
+    }
+
+    const data = await res.json();
+    const glob = data.global_summary || {};
+
+    // Update KPI Cards
+    const saSites = document.getElementById('sa-total-sites');
+    if (saSites) saSites.textContent = glob.total_registered_websites || '0';
+
+    const saBlogs = document.getElementById('sa-total-blogs');
+    if (saBlogs) saBlogs.textContent = glob.total_global_published_blogs || '0';
+
+    const saSocial = document.getElementById('sa-total-social');
+    if (saSocial) saSocial.textContent = (glob.total_global_social_scheduled + glob.total_global_social_published) || '0';
+
+    const saClients = document.getElementById('sa-total-clients');
+    if (saClients) saClients.textContent = glob.total_assigned_clients || '0';
+
+    // Render Websites Table
+    const sites = data.sites_summary || [];
+    if (!tbody) return;
+
+    if (sites.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="padding:20px; text-align:center; color:var(--text-muted);">No websites registered yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = sites.map(site => {
+      const metrics = site.metrics || {};
+      const clients = site.assigned_client_emails || [];
+      const inviteUrl = site.invite_url || `/?site=${site.site_id}&invite=${site.invite_token}`;
+      
+      const clientsHtml = clients.length > 0 ? clients.map(c => `
+        <span style="display:inline-flex; align-items:center; gap:4px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); color:#10b981; font-size:10.5px; padding:2px 6px; border-radius:4px; margin:2px 0;">
+          <i class="fa-solid fa-user-check"></i> ${escapeHtml(c)}
+          <button type="button" onclick="handleRevokeClientAccess('${site.site_id}', '${escapeHtml(c)}')" style="background:none; border:none; color:#ef4444; cursor:pointer; padding:0 2px; font-weight:800;" title="Revoke access">&times;</button>
+        </span>
+      `).join(' ') : `<span style="color:var(--text-muted); font-size:11px; font-style:italic;">No client assigned (Master Only)</span>`;
+
+      return `
+        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+          <td style="padding: 12px 14px; font-weight: 700; color: #fff;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:10px; height:10px; border-radius:50%; background:${site.color_accent || '#06b6d4'}; display:inline-block;"></span>
+              <span>${escapeHtml(site.name)}</span>
+            </div>
+            <div style="font-size:10.5px; color:var(--text-muted); font-weight:400; margin-top:2px;">ID: <code>${site.site_id}</code></div>
+          </td>
+          <td style="padding: 12px 14px;">
+            <a href="${escapeHtml(site.domain)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent-cyan); text-decoration:none; font-size:11.5px; word-break:break-all;">
+              <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px; margin-right:3px;"></i> ${escapeHtml(site.domain.replace('https://', ''))}
+            </a>
+          </td>
+          <td style="padding: 12px 14px; color:var(--text-secondary); font-size:11.5px;">
+            <i class="fa-solid fa-location-dot" style="color:#f97316; margin-right:4px;"></i> ${escapeHtml(site.location || 'Melbourne')}
+          </td>
+          <td style="padding: 12px 14px;">
+            ${clientsHtml}
+            <div style="margin-top:4px;">
+              <button type="button" onclick="openAllotClientModal('${site.site_id}', '${escapeHtml(site.name)}')" class="btn btn-secondary btn-sm" style="font-size:10px; padding:2px 6px; border-color:rgba(16,185,129,0.4); color:#10b981;">
+                <i class="fa-solid fa-plus"></i> Allot Client
+              </button>
+            </div>
+          </td>
+          <td style="padding: 12px 14px; text-align:center;">
+            <div style="display:inline-grid; grid-template-columns:1fr 1fr; gap:4px; font-size:10.5px; font-family:var(--font-mono); text-align:left;">
+              <span style="color:#10b981;">Blogs: <strong>${metrics.published_blogs || 0}</strong></span>
+              <span style="color:var(--accent-purple);">Social: <strong>${(metrics.social_published || 0) + (metrics.social_scheduled || 0)}</strong></span>
+              <span style="color:var(--accent-cyan);">Tasks: <strong>${metrics.tasks_completed || 0}</strong></span>
+              <span style="color:#facc15;">Leads: <strong>${metrics.leads_count || 0}</strong></span>
+            </div>
+          </td>
+          <td style="padding: 12px 14px; text-align:center; white-space:nowrap;">
+            <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
+              <button type="button" onclick="copyClientInviteLink('${inviteUrl}')" class="btn btn-sm" style="background:linear-gradient(135deg, #eab308, #f97316); color:#000; font-weight:800; font-size:10.5px; padding:4px 8px; border-radius:6px; width:100%;">
+                <i class="fa-solid fa-link"></i> Copy Invite Link
+              </button>
+              <button type="button" onclick="switchActiveSite('${site.site_id}'); closeSuperAdminHubModal();" class="btn btn-secondary btn-sm" style="font-size:10px; padding:3px 8px; width:100%;">
+                <i class="fa-solid fa-eye"></i> View Dashboard
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+  } catch (err) {
+    if (tbody) {
+      tbody.innerHTML = `<tr><td colspan="6" style="padding:20px; text-align:center; color:#ef4444;">Failed to load Super Admin Telemetry: ${err.message}</td></tr>`;
+    }
+  }
+}
+
+function copyClientInviteLink(relativeUrl) {
+  const fullUrl = window.location.origin + relativeUrl;
+  navigator.clipboard.writeText(fullUrl).then(() => {
+    alert(`🎉 Client Invite Link Copied to Clipboard!\n\nShare this secure link with your client:\n${fullUrl}\n\nClient will be granted access strictly to manage this specific website.`);
+  }).catch(() => {
+    prompt('Copy this Client Invite Link:', fullUrl);
+  });
+}
+
+function openRegisterClientSiteModal() {
+  const modal = document.getElementById('modal-register-client-site');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeRegisterClientSiteModal() {
+  const modal = document.getElementById('modal-register-client-site');
+  if (modal) modal.style.display = 'none';
+}
+
+async function handleRegisterClientSite(event) {
+  event.preventDefault();
+  const name = document.getElementById('reg-site-name').value.trim();
+  const domain = document.getElementById('reg-site-domain').value.trim();
+  const location = document.getElementById('reg-site-location').value.trim();
+  const niche = document.getElementById('reg-site-niche').value.trim();
+  const color = document.getElementById('reg-site-color').value;
+  const clientEmail = document.getElementById('reg-site-client-email').value.trim();
+
+  if (!name || !domain) {
+    alert('Please enter both Website Name and Domain.');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/admin/super/sites/register', {
+      method: 'POST',
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        domain: domain,
+        location: location || 'Melbourne, VIC',
+        niche: niche || 'Luxury Chauffeur & Executive Transfers',
+        color_accent: color || '#06b6d4',
+        assigned_client_email: clientEmail || null
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(`Error registering website: ${data.detail || 'Unknown error'}`);
+      return;
+    }
+
+    alert(`🎉 Website '${name}' registered successfully!\n\nClient Invite Link:\n${window.location.origin + data.invite_url}`);
+    closeRegisterClientSiteModal();
+    initWebsiteSwitcher();
+    loadSuperAdminTelemetry();
+  } catch (err) {
+    alert(`Failed to register website: ${err.message}`);
+  }
+}
+
+function openAllotClientModal(siteId, siteName) {
+  const modal = document.getElementById('modal-allot-client-user');
+  const siteIdInput = document.getElementById('allot-site-id');
+  const siteNameDisplay = document.getElementById('allot-site-name-display');
+  const emailInput = document.getElementById('allot-client-email');
+
+  if (siteIdInput) siteIdInput.value = siteId;
+  if (siteNameDisplay) siteNameDisplay.textContent = siteName || siteId;
+  if (emailInput) emailInput.value = '';
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeAllotClientModal() {
+  const modal = document.getElementById('modal-allot-client-user');
+  if (modal) modal.style.display = 'none';
+}
+
+async function handleAllotClientSubmit(event) {
+  event.preventDefault();
+  const siteId = document.getElementById('allot-site-id').value;
+  const email = document.getElementById('allot-client-email').value.trim();
+
+  if (!siteId || !email) {
+    alert('Please enter a valid client email.');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/admin/super/sites/allot', {
+      method: 'POST',
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        site_id: siteId,
+        client_email: email
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(`Error assigning client: ${data.detail || 'Unknown error'}`);
+      return;
+    }
+
+    alert(`✅ Client '${email}' has been granted access to '${siteId}' successfully!`);
+    closeAllotClientModal();
+    loadSuperAdminTelemetry();
+  } catch (err) {
+    alert(`Failed to allot client: ${err.message}`);
+  }
+}
+
+async function handleRevokeClientAccess(siteId, clientEmail) {
+  if (!confirm(`Are you sure you want to revoke '${clientEmail}' access from '${siteId}'?`)) {
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/admin/super/sites/revoke', {
+      method: 'DELETE',
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        site_id: siteId,
+        client_email: clientEmail
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(`Error revoking access: ${data.detail || 'Unknown error'}`);
+      return;
+    }
+
+    alert(`Revoked access for '${clientEmail}' from '${siteId}'.`);
+    loadSuperAdminTelemetry();
+  } catch (err) {
+    alert(`Failed to revoke access: ${err.message}`);
+  }
+}
+
+// Global Super Admin window bindings
+window.openSuperAdminHubModal = openSuperAdminHubModal;
+window.closeSuperAdminHubModal = closeSuperAdminHubModal;
+window.loadSuperAdminTelemetry = loadSuperAdminTelemetry;
+window.copyClientInviteLink = copyClientInviteLink;
+window.openRegisterClientSiteModal = openRegisterClientSiteModal;
+window.closeRegisterClientSiteModal = closeRegisterClientSiteModal;
+window.handleRegisterClientSite = handleRegisterClientSite;
+window.openAllotClientModal = openAllotClientModal;
+window.closeAllotClientModal = closeAllotClientModal;
+window.handleAllotClientSubmit = handleAllotClientSubmit;
+window.handleRevokeClientAccess = handleRevokeClientAccess;
+
 
 
 

@@ -387,11 +387,41 @@ class LoginRequest(BaseModel):
     password: str
 
 
-# --- Authentication & Authorization Core ---
-def generate_admin_token(email: str) -> str:
+class ClientLoginRequest(BaseModel):
+    email: str
+    invite_token: Optional[str] = None
+
+
+class RegisterClientSiteRequest(BaseModel):
+    name: str
+    domain: str
+    location: Optional[str] = "Melbourne, VIC"
+    niche: Optional[str] = "Luxury Chauffeur & Airport Transfers"
+    default_category: Optional[str] = "Chauffeur Services"
+    assigned_client_email: Optional[str] = None
+    color_accent: Optional[str] = "#06b6d4"
+
+
+class AllotClientRequest(BaseModel):
+    site_id: str
+    client_email: str
+
+
+class RevokeClientRequest(BaseModel):
+    site_id: str
+    client_email: str
+
+
+class GenerateInviteRequest(BaseModel):
+    site_id: str
+
+
+# --- Authentication & Multi-Tenant Authorization Core ---
+def generate_auth_token(email: str, role: str = "super_admin", allowed_sites: Optional[List[str]] = None) -> str:
     payload = {
         "email": email.strip().lower(),
-        "role": "admin",
+        "role": role,
+        "allowed_sites": allowed_sites or (["*"] if role in ("admin", "super_admin") else []),
         "exp": int(time.time()) + (30 * 86400),  # 30 days validity
     }
     payload_b64 = base64.urlsafe_b64encode(json.dumps(payload).encode()).decode()
@@ -399,6 +429,10 @@ def generate_admin_token(email: str) -> str:
         AUTH_SECRET_KEY.encode(), payload_b64.encode(), hashlib.sha256
     ).hexdigest()
     return f"{payload_b64}.{signature}"
+
+
+def generate_admin_token(email: str) -> str:
+    return generate_auth_token(email=email, role="super_admin", allowed_sites=["*"])
 
 
 def verify_token(token: Optional[str]) -> Optional[Dict[str, Any]]:
@@ -417,8 +451,22 @@ def verify_token(token: Optional[str]) -> Optional[Dict[str, Any]]:
         payload = json.loads(base64.urlsafe_b64decode(payload_b64.encode()).decode())
         if payload.get("exp", 0) < int(time.time()):
             return None
-        if payload.get("email") != ADMIN_EMAIL:
-            return None
+
+        # Check if Super Admin
+        email = payload.get("email", "").strip().lower()
+        if email == ADMIN_EMAIL.strip().lower():
+            payload["is_super_admin"] = True
+            payload["role"] = "super_admin"
+            payload["allowed_sites"] = ["*"]
+            return payload
+
+        # Check if Client User with assigned sites
+        sites = websites_mgr.get_sites_for_user(email, is_super_admin=False)
+        allowed_site_ids = [s.site_id for s in sites] or payload.get("allowed_sites", [])
+        payload["allowed_sites"] = allowed_site_ids
+        payload["is_super_admin"] = False
+        if allowed_site_ids or payload.get("role") == "client":
+            payload["role"] = "client"
         return payload
     except Exception:
         return None
@@ -441,6 +489,31 @@ def require_admin(
             detail="Admin access required. Only authorized Admin can run tasks, add topics, or modify settings.",
         )
     return payload
+
+
+def require_super_admin(
+    authorization: Optional[str] = Header(None),
+    x_admin_token: Optional[str] = Header(None),
+) -> Dict[str, Any]:
+    payload = require_admin(authorization, x_admin_token)
+    if not payload.get("is_super_admin"):
+        raise HTTPException(
+            status_code=403,
+            detail="Super Admin master access required. Only the system owner can access this section.",
+        )
+    return payload
+
+
+def check_site_access_permission(site_id: str, payload: Optional[Dict[str, Any]]) -> bool:
+    """Verifies whether the current user has authorization to access the specified site_id."""
+    if not payload:
+        return True  # Public read-only viewer mode
+    if payload.get("is_super_admin"):
+        return True
+    allowed = payload.get("allowed_sites", [])
+    if "*" in allowed or site_id in allowed:
+        return True
+    return False
 
 
 
@@ -508,7 +581,7 @@ def get_auth_session(
     authorization: Optional[str] = Header(None),
     x_admin_token: Optional[str] = Header(None)
 ):
-    """Checks token validity and returns current role (admin vs viewer)."""
+    """Checks token validity and returns current role (super_admin vs client vs viewer)."""
     token = None
     if authorization and authorization.startswith("Bearer "):
         token = authorization.split("Bearer ")[1].strip()
@@ -517,17 +590,363 @@ def get_auth_session(
 
     payload = verify_token(token)
     if payload:
-        return {
-            "status": "success",
-            "role": "admin",
-            "is_admin": True,
-            "display_role": "Super Admin (Full Control)"
-        }
+        if payload.get("is_super_admin"):
+            return {
+                "status": "success",
+                "role": "super_admin",
+                "is_admin": True,
+                "is_super_admin": True,
+                "email": payload.get("email"),
+                "display_role": "Master Super Admin (Sonu Tripathi)",
+                "allowed_sites": ["*"],
+                "can_manage_all": True
+            }
+        elif payload.get("role") == "client" or payload.get("allowed_sites"):
+            allowed = payload.get("allowed_sites", [])
+            primary_site = allowed[0] if allowed else "ccm"
+            site_prof = websites_mgr.get(primary_site)
+            site_name = site_prof.name if site_prof else primary_site
+            return {
+                "status": "success",
+                "role": "client",
+                "is_admin": True,
+                "is_super_admin": False,
+                "email": payload.get("email"),
+                "display_role": f"Client Admin ({site_name})",
+                "allowed_sites": allowed,
+                "primary_site": primary_site,
+                "can_manage_all": False
+            }
     return {
         "status": "success",
         "role": "viewer",
         "is_admin": False,
-        "display_role": "Read-Only Viewer (Public)"
+        "is_super_admin": False,
+        "email": None,
+        "display_role": "Read-Only Viewer (Public)",
+        "allowed_sites": ["*"],
+        "can_manage_all": False
+    }
+
+
+# ============================================================
+# Client Portal & Onboarding Authentication Endpoints
+# ============================================================
+
+@app.get("/api/portal/validate-invite")
+def validate_invite(token: str):
+    """Validates an invite token and returns target website onboarding metadata."""
+    if not token or not token.strip():
+        raise HTTPException(status_code=400, detail="Invite token is required.")
+    site = websites_mgr.get_by_invite_token(token.strip())
+    if not site:
+        raise HTTPException(status_code=404, detail="Invalid or expired client invite link.")
+    return {
+        "status": "success",
+        "site_id": site.site_id,
+        "name": site.name,
+        "domain": site.domain,
+        "location": site.location,
+        "niche": site.niche,
+        "color_accent": site.color_accent,
+        "invite_token": site.invite_token
+    }
+
+
+@app.post("/api/auth/client-login")
+def client_login(req: ClientLoginRequest):
+    """Logs in a client user via assigned email or active invite token."""
+    email_clean = req.email.strip().lower()
+    if not email_clean or "@" not in email_clean:
+        raise HTTPException(status_code=400, detail="Valid email address is required.")
+
+    # 1. If invite token provided, associate email with that site
+    target_site = None
+    if req.invite_token and req.invite_token.strip():
+        target_site = websites_mgr.get_by_invite_token(req.invite_token.strip())
+        if target_site:
+            websites_mgr.allot_client(target_site.site_id, email_clean)
+
+    # 2. Check all sites accessible by this email
+    user_sites = websites_mgr.get_sites_for_user(email_clean, is_super_admin=False)
+    if not user_sites:
+        raise HTTPException(
+            status_code=403,
+            detail=f"No website access found for '{email_clean}'. Please use a valid client invite link from your administrator."
+        )
+
+    allowed_site_ids = [s.site_id for s in user_sites]
+    token = generate_auth_token(email=email_clean, role="client", allowed_sites=allowed_site_ids)
+
+    return {
+        "status": "success",
+        "message": f"Client authenticated for {len(allowed_site_ids)} website(s).",
+        "role": "client",
+        "token": token,
+        "email": email_clean,
+        "allowed_sites": allowed_site_ids,
+        "primary_site": allowed_site_ids[0]
+    }
+
+
+@app.post("/api/portal/onboard-register")
+def client_self_onboard_register(req: RegisterClientSiteRequest):
+    """Allows a new business client to self-register their website domain & brand."""
+    email_clean = (req.assigned_client_email or "").strip().lower()
+    if not email_clean or "@" not in email_clean:
+        raise HTTPException(status_code=400, detail="A valid contact email is required.")
+    if not req.name or not req.name.strip():
+        raise HTTPException(status_code=400, detail="Brand / Business name is required.")
+    if not req.domain or not req.domain.strip():
+        raise HTTPException(status_code=400, detail="Website domain URL is required.")
+
+    # Generate clean site_id slug
+    clean_slug = re.sub(r'[^a-zA-Z0-9]+', '-', req.name.strip().lower()).strip('-')
+    if not clean_slug or len(clean_slug) < 2:
+        clean_slug = f"site-{secrets.token_hex(3)}"
+    
+    # Check if slug exists
+    if websites_mgr.get(clean_slug):
+        clean_slug = f"{clean_slug}-{secrets.token_hex(2)}"
+
+    clean_domain = req.domain.strip()
+    if not clean_domain.startswith("http://") and not clean_domain.startswith("https://"):
+        clean_domain = f"https://{clean_domain}"
+
+    profile = WebsiteProfile(
+        site_id=clean_slug,
+        name=req.name.strip(),
+        domain=clean_domain,
+        location=req.location.strip() if req.location else "Melbourne, VIC",
+        niche=req.niche.strip() if req.niche else "Luxury Chauffeur & Executive Transfers",
+        default_category=req.default_category.strip() if req.default_category else "Chauffeur Services",
+        assigned_client_emails=[email_clean],
+        owner_email=ADMIN_EMAIL,
+        color_accent=req.color_accent or "#06b6d4",
+        is_active=True
+    )
+    saved = websites_mgr.add_website(profile)
+    token = generate_auth_token(email=email_clean, role="client", allowed_sites=[saved.site_id])
+
+    return {
+        "status": "success",
+        "message": f"Website '{saved.name}' registered successfully!",
+        "site": saved.model_dump(),
+        "client_token": token,
+        "portal_url": f"/#site={saved.site_id}&invite={saved.invite_token}"
+    }
+
+
+# ============================================================
+# Master Super Admin Command Center Endpoints
+# ============================================================
+
+@app.get("/api/admin/super/global-telemetry")
+def get_super_admin_global_telemetry(_super: Dict[str, Any] = Depends(require_super_admin)):
+    """Consolidated Multi-Site Master Intelligence Telemetry across ALL client websites (Super Admin Only)."""
+    all_sites = websites_mgr.list_all()
+    all_tasks = orchestrator.queue.list_all()
+    
+    # Load Blog Topics
+    topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
+    blog_rows = []
+    if topics_file.exists():
+        import csv
+        try:
+            with open(topics_file, newline="", encoding="utf-8") as f:
+                blog_rows = list(csv.DictReader(f))
+        except Exception:
+            blog_rows = []
+
+    # Load Social Scheduled
+    sched_file = Path("data/social_scheduled_campaigns.json")
+    social_posts = []
+    if sched_file.exists():
+        try:
+            with open(sched_file, "r", encoding="utf-8") as f:
+                social_posts = json.load(f)
+        except Exception:
+            social_posts = []
+
+    # Load Leads
+    leads_file = Path("data/leads.json")
+    leads_list = []
+    if leads_file.exists():
+        try:
+            with open(leads_file, "r", encoding="utf-8") as f:
+                leads_list = json.load(f)
+        except Exception:
+            leads_list = []
+
+    sites_summary = []
+    total_published_blogs = 0
+    total_social_scheduled = 0
+    total_social_published = 0
+    unique_clients = set()
+
+    for site in all_sites:
+        sid = site.site_id
+        # Blogs for this site
+        site_blogs = [b for b in blog_rows if b.get("site", "ccm").lower() == sid]
+        site_pub_blogs = len([b for b in site_blogs if b.get("status") == "published"])
+        site_app_blogs = len([b for b in site_blogs if b.get("status") in ("approved", "pending", "drafted")])
+        total_published_blogs += site_pub_blogs
+
+        # Social for this site
+        site_social = [p for p in social_posts if p.get("site") == sid]
+        site_pub_social = len([p for p in site_social if p.get("status") == "published"])
+        site_sched_social = len([p for p in site_social if p.get("status") == "scheduled"])
+        total_social_published += site_pub_social
+        total_social_scheduled += site_sched_social
+
+        # Leads for this site
+        site_leads = len([l for l in leads_list if l.get("site_id") == sid or sid in str(l.get("source", "")).lower()])
+
+        # Tasks for this site
+        site_tasks = len([
+            t for t in all_tasks
+            if (t.input_data.get("site") == sid or
+                t.input_data.get("site_id") == sid or
+                site.domain in str(t.input_data.get("site_url", "")) or
+                site.domain in str(t.input_data.get("url", "")))
+        ])
+
+        for c_email in site.assigned_client_emails:
+            unique_clients.add(c_email)
+
+        sites_summary.append({
+            "site_id": site.site_id,
+            "name": site.name,
+            "domain": site.domain,
+            "location": site.location,
+            "niche": site.niche,
+            "color_accent": site.color_accent,
+            "is_active": site.is_active,
+            "owner_email": site.owner_email,
+            "assigned_client_emails": site.assigned_client_emails,
+            "invite_token": site.invite_token,
+            "invite_url": f"/?site={site.site_id}&invite={site.invite_token}",
+            "created_at": site.created_at or "2026-08-01",
+            "metrics": {
+                "published_blogs": site_pub_blogs,
+                "approved_blogs_queue": site_app_blogs,
+                "social_published": site_pub_social,
+                "social_scheduled": site_sched_social,
+                "leads_count": site_leads,
+                "tasks_completed": site_tasks
+            }
+        })
+
+    return {
+        "status": "success",
+        "super_admin": ADMIN_EMAIL,
+        "global_summary": {
+            "total_registered_websites": len(all_sites),
+            "total_assigned_clients": len(unique_clients),
+            "total_global_tasks": len(all_tasks),
+            "total_global_published_blogs": total_published_blogs,
+            "total_global_social_scheduled": total_social_scheduled,
+            "total_global_social_published": total_social_published,
+            "total_global_leads": len(leads_list),
+            "active_agents_running": len(orchestrator.registry.list_all())
+        },
+        "sites_summary": sites_summary,
+        "recent_activity": [
+            {
+                "task_id": t.task_id,
+                "agent_id": t.agent_id,
+                "task_type": t.task_type,
+                "status": t.status.value if hasattr(t.status, "value") else str(t.status),
+                "created_at": t.created_at.isoformat() if hasattr(t.created_at, "isoformat") else str(t.created_at)
+            }
+            for t in all_tasks[:12]
+        ]
+    }
+
+
+@app.post("/api/admin/super/sites/register")
+def super_admin_register_site(req: RegisterClientSiteRequest, _super: Dict[str, Any] = Depends(require_super_admin)):
+    """Super Admin registers a new client website and creates invite links."""
+    if not req.name or not req.name.strip():
+        raise HTTPException(status_code=400, detail="Website Name is required.")
+    if not req.domain or not req.domain.strip():
+        raise HTTPException(status_code=400, detail="Website Domain is required.")
+
+    clean_slug = re.sub(r'[^a-zA-Z0-9]+', '-', req.name.strip().lower()).strip('-')
+    if not clean_slug:
+        clean_slug = f"site-{secrets.token_hex(3)}"
+    if websites_mgr.get(clean_slug):
+        clean_slug = f"{clean_slug}-{secrets.token_hex(2)}"
+
+    clean_domain = req.domain.strip()
+    if not clean_domain.startswith("http://") and not clean_domain.startswith("https://"):
+        clean_domain = f"https://{clean_domain}"
+
+    client_emails = []
+    if req.assigned_client_email and req.assigned_client_email.strip():
+        client_emails.append(req.assigned_client_email.strip().lower())
+
+    profile = WebsiteProfile(
+        site_id=clean_slug,
+        name=req.name.strip(),
+        domain=clean_domain,
+        location=req.location.strip() if req.location else "Melbourne, VIC",
+        niche=req.niche.strip() if req.niche else "Luxury Chauffeur & Executive Transfers",
+        default_category=req.default_category.strip() if req.default_category else "Chauffeur Services",
+        assigned_client_emails=client_emails,
+        owner_email=ADMIN_EMAIL,
+        color_accent=req.color_accent or "#06b6d4",
+        is_active=True
+    )
+    saved = websites_mgr.add_website(profile)
+
+    return {
+        "status": "success",
+        "message": f"Client Website '{saved.name}' registered successfully!",
+        "site": saved.model_dump(),
+        "invite_url": f"/?site={saved.site_id}&invite={saved.invite_token}"
+    }
+
+
+@app.post("/api/admin/super/sites/allot")
+def super_admin_allot_client(req: AllotClientRequest, _super: Dict[str, Any] = Depends(require_super_admin)):
+    """Assigns a client email address to manage a specific website."""
+    site = websites_mgr.allot_client(req.site_id, req.client_email)
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{req.site_id}' not found.")
+    return {
+        "status": "success",
+        "message": f"Client '{req.client_email}' assigned to '{site.name}' successfully.",
+        "assigned_client_emails": site.assigned_client_emails,
+        "site": site.model_dump()
+    }
+
+
+@app.delete("/api/admin/super/sites/revoke")
+def super_admin_revoke_client(req: RevokeClientRequest, _super: Dict[str, Any] = Depends(require_super_admin)):
+    """Revokes a client email address's access to a website."""
+    site = websites_mgr.revoke_client(req.site_id, req.client_email)
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{req.site_id}' not found.")
+    return {
+        "status": "success",
+        "message": f"Client '{req.client_email}' access revoked from '{site.name}'.",
+        "assigned_client_emails": site.assigned_client_emails,
+        "site": site.model_dump()
+    }
+
+
+@app.post("/api/admin/super/invite/generate")
+def super_admin_generate_invite(req: GenerateInviteRequest, _super: Dict[str, Any] = Depends(require_super_admin)):
+    """Regenerates a secure client invite token & link for a website."""
+    token = websites_mgr.generate_invite_token(req.site_id)
+    site = websites_mgr.get(req.site_id)
+    return {
+        "status": "success",
+        "site_id": req.site_id,
+        "site_name": site.name if site else req.site_id,
+        "invite_token": token,
+        "invite_url": f"/?site={req.site_id}&invite={token}"
     }
 
 
@@ -668,8 +1087,28 @@ def logout():
 
 
 @app.get("/api/websites")
-def list_websites():
-    """List all registered multi-tenant websites."""
+def list_websites(
+    authorization: Optional[str] = Header(None),
+    x_admin_token: Optional[str] = Header(None)
+):
+    """List registered multi-tenant websites (scoped for client users)."""
+    token = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split("Bearer ")[1].strip()
+    elif x_admin_token:
+        token = x_admin_token.strip()
+
+    payload = verify_token(token)
+    if payload and not payload.get("is_super_admin") and payload.get("role") == "client":
+        allowed = payload.get("allowed_sites", [])
+        all_sites = websites_mgr.list_all()
+        user_sites = [s for s in all_sites if s.site_id in allowed]
+        return {
+            "status": "success",
+            "count": len(user_sites),
+            "websites": [s.model_dump() for s in user_sites]
+        }
+
     sites = websites_mgr.list_all()
     return {
         "status": "success",

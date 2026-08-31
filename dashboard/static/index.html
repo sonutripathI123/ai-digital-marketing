@@ -127,6 +127,11 @@
           <!-- Role-Based Auth Badge & Login Action -->
           <div id="auth-status-container" style="display:flex; align-items:center; gap:8px;"></div>
 
+          <!-- Super Admin Master Hub Button -->
+          <button class="btn" id="super-admin-btn" onclick="openSuperAdminHubModal()" type="button" style="display:none; background:linear-gradient(135deg, rgba(234,179,8,0.2), rgba(249,115,22,0.2)); border:1px solid #eab308; color:#facc15; font-weight:800; box-shadow:0 4px 12px rgba(234,179,8,0.25);">
+            <i class="fa-solid fa-crown" style="color:#facc15;"></i> Super Admin Hub
+          </button>
+
           <a href="/api/docs/download-master-handbook" target="_blank" download="AI_Digital_Marketing_Master_Handbook.pdf" class="btn btn-secondary" style="border-color:rgba(168,85,247,0.5); background:linear-gradient(135deg, rgba(168,85,247,0.15), rgba(6,182,212,0.15)); color:#c084fc; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px; box-shadow: 0 4px 12px rgba(168,85,247,0.25);">
             <i class="fa-solid fa-book-open" style="color:#c084fc;"></i> ⬇ Master Handbook (PDF)
           </a>
@@ -1564,6 +1569,166 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=11.41.0"></script>
+  <!-- Master Super Admin Hub Modal -->
+  <div id="modal-super-admin" class="modal-backdrop" style="display: none;">
+    <div class="modal-card" style="max-width: 1040px; width: 95%;">
+      <div class="modal-header" style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(249, 115, 22, 0.12)); border-bottom: 1px solid rgba(234, 179, 8, 0.3);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(234, 179, 8, 0.2); border: 1px solid #eab308; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #facc15;">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <div>
+            <h2 style="font-size: 18px; font-weight: 800; color: #fff; margin: 0;">Super Admin Command Center</h2>
+            <div style="font-size: 11px; color: #facc15; font-weight: 600;">Global Multi-Tenant Hub &bull; Master Owner Access (Sonu Tripathi)</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeSuperAdminHubModal()" type="button">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding: 20px;">
+        <!-- Global KPI Telemetry Cards -->
+        <div class="responsive-grid-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
+          <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 12px; padding: 14px;">
+            <div style="font-size: 10.5px; font-weight: 800; color: #facc15; text-transform: uppercase;"><i class="fa-solid fa-globe"></i> Managed Websites</div>
+            <div id="sa-total-sites" style="font-size: 26px; font-weight: 800; color: #fff; margin-top: 4px;">0</div>
+            <div style="font-size: 10.5px; color: var(--text-muted);">Active Client Brands</div>
+          </div>
+          <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; padding: 14px;">
+            <div style="font-size: 10.5px; font-weight: 800; color: var(--accent-cyan); text-transform: uppercase;"><i class="fa-solid fa-blog"></i> Global Live Blogs</div>
+            <div id="sa-total-blogs" style="font-size: 26px; font-weight: 800; color: #fff; margin-top: 4px;">0</div>
+            <div style="font-size: 10.5px; color: var(--text-muted);">Published across all sites</div>
+          </div>
+          <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px; padding: 14px;">
+            <div style="font-size: 10.5px; font-weight: 800; color: var(--accent-purple); text-transform: uppercase;"><i class="fa-solid fa-share-nodes"></i> Global Social Posts</div>
+            <div id="sa-total-social" style="font-size: 26px; font-weight: 800; color: #fff; margin-top: 4px;">0</div>
+            <div style="font-size: 10.5px; color: var(--text-muted);">Queued & Published Live</div>
+          </div>
+          <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 14px;">
+            <div style="font-size: 10.5px; font-weight: 800; color: var(--status-success); text-transform: uppercase;"><i class="fa-solid fa-users-gear"></i> Assigned Clients</div>
+            <div id="sa-total-clients" style="font-size: 26px; font-weight: 800; color: #fff; margin-top: 4px;">0</div>
+            <div style="font-size: 10.5px; color: var(--text-muted);">Delegated Client Users</div>
+          </div>
+        </div>
+
+        <!-- Super Admin Action Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <h3 style="font-size: 14px; font-weight: 800; color: var(--text-primary); margin: 0;">
+            <i class="fa-solid fa-list-check" style="color: var(--accent-cyan); margin-right: 6px;"></i>
+            Client Websites & Access Control Registry:
+          </h3>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary btn-sm" onclick="openRegisterClientSiteModal()" style="background: linear-gradient(135deg, #eab308, #f97316); border: none; color: #000; font-weight: 800; font-size: 12px; padding: 6px 14px; border-radius: 8px;">
+              <i class="fa-solid fa-plus-circle"></i> + Register New Client Website
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="loadSuperAdminTelemetry()" style="font-size: 12px;">
+              <i class="fa-solid fa-arrows-rotate"></i> Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- Managed Websites Table -->
+        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--glass-border); border-radius: 12px; overflow-x: auto; margin-bottom: 20px; max-height: 380px;">
+          <table style="width: 100%; min-width: 860px; border-collapse: collapse; text-align: left; font-size: 12px;">
+            <thead>
+              <tr style="background: rgba(15, 23, 42, 0.95); color: var(--text-muted); text-transform: uppercase; position: sticky; top: 0; z-index: 2;">
+                <th style="padding: 10px 14px; width: 140px;">Website Brand</th>
+                <th style="padding: 10px 14px; width: 160px;">Domain URL</th>
+                <th style="padding: 10px 14px; width: 120px;">Location</th>
+                <th style="padding: 10px 14px; width: 180px;">Assigned Clients</th>
+                <th style="padding: 10px 14px; width: 140px; text-align: center;">AI Activity</th>
+                <th style="padding: 10px 14px; width: 180px; text-align: center;">Client Invite / Actions</th>
+              </tr>
+            </thead>
+            <tbody id="sa-websites-tbody">
+              <tr>
+                <td colspan="6" style="padding: 30px; text-align: center; color: var(--text-muted);">
+                  <i class="fa-solid fa-spinner fa-spin" style="font-size: 20px; color: #facc15; margin-bottom: 8px;"></i>
+                  <div>Loading Super Admin Telemetry...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register New Client Website Modal -->
+  <div id="modal-register-client-site" class="modal-backdrop" style="display: none; z-index: 100010;">
+    <div class="modal-card" style="max-width: 520px; width: 95%;">
+      <div class="modal-header" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(168, 85, 247, 0.15)); border-bottom: 1px solid rgba(6, 182, 212, 0.3);">
+        <h2 style="font-size: 16px; font-weight: 800; color: #fff; margin: 0;"><i class="fa-solid fa-globe" style="color: var(--accent-cyan);"></i> Register New Client Website</h2>
+        <button class="modal-close-btn" onclick="closeRegisterClientSiteModal()" type="button">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <form id="form-register-client-site" onsubmit="handleRegisterClientSite(event)">
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Website / Brand Name *</label>
+            <input type="text" id="reg-site-name" required placeholder="e.g. Sydney Luxury Chauffeurs" class="form-control" style="width: 100%; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Website Domain URL *</label>
+            <input type="text" id="reg-site-domain" required placeholder="https://sydneyluxurychauffeurs.com.au" class="form-control" style="width: 100%; font-size: 13px;" />
+          </div>
+          <div class="responsive-grid-2" style="margin-bottom: 12px;">
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Operating Location</label>
+              <input type="text" id="reg-site-location" placeholder="e.g. Sydney, NSW" value="Sydney, NSW" class="form-control" style="width: 100%; font-size: 13px;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Badge Color</label>
+              <input type="color" id="reg-site-color" value="#06b6d4" class="form-control" style="width: 100%; height: 38px; padding: 2px; cursor: pointer;" />
+            </div>
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Business Niche / Focus</label>
+            <input type="text" id="reg-site-niche" placeholder="Executive Airport Transfers & Corporate Chauffeur" value="Executive Airport Transfers & Corporate Chauffeur" class="form-control" style="width: 100%; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 18px;">
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Allot to Client Email (Optional)</label>
+            <input type="email" id="reg-site-client-email" placeholder="client@company.com" class="form-control" style="width: 100%; font-size: 13px;" />
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 8px;">
+            <button type="button" class="btn btn-secondary" onclick="closeRegisterClientSiteModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, var(--accent-cyan), #3b82f6); border: none; font-weight: 800;">
+              <i class="fa-solid fa-check"></i> Register & Generate Invite Link
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Allot Client User Modal -->
+  <div id="modal-allot-client-user" class="modal-backdrop" style="display: none; z-index: 100010;">
+    <div class="modal-card" style="max-width: 440px; width: 95%;">
+      <div class="modal-header" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15)); border-bottom: 1px solid rgba(16, 185, 129, 0.3);">
+        <h2 style="font-size: 16px; font-weight: 800; color: #fff; margin: 0;"><i class="fa-solid fa-user-plus" style="color: #10b981;"></i> Allot Client Website Access</h2>
+        <button class="modal-close-btn" onclick="closeAllotClientModal()" type="button">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <form id="form-allot-client-user" onsubmit="handleAllotClientSubmit(event)">
+          <input type="hidden" id="allot-site-id" />
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Target Website</label>
+            <div id="allot-site-name-display" style="font-size: 14px; font-weight: 800; color: var(--accent-cyan);">Corporate Cars Melbourne</div>
+          </div>
+          <div style="margin-bottom: 18px;">
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Client Email Address *</label>
+            <input type="email" id="allot-client-email" required placeholder="client@company.com" class="form-control" style="width: 100%; font-size: 13px;" />
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">This client will be granted exclusive dashboard access to manage this website only.</div>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 8px;">
+            <button type="button" class="btn btn-secondary" onclick="closeAllotClientModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 800;">
+              <i class="fa-solid fa-key"></i> Grant Client Access
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v=11.42.0"></script>
 </body>
 </html>

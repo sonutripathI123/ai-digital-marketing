@@ -14,7 +14,11 @@
     "instagram_url": "https://instagram.com/corporatecarsmelbourne",
     "linkedin_url": "https://linkedin.com/company/corporatecarsmelbourne",
     "is_active": true,
-    "color_accent": "#06b6d4"
+    "color_accent": "#06b6d4",
+    "owner_email": "sonutripathi9305@gmail.com",
+    "assigned_client_emails": [],
+    "invite_token": "inv_ccm_e7505cee",
+    "created_at": null
   },
   {
     "site_id": "opal",
@@ -31,6 +35,10 @@
     "instagram_url": "https://instagram.com/opalchauffeurs",
     "linkedin_url": "https://linkedin.com/company/opalchauffeurs",
     "is_active": true,
-    "color_accent": "#a855f7"
+    "color_accent": "#a855f7",
+    "owner_email": "sonutripathi9305@gmail.com",
+    "assigned_client_emails": [],
+    "invite_token": "inv_opal_16bab12b",
+    "created_at": null
   }
 ]
