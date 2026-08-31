@@ -7,16 +7,7 @@ let currentUserRole = 'viewer';
 let authToken = sessionStorage.getItem('ccm_admin_token') || null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  initClock();
-  initNavigation();
-  initEventListeners();
-  initAmbientParticles();
-  init3DCyberCore();
-  init3DCardTilt();
-  await checkAuthSession();
-  checkVisitorAccess();
-
-  // Detect Client Portal Invite Link from Query or Hash
+  // 1. Detect Client Portal Invite Link from Query or Hash first
   const urlParams = new URLSearchParams(window.location.search);
   const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
   const inviteToken = urlParams.get('token') || urlParams.get('invite') || hashParams.get('token') || hashParams.get('invite');
@@ -30,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         currentSiteId = inviteData.site_id;
         sessionStorage.setItem('ccm_selected_site', currentSiteId);
         sessionStorage.setItem('ccm_client_invite_token', inviteToken);
+        localStorage.setItem('ai_visitor_session', 'client_portal_' + currentSiteId);
         currentUserRole = 'client';
         isSuperAdmin = false;
         currentAllowedSites = [inviteData.site_id];
@@ -49,10 +41,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // Restore saved active view from hash or sessionStorage
-  const hashView = window.location.hash.replace('#', '').split('&')[0].trim();
+  // 2. Initialize UI components, clock, and navigation
+  initClock();
+  initNavigation();
+  initEventListeners();
+  initAmbientParticles();
+  init3DCyberCore();
+  init3DCardTilt();
+  await checkAuthSession();
+  checkVisitorAccess();
+
+  // 3. Restore saved active view
+  const rawHash = window.location.hash.replace('#', '');
+  const hashView = rawHash.includes('=') ? 'overview' : rawHash.trim();
   const savedView = sessionStorage.getItem('ccm_active_view');
-  const initialView = (hashView && !hashView.includes('=')) ? hashView : (savedView || 'overview');
+  const initialView = hashView || savedView || 'overview';
 
   await initWebsiteSwitcher();
   switchToView(initialView);
@@ -175,8 +178,6 @@ function requireAdminAction(actionName = 'perform this action') {
     openAdminLoginModal(`Authentication Required: Only authorized administrators can ${actionName}. Public visitors have Read-Only view access.`);
     return false;
   }
-  return true;
-}
   return true;
 }
 
