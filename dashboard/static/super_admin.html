@@ -512,15 +512,20 @@
       <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 18px;">Share this exclusive portal link with your client:</p>
 
       <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-        <input type="text" id="share-link-input" readonly class="form-control" style="background: transparent; border: none; font-family: var(--font-mono); font-size: 11.5px; color: var(--gold);" />
+        <a id="share-link-anchor" href="#" target="_blank" style="font-family: var(--font-mono); font-size: 11.5px; color: var(--gold); text-decoration: underline; word-break: break-all; text-align: left; flex: 1;">
+          https://...
+        </a>
         <button class="btn btn-gold btn-sm" onclick="copyShareInputLink()" style="font-size: 11px; white-space: nowrap;">
           <i class="fa-solid fa-copy"></i> Copy
         </button>
       </div>
 
-      <div style="display: flex; gap: 10px; justify-content: center;">
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <a id="share-direct-open-btn" href="#" target="_blank" class="btn btn-secondary" style="color: var(--cyan); border-color: rgba(6,182,212,0.4);">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Client Portal
+        </a>
         <a id="share-whatsapp-btn" href="#" target="_blank" class="btn" style="background: #25D366; color: #fff; font-weight: 700;">
-          <i class="fa-brands fa-whatsapp"></i> Share WhatsApp
+          <i class="fa-brands fa-whatsapp"></i> Share on WhatsApp
         </a>
         <button class="btn btn-secondary" onclick="closeShareModal()">Done</button>
       </div>
@@ -777,9 +782,26 @@
 
         // Show Success Share Popup with Live Public URL
         const fullPublicUrl = getShareableBaseUrl() + `/portal?token=${data.site.invite_token}`;
+        const localPortalUrl = window.location.origin + `/portal?token=${data.site.invite_token}`;
+
         document.getElementById('share-modal-title').textContent = `Website '${name}' Created!`;
-        document.getElementById('share-link-input').value = fullPublicUrl;
-        document.getElementById('share-whatsapp-btn').href = `https://wa.me/?text=${encodeURIComponent(`Here is your dedicated AI Digital Marketing portal for ${name}: ${fullPublicUrl}`)}`;
+        
+        const anchor = document.getElementById('share-link-anchor');
+        if (anchor) {
+          anchor.href = localPortalUrl;
+          anchor.textContent = fullPublicUrl;
+        }
+
+        const openBtn = document.getElementById('share-direct-open-btn');
+        if (openBtn) {
+          openBtn.href = localPortalUrl;
+        }
+
+        const waBtn = document.getElementById('share-whatsapp-btn');
+        if (waBtn) {
+          waBtn.href = `https://wa.me/?text=${encodeURIComponent(`Hello, here is your dedicated AI Digital Marketing Command Center for ${name}: ${fullPublicUrl}`)}`;
+        }
+
         document.getElementById('modal-share-success').style.display = 'flex';
 
       } catch (err) {
@@ -788,10 +810,13 @@
     }
 
     function copyShareInputLink() {
-      const input = document.getElementById('share-link-input');
-      input.select();
-      navigator.clipboard.writeText(input.value);
-      alert('Link copied to clipboard!');
+      const anchor = document.getElementById('share-link-anchor');
+      const textToCopy = anchor ? anchor.textContent.trim() : '';
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        alert(`🎉 Link Copied to Clipboard!\n\n${textToCopy}`);
+      }).catch(() => {
+        prompt('Copy Link:', textToCopy);
+      });
     }
 
     function closeShareModal() {
