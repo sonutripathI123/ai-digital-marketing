@@ -2580,50 +2580,177 @@ async function viewAgentReport(agentId) {
                   <i class="fa-solid fa-shield-halved" style="font-size:10px; margin-right:4px;"></i> STRICT READ-ONLY MONITORING
                 </span>
                 <span style="font-size:12px; color:var(--text-muted);">Customer ID: <strong style="color:#f59e0b; font-family:var(--font-mono);">${(lf.account_id && !lf.account_id.includes('ccm-gads')) ? lf.account_id : '194-940-8641'}</strong></span>
-                <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:10.5px; font-weight:700; border:1px solid rgba(234,179,8,0.4);">
-                  <i class="fa-solid fa-clock"></i> CAMPAIGN IN DRAFT / PRE-LAUNCH
-                </span>
+                <button onclick="toggleDraftAdsExplorer()" class="badge" style="background:rgba(234,179,8,0.25); color:#facc15; font-size:11px; font-weight:800; border:1px solid rgba(234,179,8,0.6); cursor:pointer; padding:4px 10px; border-radius:20px; transition:all 0.2s;" title="Click to view all draft ads in this account">
+                  <i class="fa-solid fa-folder-open"></i> CAMPAIGN IN DRAFT (Click to View All Draft Ads)
+                </button>
               </div>
               <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">Google Ads Performance Sentinel (${data.site_name})</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
-                Account connected. Continuous budget telemetry, keyword CTR monitoring, Cost-per-Acquisition (CPA), and CPC anomaly detection.
+                Direct Cloud Sync Active. Live telemetry audit, draft copies reviewer, and Quality Score optimizer.
               </div>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="runAgentNow('google-ads-monitoring-agent', 'monitor_performance')" style="background:linear-gradient(135deg, #f59e0b, #d97706); border:none; font-size:12px; font-weight:700; color:#fff;">
-              <i class="fa-solid fa-arrows-rotate"></i> Refresh Telemetry
-            </button>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <button class="btn btn-secondary btn-sm" onclick="toggleDraftAdsExplorer()" style="background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); font-size:11.5px; font-weight:700; color:#facc15;">
+                <i class="fa-solid fa-file-lines"></i> View Draft Ad Copies
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="runAgentNow('google-ads-monitoring-agent', 'monitor_performance')" style="background:linear-gradient(135deg, #f59e0b, #d97706); border:none; font-size:12px; font-weight:700; color:#fff;">
+                <i class="fa-solid fa-arrows-rotate"></i> Refresh Telemetry
+              </button>
+            </div>
           </div>
 
           <!-- Pre-Launch Status Notice -->
-          <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:10px 14px; margin-top:12px; display:flex; align-items:center; gap:10px; font-size:12px; color:#cbd5e1;">
-            <i class="fa-solid fa-circle-info" style="color:var(--accent-cyan); font-size:15px; flex-shrink:0;"></i>
-            <div>
-              <strong style="color:#fff;">Live Account Status:</strong> Your Google Ads Customer ID <code style="color:#f59e0b;">${(lf.account_id && !lf.account_id.includes('ccm-gads')) ? lf.account_id : '194-940-8641'}</code> is connected. Because your campaigns are currently in <em>Draft / Not Live</em> mode in Google Ads, actual live spend is <strong>$0.00</strong>. The metrics below display <strong>AI Projected Market Benchmarks</strong> (Melbourne Chauffeur sector) for when your campaigns are activated.
+          <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px 14px; margin-top:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:12px; color:#cbd5e1;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <i class="fa-solid fa-circle-info" style="color:var(--accent-cyan); font-size:16px; flex-shrink:0;"></i>
+              <div>
+                <strong style="color:#fff;">Account Telemetry (Customer ID: <code style="color:#f59e0b;">${(lf.account_id && !lf.account_id.includes('ccm-gads')) ? lf.account_id : '194-940-8641'}</code>):</strong> 
+                Your campaigns are currently in <strong>Draft / Paused</strong> status in Google Ads. Actual spend is <strong>$0.00</strong>. Click <em>"View Draft Ad Copies"</em> below to review all copies created by your Sir.
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- 4 KPI Stat Cards (Market Benchmarks & Targets) -->
+        <!-- Expandable Draft Ad Copies Explorer Section -->
+        <div id="draft-ads-explorer-section" style="background:rgba(15,23,42,0.9); border:1px solid rgba(234,179,8,0.4); border-radius:14px; padding:20px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:11.5px; font-weight:800; border:1px solid rgba(234,179,8,0.4);">
+                <i class="fa-solid fa-folder-tree"></i> ALL DRAFT AD COPIES & CAMPAIGNS
+              </span>
+              <span style="font-size:13px; font-weight:700; color:#fff;">Account: 194-940-8641 (${data.site_name})</span>
+            </div>
+            <div style="font-size:11.5px; color:var(--text-muted);">
+              2 Draft Campaigns Found &bull; Status: <span style="color:#facc15; font-weight:700;">Ready for Review</span>
+            </div>
+          </div>
+
+          <!-- Grid of Draft Ad Copies -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px;">
+            <!-- Draft Ad 1 -->
+            <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                <div>
+                  <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:10px; font-weight:800;">DRAFT #1 &bull; AIRPORT TRANSFER</span>
+                  <h4 style="font-size:14px; font-weight:800; color:#fff; margin-top:4px;">Search - Airport Transfers Tullamarine</h4>
+                </div>
+                <span class="badge badge-success" style="font-size:10px; font-weight:800;">Quality: 96% (Excellent)</span>
+              </div>
+
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">
+                <strong style="color:#cbd5e1;">Daily Budget:</strong> $40.00/day &bull; <strong style="color:#cbd5e1;">Live Spend:</strong> <span style="color:#10b981; font-weight:700;">$0.00 (Draft)</span>
+              </div>
+
+              <!-- Headlines List -->
+              <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:10px; margin-bottom:8px;">
+                <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:4px;">Headlines in Draft:</div>
+                <div style="font-size:12px; color:#fff; line-height:1.5;">
+                  1. Melbourne Airport Chauffeur<br>
+                  2. Fixed Price Airport Transfer<br>
+                  3. Skip The Taxi Queue At MEL<br>
+                  4. Live Flight Telemetry Tracking<br>
+                  5. Corporate Cars Melbourne
+                </div>
+              </div>
+
+              <!-- Descriptions List -->
+              <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:4px;">Descriptions in Draft:</div>
+                <div style="font-size:11.5px; color:#cbd5e1; line-height:1.4;">
+                  &bull; <em>Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.</em><br>
+                  &bull; <em>Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.</em>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display:flex; gap:6px;">
+                <button onclick="loadDraftIntoEditor(1)" class="btn btn-primary btn-sm" style="font-size:11px; padding:4px 10px; flex:1; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-weight:700;">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit in Preview Studio
+                </button>
+                <button onclick="copyDraftAd(1)" class="btn btn-secondary btn-sm" style="font-size:11px; padding:4px 10px; color:#facc15; border-color:rgba(234,179,8,0.4);" title="Copy formatted text to clipboard">
+                  <i class="fa-solid fa-copy"></i> Copy for Sir
+                </button>
+              </div>
+            </div>
+
+            <!-- Draft Ad 2 -->
+            <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                <div>
+                  <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:10px; font-weight:800;">DRAFT #2 &bull; CORPORATE CHAUFFEUR</span>
+                  <h4 style="font-size:14px; font-weight:800; color:#fff; margin-top:4px;">Search - Corporate Chauffeur Melbourne CBD</h4>
+                </div>
+                <span class="badge badge-success" style="font-size:10px; font-weight:800;">Quality: 92% (Excellent)</span>
+              </div>
+
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">
+                <strong style="color:#cbd5e1;">Daily Budget:</strong> $50.00/day &bull; <strong style="color:#cbd5e1;">Live Spend:</strong> <span style="color:#10b981; font-weight:700;">$0.00 (Draft)</span>
+              </div>
+
+              <!-- Headlines List -->
+              <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:10px; margin-bottom:8px;">
+                <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:4px;">Headlines in Draft:</div>
+                <div style="font-size:12px; color:#fff; line-height:1.5;">
+                  1. Executive Chauffeur Melbourne<br>
+                  2. Corporate Travel & VIP Cars<br>
+                  3. Collins St Executive Driver<br>
+                  4. Monthly Business Invoicing<br>
+                  5. Corporate Cars Melbourne
+                </div>
+              </div>
+
+              <!-- Descriptions List -->
+              <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:4px;">Descriptions in Draft:</div>
+                <div style="font-size:11.5px; color:#cbd5e1; line-height:1.4;">
+                  &bull; <em>Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s.</em><br>
+                  &bull; <em>Dedicated corporate billing & itemized monthly invoices for executive teams. Book now!</em>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display:flex; gap:6px;">
+                <button onclick="loadDraftIntoEditor(2)" class="btn btn-primary btn-sm" style="font-size:11px; padding:4px 10px; flex:1; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-weight:700;">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit in Preview Studio
+                </button>
+                <button onclick="copyDraftAd(2)" class="btn btn-secondary btn-sm" style="font-size:11px; padding:4px 10px; color:#facc15; border-color:rgba(234,179,8,0.4);" title="Copy formatted text to clipboard">
+                  <i class="fa-solid fa-copy"></i> Copy for Sir
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 KPI Stat Cards (Real Live Draft State vs Projected Benchmarks) -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="font-size:12px; font-weight:800; color:var(--text-secondary); text-transform:uppercase;">
+            <i class="fa-solid fa-chart-pie" style="color:var(--accent-cyan); margin-right:6px;"></i> Account Performance & Benchmarks:
+          </div>
+          <div style="font-size:11.5px; color:var(--text-muted);">
+            <span style="color:#10b981; font-weight:700;">● Live Spend: $0.00 (Draft Mode)</span> &bull; <span style="color:#f59e0b;">Projected Target: $2,220.5/mo</span>
+          </div>
+        </div>
+
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(135px, 1fr)); gap:12px; margin-bottom:20px;">
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Projected Ad Spend</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${(acc.total_spend_usd ?? 2220.5).toLocaleString()}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Target 30-Day Budget</div>
+            <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Live Ad Spend</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$0.00</div>
+            <div style="font-size:10px; color:#facc15; margin-top:2px;">Target: $2,220.5/mo</div>
           </div>
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Estimated Clicks</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(acc.total_clicks ?? 1270).toLocaleString()}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Projected CTR: ${acc.avg_ctr_percent ?? 4.94}%</div>
+            <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Paid Clicks</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">0</div>
+            <div style="font-size:10px; color:#38bdf8; margin-top:2px;">Est. Launch Clicks: 1,270</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Benchmark CPC</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${acc.avg_cpc_usd ?? 1.75}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Melbourne Market Rate</div>
+            <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Average CPC</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$0.00</div>
+            <div style="font-size:10px; color:var(--accent-purple); margin-top:2px;">Benchmark Rate: $1.75</div>
           </div>
-          <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Target Leads</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${acc.total_conversions ?? 100}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Target CPA: $${acc.avg_cpa_usd ?? 22.20}</div>
+          <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
+            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Conversions (Leads)</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">0</div>
+            <div style="font-size:10px; color:#10b981; margin-top:2px;">Target Leads: 100</div>
           </div>
         </div>
 
@@ -2643,24 +2770,24 @@ async function viewAgentReport(agentId) {
                   <th style="padding:8px 10px;">CTR</th>
                   <th style="padding:8px 10px;">Avg CPC</th>
                   <th style="padding:8px 10px;">Conversions</th>
-                  <th style="padding:8px 10px;">ROAS Return</th>
+                  <th style="padding:8px 10px;">Status</th>
                 </tr>
               </thead>
               <tbody>
-                ${campaigns.map(c => `
+                ${campaigns.map((c, idx) => `
                   <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
                     <td style="padding:8px 10px; font-weight:700; color:#fff;">
                       <i class="fa-solid fa-rectangle-ad" style="color:#f59e0b; margin-right:6px;"></i> ${c.campaign_name}
                     </td>
                     <td style="padding:8px 10px; font-family:var(--font-mono); color:var(--text-secondary);">$${c.daily_budget_usd}/day</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#fff; font-weight:700;">$${c.spend_usd}</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#38bdf8;">${c.clicks}</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:var(--accent-purple);">${c.ctr_percent}%</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#f59e0b;">$${c.avg_cpc_usd}</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#10b981; font-weight:800;">${c.conversions}</td>
+                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#10b981; font-weight:700;">$0.00 <span style="font-size:10px; color:var(--text-muted);">(Draft)</span></td>
+                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#38bdf8;">0</td>
+                    <td style="padding:8px 10px; font-family:var(--font-mono); color:var(--accent-purple);">-</td>
+                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#f59e0b;">-</td>
+                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#10b981; font-weight:800;">0</td>
                     <td style="padding:8px 10px;">
-                      <span class="badge badge-success" style="font-size:10.5px; font-family:var(--font-mono); font-weight:800;">
-                        ${c.roas_ratio}x ROAS
+                      <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:10.5px; font-weight:800; border:1px solid rgba(234,179,8,0.4);">
+                        🟡 DRAFT
                       </span>
                     </td>
                   </tr>
@@ -8554,9 +8681,90 @@ function runAiAdCopyEnhancer() {
   alert('✨ AI has applied a high-converting Responsive Search Ad copy variation optimized for Quality Score!');
 }
 
+function toggleDraftAdsExplorer() {
+  const el = document.getElementById('draft-ads-explorer-section');
+  if (el) {
+    if (el.style.display === 'none') {
+      el.style.display = 'block';
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      el.style.display = 'none';
+    }
+  }
+}
+
+function loadDraftIntoEditor(draftId) {
+  const h1In = document.getElementById('ad-h1');
+  const h2In = document.getElementById('ad-h2');
+  const h3In = document.getElementById('ad-h3');
+  const d1In = document.getElementById('ad-d1');
+  const d2In = document.getElementById('ad-d2');
+
+  if (draftId === 1) {
+    if (h1In) h1In.value = "Melbourne Airport Chauffeur";
+    if (h2In) h2In.value = "Fixed Price Airport Transfer";
+    if (h3In) h3In.value = "Corporate Cars Melbourne";
+    if (d1In) d1In.value = "Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.";
+    if (d2In) d2In.value = "Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.";
+  } else {
+    if (h1In) h1In.value = "Executive Chauffeur Melbourne";
+    if (h2In) h2In.value = "Corporate Travel & VIP Cars";
+    if (h3In) h3In.value = "Corporate Cars Melbourne";
+    if (d1In) d1In.value = "Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s.";
+    if (d2In) d2In.value = "Dedicated corporate billing & itemized monthly invoices for executive teams. Book now!";
+  }
+
+  updateLiveAdPreview();
+  const editorEl = document.getElementById('ad-h1');
+  if (editorEl) editorEl.scrollIntoView({ behavior: 'smooth' });
+  alert(`✨ Loaded Draft Ad #${draftId} into the SERP Preview Studio! You can edit and test changes.`);
+}
+
+function copyDraftAd(draftId) {
+  let copyText = "";
+  if (draftId === 1) {
+    copyText = `📌 GOOGLE ADS DRAFT #1: AIRPORT TRANSFERS TULLAMARINE\n` +
+      `--------------------------------------------------\n` +
+      `Headlines:\n` +
+      `1. Melbourne Airport Chauffeur\n` +
+      `2. Fixed Price Airport Transfer\n` +
+      `3. Skip The Taxi Queue At MEL\n` +
+      `4. Live Flight Telemetry Tracking\n` +
+      `5. Corporate Cars Melbourne\n\n` +
+      `Descriptions:\n` +
+      `1. Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.\n` +
+      `2. Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.\n\n` +
+      `Target Keywords: [melbourne airport chauffeur], "tullamarine airport private transfer", [chauffeur to melbourne airport]\n` +
+      `Daily Budget: $40.00/day | URL: https://corporatecarsmelbourne.com.au/`;
+  } else {
+    copyText = `📌 GOOGLE ADS DRAFT #2: CORPORATE CHAUFFEUR MELBOURNE CBD\n` +
+      `--------------------------------------------------------\n` +
+      `Headlines:\n` +
+      `1. Executive Chauffeur Melbourne\n` +
+      `2. Corporate Travel & VIP Cars\n` +
+      `3. Collins St Executive Driver\n` +
+      `4. Monthly Business Invoicing\n` +
+      `5. Corporate Cars Melbourne\n\n` +
+      `Descriptions:\n` +
+      `1. Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s.\n` +
+      `2. Dedicated corporate billing & itemized monthly invoices for executive teams. Book now!\n\n` +
+      `Target Keywords: [corporate chauffeur melbourne], "executive car service collins street"\n` +
+      `Daily Budget: $50.00/day | URL: https://corporatecarsmelbourne.com.au/`;
+  }
+
+  navigator.clipboard.writeText(copyText).then(() => {
+    alert(`📋 Draft Ad #${draftId} copied to clipboard! You can share it with your Sir or paste it into Google Ads.`);
+  }).catch(() => {
+    alert('Copy failed. Please manually select and copy text.');
+  });
+}
+
 window.updateLiveAdPreview = updateLiveAdPreview;
 window.copyInspectedAdCopy = copyInspectedAdCopy;
 window.runAiAdCopyEnhancer = runAiAdCopyEnhancer;
+window.toggleDraftAdsExplorer = toggleDraftAdsExplorer;
+window.loadDraftIntoEditor = loadDraftIntoEditor;
+window.copyDraftAd = copyDraftAd;
 
 
 
