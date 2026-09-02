@@ -9343,6 +9343,43 @@ async function publishGoogleAdLive() {
   }
 }
 
+let deferredPwaPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPwaPrompt = e;
+  console.log('[PWA] beforeinstallprompt captured, ready for install.');
+  const hBtn = document.getElementById('pwa-install-header-btn');
+  if (hBtn) hBtn.style.display = 'inline-flex';
+  const sBtn = document.getElementById('pwa-install-sidebar-btn');
+  if (sBtn) sBtn.style.display = 'flex';
+});
+
+window.addEventListener('appinstalled', () => {
+  console.log('[PWA] Installed successfully as standalone Web App.');
+  deferredPwaPrompt = null;
+  const hBtn = document.getElementById('pwa-install-header-btn');
+  if (hBtn) hBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> App Installed';
+});
+
+window.triggerPwaInstall = async function() {
+  if (deferredPwaPrompt) {
+    deferredPwaPrompt.prompt();
+    const { outcome } = await deferredPwaPrompt.userChoice;
+    console.log(`[PWA] Install prompt outcome: ${outcome}`);
+    if (outcome === 'accepted') {
+      deferredPwaPrompt = null;
+    }
+  } else {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      alert("📲 iPhone / iPad par Install karne ke liye:\n\n1. Safari me neeche Share icon (⬆️) par click kijiye.\n2. Scroll karke 'Add to Home Screen ➕' select kijiye.\n3. Top right me 'Add' dabaiye!");
+    } else {
+      alert("📲 Desktop / Mobile par App Install karne ke liye:\n\n• Chrome/Edge Browser ke top-right 3-dots (⋮) par click karein ➔ 'Install Corporate Cars Marketing AI' (ya 'Cast, save and share' ➔ 'Install page as app') select karein!\n• Mobile Chrome me: 3-dots (⋮) ➔ 'Install app' dabayein.");
+    }
+  }
+};
+
 window.updateLiveAdPreview = updateLiveAdPreview;
 window.copyInspectedAdCopy = copyInspectedAdCopy;
 window.runAiAdCopyEnhancer = runAiAdCopyEnhancer;

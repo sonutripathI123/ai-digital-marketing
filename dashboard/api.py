@@ -562,6 +562,24 @@ def serve_dashboard_ui():
     )
 
 
+@app.api_route("/manifest.json", methods=["GET", "HEAD"])
+def serve_manifest():
+    """Serves PWA Web App manifest."""
+    manifest_path = STATIC_DIR / "manifest.json"
+    return FileResponse(str(manifest_path), media_type="application/manifest+json")
+
+
+@app.api_route("/sw.js", methods=["GET", "HEAD"])
+def serve_sw():
+    """Serves PWA Service Worker."""
+    sw_path = STATIC_DIR / "sw.js"
+    return FileResponse(
+        str(sw_path),
+        media_type="application/javascript",
+        headers={"Service-Worker-Allowed": "/", "Cache-Control": "no-cache"}
+    )
+
+
 @app.api_route("/health", methods=["GET", "HEAD"])
 def health_check():
     """Health check endpoint for cloud load balancers and Render."""
