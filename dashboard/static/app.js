@@ -8101,14 +8101,18 @@ const AGENT_INTEGRATION_CONFIGS = {
     color: '#eab308',
     subtitle: 'Audits PPC spend, keyword cost-per-click (CPC), conversions, and ROAS.',
     fields: [
-      { key: 'customer_id', label: '10-Digit Google Ads Customer ID', type: 'text', placeholder: '123-456-7890', required: true, help: 'Displayed in the top-right corner of Google Ads' }
+      { key: 'customer_id', label: '10-Digit Google Ads Customer ID', type: 'text', placeholder: '194-940-8641', required: true, help: 'Displayed in the top-right corner of Google Ads' },
+      { key: 'developer_token', label: 'Developer Token (Optional for Direct API)', type: 'password', placeholder: '••••••••••••••••', required: false, help: 'From Google Ads Manager (MCC) > Tools > API Center' },
+      { key: 'client_id', label: 'OAuth Client ID (Optional for Live Auto-Fetch)', type: 'text', placeholder: 'xxxx.apps.googleusercontent.com', required: false, help: 'From Google Cloud Console > Credentials' },
+      { key: 'client_secret', label: 'OAuth Client Secret (Optional)', type: 'password', placeholder: '••••••••••••••••', required: false, help: 'From Google Cloud Console' },
+      { key: 'refresh_token', label: 'OAuth Refresh Token (Optional)', type: 'password', placeholder: '••••••••••••••••', required: false, help: 'Generated via OAuth Playground for adwords scope' }
     ],
     guide: `
       <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
-        <h4 style="color:#eab308; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-bullhorn"></i> How to Find Google Ads ID:</h4>
+        <h4 style="color:#eab308; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-bullhorn"></i> How to Connect Google Ads Direct Cloud Sync:</h4>
         <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
-          Open <code>ads.google.com</code>. Look at the top right header under your profile icon.<br>
-          Copy the 10-digit number formatted as <code>XXX-XXX-XXXX</code>.
+          <strong>1. Customer ID:</strong> Open <code>ads.google.com</code> and copy the 10-digit number from the top right.<br>
+          <strong>2. Direct API Sync:</strong> For 100% automatic real-time sync of drafts and spend without manual exports, enter your Google Cloud OAuth & Developer Token credentials above.
         </div>
       </div>
     `
@@ -8119,7 +8123,7 @@ const AGENT_INTEGRATION_CONFIGS = {
     color: '#10b981',
     subtitle: 'Optimizes keyword bids, negative search terms, device multipliers, and ad copies.',
     fields: [
-      { key: 'customer_id', label: '10-Digit Google Ads Customer ID', type: 'text', placeholder: '123-456-7890', required: true, help: 'Displayed in the top-right corner of Google Ads' }
+      { key: 'customer_id', label: '10-Digit Google Ads Customer ID', type: 'text', placeholder: '194-940-8641', required: true, help: 'Displayed in the top-right corner of Google Ads' }
     ],
     guide: `
       <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
