@@ -548,7 +548,7 @@ def check_site_access_permission(site_id: str, payload: Optional[Dict[str, Any]]
 
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def serve_dashboard_ui():
     """Serves the main Command Center Single Page Application."""
     index_path = STATIC_DIR / "index.html"
@@ -560,6 +560,12 @@ def serve_dashboard_ui():
             "Expires": "0"
         }
     )
+
+
+@app.api_route("/health", methods=["GET", "HEAD"])
+def health_check():
+    """Health check endpoint for cloud load balancers and Render."""
+    return {"status": "ok", "service": "AI Digital Marketing OS"}
 
 
 @app.get("/super-admin")
