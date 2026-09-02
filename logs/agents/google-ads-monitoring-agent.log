@@ -309,3 +309,4 @@
 2026-08-18 09:44:46,818 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
 2026-08-18 09:45:12,093 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=create_campaign, account='123-456-7890', live_enabled=False
 2026-08-18 09:45:12,094 [WARNING] [agent:agent.google-ads-monitoring-agent] Blocked live mutation request 'create_campaign' (ADS_LIVE_EXECUTION_ENABLED=false)
+2026-09-02 11:00:42,320 [INFO] [agent:agent.google-ads-monitoring-agent] Executing GoogleAdsMonitoringAgent task: action=monitor_performance, account='194-940-8641', live_enabled=False
