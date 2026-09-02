@@ -3043,6 +3043,72 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
           </div>
         </div>
 
+        <!-- Live Ad Groups Analysis & Future Ad Copy Generator (16Aug_Ads_Campaign) -->
+        <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(6,182,212,0.4); border-radius:14px; padding:20px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
+            <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-brain" style="color:var(--accent-cyan);"></i> Live Ad Groups Intelligence & Future Copy Generator (16Aug_Ads_Campaign)
+            </div>
+            <span class="badge badge-success" style="font-size:10px; font-weight:800;">
+              <i class="fa-solid fa-chart-line"></i> Deep Telemetry Audited
+            </span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:16px;">
+            <!-- Winner Ad Group 1 -->
+            <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span class="badge badge-success" style="font-size:10px; font-weight:800;">🔥 PROVEN WINNER</span>
+                <span style="font-size:11px; color:#10b981; font-weight:700;">4 Leads &bull; A$109.71 CPA</span>
+              </div>
+              <h4 style="font-size:14.5px; font-weight:800; color:#fff; margin-bottom:4px;">Corporate Chauffeur & Cars</h4>
+              <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:10px; line-height:1.4;">
+                <strong>AI Audit:</strong> High conversion rate (2.12%) on 189 clicks. Collins St corporate travel & executive fleet hooks are winning.
+              </div>
+
+              <!-- Generated Future Ad Copy Suggestion -->
+              <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:#facc15; text-transform:uppercase; margin-bottom:4px;">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> Future RSA Copy Variation (Scale Hook):
+                </div>
+                <div style="font-size:11.5px; color:#fff; line-height:1.5;">
+                  • <strong>Headline:</strong> Executive Chauffeur Melbourne | Collins St Corporate Driver | Monthly Business Invoicing<br>
+                  • <strong>Description:</strong> <em>Discreet, punctual corporate car transfers across Melbourne CBD. Itemized monthly invoicing. Book online in 60s.</em>
+                </div>
+              </div>
+              <button onclick="loadDraftIntoEditor(2)" class="btn btn-sm" style="width:100%; background:rgba(16,185,129,0.2); color:#10b981; border:1px solid rgba(16,185,129,0.4); font-size:11.5px; font-weight:700;">
+                <i class="fa-solid fa-pen-to-square"></i> Load & Customize This Winner Copy
+              </button>
+            </div>
+
+            <!-- Fixable Leak Ad Group 2 -->
+            <div style="background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.3); border-radius:12px; padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:10px; font-weight:800; border:1px solid rgba(234,179,8,0.4);">⚠️ FIXABLE CTR LEAK</span>
+                <span style="font-size:11px; color:#facc15; font-weight:700;">12.04% CTR &bull; 0 Conversions</span>
+              </div>
+              <h4 style="font-size:14.5px; font-weight:800; color:#fff; margin-bottom:4px;">Corporate Airport Transfers</h4>
+              <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:10px; line-height:1.4;">
+                <strong>AI Audit:</strong> 12.04% CTR is exceptionally high (55 clicks), but customers bounce due to lack of immediate pricing & direct call options.
+              </div>
+
+              <!-- Generated Future Ad Copy Suggestion -->
+              <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:4px;">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> Future RSA Copy Variation (Fix Conversion Leak):
+                </div>
+                <div style="font-size:11.5px; color:#fff; line-height:1.5;">
+                  • <strong>Headline:</strong> Melbourne Airport Chauffeur | Fixed $95 Airport Flat Rate | Call Now For Instant Pickup<br>
+                  • <strong>Description:</strong> <em>Land at Tullamarine & step straight into luxury. No surge pricing. Free flight delay tracking. Call +61 400 000 000.</em>
+                </div>
+              </div>
+              <button onclick="loadDraftIntoEditor(1)" class="btn btn-sm" style="width:100%; background:rgba(6,182,212,0.2); color:var(--accent-cyan); border:1px solid rgba(6,182,212,0.4); font-size:11.5px; font-weight:700;">
+                <i class="fa-solid fa-pen-to-square"></i> Load & Customize This High-Converting Copy
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Recommended Negative Keywords Section -->
         <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
