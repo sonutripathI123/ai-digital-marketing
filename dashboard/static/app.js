@@ -7972,7 +7972,7 @@ const AGENT_INTEGRATION_CONFIGS = {
     `
   },
   'google-ads-monitoring-agent': {
-    title: 'Google Ads Intelligence',
+    title: 'Google Ads Performance Sentinel',
     icon: 'fa-brands fa-google',
     color: '#eab308',
     subtitle: 'Audits PPC spend, keyword cost-per-click (CPC), conversions, and ROAS.',
@@ -7985,6 +7985,24 @@ const AGENT_INTEGRATION_CONFIGS = {
         <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
           Open <code>ads.google.com</code>. Look at the top right header under your profile icon.<br>
           Copy the 10-digit number formatted as <code>XXX-XXX-XXXX</code>.
+        </div>
+      </div>
+    `
+  },
+  'google-ads-optimization-agent': {
+    title: 'Google Ads CPA & ROAS Optimizer',
+    icon: 'fa-solid fa-sliders',
+    color: '#10b981',
+    subtitle: 'Optimizes keyword bids, negative search terms, device multipliers, and ad copies.',
+    fields: [
+      { key: 'customer_id', label: '10-Digit Google Ads Customer ID', type: 'text', placeholder: '123-456-7890', required: true, help: 'Displayed in the top-right corner of Google Ads' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
+        <h4 style="color:#10b981; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-sliders"></i> Google Ads Optimization Setup:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          Enter your 10-digit Google Ads Customer ID.<br>
+          The AI Optimizer will evaluate search queries and propose negative keywords, device bid adjustments, and headline variations.
         </div>
       </div>
     `
