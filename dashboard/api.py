@@ -137,6 +137,31 @@ orchestrator.register_agent(external_link_agent)
 orchestrator.register_agent(ad_spy_agent)
 orchestrator.register_agent(page_optimizer_agent)
 
+def render_keep_alive_worker():
+    """Background keep-alive daemon: pings the Render web service every 8 minutes to prevent free-tier spin down."""
+    import time
+    import urllib.request
+    time.sleep(20)  # Wait 20s for server to start
+    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://corporate-marketing-ai.onrender.com")
+    health_url = f"{render_url.rstrip('/')}/health"
+    logger.info(f"Render keep-alive ping engine started for {health_url}")
+    
+    while True:
+        try:
+            req = urllib.request.Request(
+                health_url,
+                headers={"User-Agent": "AI-Marketing-KeepAlive-Ping/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                status = resp.getcode()
+                logger.info(f"Keep-alive self-ping sent to {health_url} -> HTTP {status}")
+        except Exception as e:
+            logger.debug(f"Keep-alive self-ping notice: {e}")
+        time.sleep(480)  # Ping every 8 minutes (480s) to beat Render's 15-minute inactivity timer
+
+# Launch keep-alive thread on initialization
+threading.Thread(target=render_keep_alive_worker, daemon=True).start()
+
 def check_and_auto_catchup_daily_blog():
     """Self-healing watchdog: checks if today's blog was missed and auto-publishes immediately."""
     try:
