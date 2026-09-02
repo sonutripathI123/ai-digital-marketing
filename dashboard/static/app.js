@@ -2579,7 +2579,7 @@ async function viewAgentReport(agentId) {
                 <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800; background:rgba(16,185,129,0.2); color:#10b981;">
                   <i class="fa-solid fa-shield-halved" style="font-size:10px; margin-right:4px;"></i> STRICT READ-ONLY MONITORING
                 </span>
-                <span style="font-size:12px; color:var(--text-muted);">Account ID: <strong style="color:#f59e0b; font-family:var(--font-mono);">${lf.account_id || '123-456-7890'}</strong></span>
+                <span style="font-size:12px; color:var(--text-muted);">Customer ID: <strong style="color:#f59e0b; font-family:var(--font-mono);">${lf.account_id || (dm.latest_findings && dm.latest_findings.account_id) || '194-940-8641'}</strong></span>
               </div>
               <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">Google Ads Performance Sentinel (${data.site_name})</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
@@ -2703,6 +2703,7 @@ async function viewAgentReport(agentId) {
                   <i class="fa-solid fa-wand-magic-sparkles" style="font-size:10px; margin-right:4px;"></i> AI OPTIMIZATION STRATEGIST
                 </span>
                 <span class="badge badge-warning" style="font-size:10px;">APPROVAL GUARDED</span>
+                <span style="font-size:12px; color:var(--text-muted); margin-left:6px;">Customer ID: <strong style="color:#10b981; font-family:var(--font-mono);">${lf.account_id || (dm.latest_findings && dm.latest_findings.account_id) || '194-940-8641'}</strong></span>
               </div>
               <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">Google Ads CPA & ROAS Optimization Engine</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">

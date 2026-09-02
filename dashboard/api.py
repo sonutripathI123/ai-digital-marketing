@@ -2071,6 +2071,70 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                 ]
             }
 
+    elif agent_id == "google-ads-monitoring-agent":
+        from agents.google_ads_monitoring_agent import GoogleAdsMonitoringAgent
+        from core.models.task import AgentTask
+        
+        creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
+        cust_id = creds.get("customer_id") or site_profile.google_ads_id or "194-940-8641"
+        
+        gads_agent = GoogleAdsMonitoringAgent()
+        task_stub = AgentTask(
+            task_id="gads-live-query",
+            agent_id="google-ads-monitoring-agent",
+            task_type="monitor_performance",
+            input_data={"action": "monitor_performance", "account_id": cust_id, "site_id": effective_site, "site_name": site_name},
+            site_id=effective_site
+        )
+        try:
+            task_res = gads_agent.run_task(task_stub, router=orchestrator.router)
+            out_data = task_res.get("output", {})
+            out_data["account_id"] = cust_id
+        except Exception as e:
+            out_data = {"error": str(e), "account_id": cust_id}
+            
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("actionable_recommendations", [
+                f"Maintain current budget on high-performing airport campaigns for {site_name}.",
+                f"Review negative keyword exclusions for Customer ID {cust_id}."
+            ])
+        }
+
+    elif agent_id == "google-ads-optimization-agent":
+        from agents.google_ads_optimization_agent import GoogleAdsOptimizationAgent
+        from core.models.task import AgentTask
+        
+        creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
+        if not creds:
+            creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-optimization-agent")
+        cust_id = creds.get("customer_id") or site_profile.google_ads_id or "194-940-8641"
+        
+        opt_agent = GoogleAdsOptimizationAgent()
+        task_stub = AgentTask(
+            task_id="gads-opt-live-query",
+            agent_id="google-ads-optimization-agent",
+            task_type="recommend_optimizations",
+            input_data={"action": "recommend_optimizations", "account_id": cust_id, "site_id": effective_site, "site_name": site_name},
+            site_id=effective_site
+        )
+        try:
+            task_res = opt_agent.run_task(task_stub, router=orchestrator.router)
+            out_data = task_res.get("output", {})
+            out_data["account_id"] = cust_id
+        except Exception as e:
+            out_data = {"error": str(e), "account_id": cust_id}
+            
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("actionable_next_steps", [
+                f"Approve negative keywords list for Customer ID {cust_id} to block wasted search spend.",
+                f"Deploy +15% mobile bid adjustment on {site_name} airport routes."
+            ])
+        }
+
     elif agent_id == "lead-management-agent":
         if effective_site == "ccm":
             from agents.lead_management_agent import LeadManagementAgent

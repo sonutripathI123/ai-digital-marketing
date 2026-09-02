@@ -8,7 +8,7 @@
     "default_category": "Chauffeur Services",
     "gsc_site_url": "https://corporatecarsmelbourne.com.au",
     "ga4_property_id": "corporate-cars-melbourne-ga4",
-    "google_ads_id": "ccm-gads-482",
+    "google_ads_id": "194-940-8641",
     "meta_ads_id": "ccm-meta-891",
     "facebook_url": "https://facebook.com/corporatecarsmelbourne",
     "instagram_url": "https://instagram.com/corporatecarsmelbourne",
@@ -21,7 +21,13 @@
     ],
     "invite_token": "inv_ccm_e7505cee",
     "created_at": null,
-    "agent_credentials": {}
+    "agent_credentials": {
+      "google-ads-monitoring-agent": {
+        "customer_id": "194-940-8641",
+        "updated_at": "2026-09-02T05:23:18.227688",
+        "is_connected": true
+      }
+    }
   },
   {
     "site_id": "opal",
