@@ -2899,12 +2899,15 @@ async function viewAgentReport(agentId) {
               </span>
               <span style="font-size:13px; font-weight:700; color:#fff;">Draft Ad & Extension Builder (${data.site_name})</span>
             </div>
-            <div style="display:flex; gap:6px;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <button class="btn btn-secondary btn-sm" onclick="copyInspectedAdCopy()" style="font-size:11px; color:#facc15; border-color:rgba(234,179,8,0.4);" title="Copy complete blueprint to clipboard">
-                <i class="fa-solid fa-copy"></i> Copy Complete Ad Blueprint for Sir
+                <i class="fa-solid fa-copy"></i> Copy Blueprint for Sir
               </button>
               <button class="btn btn-primary btn-sm" onclick="runAiAdCopyEnhancer()" style="background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-size:11px; font-weight:700;">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> AI Enhance Copy
+              </button>
+              <button class="btn btn-success btn-sm" id="btn-publish-gads-live" onclick="publishGoogleAdLive()" style="background:linear-gradient(135deg, #10b981, #059669); border:none; font-size:11.5px; font-weight:800; color:#fff; box-shadow:0 0 12px rgba(16,185,129,0.4);" title="Publish this ad live to Google Ads">
+                <i class="fa-solid fa-rocket"></i> 🚀 1-Click Publish Live
               </button>
             </div>
           </div>
@@ -9270,6 +9273,104 @@ Final Landing Page URL: https://corporatecarsmelbourne.com.au/`;
   });
 }
 
+async function publishGoogleAdLive() {
+  const h1 = document.getElementById('ad-h1')?.value || '';
+  const h2 = document.getElementById('ad-h2')?.value || '';
+  const h3 = document.getElementById('ad-h3')?.value || '';
+  const h4 = document.getElementById('ad-h4')?.value || '';
+  const h5 = document.getElementById('ad-h5')?.value || '';
+  const d1 = document.getElementById('ad-d1')?.value || '';
+  const d2 = document.getElementById('ad-d2')?.value || '';
+  const d3 = document.getElementById('ad-d3')?.value || '';
+  const keywords = (document.getElementById('ad-keywords')?.value || '').split('\n').map(k => k.trim()).filter(Boolean);
+  const negatives = (document.getElementById('ad-negatives')?.value || '').split(',').map(n => n.trim()).filter(Boolean);
+  const phone = document.getElementById('ad-phone')?.value || '+61 400 000 000';
+  const st1 = document.getElementById('ad-st1-name')?.value || 'Meet & Greet Service';
+  const st1Url = document.getElementById('ad-st1-url')?.value || '/airport-transfers';
+  const st2 = document.getElementById('ad-st2-name')?.value || 'Fixed Price Calculator';
+  const st2Url = document.getElementById('ad-st2-url')?.value || '/instant-quote';
+  const st3 = document.getElementById('ad-st3-name')?.value || 'Fleet Showcase';
+  const st3Url = document.getElementById('ad-st3-url')?.value || '/our-fleet';
+  const callouts = (document.getElementById('ad-callouts')?.value || '').split(',').map(c => c.trim()).filter(Boolean);
+  const locations = document.getElementById('ad-locations')?.value || 'Melbourne, VIC';
+  const budgetRaw = document.getElementById('ad-budget')?.value || '$40.00';
+  const budgetNum = parseFloat(budgetRaw.replace(/[^0-9.]/g, '')) || 40.0;
+
+  const confirmMsg = `🚀 CONFIRM GOOGLE ADS LIVE LAUNCH\n` +
+    `----------------------------------------\n` +
+    `Account Customer ID: 194-940-8641\n` +
+    `Campaign: Search - Airport Transfers Tullamarine\n` +
+    `Daily Budget: $${budgetNum.toFixed(2)}/day\n` +
+    `Headlines: ${h1} | ${h2} | ${h3}\n\n` +
+    `Are you sure you want to PUBLISH this campaign LIVE now to Google Ads?`;
+
+  if (!confirm(confirmMsg)) return;
+
+  const btn = document.getElementById('btn-publish-gads-live');
+  if (btn) {
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publishing Live to Google Ads...';
+    btn.disabled = true;
+  }
+
+  try {
+    const payload = {
+      site_id: (typeof currentSiteId !== 'undefined' && currentSiteId) ? currentSiteId : 'ccm',
+      customer_id: '194-940-8641',
+      campaign_name: 'Search - Airport Transfers Tullamarine',
+      headlines: [h1, h2, h3, h4, h5].filter(Boolean),
+      descriptions: [d1, d2, d3].filter(Boolean),
+      keywords: keywords,
+      negative_keywords: negatives,
+      phone_number: phone,
+      sitelinks: [
+        { name: st1, url: st1Url },
+        { name: st2, url: st2Url },
+        { name: st3, url: st3Url }
+      ],
+      callouts: callouts,
+      daily_budget_usd: budgetNum,
+      geo_targeting: locations
+    };
+
+    const res = await fetch('/api/agents/google-ads/publish-live', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (res.ok && data.success) {
+      alert(`🎉 100% SUCCESS! YOUR AD IS NOW OFFICIALLY LIVE ON GOOGLE SEARCH!\n\n` +
+        `• Customer ID: 194-940-8641\n` +
+        `• Status: 🟢 ACTIVE / LIVE\n` +
+        `• Daily Budget: $${budgetNum.toFixed(2)}/day\n` +
+        `• Published At: ${new Date(data.published_at).toLocaleTimeString()}\n\n` +
+        `Live search impressions and telemetry will now begin tracking automatically!`);
+      
+      // Update UI badges to LIVE
+      const badges = document.querySelectorAll('.badge');
+      badges.forEach(b => {
+        if (b.textContent.includes('CAMPAIGN IN DRAFT') || b.textContent.includes('DRAFT')) {
+          b.className = 'badge badge-success';
+          b.style.background = 'rgba(16,185,129,0.2)';
+          b.style.color = '#10b981';
+          b.style.borderColor = 'rgba(16,185,129,0.4)';
+          b.innerHTML = '<i class="fa-solid fa-circle-check"></i> 🟢 CAMPAIGN ACTIVE & LIVE';
+        }
+      });
+    } else {
+      alert(`❌ Error publishing: ${data.detail || data.message || 'Unknown error'}`);
+    }
+  } catch (err) {
+    alert(`❌ Publish error: ${err.message}`);
+  } finally {
+    if (btn) {
+      btn.innerHTML = '<i class="fa-solid fa-rocket"></i> 🚀 1-Click Publish Live';
+      btn.disabled = false;
+    }
+  }
+}
+
 window.updateLiveAdPreview = updateLiveAdPreview;
 window.copyInspectedAdCopy = copyInspectedAdCopy;
 window.runAiAdCopyEnhancer = runAiAdCopyEnhancer;
@@ -9277,6 +9378,7 @@ window.toggleDraftAdsExplorer = toggleDraftAdsExplorer;
 window.loadDraftIntoEditor = loadDraftIntoEditor;
 window.copyDraftAd = copyDraftAd;
 window.switchStudioTab = switchStudioTab;
+window.publishGoogleAdLive = publishGoogleAdLive;
 
 
 
