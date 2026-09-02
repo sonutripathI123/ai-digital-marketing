@@ -2579,7 +2579,7 @@ async function viewAgentReport(agentId) {
                 <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800; background:rgba(16,185,129,0.2); color:#10b981;">
                   <i class="fa-solid fa-shield-halved" style="font-size:10px; margin-right:4px;"></i> STRICT READ-ONLY MONITORING
                 </span>
-                <span style="font-size:12px; color:var(--text-muted);">Customer ID: <strong style="color:#f59e0b; font-family:var(--font-mono);">${lf.account_id || (dm.latest_findings && dm.latest_findings.account_id) || '194-940-8641'}</strong></span>
+                <span style="font-size:12px; color:var(--text-muted);">Customer ID: <strong style="color:#f59e0b; font-family:var(--font-mono);">${(lf.account_id && !lf.account_id.includes('ccm-gads')) ? lf.account_id : '194-940-8641'}</strong></span>
                 <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:10.5px; font-weight:700; border:1px solid rgba(234,179,8,0.4);">
                   <i class="fa-solid fa-clock"></i> CAMPAIGN IN DRAFT / PRE-LAUNCH
                 </span>
@@ -2598,7 +2598,7 @@ async function viewAgentReport(agentId) {
           <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:10px 14px; margin-top:12px; display:flex; align-items:center; gap:10px; font-size:12px; color:#cbd5e1;">
             <i class="fa-solid fa-circle-info" style="color:var(--accent-cyan); font-size:15px; flex-shrink:0;"></i>
             <div>
-              <strong style="color:#fff;">Live Account Status:</strong> Your Google Ads Customer ID <code style="color:#f59e0b;">${lf.account_id || '194-940-8641'}</code> is connected. Because your campaigns are currently in <em>Draft / Not Live</em> mode in Google Ads, actual live spend is <strong>$0.00</strong>. The metrics below display <strong>AI Projected Market Benchmarks</strong> (Melbourne Chauffeur sector) for when your campaigns are activated.
+              <strong style="color:#fff;">Live Account Status:</strong> Your Google Ads Customer ID <code style="color:#f59e0b;">${(lf.account_id && !lf.account_id.includes('ccm-gads')) ? lf.account_id : '194-940-8641'}</code> is connected. Because your campaigns are currently in <em>Draft / Not Live</em> mode in Google Ads, actual live spend is <strong>$0.00</strong>. The metrics below display <strong>AI Projected Market Benchmarks</strong> (Melbourne Chauffeur sector) for when your campaigns are activated.
             </div>
           </div>
         </div>
@@ -2826,7 +2826,7 @@ async function viewAgentReport(agentId) {
                   <i class="fa-solid fa-wand-magic-sparkles" style="font-size:10px; margin-right:4px;"></i> AI OPTIMIZATION STRATEGIST
                 </span>
                 <span class="badge badge-warning" style="font-size:10px;">APPROVAL GUARDED</span>
-                <span style="font-size:12px; color:var(--text-muted); margin-left:6px;">Customer ID: <strong style="color:#10b981; font-family:var(--font-mono);">${lf.account_id || (dm.latest_findings && dm.latest_findings.account_id) || '194-940-8641'}</strong></span>
+                <span style="font-size:12px; color:var(--text-muted); margin-left:6px;">Customer ID: <strong style="color:#10b981; font-family:var(--font-mono);">${(lf.account_id && !lf.account_id.includes('ccm-gads')) ? lf.account_id : '194-940-8641'}</strong></span>
               </div>
               <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">Google Ads CPA & ROAS Optimization Engine</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">

@@ -2076,7 +2076,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
         from core.models.task import AgentTask
         
         creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
-        cust_id = creds.get("customer_id") or site_profile.google_ads_id or "194-940-8641"
+        raw_id = creds.get("customer_id") or site_profile.google_ads_id
+        cust_id = "194-940-8641" if (not raw_id or "ccm-gads" in str(raw_id) or effective_site == "ccm") else raw_id
         
         gads_agent = GoogleAdsMonitoringAgent()
         task_stub = AgentTask(
@@ -2109,7 +2110,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
         creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
         if not creds:
             creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-optimization-agent")
-        cust_id = creds.get("customer_id") or site_profile.google_ads_id or "194-940-8641"
+        raw_id = creds.get("customer_id") or site_profile.google_ads_id
+        cust_id = "194-940-8641" if (not raw_id or "ccm-gads" in str(raw_id) or effective_site == "ccm") else raw_id
         
         opt_agent = GoogleAdsOptimizationAgent()
         task_stub = AgentTask(
