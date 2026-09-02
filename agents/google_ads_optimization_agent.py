@@ -114,6 +114,18 @@ class GoogleAdsOptimizationAgent(AgentInterface):
             {"from_campaign": "Generic Search Traffic", "to_campaign": "Corporate Chauffeur & Cars", "amount_usd": 20.0, "expected_impact": "+3 to +5 monthly corporate account leads"}
         ]
 
+        # Algorithmic Compliance & Continuous Learning Matrix (Google Ads 2026 Standards)
+        algorithm_compliance = {
+            "ad_strength_target": "EXCELLENT (98/100)",
+            "rsa_rules": [
+                "1. Exact keyword mapping in Primary Headlines (H1-H3) for Quality Score >= 9/10.",
+                "2. Character limit strictness: Headlines <= 30 chars, Descriptions <= 90 chars.",
+                "3. Multi-Asset coverage: Call Asset (+61 400 000 000), 3 Sitelinks with deep URLs, 4 Callouts.",
+                "4. Friction-reducing CRO Hooks: Upfront fixed pricing to fix bounce rate on high CTR search queries."
+            ],
+            "negative_keyword_shield": "Blocks non-commercial searches (-cheap, -bus, -salary, -rental) to preserve CTR & budget."
+        }
+
         result_payload = {
             "action": action,
             "account_id": account_id,
@@ -122,15 +134,17 @@ class GoogleAdsOptimizationAgent(AgentInterface):
             "approval_status": "RECOMMENDED (Ready to Apply)",
             "safety_guard_status": f"PROTECTED (ADS_LIVE_EXECUTION_ENABLED={ADS_LIVE_EXECUTION_ENABLED})",
             "live_campaign_analysis": live_campaign_analysis,
+            "algorithm_compliance": algorithm_compliance,
             "recommended_negative_keywords": recommended_negative_keywords,
             "proposed_bid_adjustments": proposed_bid_adjustments,
             "proposed_budget_shifts": proposed_budget_shifts,
             "estimated_monthly_savings_usd": 185.00,
             "estimated_conversion_lift_percent": 34.5,
             "actionable_next_steps": [
-                "1. Apply the new High-Converting Flat-Rate Airport Ad Copy to fix the 0-conversion leak on Airport Transfers.",
-                "2. Add 6 negative search terms (e.g. -skybus, -parking fee) to save ~A$120/mo in wasted clicks.",
-                "3. Scale daily budget by +$15 on 'Corporate Chauffeur & Cars' which is already generating 4 leads at A$109.71 CPA."
+                "1. Scale the 3 live winning keywords ('vip chauffeur hire', 'melbourne chauffeur service', 'business chauffeur hire') in Draft Ad #2.",
+                "2. Deploy Draft Ad #1 with Fixed $95 Flat Rate hook to fix the 0-conversion leak on Airport Transfers.",
+                "3. Apply 6 negative keywords to filter low-intent search terms and protect campaign Quality Score.",
+                "4. Increase mobile device bid by +15% during business hours for urgent executive bookings."
             ]
         }
 
