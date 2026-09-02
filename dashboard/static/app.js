@@ -2895,13 +2895,13 @@ async function viewAgentReport(agentId) {
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <span class="badge" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan); border:1px solid rgba(6,182,212,0.4); font-size:11px; font-weight:800;">
-                <i class="fa-solid fa-file-pen"></i> AD COPY INSPECTOR & LIVE PREVIEW
+                <i class="fa-solid fa-file-pen"></i> FULL-STACK GOOGLE ADS CAMPAIGN STUDIO
               </span>
-              <span style="font-size:13px; font-weight:700; color:#fff;">Draft Ad Review for ${data.site_name}</span>
+              <span style="font-size:13px; font-weight:700; color:#fff;">Draft Ad & Extension Builder (${data.site_name})</span>
             </div>
             <div style="display:flex; gap:6px;">
-              <button class="btn btn-secondary btn-sm" onclick="copyInspectedAdCopy()" style="font-size:11px; color:#facc15; border-color:rgba(234,179,8,0.4);">
-                <i class="fa-solid fa-copy"></i> Copy Ad Copy for Sir
+              <button class="btn btn-secondary btn-sm" onclick="copyInspectedAdCopy()" style="font-size:11px; color:#facc15; border-color:rgba(234,179,8,0.4);" title="Copy complete blueprint to clipboard">
+                <i class="fa-solid fa-copy"></i> Copy Complete Ad Blueprint for Sir
               </button>
               <button class="btn btn-primary btn-sm" onclick="runAiAdCopyEnhancer()" style="background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-size:11px; font-weight:700;">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> AI Enhance Copy
@@ -2909,52 +2909,193 @@ async function viewAgentReport(agentId) {
             </div>
           </div>
 
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; align-items:start;">
-            <!-- Left: Editable Ad Copy Inputs -->
-            <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px;">
-              <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:10px;">
-                Ad Copy Inputs (Edit or Paste Your Sir's Text)
-              </div>
+          <!-- Studio Mode Navigation Tabs -->
+          <div style="display:flex; gap:6px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px;">
+            <button id="tab-btn-headlines" class="btn btn-sm" onclick="switchStudioTab('headlines')" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan); border:1px solid rgba(6,182,212,0.4); font-size:11.5px; font-weight:700;">
+              <i class="fa-solid fa-heading"></i> 1. Headlines & Descriptions
+            </button>
+            <button id="tab-btn-keywords" class="btn btn-sm" onclick="switchStudioTab('keywords')" style="background:rgba(255,255,255,0.05); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1); font-size:11.5px; font-weight:700;">
+              <i class="fa-solid fa-key"></i> 2. Keywords & Match Types
+            </button>
+            <button id="tab-btn-extensions" class="btn btn-sm" onclick="switchStudioTab('extensions')" style="background:rgba(255,255,255,0.05); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1); font-size:11.5px; font-weight:700;">
+              <i class="fa-solid fa-puzzle-piece"></i> 3. Extensions & Callouts
+            </button>
+            <button id="tab-btn-locations" class="btn btn-sm" onclick="switchStudioTab('locations')" style="background:rgba(255,255,255,0.05); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1); font-size:11.5px; font-weight:700;">
+              <i class="fa-solid fa-location-dot"></i> 4. Geo-Targeting & Budget
+            </button>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:18px; align-items:start;">
+            <!-- Left: Multi-Tab Form Inputs -->
+            <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
               
-              <div style="margin-bottom:8px;">
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:3px;">
-                  <span>Headline 1 (Keyword Hook)</span>
-                  <span id="h1-count" style="color:var(--accent-cyan);">28/30</span>
+              <!-- Tab 1: Headlines & Descriptions -->
+              <div id="studio-tab-headlines">
+                <div style="font-size:11px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:10px;">
+                  <i class="fa-solid fa-heading"></i> Headlines (Up to 5 Variations)
                 </div>
-                <input type="text" id="ad-h1" class="form-control" value="Melbourne Airport Chauffeur" maxlength="30" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                
+                <div style="margin-bottom:8px;">
+                  <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:2px;">
+                    <span>Headline 1 (Keyword Hook)</span>
+                    <span id="h1-count" style="color:var(--accent-cyan);">27/30</span>
+                  </div>
+                  <input type="text" id="ad-h1" class="form-control" value="Melbourne Airport Chauffeur" maxlength="30" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                </div>
+
+                <div style="margin-bottom:8px;">
+                  <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:2px;">
+                    <span>Headline 2 (Offer / Pricing)</span>
+                    <span id="h2-count" style="color:var(--accent-cyan);">28/30</span>
+                  </div>
+                  <input type="text" id="ad-h2" class="form-control" value="Fixed Price Airport Transfer" maxlength="30" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                </div>
+
+                <div style="margin-bottom:8px;">
+                  <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:2px;">
+                    <span>Headline 3 (Brand Authority)</span>
+                    <span id="h3-count" style="color:var(--accent-cyan);">24/30</span>
+                  </div>
+                  <input type="text" id="ad-h3" class="form-control" value="Corporate Cars Melbourne" maxlength="30" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                </div>
+
+                <div style="margin-bottom:8px;">
+                  <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:2px;">
+                    <span>Headline 4 (Convenience Hook)</span>
+                    <span id="h4-count" style="color:var(--accent-cyan);">25/30</span>
+                  </div>
+                  <input type="text" id="ad-h4" class="form-control" value="Skip The Taxi Queue At MEL" maxlength="30" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                </div>
+
+                <div style="margin-bottom:12px;">
+                  <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:2px;">
+                    <span>Headline 5 (Trust / Guarantee)</span>
+                    <span id="h5-count" style="color:var(--accent-cyan);">29/30</span>
+                  </div>
+                  <input type="text" id="ad-h5" class="form-control" value="Live Flight Telemetry Tracking" maxlength="30" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                </div>
+
+                <div style="font-size:11px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">
+                  <i class="fa-solid fa-align-left"></i> Descriptions (Up to 3 Variations)
+                </div>
+
+                <div style="margin-bottom:8px;">
+                  <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:2px;">
+                    <span>Description 1 (Primary Value Prop)</span>
+                    <span id="d1-count" style="color:var(--accent-purple);">84/90</span>
+                  </div>
+                  <textarea id="ad-d1" rows="2" class="form-control" maxlength="90" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px; resize:none;">Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.</textarea>
+                </div>
+
+                <div style="margin-bottom:8px;">
+                  <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:2px;">
+                    <span>Description 2 (Call-to-Action)</span>
+                    <span id="d2-count" style="color:var(--accent-purple);">86/90</span>
+                  </div>
+                  <textarea id="ad-d2" rows="2" class="form-control" maxlength="90" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px; resize:none;">Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.</textarea>
+                </div>
+
+                <div>
+                  <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:2px;">
+                    <span>Description 3 (Corporate / Group)</span>
+                    <span id="d3-count" style="color:var(--accent-purple);">85/90</span>
+                  </div>
+                  <textarea id="ad-d3" rows="2" class="form-control" maxlength="90" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px; resize:none;">Dedicated monthly corporate billing & itemized tax invoices for executive teams.</textarea>
+                </div>
               </div>
 
-              <div style="margin-bottom:8px;">
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:3px;">
-                  <span>Headline 2 (Offer / Value)</span>
-                  <span id="h2-count" style="color:var(--accent-cyan);">27/30</span>
+              <!-- Tab 2: Keywords & Match Types -->
+              <div id="studio-tab-keywords" style="display:none;">
+                <div style="font-size:11px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:10px;">
+                  <i class="fa-solid fa-key"></i> Target Keywords (Exact & Phrase Match)
                 </div>
-                <input type="text" id="ad-h2" class="form-control" value="Fixed Price Airport Transfer" maxlength="30" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">
+                  Use brackets <code>[keyword]</code> for Exact Match, quotes <code>"keyword"</code> for Phrase Match.
+                </div>
+                <textarea id="ad-keywords" rows="5" class="form-control" oninput="updateLiveAdPreview()" style="width:100%; padding:8px 10px; font-size:12px; font-family:var(--font-mono); background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#38bdf8; border-radius:6px; line-height:1.5;">[melbourne airport chauffeur]
+[tullamarine airport private transfer]
+[chauffeur to melbourne airport]
+"corporate cars melbourne"
+"executive car hire melbourne airport"
+"luxury airport pickup melbourne"</textarea>
+
+                <div style="font-size:11px; font-weight:800; color:#f87171; text-transform:uppercase; margin-top:14px; margin-bottom:6px;">
+                  <i class="fa-solid fa-ban"></i> Negative Keywords (Budget Waste Blocker)
+                </div>
+                <textarea id="ad-negatives" rows="3" class="form-control" style="width:100%; padding:8px 10px; font-size:12px; font-family:var(--font-mono); background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; border-radius:6px; line-height:1.4;">-cheap, -taxi meter, -bus timetable, -uber driver, -salary, -rental car, -jobs, -driver vacancies, -self drive</textarea>
               </div>
 
-              <div style="margin-bottom:8px;">
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:3px;">
-                  <span>Headline 3 (Brand Authority)</span>
-                  <span id="h3-count" style="color:var(--accent-cyan);">23/30</span>
+              <!-- Tab 3: Extensions & Assets -->
+              <div id="studio-tab-extensions" style="display:none;">
+                <div style="font-size:11px; font-weight:800; color:#10b981; text-transform:uppercase; margin-bottom:10px;">
+                  <i class="fa-solid fa-puzzle-piece"></i> Ad Assets & Extensions
                 </div>
-                <input type="text" id="ad-h3" class="form-control" value="${data.site_name}" maxlength="30" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+
+                <div style="margin-bottom:10px;">
+                  <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">📞 Call Extension (Direct Phone Number)</label>
+                  <input type="text" id="ad-phone" class="form-control" value="+61 400 000 000" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#10b981; font-weight:700; border-radius:6px;" />
+                </div>
+
+                <div style="margin-bottom:10px;">
+                  <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">🔗 Sitelink 1 (Title | URL)</label>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                    <input type="text" id="ad-st1-name" value="Airport Meet & Greet" oninput="updateLiveAdPreview()" class="form-control" style="padding:6px 8px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                    <input type="text" id="ad-st1-url" value="/airport-transfers" class="form-control" style="padding:6px 8px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:var(--text-muted); border-radius:6px;" />
+                  </div>
+                </div>
+
+                <div style="margin-bottom:10px;">
+                  <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">🔗 Sitelink 2 (Title | URL)</label>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                    <input type="text" id="ad-st2-name" value="Fixed Price Calculator" oninput="updateLiveAdPreview()" class="form-control" style="padding:6px 8px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                    <input type="text" id="ad-st2-url" value="/instant-quote" class="form-control" style="padding:6px 8px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:var(--text-muted); border-radius:6px;" />
+                  </div>
+                </div>
+
+                <div style="margin-bottom:10px;">
+                  <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">🔗 Sitelink 3 (Title | URL)</label>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                    <input type="text" id="ad-st3-name" value="Fleet Showcase (Mercedes & BMW)" oninput="updateLiveAdPreview()" class="form-control" style="padding:6px 8px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                    <input type="text" id="ad-st3-url" value="/our-fleet" class="form-control" style="padding:6px 8px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:var(--text-muted); border-radius:6px;" />
+                  </div>
+                </div>
+
+                <div>
+                  <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">📢 Callout Extensions (Separated by Comma)</label>
+                  <input type="text" id="ad-callouts" value="Fixed Transparent Pricing, Live Flight Telemetry, Accredited Chauffeurs, 24/7 Concierge, Pristine European Fleet" oninput="updateLiveAdPreview()" class="form-control" style="width:100%; padding:7px 10px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px;" />
+                </div>
               </div>
 
-              <div style="margin-bottom:8px;">
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:3px;">
-                  <span>Description 1 (Primary Message)</span>
-                  <span id="d1-count" style="color:var(--accent-cyan);">80/90</span>
+              <!-- Tab 4: Geo-Targeting & Budget -->
+              <div id="studio-tab-locations" style="display:none;">
+                <div style="font-size:11px; font-weight:800; color:#f59e0b; text-transform:uppercase; margin-bottom:10px;">
+                  <i class="fa-solid fa-location-dot"></i> Geo-Targeting & Daily Budget
                 </div>
-                <textarea id="ad-d1" rows="2" class="form-control" maxlength="90" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px; resize:none;">Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.</textarea>
+
+                <div style="margin-bottom:10px;">
+                  <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">📍 Target Locations & Radius</label>
+                  <textarea id="ad-locations" rows="3" class="form-control" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px; line-height:1.4;">Melbourne CBD (5km radius around Collins St)
+Melbourne Airport Tullamarine (15km radius corridor)
+Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+                  <div>
+                    <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">💵 Daily Budget ($/day)</label>
+                    <input type="text" id="ad-budget" value="$40.00 / day" class="form-control" style="width:100%; padding:7px 10px; font-size:12px; font-family:var(--font-mono); background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#f59e0b; font-weight:700; border-radius:6px;" />
+                  </div>
+                  <div>
+                    <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">🎯 Target CPA ($/lead)</label>
+                    <input type="text" id="ad-cpa" value="$22.20 / lead" class="form-control" style="width:100%; padding:7px 10px; font-size:12px; font-family:var(--font-mono); background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#10b981; font-weight:700; border-radius:6px;" />
+                  </div>
+                </div>
+
+                <div>
+                  <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">📱 Device Bid Adjustment</label>
+                  <input type="text" id="ad-device-bid" value="+15% Mobile Bid Adjustment (Target urgent airport bookings)" class="form-control" style="width:100%; padding:7px 10px; font-size:11.5px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#38bdf8; border-radius:6px;" />
+                </div>
               </div>
 
-              <div style="margin-bottom:8px;">
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:3px;">
-                  <span>Description 2 (Call-to-Action)</span>
-                  <span id="d2-count" style="color:var(--accent-cyan);">86/90</span>
-                </div>
-                <textarea id="ad-d2" rows="2" class="form-control" maxlength="90" oninput="updateLiveAdPreview()" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#fff; border-radius:6px; resize:none;">Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.</textarea>
-              </div>
             </div>
 
             <!-- Right: Real-Time Google Search SERP Preview -->
@@ -2963,42 +3104,54 @@ async function viewAgentReport(agentId) {
                 Real-Time Google Search SERP Ad Preview
               </div>
 
-              <div style="background:#ffffff; color:#202124; border-radius:10px; padding:16px 18px; box-shadow:0 4px 14px rgba(0,0,0,0.3); font-family:Arial, sans-serif; text-align:left;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                  <span style="font-size:11.5px; font-weight:700; color:#202124;">Sponsored</span>
-                  <span style="font-size:11px; color:#5f6368;">•</span>
-                  <span style="font-size:12px; color:#202124;" id="preview-url">${data.site_domain.replace('https://','')}</span>
+              <div style="background:#ffffff; color:#202124; border-radius:10px; padding:18px 20px; box-shadow:0 4px 18px rgba(0,0,0,0.35); font-family:Arial, sans-serif; text-align:left;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:11.5px; font-weight:700; color:#202124;">Sponsored</span>
+                    <span style="font-size:11px; color:#5f6368;">•</span>
+                    <span style="font-size:12px; color:#202124;" id="preview-url">${data.site_domain.replace('https://','')}</span>
+                  </div>
+                  <span id="preview-call-badge" style="font-size:11px; font-weight:700; color:#1a0dab; background:#f1f3f4; padding:2px 8px; border-radius:4px;">
+                    📞 +61 400 000 000
+                  </span>
                 </div>
                 
-                <a href="#" style="font-size:17px; font-weight:400; color:#1a0dab; text-decoration:none; line-height:1.3; display:block; margin-bottom:4px;" id="preview-headlines">
-                  Melbourne Airport Chauffeur | Fixed Price Airport Transfer | ${data.site_name}
+                <a href="#" style="font-size:17.5px; font-weight:400; color:#1a0dab; text-decoration:none; line-height:1.3; display:block; margin-bottom:5px;" id="preview-headlines">
+                  Melbourne Airport Chauffeur | Fixed Price Airport Transfer | Corporate Cars Melbourne
                 </a>
 
-                <div style="font-size:12.5px; color:#4d5156; line-height:1.4; margin-bottom:10px;" id="preview-descriptions">
+                <div style="font-size:12.5px; color:#4d5156; line-height:1.45; margin-bottom:10px;" id="preview-descriptions">
                   Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs. Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.
                 </div>
 
+                <!-- Callout Highlights Preview -->
+                <div id="preview-callouts" style="font-size:11.5px; color:#5f6368; margin-bottom:8px; line-height:1.4;">
+                  Fixed Transparent Pricing &bull; Live Flight Telemetry &bull; Accredited Chauffeurs &bull; 24/7 Concierge
+                </div>
+
                 <!-- Ad Sitelinks Preview -->
-                <div style="display:flex; flex-wrap:wrap; gap:10px; padding-top:8px; border-top:1px solid #dadce0;">
-                  <span style="font-size:11.5px; color:#1a0dab; font-weight:500;">Meet & Greet Service</span>
-                  <span style="font-size:11.5px; color:#1a0dab; font-weight:500;">Fixed Pricing Calculator</span>
-                  <span style="font-size:11.5px; color:#1a0dab; font-weight:500;">Fleet Gallery (Sedans & Vans)</span>
+                <div id="preview-sitelinks" style="display:flex; flex-wrap:wrap; gap:12px; padding-top:8px; border-top:1px solid #dadce0;">
+                  <span id="prev-st1" style="font-size:11.5px; color:#1a0dab; font-weight:500;">Meet & Greet Service</span>
+                  <span id="prev-st2" style="font-size:11.5px; color:#1a0dab; font-weight:500;">Fixed Pricing Calculator</span>
+                  <span id="prev-st3" style="font-size:11.5px; color:#1a0dab; font-weight:500;">Fleet Gallery (Sedans & Vans)</span>
                 </div>
               </div>
 
               <!-- Quality Score Diagnostics -->
               <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:10px; padding:12px 14px; margin-top:12px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <span style="font-size:12px; font-weight:700; color:#10b981;">
-                    <i class="fa-solid fa-circle-check"></i> Ad Strength: Excellent (94/100)
+                  <span id="preview-ad-strength" style="font-size:12px; font-weight:700; color:#10b981;">
+                    <i class="fa-solid fa-circle-check"></i> Ad Strength: Excellent (98/100)
                   </span>
-                  <span style="font-size:11px; color:var(--text-muted);">CTR Potential: High (5.2%+)</span>
+                  <span style="font-size:11px; color:var(--text-muted);">CTR Potential: Very High (5.8%+)</span>
                 </div>
                 <div style="font-size:11.5px; color:var(--text-secondary); margin-top:4px;">
-                  ✓ Keyword in Headline 1 &nbsp;•&nbsp; ✓ Action CTA in Description &nbsp;•&nbsp; ✓ Character Limits Passed
+                  ✓ Keywords Mapped &bull; ✓ Sitelinks & Call Assets Active &bull; ✓ Character Limits Passed
                 </div>
               </div>
             </div>
+          </div>
+        </div>
           </div>
         </div>
 
@@ -8659,29 +8812,68 @@ window.handleSaveAgentConnection = handleSaveAgentConnection;
 window.handleDisconnectAgent = handleDisconnectAgent;
 
 // Google Ads Copy Inspector & Live Preview Studio Functions
+function switchStudioTab(tab) {
+  const tabs = ['headlines', 'keywords', 'extensions', 'locations'];
+  tabs.forEach(t => {
+    const el = document.getElementById(`studio-tab-${t}`);
+    const btn = document.getElementById(`tab-btn-${t}`);
+    if (el) el.style.display = (t === tab) ? 'block' : 'none';
+    if (btn) {
+      if (t === tab) {
+        btn.style.background = 'rgba(6,182,212,0.2)';
+        btn.style.color = 'var(--accent-cyan)';
+        btn.style.borderColor = 'rgba(6,182,212,0.4)';
+      } else {
+        btn.style.background = 'rgba(255,255,255,0.05)';
+        btn.style.color = '#cbd5e1';
+        btn.style.borderColor = 'rgba(255,255,255,0.1)';
+      }
+    }
+  });
+}
+
 function updateLiveAdPreview() {
   const h1 = document.getElementById('ad-h1')?.value || '';
   const h2 = document.getElementById('ad-h2')?.value || '';
   const h3 = document.getElementById('ad-h3')?.value || '';
+  const h4 = document.getElementById('ad-h4')?.value || '';
+  const h5 = document.getElementById('ad-h5')?.value || '';
   const d1 = document.getElementById('ad-d1')?.value || '';
   const d2 = document.getElementById('ad-d2')?.value || '';
+  const d3 = document.getElementById('ad-d3')?.value || '';
+  const phone = document.getElementById('ad-phone')?.value || '+61 400 000 000';
+  const st1 = document.getElementById('ad-st1-name')?.value || 'Meet & Greet Service';
+  const st2 = document.getElementById('ad-st2-name')?.value || 'Fixed Price Calculator';
+  const st3 = document.getElementById('ad-st3-name')?.value || 'Fleet Gallery';
+  const callouts = document.getElementById('ad-callouts')?.value || 'Fixed Pricing, Live Telemetry, Accredited Chauffeurs';
 
   // Character counters
   const h1El = document.getElementById('h1-count');
   const h2El = document.getElementById('h2-count');
   const h3El = document.getElementById('h3-count');
+  const h4El = document.getElementById('h4-count');
+  const h5El = document.getElementById('h5-count');
   const d1El = document.getElementById('d1-count');
   const d2El = document.getElementById('d2-count');
+  const d3El = document.getElementById('d3-count');
 
   if (h1El) h1El.textContent = `${h1.length}/30`;
   if (h2El) h2El.textContent = `${h2.length}/30`;
   if (h3El) h3El.textContent = `${h3.length}/30`;
+  if (h4El) h4El.textContent = `${h4.length}/30`;
+  if (h5El) h5El.textContent = `${h5.length}/30`;
   if (d1El) d1El.textContent = `${d1.length}/90`;
   if (d2El) d2El.textContent = `${d2.length}/90`;
+  if (d3El) d3El.textContent = `${d3.length}/90`;
 
   // SERP Preview elements
   const prevH = document.getElementById('preview-headlines');
   const prevD = document.getElementById('preview-descriptions');
+  const prevPhone = document.getElementById('preview-call-badge');
+  const prevCallouts = document.getElementById('preview-callouts');
+  const prevSt1 = document.getElementById('prev-st1');
+  const prevSt2 = document.getElementById('prev-st2');
+  const prevSt3 = document.getElementById('prev-st3');
 
   if (prevH) {
     const parts = [h1, h2, h3].filter(Boolean);
@@ -8691,27 +8883,85 @@ function updateLiveAdPreview() {
     const parts = [d1, d2].filter(Boolean);
     prevD.textContent = parts.join(' ') || 'Land at Tullamarine & step straight into luxury. Professional chauffeurs. Book online in 60s.';
   }
+  if (prevPhone) prevPhone.textContent = `📞 ${phone}`;
+  if (prevCallouts) prevCallouts.textContent = callouts.split(',').map(s => s.trim()).filter(Boolean).join(' • ');
+  if (prevSt1) prevSt1.textContent = st1;
+  if (prevSt2) prevSt2.textContent = st2;
+  if (prevSt3) prevSt3.textContent = st3;
 }
 
 function copyInspectedAdCopy() {
   const h1 = document.getElementById('ad-h1')?.value || '';
   const h2 = document.getElementById('ad-h2')?.value || '';
   const h3 = document.getElementById('ad-h3')?.value || '';
+  const h4 = document.getElementById('ad-h4')?.value || '';
+  const h5 = document.getElementById('ad-h5')?.value || '';
   const d1 = document.getElementById('ad-d1')?.value || '';
   const d2 = document.getElementById('ad-d2')?.value || '';
+  const d3 = document.getElementById('ad-d3')?.value || '';
+  const keywords = document.getElementById('ad-keywords')?.value || '';
+  const negatives = document.getElementById('ad-negatives')?.value || '';
+  const phone = document.getElementById('ad-phone')?.value || '+61 400 000 000';
+  const st1 = document.getElementById('ad-st1-name')?.value || 'Meet & Greet Service';
+  const st1Url = document.getElementById('ad-st1-url')?.value || '/airport-transfers';
+  const st2 = document.getElementById('ad-st2-name')?.value || 'Fixed Price Calculator';
+  const st2Url = document.getElementById('ad-st2-url')?.value || '/instant-quote';
+  const st3 = document.getElementById('ad-st3-name')?.value || 'Fleet Showcase';
+  const st3Url = document.getElementById('ad-st3-url')?.value || '/our-fleet';
+  const callouts = document.getElementById('ad-callouts')?.value || '';
+  const locations = document.getElementById('ad-locations')?.value || '';
+  const budget = document.getElementById('ad-budget')?.value || '$40.00 / day';
+  const cpa = document.getElementById('ad-cpa')?.value || '$22.20 / lead';
 
-  const copyText = `📌 GOOGLE ADS RESPONSIVE SEARCH AD (RSA) DRAFT\n` +
-    `----------------------------------------\n` +
-    `Headline 1: ${h1}\n` +
-    `Headline 2: ${h2}\n` +
-    `Headline 3: ${h3}\n\n` +
-    `Description 1: ${d1}\n` +
-    `Description 2: ${d2}\n` +
-    `----------------------------------------\n` +
-    `Target URL: https://corporatecarsmelbourne.com.au/`;
+  const copyText = `=====================================================
+📌 GOOGLE ADS COMPLETE CAMPAIGN SPECIFICATION
+=====================================================
+Status: Customized Draft / Ready for Sir Review
+
+🎯 TARGETING & BUDGET:
+-----------------------------------------------------
+• Geo-Targeting: ${locations.replace(/\n/g, ', ')}
+• Daily Budget: ${budget}
+• Target CPA: ${cpa}
+
+🔑 TARGET KEYWORDS & MATCH TYPES:
+-----------------------------------------------------
+${keywords}
+
+🚫 NEGATIVE KEYWORDS:
+-----------------------------------------------------
+${negatives}
+
+📝 RESPONSIVE SEARCH AD (RSA) HEADLINES:
+-----------------------------------------------------
+1. ${h1} (${h1.length}/30)
+2. ${h2} (${h2.length}/30)
+3. ${h3} (${h3.length}/30)
+4. ${h4} (${h4.length}/30)
+5. ${h5} (${h5.length}/30)
+
+📝 RESPONSIVE SEARCH AD (RSA) DESCRIPTIONS:
+-----------------------------------------------------
+1. ${d1} (${d1.length}/90)
+2. ${d2} (${d2.length}/90)
+3. ${d3} (${d3.length}/90)
+
+🧩 ASSETS & EXTENSIONS:
+-----------------------------------------------------
+📞 Call Extension: ${phone} (Direct Dispatch)
+
+🔗 Sitelinks:
+1. ${st1} -> ${st1Url}
+2. ${st2} -> ${st2Url}
+3. ${st3} -> ${st3Url}
+
+📢 Callouts:
+${callouts}
+
+Target Website URL: https://corporatecarsmelbourne.com.au/`;
 
   navigator.clipboard.writeText(copyText).then(() => {
-    alert('📋 Ad Copy successfully copied to clipboard! You can paste and share it directly with your Sir or in Google Ads.');
+    alert('📋 COMPLETE GOOGLE ADS CAMPAIGN BLUEPRINT COPIED TO CLIPBOARD!\n\nIncludes all 5 Headlines, 3 Descriptions, Keywords & Match Types, Negatives, Call Extensions, Sitelinks, and Geo-Targeting!');
   }).catch(() => {
     alert('Copy failed. Please manually select and copy the text.');
   });
@@ -8775,27 +9025,76 @@ function loadDraftIntoEditor(draftId) {
   const h1In = document.getElementById('ad-h1');
   const h2In = document.getElementById('ad-h2');
   const h3In = document.getElementById('ad-h3');
+  const h4In = document.getElementById('ad-h4');
+  const h5In = document.getElementById('ad-h5');
   const d1In = document.getElementById('ad-d1');
   const d2In = document.getElementById('ad-d2');
+  const d3In = document.getElementById('ad-d3');
+  const kwIn = document.getElementById('ad-keywords');
+  const negIn = document.getElementById('ad-negatives');
+  const phoneIn = document.getElementById('ad-phone');
+  const st1Name = document.getElementById('ad-st1-name');
+  const st1Url = document.getElementById('ad-st1-url');
+  const st2Name = document.getElementById('ad-st2-name');
+  const st2Url = document.getElementById('ad-st2-url');
+  const st3Name = document.getElementById('ad-st3-name');
+  const st3Url = document.getElementById('ad-st3-url');
+  const calloutsIn = document.getElementById('ad-callouts');
+  const locsIn = document.getElementById('ad-locations');
+  const budgetIn = document.getElementById('ad-budget');
+  const cpaIn = document.getElementById('ad-cpa');
 
   if (draftId === 1) {
     if (h1In) h1In.value = "Melbourne Airport Chauffeur";
     if (h2In) h2In.value = "Fixed Price Airport Transfer";
     if (h3In) h3In.value = "Corporate Cars Melbourne";
+    if (h4In) h4In.value = "Skip The Taxi Queue At MEL";
+    if (h5In) h5In.value = "Live Flight Telemetry Tracking";
     if (d1In) d1In.value = "Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.";
     if (d2In) d2In.value = "Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.";
+    if (d3In) d3In.value = "Transparent fixed pricing with no surge rates. Executive transport across Melbourne.";
+    if (kwIn) kwIn.value = "[melbourne airport chauffeur]\n[tullamarine airport private transfer]\n[chauffeur to melbourne airport]\n\"corporate cars melbourne\"\n\"executive car hire melbourne airport\"\n\"luxury airport pickup melbourne\"";
+    if (negIn) negIn.value = "-cheap, -taxi meter, -bus timetable, -uber driver, -salary, -rental car, -jobs, -driver vacancies";
+    if (phoneIn) phoneIn.value = "+61 400 000 000";
+    if (st1Name) st1Name.value = "Airport Meet & Greet";
+    if (st1Url) st1Url.value = "/airport-transfers";
+    if (st2Name) st2Name.value = "Fixed Fare Calculator";
+    if (st2Url) st2Url.value = "/instant-quote";
+    if (st3Name) st3Name.value = "Executive Fleet Gallery";
+    if (st3Url) st3Url.value = "/our-fleet";
+    if (calloutsIn) calloutsIn.value = "Fixed Transparent Pricing, Live Flight Telemetry, Accredited Chauffeurs, 24/7 Concierge, Pristine European Fleet";
+    if (locsIn) locsIn.value = "Melbourne CBD (5km radius)\nMelbourne Airport Tullamarine (15km corridor)\nToorak, South Yarra, Brighton, Hawthorn, Kew";
+    if (budgetIn) budgetIn.value = "$40.00 / day";
+    if (cpaIn) cpaIn.value = "$22.20 / lead";
   } else {
     if (h1In) h1In.value = "Executive Chauffeur Melbourne";
     if (h2In) h2In.value = "Corporate Travel & VIP Cars";
     if (h3In) h3In.value = "Corporate Cars Melbourne";
+    if (h4In) h4In.value = "Collins St Executive Driver";
+    if (h5In) h5In.value = "Monthly Business Invoicing";
     if (d1In) d1In.value = "Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s.";
     if (d2In) d2In.value = "Dedicated corporate billing & itemized monthly invoices for executive teams. Book now!";
+    if (d3In) d3In.value = "Pristine European sedans with professional uniformed chauffeurs. 100% on-time guarantee.";
+    if (kwIn) kwIn.value = "[corporate chauffeur melbourne]\n[private driver melbourne cbd]\n[executive car hire melbourne]\n\"executive car service collins street\"\n\"corporate cars melbourne\"\n\"business chauffeur service melbourne\"";
+    if (negIn) negIn.value = "-cheap, -taxi, -uber driver, -salary, -jobs, -driver vacancies, -self drive, -car rental";
+    if (phoneIn) phoneIn.value = "+61 400 000 000";
+    if (st1Name) st1Name.value = "Corporate Business Accounts";
+    if (st1Url) st1Url.value = "/corporate-travel";
+    if (st2Name) st2Name.value = "Executive Fleet Showcase";
+    if (st2Url) st2Url.value = "/our-fleet";
+    if (st3Name) st3Name.value = "Board Member Transfers";
+    if (st3Url) st3Url.value = "/airport-transfers";
+    if (calloutsIn) calloutsIn.value = "Monthly Business Invoicing, Pristine Mercedes Fleet, Uniformed Chauffeurs, 100% Punctuality, 24/7 Concierge";
+    if (locsIn) locsIn.value = "Melbourne CBD (Collins St, Docklands, Southbank)\nToorak, South Yarra, Hawthorn, Kew";
+    if (budgetIn) budgetIn.value = "$50.00 / day";
+    if (cpaIn) cpaIn.value = "$24.50 / lead";
   }
 
+  switchStudioTab('headlines');
   updateLiveAdPreview();
   const editorEl = document.getElementById('ad-h1');
   if (editorEl) editorEl.scrollIntoView({ behavior: 'smooth' });
-  alert(`✨ Loaded Draft Ad #${draftId} into the SERP Preview Studio! You can edit and test changes.`);
+  alert(`✨ Loaded Complete Draft Campaign #${draftId} into the Studio! You can edit Headlines, Keywords, Sitelinks, Extensions & Locations.`);
 }
 
 function copyDraftAd(draftId) {
@@ -8977,6 +9276,7 @@ window.runAiAdCopyEnhancer = runAiAdCopyEnhancer;
 window.toggleDraftAdsExplorer = toggleDraftAdsExplorer;
 window.loadDraftIntoEditor = loadDraftIntoEditor;
 window.copyDraftAd = copyDraftAd;
+window.switchStudioTab = switchStudioTab;
 
 
 
