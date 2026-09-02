@@ -2862,19 +2862,19 @@ async function viewAgentReport(agentId) {
                 <span class="badge badge-success" style="font-size:10px; font-weight:800;">🔥 PROVEN WINNER</span>
                 <span style="font-size:11px; color:#10b981; font-weight:700;">4 Leads &bull; A$109.71 CPA</span>
               </div>
-              <h4 style="font-size:14.5px; font-weight:800; color:#fff; margin-bottom:4px;">Corporate Chauffeur & Cars</h4>
+              <h4 style="font-size:14.5px; font-weight:800; color:#fff; margin-bottom:4px;">Corporate Chauffeur & VIP Travel</h4>
               <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:10px; line-height:1.4;">
-                <strong>AI Audit:</strong> High conversion rate (2.12%) on 189 clicks. Collins St corporate travel & executive fleet hooks are winning.
+                <strong>AI Audit (Live PDF Data):</strong> <strong>4 Leads</strong> generated from <code>"vip chauffeur hire"</code> (2 leads), <code>[melbourne chauffeur service]</code> (1 lead), and <code>"business chauffeur hire"</code> (12.5% conv rate).
               </div>
 
               <!-- Generated Future Ad Copy Suggestion -->
               <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px; margin-bottom:10px;">
                 <div style="font-size:10.5px; font-weight:800; color:#facc15; text-transform:uppercase; margin-bottom:4px;">
-                  <i class="fa-solid fa-wand-magic-sparkles"></i> Future RSA Copy Variation (Scale Hook):
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> Future RSA Copy (Matched to Winning Keywords):
                 </div>
                 <div style="font-size:11.5px; color:#fff; line-height:1.5;">
-                  • <strong>Headline:</strong> Executive Chauffeur Melbourne | Collins St Corporate Driver | Monthly Business Invoicing<br>
-                  • <strong>Description:</strong> <em>Discreet, punctual corporate car transfers across Melbourne CBD. Itemized monthly invoicing. Book online in 60s.</em>
+                  • <strong>Headline:</strong> VIP Chauffeur Hire Melbourne | Melbourne Chauffeur Service | Business Chauffeur Hire<br>
+                  • <strong>Description:</strong> <em>Discreet, punctual VIP & business chauffeur hire across Melbourne. Dedicated monthly invoicing & pristine Mercedes fleet.</em>
                 </div>
               </div>
               <button onclick="loadDraftIntoEditor(2)" class="btn btn-sm" style="width:100%; background:rgba(16,185,129,0.2); color:#10b981; border:1px solid rgba(16,185,129,0.4); font-size:11.5px; font-weight:700; cursor:pointer;">
@@ -9086,25 +9086,25 @@ function loadDraftIntoEditor(draftId) {
     if (budgetIn) budgetIn.value = "$40.00 / day";
     if (cpaIn) cpaIn.value = "$22.20 / lead";
   } else {
-    if (h1In) h1In.value = "Executive Chauffeur Melbourne";
-    if (h2In) h2In.value = "Corporate Travel & VIP Cars";
-    if (h3In) h3In.value = "Corporate Cars Melbourne";
-    if (h4In) h4In.value = "Collins St Executive Driver";
-    if (h5In) h5In.value = "Monthly Business Invoicing";
-    if (d1In) d1In.value = "Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s.";
-    if (d2In) d2In.value = "Dedicated corporate billing & itemized monthly invoices for executive teams. Book now!";
-    if (d3In) d3In.value = "Pristine European sedans with professional uniformed chauffeurs. 100% on-time guarantee.";
-    if (kwIn) kwIn.value = "[corporate chauffeur melbourne]\n[private driver melbourne cbd]\n[executive car hire melbourne]\n\"executive car service collins street\"\n\"corporate cars melbourne\"\n\"business chauffeur service melbourne\"";
+    if (h1In) h1In.value = "VIP Chauffeur Hire Melbourne";
+    if (h2In) h2In.value = "Melbourne Chauffeur Service";
+    if (h3In) h3In.value = "Business Chauffeur Hire";
+    if (h4In) h4In.value = "Executive Cars Melbourne";
+    if (h5In) h5In.value = "Corporate Cars Melbourne";
+    if (d1In) d1In.value = "Discreet, punctual VIP & business chauffeur hire across Melbourne. Accredited drivers.";
+    if (d2In) d2In.value = "Dedicated monthly corporate invoicing & pristine Mercedes fleet. Book online in 60s.";
+    if (d3In) d3In.value = "Executive car service for Collins St boardrooms & VIP airport pickups. 100% on time.";
+    if (kwIn) kwIn.value = "\"vip chauffeur hire\"\n[melbourne chauffeur service]\n\"business chauffeur hire\"\n[executive chauffeur melbourne]\n\"executive cars melbourne\"\n[corporate chauffeur melbourne]\n\"corporate chauffeur hire\"\n\"melbourne corporate cars\"";
     if (negIn) negIn.value = "-cheap, -taxi, -uber driver, -salary, -jobs, -driver vacancies, -self drive, -car rental";
     if (phoneIn) phoneIn.value = "+61 400 000 000";
     if (st1Name) st1Name.value = "Corporate Business Accounts";
     if (st1Url) st1Url.value = "/corporate-travel";
-    if (st2Name) st2Name.value = "Executive Fleet Showcase";
+    if (st2Name) st2Name.value = "VIP Fleet Showcase";
     if (st2Url) st2Url.value = "/our-fleet";
-    if (st3Name) st3Name.value = "Board Member Transfers";
+    if (st3Name) st3Name.value = "Boardroom & Airport Transfers";
     if (st3Url) st3Url.value = "/airport-transfers";
     if (calloutsIn) calloutsIn.value = "Monthly Business Invoicing, Pristine Mercedes Fleet, Uniformed Chauffeurs, 100% Punctuality, 24/7 Concierge";
-    if (locsIn) locsIn.value = "Melbourne CBD (Collins St, Docklands, Southbank)\nToorak, South Yarra, Hawthorn, Kew";
+    if (locsIn) locsIn.value = "Melbourne CBD (Collins St, Docklands, Southbank)\nToorak, South Yarra, Hawthorn, Kew, Brighton";
     if (budgetIn) budgetIn.value = "$50.00 / day";
     if (cpaIn) cpaIn.value = "$24.50 / lead";
   }

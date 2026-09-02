@@ -44,23 +44,39 @@ class GoogleAdsOptimizationAgent(AgentInterface):
         # High-Performance Optimization Engine based on Live Telemetry (16Aug_Ads_Campaign)
         live_campaign_analysis = {
             "winner_ad_group": {
-                "name": "Corporate Chauffeur & Cars",
-                "verdict": "🔥 PROVEN WINNER (High ROAS & Conversions)",
-                "metrics": "189 Clicks, 10.20% CTR, 4 Leads, A$109.71 CPA",
-                "key_takeaway": "Collins St and Executive CBD travelers are actively booking. Trust & corporate invoicing hooks resonate strongly.",
+                "name": "Corporate Chauffeur & VIP Travel",
+                "verdict": "🔥 PROVEN WINNER (100% of Account Conversions)",
+                "metrics": "191 Clicks, 10.15% CTR, 4 Leads, A$110.68 CPA (A$442.73 Spend)",
+                "top_converting_keywords": [
+                    {"keyword": "vip chauffeur hire", "match": "Phrase", "clicks": 106, "conversions": 2.0, "cpa": "A$120.43"},
+                    {"keyword": "melbourne chauffeur service", "match": "Exact", "clicks": 41, "conversions": 1.0, "cpa": "A$97.22"},
+                    {"keyword": "business chauffeur hire", "match": "Phrase", "clicks": 8, "conversions": 1.0, "conv_rate": "12.50%", "cpa": "A$18.45"}
+                ],
+                "key_takeaway": "Top volume and leads come from VIP and business chauffeur hooks. Conversion rate peaks at 12.50% on business chauffeur hire.",
                 "future_ad_copy_suggestion": {
                     "headlines": [
-                        "Executive Chauffeur Melbourne (27/30)",
-                        "Collins St Corporate Driver (26/30)",
-                        "Monthly Business Invoicing (25/30)",
-                        "Corporate Cars Melbourne (23/30)",
-                        "100% On-Time Chauffeur (22/30)"
+                        "VIP Chauffeur Hire Melbourne (28/30)",
+                        "Melbourne Chauffeur Service (26/30)",
+                        "Business Chauffeur Hire (22/30)",
+                        "Executive Cars Melbourne (23/30)",
+                        "Corporate Cars Melbourne (23/30)"
                     ],
                     "descriptions": [
-                        "Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s. (84/90)",
-                        "Itemized monthly corporate billing & executive Mercedes fleet. Reserve your ride today. (87/90)"
+                        "Discreet, punctual VIP & business chauffeur hire across Melbourne. Accredited drivers. (85/90)",
+                        "Dedicated monthly corporate invoicing & pristine Mercedes fleet. Book online in 60s. (86/90)",
+                        "Executive car service for Collins St boardrooms & VIP airport pickups. 100% on time. (85/90)"
                     ],
-                    "strategic_focus": "Double down on business accounts, tax-deductible billing, and boardroom transit."
+                    "target_keywords": [
+                        "\"vip chauffeur hire\"",
+                        "[melbourne chauffeur service]",
+                        "\"business chauffeur hire\"",
+                        "[executive chauffeur melbourne]",
+                        "\"executive cars melbourne\"",
+                        "[corporate chauffeur melbourne]",
+                        "\"corporate chauffeur hire\"",
+                        "\"melbourne corporate cars\""
+                    ],
+                    "strategic_focus": "Scale the proven 3 winning keywords (VIP Chauffeur, Melbourne Chauffeur, Business Chauffeur) to double lead volume."
                 }
             },
             "conversion_leak_ad_group": {
