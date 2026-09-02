@@ -4,13 +4,13 @@ let allWebsitesList = [];
 let activityChartInstance = null;
 let categoryChartInstance = null;
 let currentUserRole = 'viewer';
-let authToken = sessionStorage.getItem('ccm_admin_token') || null;
+let authToken = localStorage.getItem('ccm_admin_token') || sessionStorage.getItem('ccm_admin_token') || null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Detect Client Portal Invite Link from Query or Hash first
   const urlParams = new URLSearchParams(window.location.search);
   const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
-  const inviteToken = urlParams.get('token') || urlParams.get('invite') || hashParams.get('token') || hashParams.get('invite') || sessionStorage.getItem('ccm_client_invite_token');
+  const inviteToken = urlParams.get('token') || urlParams.get('invite') || hashParams.get('token') || hashParams.get('invite');
   const targetSiteParam = urlParams.get('site') || hashParams.get('site');
 
   if (inviteToken) {
@@ -19,11 +19,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (validateRes.ok) {
         const inviteData = await validateRes.json();
         currentSiteId = inviteData.site_id;
+        
+        // Clear any old super-admin credentials to strictly isolate this client
+        localStorage.removeItem('ccm_admin_token');
+        sessionStorage.removeItem('ccm_admin_token');
+
         sessionStorage.setItem('ccm_selected_site', currentSiteId);
+        localStorage.setItem('ccm_selected_site', currentSiteId);
         sessionStorage.setItem('ccm_client_invite_token', inviteToken);
+        localStorage.setItem('ccm_client_invite_token', inviteToken);
+        localStorage.setItem('ccm_client_site', currentSiteId);
+        localStorage.setItem('ccm_user_role', 'client');
         localStorage.setItem('ai_visitor_session', 'client_portal_' + currentSiteId);
 
-        // Auto authenticate client session with full execution rights
+        // Auto authenticate client session with isolated client execution rights
         const clientEmail = (inviteData.assigned_client_emails && inviteData.assigned_client_emails[0]) || `client@${currentSiteId}.portal`;
         const loginRes = await fetch('/api/auth/client-login', {
           method: 'POST',
@@ -35,6 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const loginData = await loginRes.json();
           authToken = loginData.token;
           sessionStorage.setItem('ccm_admin_token', authToken);
+          localStorage.setItem('ccm_admin_token', authToken);
         }
 
         currentUserRole = 'client';
@@ -48,11 +58,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   } else if (targetSiteParam) {
     currentSiteId = targetSiteParam;
     sessionStorage.setItem('ccm_selected_site', currentSiteId);
+    localStorage.setItem('ccm_selected_site', currentSiteId);
   } else {
-    // Restore saved active website from sessionStorage or localStorage
-    const savedSite = sessionStorage.getItem('ccm_selected_site') || localStorage.getItem('ccm_selected_site');
-    if (savedSite) {
-      currentSiteId = savedSite;
+    // Check if persistent client session exists in localStorage
+    const savedUserRole = localStorage.getItem('ccm_user_role');
+    const savedClientSite = localStorage.getItem('ccm_client_site');
+    if (savedUserRole === 'client' && savedClientSite) {
+      currentSiteId = savedClientSite;
+      currentUserRole = 'client';
+      isSuperAdmin = false;
+      currentAllowedSites = [savedClientSite];
+      clientPrimarySite = savedClientSite;
+    } else {
+      const savedSite = sessionStorage.getItem('ccm_selected_site') || localStorage.getItem('ccm_selected_site');
+      if (savedSite) {
+        currentSiteId = savedSite;
+      }
     }
   }
 
@@ -96,9 +117,10 @@ function getAuthHeaders(customHeaders = {}) {
 async function checkAuthSession() {
   // Always check for 3-failed-attempts lockout on this browser client
   const isLocked = localStorage.getItem('ccm_admin_locked') === 'true';
-  const hasClientInvite = sessionStorage.getItem('ccm_client_invite_token');
+  const hasClientInvite = localStorage.getItem('ccm_client_invite_token') || sessionStorage.getItem('ccm_client_invite_token');
+  const isClientSaved = localStorage.getItem('ccm_user_role') === 'client';
 
-  if (isLocked || (!authToken && !hasClientInvite)) {
+  if (isLocked || (!authToken && !hasClientInvite && !isClientSaved)) {
     currentUserRole = 'viewer';
     isSuperAdmin = false;
     currentAllowedSites = ['*'];
@@ -109,8 +131,13 @@ async function checkAuthSession() {
     return;
   }
 
-  if (currentUserRole === 'client' && hasClientInvite) {
-    // Retain client admin role with full execution rights
+  if ((currentUserRole === 'client' || isClientSaved) && (hasClientInvite || isClientSaved)) {
+    currentUserRole = 'client';
+    isSuperAdmin = false;
+    const clientSite = localStorage.getItem('ccm_client_site') || sessionStorage.getItem('ccm_selected_site') || currentSiteId;
+    currentSiteId = clientSite;
+    currentAllowedSites = [clientSite];
+    clientPrimarySite = clientSite;
     renderAuthHeaderUI();
     return;
   }
@@ -127,27 +154,23 @@ async function checkAuthSession() {
     } else if (data.role === 'client') {
       currentUserRole = 'client';
       isSuperAdmin = false;
-      currentAllowedSites = data.allowed_sites || [];
+      currentAllowedSites = data.allowed_sites || [currentSiteId];
       clientPrimarySite = data.primary_site || (data.allowed_sites && data.allowed_sites[0]) || currentSiteId;
-      if (currentSiteId !== clientPrimarySite && currentAllowedSites.includes(clientPrimarySite)) {
-        currentSiteId = clientPrimarySite;
-      }
+      currentSiteId = clientPrimarySite;
     } else if (data.is_admin) {
       currentUserRole = 'admin';
       isSuperAdmin = false;
       currentAllowedSites = ['*'];
     } else {
-      if (!hasClientInvite) {
-        currentUserRole = 'viewer';
-        isSuperAdmin = false;
-        currentAllowedSites = ['*'];
-        authToken = null;
-        sessionStorage.removeItem('ccm_admin_token');
-        localStorage.removeItem('ccm_admin_token');
-      }
+      currentUserRole = 'viewer';
+      isSuperAdmin = false;
+      currentAllowedSites = ['*'];
+      authToken = null;
+      sessionStorage.removeItem('ccm_admin_token');
+      localStorage.removeItem('ccm_admin_token');
     }
   } catch (err) {
-    if (!hasClientInvite) {
+    if (currentUserRole !== 'client') {
       currentUserRole = 'viewer';
       isSuperAdmin = false;
       currentAllowedSites = ['*'];
@@ -163,16 +186,16 @@ function renderAuthHeaderUI() {
   const userLogsBtn = document.querySelector('button[onclick="openVisitorAuditModal()"]');
   
   if (superAdminBtn) {
-    superAdminBtn.style.display = (currentUserRole === 'super_admin' || isSuperAdmin) ? 'inline-flex' : 'none';
+    superAdminBtn.style.display = (currentUserRole === 'super_admin' && isSuperAdmin) ? 'inline-flex' : 'none';
   }
 
   if (userLogsBtn) {
-    userLogsBtn.style.display = (currentUserRole === 'client') ? 'none' : 'inline-flex';
+    userLogsBtn.style.display = (currentUserRole === 'super_admin' || currentUserRole === 'admin') ? 'inline-flex' : 'none';
   }
 
   if (!container) return;
 
-  if (currentUserRole === 'super_admin' || isSuperAdmin) {
+  if (currentUserRole === 'super_admin' && isSuperAdmin) {
     container.innerHTML = `
       <div class="auth-pill admin-mode" style="background:linear-gradient(135deg, rgba(234,179,8,0.2), rgba(249,115,22,0.2)); border:1px solid #eab308; color:#facc15;" title="Master Super Admin (Sonu Tripathi) with full multi-site control">
         <i class="fa-solid fa-crown" style="color:#facc15;"></i>
@@ -183,12 +206,15 @@ function renderAuthHeaderUI() {
       </button>
     `;
   } else if (currentUserRole === 'client') {
-    // Client has full agent control — no Admin Login or Read-Only mode shown!
+    // Client has dedicated workspace access for their assigned website
     container.innerHTML = `
-      <div class="auth-pill admin-mode" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(6,182,212,0.18)); border:1px solid #10b981; color:#10b981; font-weight:700;" title="Full access to run all 19 AI agents for your website">
+      <div class="auth-pill admin-mode" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(6,182,212,0.18)); border:1px solid #10b981; color:#10b981; font-weight:700;" title="Dedicated Client Portal for your assigned website">
         <i class="fa-solid fa-circle-check" style="color:#10b981;"></i>
-        <span>Active AI Portal (19 Agents Unlocked)</span>
+        <span>Client Portal (${allWebsitesList.find(s=>s.site_id===currentSiteId)?.name || 'Active Site'})</span>
       </div>
+      <button class="btn btn-sm btn-secondary" onclick="logoutClient()" title="Exit Client Portal" style="font-size:11px; padding:4px 8px; margin-left:4px;">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Exit
+      </button>
     `;
   } else {
     container.innerHTML = `
@@ -202,6 +228,17 @@ function renderAuthHeaderUI() {
     `;
   }
 }
+
+function logoutClient() {
+  localStorage.removeItem('ccm_client_invite_token');
+  localStorage.removeItem('ccm_client_site');
+  localStorage.removeItem('ccm_client_token');
+  localStorage.removeItem('ccm_user_role');
+  localStorage.removeItem('ccm_admin_token');
+  sessionStorage.clear();
+  window.location.href = '/';
+}
+window.logoutClient = logoutClient;
 
 function requireAdminAction(actionName = 'perform this action') {
   // Super Admin and Client Admin can perform all actions without restriction
@@ -816,10 +853,17 @@ function initEventListeners() {
 /* --- Multi-Website Switcher & Registry Handlers --- */
 async function initWebsiteSwitcher() {
   try {
-    const res = await fetch('/api/websites');
+    const res = await fetch('/api/websites', { headers: getAuthHeaders() });
     const data = await res.json();
     if (data.websites && data.websites.length > 0) {
-      allWebsitesList = data.websites;
+      if (currentUserRole === 'client') {
+        allWebsitesList = data.websites.filter(s => currentAllowedSites.includes(s.site_id));
+        if (allWebsitesList.length === 0 && currentSiteId) {
+          allWebsitesList = data.websites.filter(s => s.site_id === currentSiteId);
+        }
+      } else {
+        allWebsitesList = data.websites;
+      }
     }
   } catch (err) {
     console.error('Failed to load websites list:', err);
