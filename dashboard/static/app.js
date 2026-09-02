@@ -129,8 +129,8 @@ async function checkAuthSession() {
       isSuperAdmin = false;
       currentAllowedSites = data.allowed_sites || [];
       clientPrimarySite = data.primary_site || (data.allowed_sites && data.allowed_sites[0]) || currentSiteId;
-      if (activeSite !== clientPrimarySite && currentAllowedSites.includes(clientPrimarySite)) {
-        activeSite = clientPrimarySite;
+      if (currentSiteId !== clientPrimarySite && currentAllowedSites.includes(clientPrimarySite)) {
+        currentSiteId = clientPrimarySite;
       }
     } else if (data.is_admin) {
       currentUserRole = 'admin';
@@ -8275,7 +8275,9 @@ async function handleSaveAgentConnection(e) {
     const data = await res.json();
 
     if (res.ok) {
-      alert(`🎉 Agent connected successfully for ${activeSite || currentSiteId}!`);
+      const siteObj = (typeof allWebsitesList !== 'undefined' && Array.isArray(allWebsitesList)) ? allWebsitesList.find(s => s.site_id === currentSiteId) : null;
+      const siteDisplayName = siteObj ? siteObj.name : currentSiteId;
+      alert(`🎉 Agent connected successfully for ${siteDisplayName}!`);
       closeAgentIntegrationModal();
       loadAgents();
     } else {
