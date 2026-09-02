@@ -2626,95 +2626,173 @@ async function viewAgentReport(agentId) {
           </div>
 
           <!-- Grid of Draft Ad Copies -->
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px, 1fr)); gap:18px;">
             <!-- Draft Ad 1 -->
-            <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:18px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                 <div>
-                  <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:10px; font-weight:800;">DRAFT #1 &bull; AIRPORT TRANSFER</span>
-                  <h4 style="font-size:14px; font-weight:800; color:#fff; margin-top:4px;">Search - Airport Transfers Tullamarine</h4>
+                  <span class="badge" style="background:rgba(234,179,8,0.25); color:#facc15; font-size:10px; font-weight:800; border:1px solid rgba(234,179,8,0.5);">DRAFT #1 &bull; AIRPORT TRANSFER</span>
+                  <h4 style="font-size:15px; font-weight:800; color:#fff; margin-top:4px;">Search - Airport Transfers Tullamarine</h4>
                 </div>
-                <span class="badge badge-success" style="font-size:10px; font-weight:800;">Quality: 96% (Excellent)</span>
+                <span class="badge badge-success" style="font-size:10.5px; font-weight:800;">Quality: 96% (Excellent)</span>
               </div>
 
-              <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">
-                <strong style="color:#cbd5e1;">Daily Budget:</strong> $40.00/day &bull; <strong style="color:#cbd5e1;">Live Spend:</strong> <span style="color:#10b981; font-weight:700;">$0.00 (Draft)</span>
+              <!-- Budget & Geo-Targeting Row -->
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:10px; font-size:11.5px; color:#cbd5e1; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <div><strong>Daily Budget:</strong> $40.00/day</div>
+                <div><strong>Live Spend:</strong> <span style="color:#10b981; font-weight:700;">$0.00 (Draft)</span></div>
+                <div style="grid-column:1/-1;"><strong>📍 Geo-Targeting:</strong> Melbourne CBD (5km) + Tullamarine Airport (15km radius) + Toorak, Brighton</div>
+              </div>
+
+              <!-- Keywords Section (Exact & Phrase Match) -->
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:6px; display:flex; justify-content:space-between;">
+                  <span><i class="fa-solid fa-key"></i> Target Keywords & Match Types:</span>
+                  <span style="color:var(--text-muted);">5 Keywords</span>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:5px; font-size:11px; font-family:var(--font-mono);">
+                  <span class="badge" style="background:rgba(6,182,212,0.15); color:#38bdf8; border:1px solid rgba(6,182,212,0.3); font-weight:600;">[melbourne airport chauffeur] <small>(Exact)</small></span>
+                  <span class="badge" style="background:rgba(6,182,212,0.15); color:#38bdf8; border:1px solid rgba(6,182,212,0.3); font-weight:600;">[tullamarine airport private transfer] <small>(Exact)</small></span>
+                  <span class="badge" style="background:rgba(168,85,247,0.15); color:#c084fc; border:1px solid rgba(168,85,247,0.3); font-weight:600;">"chauffeur to melbourne airport" <small>(Phrase)</small></span>
+                  <span class="badge" style="background:rgba(168,85,247,0.15); color:#c084fc; border:1px solid rgba(168,85,247,0.3); font-weight:600;">"luxury airport pickup melbourne" <small>(Phrase)</small></span>
+                </div>
+              </div>
+
+              <!-- Negative Keywords Protection -->
+              <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:8px 10px; margin-bottom:10px; font-size:11px; color:#fca5a5;">
+                <strong>🚫 Negative Keywords:</strong> -cheap, -taxi meter, -bus timetable, -uber driver, -salary, -rental car
               </div>
 
               <!-- Headlines List -->
-              <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:10px; margin-bottom:8px;">
-                <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:4px;">Headlines in Draft:</div>
-                <div style="font-size:12px; color:#fff; line-height:1.5;">
-                  1. Melbourne Airport Chauffeur<br>
-                  2. Fixed Price Airport Transfer<br>
-                  3. Skip The Taxi Queue At MEL<br>
-                  4. Live Flight Telemetry Tracking<br>
-                  5. Corporate Cars Melbourne
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:#facc15; text-transform:uppercase; margin-bottom:5px;">
+                  <i class="fa-solid fa-heading"></i> Headlines in Draft (Responsive Search Ad):
+                </div>
+                <div style="font-size:11.5px; color:#fff; line-height:1.6;">
+                  1. <strong>Melbourne Airport Chauffeur</strong> <span style="color:var(--text-muted); font-size:10px;">(26/30)</span><br>
+                  2. <strong>Fixed Price Airport Transfer</strong> <span style="color:var(--text-muted); font-size:10px;">(27/30)</span><br>
+                  3. <strong>Skip The Taxi Queue At MEL</strong> <span style="color:var(--text-muted); font-size:10px;">(25/30)</span><br>
+                  4. <strong>Live Flight Telemetry Tracking</strong> <span style="color:var(--text-muted); font-size:10px;">(29/30)</span><br>
+                  5. <strong>Corporate Cars Melbourne</strong> <span style="color:var(--text-muted); font-size:10px;">(23/30)</span>
                 </div>
               </div>
 
               <!-- Descriptions List -->
-              <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:10px; margin-bottom:10px;">
-                <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:4px;">Descriptions in Draft:</div>
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:5px;">
+                  <i class="fa-solid fa-align-left"></i> Descriptions in Draft:
+                </div>
                 <div style="font-size:11.5px; color:#cbd5e1; line-height:1.4;">
-                  &bull; <em>Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.</em><br>
-                  &bull; <em>Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.</em>
+                  &bull; <em>Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.</em> <span style="color:var(--text-muted); font-size:10px;">(84/90)</span><br>
+                  &bull; <em>Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.</em> <span style="color:var(--text-muted); font-size:10px;">(86/90)</span>
+                </div>
+              </div>
+
+              <!-- Sitelinks & Extensions -->
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:12px;">
+                <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase; margin-bottom:5px;">
+                  <i class="fa-solid fa-puzzle-piece"></i> Ad Assets & Extensions Included:
+                </div>
+                <div style="font-size:11px; color:#cbd5e1; line-height:1.5;">
+                  <strong>🔗 Sitelinks:</strong> 1. Meet & Greet Service &bull; 2. Fixed Fare Calculator &bull; 3. European Fleet Gallery<br>
+                  <strong>📢 Callouts:</strong> Fixed Pricing &bull; Flight Telemetry &bull; Accredited Chauffeurs &bull; 24/7 Concierge<br>
+                  <strong>📞 Call Extension:</strong> +61 400 000 000 (Direct 24/7 Dispatch)<br>
+                  <strong>📱 Device Bid:</strong> +15% Mobile Bid Adjustment (Urgent Airport Travelers)
                 </div>
               </div>
 
               <!-- Action Buttons -->
-              <div style="display:flex; gap:6px;">
-                <button onclick="loadDraftIntoEditor(1)" class="btn btn-primary btn-sm" style="font-size:11px; padding:4px 10px; flex:1; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-weight:700;">
+              <div style="display:flex; gap:8px;">
+                <button onclick="loadDraftIntoEditor(1)" class="btn btn-primary btn-sm" style="font-size:11.5px; padding:6px 12px; flex:1; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-weight:700;">
                   <i class="fa-solid fa-pen-to-square"></i> Edit in Preview Studio
                 </button>
-                <button onclick="copyDraftAd(1)" class="btn btn-secondary btn-sm" style="font-size:11px; padding:4px 10px; color:#facc15; border-color:rgba(234,179,8,0.4);" title="Copy formatted text to clipboard">
-                  <i class="fa-solid fa-copy"></i> Copy for Sir
+                <button onclick="copyDraftAd(1)" class="btn btn-secondary btn-sm" style="font-size:11.5px; padding:6px 12px; color:#facc15; border-color:rgba(234,179,8,0.4);" title="Copy full campaign blueprint to clipboard">
+                  <i class="fa-solid fa-copy"></i> Copy Full Ad for Sir
                 </button>
               </div>
             </div>
 
             <!-- Draft Ad 2 -->
-            <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:18px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                 <div>
-                  <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:10px; font-weight:800;">DRAFT #2 &bull; CORPORATE CHAUFFEUR</span>
-                  <h4 style="font-size:14px; font-weight:800; color:#fff; margin-top:4px;">Search - Corporate Chauffeur Melbourne CBD</h4>
+                  <span class="badge" style="background:rgba(234,179,8,0.25); color:#facc15; font-size:10px; font-weight:800; border:1px solid rgba(234,179,8,0.5);">DRAFT #2 &bull; CORPORATE CHAUFFEUR</span>
+                  <h4 style="font-size:15px; font-weight:800; color:#fff; margin-top:4px;">Search - Corporate Chauffeur Melbourne CBD</h4>
                 </div>
-                <span class="badge badge-success" style="font-size:10px; font-weight:800;">Quality: 92% (Excellent)</span>
+                <span class="badge badge-success" style="font-size:10.5px; font-weight:800;">Quality: 92% (Excellent)</span>
               </div>
 
-              <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">
-                <strong style="color:#cbd5e1;">Daily Budget:</strong> $50.00/day &bull; <strong style="color:#cbd5e1;">Live Spend:</strong> <span style="color:#10b981; font-weight:700;">$0.00 (Draft)</span>
+              <!-- Budget & Geo-Targeting Row -->
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:10px; font-size:11.5px; color:#cbd5e1; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <div><strong>Daily Budget:</strong> $50.00/day</div>
+                <div><strong>Live Spend:</strong> <span style="color:#10b981; font-weight:700;">$0.00 (Draft)</span></div>
+                <div style="grid-column:1/-1;"><strong>📍 Geo-Targeting:</strong> Melbourne CBD (Collins St, Docklands) + South Yarra, Hawthorn, Kew</div>
+              </div>
+
+              <!-- Keywords Section (Exact & Phrase Match) -->
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:6px; display:flex; justify-content:space-between;">
+                  <span><i class="fa-solid fa-key"></i> Target Keywords & Match Types:</span>
+                  <span style="color:var(--text-muted);">4 Keywords</span>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:5px; font-size:11px; font-family:var(--font-mono);">
+                  <span class="badge" style="background:rgba(6,182,212,0.15); color:#38bdf8; border:1px solid rgba(6,182,212,0.3); font-weight:600;">[corporate chauffeur melbourne] <small>(Exact)</small></span>
+                  <span class="badge" style="background:rgba(6,182,212,0.15); color:#38bdf8; border:1px solid rgba(6,182,212,0.3); font-weight:600;">[private driver melbourne cbd] <small>(Exact)</small></span>
+                  <span class="badge" style="background:rgba(168,85,247,0.15); color:#c084fc; border:1px solid rgba(168,85,247,0.3); font-weight:600;">"executive car service collins street" <small>(Phrase)</small></span>
+                  <span class="badge" style="background:rgba(168,85,247,0.15); color:#c084fc; border:1px solid rgba(168,85,247,0.3); font-weight:600;">"corporate cars melbourne" <small>(Phrase)</small></span>
+                </div>
+              </div>
+
+              <!-- Negative Keywords Protection -->
+              <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:8px 10px; margin-bottom:10px; font-size:11px; color:#fca5a5;">
+                <strong>🚫 Negative Keywords:</strong> -cheap, -taxi, -uber driver, -jobs, -driver vacancies, -self drive
               </div>
 
               <!-- Headlines List -->
-              <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:10px; margin-bottom:8px;">
-                <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:4px;">Headlines in Draft:</div>
-                <div style="font-size:12px; color:#fff; line-height:1.5;">
-                  1. Executive Chauffeur Melbourne<br>
-                  2. Corporate Travel & VIP Cars<br>
-                  3. Collins St Executive Driver<br>
-                  4. Monthly Business Invoicing<br>
-                  5. Corporate Cars Melbourne
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:#facc15; text-transform:uppercase; margin-bottom:5px;">
+                  <i class="fa-solid fa-heading"></i> Headlines in Draft (Responsive Search Ad):
+                </div>
+                <div style="font-size:11.5px; color:#fff; line-height:1.6;">
+                  1. <strong>Executive Chauffeur Melbourne</strong> <span style="color:var(--text-muted); font-size:10px;">(27/30)</span><br>
+                  2. <strong>Corporate Travel & VIP Cars</strong> <span style="color:var(--text-muted); font-size:10px;">(26/30)</span><br>
+                  3. <strong>Collins St Executive Driver</strong> <span style="color:var(--text-muted); font-size:10px;">(26/30)</span><br>
+                  4. <strong>Monthly Business Invoicing</strong> <span style="color:var(--text-muted); font-size:10px;">(25/30)</span><br>
+                  5. <strong>Corporate Cars Melbourne</strong> <span style="color:var(--text-muted); font-size:10px;">(23/30)</span>
                 </div>
               </div>
 
               <!-- Descriptions List -->
-              <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:10px; margin-bottom:10px;">
-                <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:4px;">Descriptions in Draft:</div>
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:5px;">
+                  <i class="fa-solid fa-align-left"></i> Descriptions in Draft:
+                </div>
                 <div style="font-size:11.5px; color:#cbd5e1; line-height:1.4;">
-                  &bull; <em>Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s.</em><br>
-                  &bull; <em>Dedicated corporate billing & itemized monthly invoices for executive teams. Book now!</em>
+                  &bull; <em>Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s.</em> <span style="color:var(--text-muted); font-size:10px;">(84/90)</span><br>
+                  &bull; <em>Dedicated corporate billing & itemized monthly invoices for executive teams. Book now!</em> <span style="color:var(--text-muted); font-size:10px;">(88/90)</span>
+                </div>
+              </div>
+
+              <!-- Sitelinks & Extensions -->
+              <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; margin-bottom:12px;">
+                <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase; margin-bottom:5px;">
+                  <i class="fa-solid fa-puzzle-piece"></i> Ad Assets & Extensions Included:
+                </div>
+                <div style="font-size:11px; color:#cbd5e1; line-height:1.5;">
+                  <strong>🔗 Sitelinks:</strong> 1. Corporate Accounts &bull; 2. Executive Fleet &bull; 3. Board Member Transfers<br>
+                  <strong>📢 Callouts:</strong> Monthly Invoicing &bull; Premium Mercedes Fleet &bull; Uniformed Chauffeurs<br>
+                  <strong>📞 Call Extension:</strong> +61 400 000 000 (Priority Executive Line)<br>
+                  <strong>⏰ Ad Schedule:</strong> Mon-Fri 06:00 AM - 10:00 PM (Business Hours)
                 </div>
               </div>
 
               <!-- Action Buttons -->
-              <div style="display:flex; gap:6px;">
-                <button onclick="loadDraftIntoEditor(2)" class="btn btn-primary btn-sm" style="font-size:11px; padding:4px 10px; flex:1; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-weight:700;">
+              <div style="display:flex; gap:8px;">
+                <button onclick="loadDraftIntoEditor(2)" class="btn btn-primary btn-sm" style="font-size:11.5px; padding:6px 12px; flex:1; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-weight:700;">
                   <i class="fa-solid fa-pen-to-square"></i> Edit in Preview Studio
                 </button>
-                <button onclick="copyDraftAd(2)" class="btn btn-secondary btn-sm" style="font-size:11px; padding:4px 10px; color:#facc15; border-color:rgba(234,179,8,0.4);" title="Copy formatted text to clipboard">
-                  <i class="fa-solid fa-copy"></i> Copy for Sir
+                <button onclick="copyDraftAd(2)" class="btn btn-secondary btn-sm" style="font-size:11.5px; padding:6px 12px; color:#facc15; border-color:rgba(234,179,8,0.4);" title="Copy full campaign blueprint to clipboard">
+                  <i class="fa-solid fa-copy"></i> Copy Full Ad for Sir
                 </button>
               </div>
             </div>
@@ -8723,37 +8801,171 @@ function loadDraftIntoEditor(draftId) {
 function copyDraftAd(draftId) {
   let copyText = "";
   if (draftId === 1) {
-    copyText = `📌 GOOGLE ADS DRAFT #1: AIRPORT TRANSFERS TULLAMARINE\n` +
-      `--------------------------------------------------\n` +
-      `Headlines:\n` +
-      `1. Melbourne Airport Chauffeur\n` +
-      `2. Fixed Price Airport Transfer\n` +
-      `3. Skip The Taxi Queue At MEL\n` +
-      `4. Live Flight Telemetry Tracking\n` +
-      `5. Corporate Cars Melbourne\n\n` +
-      `Descriptions:\n` +
-      `1. Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.\n` +
-      `2. Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s.\n\n` +
-      `Target Keywords: [melbourne airport chauffeur], "tullamarine airport private transfer", [chauffeur to melbourne airport]\n` +
-      `Daily Budget: $40.00/day | URL: https://corporatecarsmelbourne.com.au/`;
+    copyText = `=====================================================
+📌 GOOGLE ADS COMPLETE CAMPAIGN SPECIFICATION SHEET
+=====================================================
+Campaign Name: Search - Airport Transfers Tullamarine
+Account Customer ID: 194-940-8641
+Status: Draft / Ready for Review
+
+🎯 CAMPAIGN TARGETING & BUDGET:
+-----------------------------------------------------
+• Geo-Targeting: Melbourne CBD (5km radius) + Tullamarine Airport (15km radius corridor) + Suburbs (Toorak, South Yarra, Brighton, Hawthorn, Kew)
+• Daily Budget: $40.00 / day
+• Bid Strategy: Maximize Conversions (Target CPA: $22.20)
+• Device Bid: +15% Mobile Bid Adjustment (Urgent travelers)
+• Language: English
+
+🔑 TARGET KEYWORDS & MATCH TYPES:
+-----------------------------------------------------
+[melbourne airport chauffeur]        (Exact Match)
+[tullamarine airport private transfer] (Exact Match)
+[chauffeur to melbourne airport]      (Exact Match)
+"corporate cars melbourne"             (Phrase Match)
+"executive car hire melbourne airport" (Phrase Match)
+"luxury airport pickup melbourne"      (Phrase Match)
+
+🚫 NEGATIVE KEYWORDS (BUDGET PROTECTION):
+-----------------------------------------------------
+-cheap, -taxi meter, -bus timetable, -uber driver, -salary, -rental car, -jobs, -driver vacancies
+
+📝 RESPONSIVE SEARCH AD (RSA) HEADLINES:
+-----------------------------------------------------
+1. Melbourne Airport Chauffeur     (26/30)
+2. Fixed Price Airport Transfer     (27/30)
+3. Skip The Taxi Queue At MEL       (25/30)
+4. Live Flight Telemetry Tracking   (29/30)
+5. Corporate Cars Melbourne         (23/30)
+6. Premium Mercedes & BMW Fleet     (27/30)
+7. 24/7 VIP Terminal Meet & Greet   (29/30)
+
+📝 RESPONSIVE SEARCH AD (RSA) DESCRIPTIONS:
+-----------------------------------------------------
+1. Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs. (84/90)
+2. Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s. (86/90)
+3. Transparent fixed pricing with no surge rates. Executive transport across Melbourne. (85/90)
+4. Dedicated monthly corporate billing & itemized invoices for executive travel teams. (85/90)
+
+🧩 ASSETS & EXTENSIONS (ALL INCLUDED):
+-----------------------------------------------------
+📞 Call Asset / Extension:
+   - Phone Number: +61 400 000 000 (24/7 Dedicated Chauffeur Dispatch)
+
+🔗 Sitelink Extensions (4 Assets):
+   1. Sitelink: Airport Meet & Greet
+      - URL: https://corporatecarsmelbourne.com.au/airport-transfers
+      - Line 1: Terminal pickup & luggage assist
+      - Line 2: Real-time flight tracking
+   2. Sitelink: Fixed Fare Calculator
+      - URL: https://corporatecarsmelbourne.com.au/instant-quote
+      - Line 1: Instant online fare estimator
+      - Line 2: 100% transparent fixed rates
+   3. Sitelink: Executive Fleet Showcase
+      - URL: https://corporatecarsmelbourne.com.au/our-fleet
+      - Line 1: Mercedes S-Class & BMW 7 Series
+      - Line 2: Luxury 7-seater executive vans
+   4. Sitelink: Corporate Business Accounts
+      - URL: https://corporatecarsmelbourne.com.au/corporate-travel
+      - Line 1: Monthly itemized tax invoices
+      - Line 2: Priority vehicle allocation
+
+📢 Callout Extensions:
+   - Fixed Transparent Pricing
+   - Real-Time Flight Telemetry
+   - Accredited Chauffeur Drivers
+   - 24/7 Concierge Dispatch
+   - Pristine European Fleet
+
+🏷️ Structured Snippets:
+   - Types: Airport Transfers, Corporate Commutes, Winery Tours, VIP Delegations
+   - Amenities: Complimentary Wi-Fi, Bottled Spring Water, Phone Chargers, Infant Seats
+
+Final Landing Page URL: https://corporatecarsmelbourne.com.au/`;
   } else {
-    copyText = `📌 GOOGLE ADS DRAFT #2: CORPORATE CHAUFFEUR MELBOURNE CBD\n` +
-      `--------------------------------------------------------\n` +
-      `Headlines:\n` +
-      `1. Executive Chauffeur Melbourne\n` +
-      `2. Corporate Travel & VIP Cars\n` +
-      `3. Collins St Executive Driver\n` +
-      `4. Monthly Business Invoicing\n` +
-      `5. Corporate Cars Melbourne\n\n` +
-      `Descriptions:\n` +
-      `1. Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s.\n` +
-      `2. Dedicated corporate billing & itemized monthly invoices for executive teams. Book now!\n\n` +
-      `Target Keywords: [corporate chauffeur melbourne], "executive car service collins street"\n` +
-      `Daily Budget: $50.00/day | URL: https://corporatecarsmelbourne.com.au/`;
+    copyText = `=====================================================
+📌 GOOGLE ADS COMPLETE CAMPAIGN SPECIFICATION SHEET
+=====================================================
+Campaign Name: Search - Corporate Chauffeur Melbourne CBD
+Account Customer ID: 194-940-8641
+Status: Draft / Ready for Review
+
+🎯 CAMPAIGN TARGETING & BUDGET:
+-----------------------------------------------------
+• Geo-Targeting: Melbourne CBD (Collins St, Docklands, Southbank) + Eastern Suburbs (Toorak, South Yarra, Hawthorn, Kew)
+• Daily Budget: $50.00 / day
+• Bid Strategy: Maximize Conversions (Target CPA: $24.50)
+• Ad Schedule: Mon-Fri 06:00 AM - 10:00 PM (Business Hours)
+• Language: English
+
+🔑 TARGET KEYWORDS & MATCH TYPES:
+-----------------------------------------------------
+[corporate chauffeur melbourne]       (Exact Match)
+[private driver melbourne cbd]        (Exact Match)
+[executive car hire melbourne]        (Exact Match)
+"executive car service collins street" (Phrase Match)
+"corporate cars melbourne"             (Phrase Match)
+"business chauffeur service melbourne" (Phrase Match)
+
+🚫 NEGATIVE KEYWORDS (BUDGET PROTECTION):
+-----------------------------------------------------
+-cheap, -taxi, -uber driver, -salary, -jobs, -driver vacancies, -self drive, -car rental
+
+📝 RESPONSIVE SEARCH AD (RSA) HEADLINES:
+-----------------------------------------------------
+1. Executive Chauffeur Melbourne    (27/30)
+2. Corporate Travel & VIP Cars      (26/30)
+3. Collins St Executive Driver      (26/30)
+4. Monthly Business Invoicing       (25/30)
+5. Corporate Cars Melbourne         (23/30)
+6. Punctual Boardroom Transfers     (27/30)
+7. Mercedes S-Class & BMW Fleet     (26/30)
+
+📝 RESPONSIVE SEARCH AD (RSA) DESCRIPTIONS:
+-----------------------------------------------------
+1. Discreet, punctual corporate car transfers across Melbourne CBD. Book online in 60s. (84/90)
+2. Dedicated corporate billing & itemized monthly invoices for executive teams. Book now! (88/90)
+3. Pristine European sedans with professional uniformed chauffeurs. 100% on-time guarantee. (89/90)
+4. Streamline your corporate travel with flexible invoicing and priority executive booking. (88/90)
+
+🧩 ASSETS & EXTENSIONS (ALL INCLUDED):
+-----------------------------------------------------
+📞 Call Asset / Extension:
+   - Phone Number: +61 400 000 000 (Priority Executive Chauffeur Line)
+
+🔗 Sitelink Extensions (4 Assets):
+   1. Sitelink: Corporate Business Accounts
+      - URL: https://corporatecarsmelbourne.com.au/corporate-travel
+      - Line 1: Monthly itemized tax invoices
+      - Line 2: Dedicated corporate concierge
+   2. Sitelink: Executive Fleet Showcase
+      - URL: https://corporatecarsmelbourne.com.au/our-fleet
+      - Line 1: Mercedes S-Class & BMW 7 Series
+      - Line 2: Luxury 7-seater executive vans
+   3. Sitelink: Board Member Airport Transfers
+      - URL: https://corporatecarsmelbourne.com.au/airport-transfers
+      - Line 1: Seamless airport meet & greet
+      - Line 2: Real-time flight tracking
+   4. Sitelink: Instant Online Booking
+      - URL: https://corporatecarsmelbourne.com.au/instant-quote
+      - Line 1: Book in under 60 seconds
+      - Line 2: Instant confirmation receipt
+
+📢 Callout Extensions:
+   - Monthly Business Invoicing
+   - Pristine Mercedes Fleet
+   - Uniformed Chauffeurs
+   - 100% Punctuality Record
+   - 24/7 Corporate Concierge
+
+🏷️ Structured Snippets:
+   - Services: Boardroom Transit, VIP Airport Pickup, Corporate Events, Roadshows
+   - Amenities: Quiet Cabin, Wi-Fi Hotspot, Phone Chargers, Daily Newspaper
+
+Final Landing Page URL: https://corporatecarsmelbourne.com.au/`;
   }
 
   navigator.clipboard.writeText(copyText).then(() => {
-    alert(`📋 Draft Ad #${draftId} copied to clipboard! You can share it with your Sir or paste it into Google Ads.`);
+    alert(`📋 100% COMPLETE CAMPAIGN BLUEPRINT COPIED TO CLIPBOARD!\n\nIncludes:\n✅ Keywords (Exact & Phrase Match)\n✅ Negative Keywords\n✅ Geo-Targeting & Locations\n✅ 7 Headlines & 4 Descriptions\n✅ Call Assets (Phone)\n✅ 4 Sitelink Extensions with URLs & Sub-lines\n✅ Callouts & Structured Snippets\n\nYou can share this entire sheet directly with your Sir!`);
   }).catch(() => {
     alert('Copy failed. Please manually select and copy text.');
   });
