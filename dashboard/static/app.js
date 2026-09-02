@@ -2722,7 +2722,7 @@ async function viewAgentReport(agentId) {
               The <strong>Google Ads Optimization Agent</strong> is interconnected with this telemetry stream. It analyzes these 2 active ad groups to generate winning Responsive Search Ad (RSA) variations with <strong>Full-Stack Campaign Studio & 1-Click Live Launch</strong>.
             </div>
           </div>
-          <button class="btn btn-primary" onclick="viewAgentPerformanceReport('google-ads-optimization-agent')" style="background:linear-gradient(135deg, var(--accent-cyan), #10b981); border:none; font-size:12.5px; font-weight:800; color:#fff; padding:10px 18px; border-radius:10px; box-shadow:0 0 16px rgba(6,182,212,0.4); cursor:pointer;">
+          <button class="btn btn-primary" onclick="viewAgentReport('google-ads-optimization-agent')" style="background:linear-gradient(135deg, var(--accent-cyan), #10b981); border:none; font-size:12.5px; font-weight:800; color:#fff; padding:10px 18px; border-radius:10px; box-shadow:0 0 16px rgba(6,182,212,0.4); cursor:pointer;">
             <i class="fa-solid fa-sliders"></i> Open Optimization Studio & 1-Click Launch &rarr;
           </button>
         </div>
@@ -9351,6 +9351,8 @@ window.loadDraftIntoEditor = loadDraftIntoEditor;
 window.copyDraftAd = copyDraftAd;
 window.switchStudioTab = switchStudioTab;
 window.publishGoogleAdLive = publishGoogleAdLive;
+window.viewAgentReport = viewAgentReport;
+window.viewAgentPerformanceReport = viewAgentReport;
 
 
 
