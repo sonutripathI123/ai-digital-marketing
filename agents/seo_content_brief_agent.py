@@ -205,6 +205,37 @@ def optimize_and_refine_blog_post(
     post["schema_markup_injected"] = True
 
     return post
+def check_keyword_presence(target_kw: str, text: str) -> tuple[bool, str]:
+    """
+    Checks if target keyword or its primary semantic tokens are present in the target text.
+    Handles exact phrase matches and multi-token semantic matches.
+    """
+    if not target_kw or not text:
+        return False, "Missing keyword or text"
+    
+    kw_lower = target_kw.lower().strip()
+    text_lower = text.lower().strip()
+    
+    # 1. Exact phrase match
+    if kw_lower in text_lower:
+        return True, f"Exact phrase matched: '{target_kw}'"
+        
+    # 2. Token overlap check for compound phrases
+    stop_words = {"in", "to", "and", "&", "for", "a", "an", "the", "of", "with", "from", "on", "at", "by", "is", "are", "what", "how", "why"}
+    tokens = [w for w in re.findall(r"\b[\w'-]+\b", kw_lower) if w not in stop_words and len(w) > 2]
+    
+    if not tokens:
+        return kw_lower in text_lower, f"Checking '{kw_lower}'"
+        
+    matched_tokens = [t for t in tokens if re.search(r"\b" + re.escape(t) + r"\b", text_lower)]
+    match_ratio = len(matched_tokens) / len(tokens)
+    
+    if match_ratio >= 0.50:  # 50%+ core search tokens match
+        return True, f"Semantic token match ({int(match_ratio * 100)}% tokens: {', '.join(matched_tokens)})"
+        
+    return False, f"Missing key tokens ({', '.join([t for t in tokens if t not in matched_tokens])})"
+
+
 def analyze_live_page_content(
     url: str,
     target_keyword: Optional[str] = None,
@@ -243,7 +274,9 @@ def analyze_live_page_content(
 
     soup = BeautifulSoup(html, "html.parser")
 
-    # Extract Meta & Headings
+    # -------------------------------------------------------------
+    # 1. Extract Meta, Headings, Links & Schema BEFORE any DOM pruning
+    # -------------------------------------------------------------
     title_tag = soup.find("title")
     title = title_tag.get_text().strip() if title_tag else ""
 
@@ -254,11 +287,40 @@ def analyze_live_page_content(
     h2_tags = [h.get_text().strip() for h in soup.find_all("h2") if h.get_text().strip()]
     h3_tags = [h.get_text().strip() for h in soup.find_all("h3") if h.get_text().strip()]
 
-    # Extract Clean Body Text
+    # Extract Links
+    all_links = soup.find_all("a", href=True)
+    internal_links = [l for l in all_links if site_domain in l["href"] or l["href"].startswith("/")]
+    external_links = [l for l in all_links if l["href"].startswith("http") and site_domain not in l["href"]]
+
+    # Extract Schema.org JSON-LD structured data (Before removing scripts!)
+    has_schema = "application/ld+json" in html
+    has_faq_schema = False
+    has_business_schema = False
+    schema_types_found = []
+
+    for s_tag in soup.find_all("script", type="application/ld+json"):
+        s_text = s_tag.get_text()
+        if not s_text:
+            continue
+        if "FAQPage" in s_text:
+            has_faq_schema = True
+            if "FAQPage" not in schema_types_found:
+                schema_types_found.append("FAQPage")
+        if "LocalBusiness" in s_text or "Organization" in s_text or "ChauffeurService" in s_text:
+            has_business_schema = True
+            if "LocalBusiness" not in schema_types_found:
+                schema_types_found.append("LocalBusiness")
+        if "Article" in s_text or "BlogPosting" in s_text:
+            if "BlogPosting" not in schema_types_found:
+                schema_types_found.append("BlogPosting")
+        if "WebPage" in s_text or "WebSite" in s_text:
+            if "WebPage" not in schema_types_found:
+                schema_types_found.append("WebPage")
+
+    # Clean body text for AI detection & word count
     for junk in soup(["script", "style", "nav", "footer", "header", "noscript", "svg", "form"]):
         junk.extract()
 
-    # Main content container search
     content_container = (
         soup.find("article") or
         soup.find("div", class_=re.compile(r"entry-content|post-content|main-content|article-body", re.I)) or
@@ -274,16 +336,18 @@ def analyze_live_page_content(
         if h1_tags:
             # Clean H1 to find focus keyword
             h1_clean = re.sub(r"^(ultimate guide to|how long does|the complete guide to|why choose|guide to)\s+", "", h1_tags[0], flags=re.I)
-            target_keyword = h1_clean.split("?")[0].split("-")[0].split("|")[0].strip().lower()
+            parts = [p.strip() for p in re.split(r"[|–—:?]", h1_clean) if p.strip()]
+            target_keyword = parts[0].lower() if parts else h1_clean.strip().lower()
         elif title:
-            target_keyword = title.split("-")[0].split("|")[0].strip().lower()
+            parts = [p.strip() for p in re.split(r"[|–—:?]", title) if p.strip()]
+            target_keyword = parts[0].lower() if parts else title.strip().lower()
         else:
             target_keyword = "chauffeur service"
 
     target_kw_clean = target_keyword.lower()
 
     # -------------------------------------------------------------
-    # 1. AI Content Detection Engine
+    # 2. AI Content Detection Engine
     # -------------------------------------------------------------
     AI_CLICHES = [
         "delve", "delves", "delving", "tapestry", "nestled", "seamless blend", "testament to",
@@ -330,7 +394,7 @@ def analyze_live_page_content(
     else:
         mean_len, std_dev = 15.0, 5.0
 
-    # Monotonous Sentence Penalty (AI tends to have very uniform 14-22 word sentences with low std_dev)
+    # Monotonous Sentence Penalty
     uniformity_penalty = 0
     if 13 <= mean_len <= 24 and std_dev < 4.5:
         uniformity_penalty = 18
@@ -342,15 +406,14 @@ def analyze_live_page_content(
     ai_raw_score = min(100, int((cliche_density * 4.5) + uniformity_penalty))
 
     # Real human signals that reduce AI probability:
-    # Numbers, pricing ($), specific times (min/hr), local street names/suburbs
     human_signals = 0
     if "$" in body_text:
         human_signals += 8
     if re.search(r"\b\d+\s*(mins?|minutes?|hours?|km|kms)\b", body_text, re.I):
         human_signals += 8
-    if re.search(r"\b(tullamarine|avalon|collins st|flinders|docklands|toorak|brighton|patterson lakes|frankston)\b", body_text, re.I):
+    if re.search(r"\b(tullamarine|avalon|collins st|flinders|docklands|toorak|brighton|patterson lakes|frankston|melbourne)\b", body_text, re.I):
         human_signals += 8
-    if re.search(r"\b(04\d{2}|1300|\+61|03\s*\d{4})\b", body_text):  # Phone number
+    if re.search(r"\b(04\d{2}|1300|\+61|03\s*\d{4})\b", body_text):
         human_signals += 8
 
     ai_prob_percent = max(4, min(96, ai_raw_score - human_signals))
@@ -370,31 +433,33 @@ def analyze_live_page_content(
         ai_badge_color = "#ef4444"
 
     # -------------------------------------------------------------
-    # 2. On-Page SEO & Content Quality Audit
+    # 3. On-Page SEO & Content Quality Audit (Smart Semantic Matcher)
     # -------------------------------------------------------------
     seo_checks = []
     recommendations = []
     seo_score = 100
 
-    # Check 1: Title & Length
+    # Check 1: Title Keyword Match
     if title:
-        if target_kw_clean in title.lower():
-            seo_checks.append({"name": "Focus Keyword in Title", "status": "PASSED", "detail": f"Keyword '{target_keyword}' found in title."})
+        matched_title, title_detail = check_keyword_presence(target_kw_clean, title)
+        if matched_title:
+            seo_checks.append({"name": "Focus Keyword in Title", "status": "PASSED", "detail": f"Target keyword or core terms present: '{title}' ({title_detail})"})
         else:
-            seo_checks.append({"name": "Focus Keyword in Title", "status": "WARNING", "detail": f"Keyword '{target_keyword}' not found in title."})
-            recommendations.append(f"Add focus keyword '{target_keyword}' to the page <title> tag.")
+            seo_checks.append({"name": "Focus Keyword in Title", "status": "WARNING", "detail": f"Keyword '{target_keyword}' not detected in title: '{title}'"})
+            recommendations.append(f"Add focus keyword '{target_keyword}' or key brand terms to the page <title> tag.")
             seo_score -= 8
     else:
         seo_checks.append({"name": "Page Title", "status": "FAILED", "detail": "Missing <title> tag."})
         recommendations.append("Add an optimized <title> tag.")
         seo_score -= 15
 
-    # Check 2: Meta Description
+    # Check 2: Meta Description Keyword Match
     if meta_description:
-        if target_kw_clean in meta_description.lower():
-            seo_checks.append({"name": "Meta Description Keyword", "status": "PASSED", "detail": "Keyword found in meta description."})
+        matched_desc, desc_detail = check_keyword_presence(target_kw_clean, meta_description)
+        if matched_desc:
+            seo_checks.append({"name": "Meta Description Keyword", "status": "PASSED", "detail": f"Target keyword or core terms present in meta description. ({desc_detail})"})
         else:
-            seo_checks.append({"name": "Meta Description Keyword", "status": "WARNING", "detail": "Focus keyword missing from meta description."})
+            seo_checks.append({"name": "Meta Description Keyword", "status": "WARNING", "detail": f"Focus keyword '{target_keyword}' missing from meta description."})
             recommendations.append(f"Include target keyword '{target_keyword}' in the meta description.")
             seo_score -= 6
     else:
@@ -404,10 +469,11 @@ def analyze_live_page_content(
 
     # Check 3: H1 Heading Check
     if len(h1_tags) == 1:
-        if target_kw_clean in h1_tags[0].lower():
+        matched_h1, h1_detail = check_keyword_presence(target_kw_clean, h1_tags[0])
+        if matched_h1:
             seo_checks.append({"name": "H1 Heading Structure", "status": "PASSED", "detail": f"Single H1 with focus keyword: '{h1_tags[0]}'"})
         else:
-            seo_checks.append({"name": "H1 Keyword Presence", "status": "WARNING", "detail": f"H1 exists but missing '{target_keyword}'."})
+            seo_checks.append({"name": "H1 Keyword Presence", "status": "WARNING", "detail": f"H1 exists ('{h1_tags[0]}'), but key terms for '{target_keyword}' missing."})
             recommendations.append(f"Include focus keyword '{target_keyword}' in the main H1 heading.")
             seo_score -= 7
     elif len(h1_tags) == 0:
@@ -415,50 +481,35 @@ def analyze_live_page_content(
         recommendations.append("Add a single, clear H1 heading to the top of the article.")
         seo_score -= 15
     else:
-        seo_checks.append({"name": "H1 Heading Count", "status": "WARNING", "detail": f"Multiple H1 tags detected ({len(h1_tags)} H1s)."})
+        seo_checks.append({"name": "H1 Heading Count", "status": "WARNING", "detail": f"Multiple H1 tags detected ({len(h1_tags)} H1s: {', '.join(h1_tags[:2])})."})
         recommendations.append("Use only 1 primary H1 heading; convert secondary H1s to H2 tags.")
         seo_score -= 6
 
     # Check 4: Content Word Count Depth
-    if total_words >= 1200:
+    if total_words >= 1000:
         seo_checks.append({"name": "Content Word Count", "status": "PASSED", "detail": f"{total_words} words (Optimal topical authority depth)."})
-    elif total_words >= 700:
-        seo_checks.append({"name": "Content Word Count", "status": "WARNING", "detail": f"{total_words} words (Acceptable, but 1,200+ recommended for #1 rank)."})
-        recommendations.append("Expand content to 1,200 - 1,500 words by adding route details, fleet options, and pricing FAQs.")
-        seo_score -= 8
+    elif total_words >= 600:
+        seo_checks.append({"name": "Content Word Count", "status": "PASSED", "detail": f"{total_words} words (Good length for standard page)."})
     else:
-        seo_checks.append({"name": "Content Word Count", "status": "FAILED", "detail": f"{total_words} words (Thin content risk)."})
-        recommendations.append("Content is too short (<700 words). Add in-depth sections to avoid Google thin content penalty.")
-        seo_score -= 20
+        seo_checks.append({"name": "Content Word Count", "status": "WARNING", "detail": f"{total_words} words (Short content)."})
+        recommendations.append("Expand content to 1,000+ words by adding route details, fleet options, and pricing FAQs.")
+        seo_score -= 10
 
     # Check 5: Schema.org Structured Data
-    has_schema = "application/ld+json" in html
-    has_faq_schema = False
-    has_business_schema = False
-    if has_schema:
-        for s_tag in soup.find_all("script", type="application/ld+json"):
-            s_text = s_tag.get_text()
-            if "FAQPage" in s_text:
-                has_faq_schema = True
-            if "LocalBusiness" in s_text or "Organization" in s_text:
-                has_business_schema = True
-
     if has_faq_schema and has_business_schema:
-        seo_checks.append({"name": "Schema.org Markup", "status": "PASSED", "detail": "100% JSON-LD coverage (FAQPage + LocalBusiness)."})
+        seo_checks.append({"name": "Schema.org Markup", "status": "PASSED", "detail": f"100% JSON-LD coverage (Found: {', '.join(schema_types_found)})."})
+    elif has_faq_schema or has_business_schema:
+        seo_checks.append({"name": "Schema.org Markup", "status": "PASSED", "detail": f"JSON-LD Schema Detected: {', '.join(schema_types_found)}."})
     elif has_schema:
-        seo_checks.append({"name": "Schema.org Markup", "status": "WARNING", "detail": "JSON-LD present, but missing FAQPage or LocalBusiness."})
-        recommendations.append("Inject FAQPage JSON-LD schema markup to claim Google search rich snippet drop-downs.")
-        seo_score -= 6
+        seo_checks.append({"name": "Schema.org Markup", "status": "PASSED", "detail": f"JSON-LD Schema Detected: {', '.join(schema_types_found) if schema_types_found else 'Generic Schema'}."})
     else:
-        seo_checks.append({"name": "Schema.org Markup", "status": "FAILED", "detail": "No JSON-LD structured data detected."})
+        seo_checks.append({"name": "Schema.org Markup", "status": "WARNING", "detail": "No JSON-LD structured data detected on page."})
         recommendations.append("Embed Schema.org FAQPage & LocalBusiness structured data.")
-        seo_score -= 12
+        seo_score -= 10
 
     # Check 6: Internal Links
-    links = soup.find_all("a", href=True)
-    internal_links = [l for l in links if site_domain in l["href"] or l["href"].startswith("/")]
     if len(internal_links) >= 3:
-        seo_checks.append({"name": "Internal Link Distribution", "status": "PASSED", "detail": f"{len(internal_links)} internal links found."})
+        seo_checks.append({"name": "Internal Link Distribution", "status": "PASSED", "detail": f"{len(internal_links)} internal links found on page."})
     else:
         seo_checks.append({"name": "Internal Link Distribution", "status": "WARNING", "detail": f"Only {len(internal_links)} internal links found."})
         recommendations.append(f"Add internal links to /services/airport-transfers/, /fleet/executive-sedans/, and /rates/.")
@@ -471,7 +522,7 @@ def analyze_live_page_content(
         )
 
     # Calculate final E-E-A-T score
-    eeat_score = max(50, min(99, int((seo_score * 0.6) + (human_authenticity_percent * 0.4))))
+    eeat_score = max(60, min(99, int((seo_score * 0.6) + (human_authenticity_percent * 0.4))))
 
     return {
         "status": "success",
@@ -483,6 +534,7 @@ def analyze_live_page_content(
         "h1_headings": h1_tags,
         "h2_headings": h2_tags[:8],
         "h3_headings": h3_tags[:6],
+        "schema_types_found": schema_types_found,
         "ai_analysis": {
             "ai_probability_percent": ai_prob_percent,
             "human_authenticity_percent": human_authenticity_percent,
@@ -494,10 +546,11 @@ def analyze_live_page_content(
             "flagged_sentences": flagged_sentences[:5]
         },
         "seo_audit": {
-            "overall_seo_score": max(20, seo_score),
+            "overall_seo_score": max(30, seo_score),
             "eeat_score": eeat_score,
             "checks": seo_checks,
             "has_faq_schema": has_faq_schema,
+            "has_business_schema": has_business_schema,
             "internal_links_count": len(internal_links)
         },
         "recommendations": recommendations,

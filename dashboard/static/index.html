@@ -1177,12 +1177,18 @@
       </div>
 
       <form id="form-live-page-audit" onsubmit="handleRunLivePageAudit(event)" style="margin-bottom: 20px;">
-        <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 12px;">
+        <div style="display: grid; grid-template-columns: 1fr 220px auto; gap: 10px; margin-bottom: 12px;">
           <div>
             <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
               Enter Page / Blog URL to Scan
             </label>
             <input type="url" class="form-control" id="audit-page-url-input" required placeholder="https://corporatecarsmelbourne.com.au/patterson-lakes-to-melbourne-airport-time/" style="width: 100%; font-size: 13px; font-family: var(--font-mono);" />
+          </div>
+          <div>
+            <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+              Target Keyword <span style="font-size: 10px; color: var(--accent-cyan);">(Optional)</span>
+            </label>
+            <input type="text" class="form-control" id="audit-page-kw-input" placeholder="e.g. corporate cars melbourne" style="width: 100%; font-size: 13px;" />
           </div>
           <div style="display: flex; align-items: flex-end;">
             <button type="submit" class="btn btn-primary" id="btn-run-live-audit" style="background: linear-gradient(135deg, var(--accent-purple), #ec4899); border: none; font-weight: 800; padding: 10px 22px; height: 42px; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 16px rgba(168, 85, 247, 0.4);">
@@ -1855,7 +1861,7 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=11.70.0"></script>
+  <script src="/static/app.js?v=11.71.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {

@@ -6695,12 +6695,16 @@ async function handleRunLivePageAudit(e) {
     </div>
   `;
 
+  const kwInput = document.getElementById('audit-page-kw-input');
+  const targetKw = kwInput ? kwInput.value.trim() : '';
+
   try {
     const res = await fetch('/api/seo/content-brief/audit-live-url', {
       method: 'POST',
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         url: url,
+        target_keyword: targetKw || null,
         site_id: currentSiteId
       })
     });
