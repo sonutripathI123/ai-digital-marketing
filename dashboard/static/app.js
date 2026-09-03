@@ -6638,6 +6638,14 @@ function openAddSocialCampaignModal(siteId) {
       </option>
     `).join('');
   }
+  const freqSelect = document.getElementById('social-frequency-select');
+  if (freqSelect) freqSelect.value = '2';
+  const textarea = document.getElementById('social-keywords-textarea');
+  if (textarea) textarea.value = '';
+  updateSocialKeywordCounter();
+  openModal('modal-add-social-campaign');
+}
+
 function openLivePageAuditModal(url) {
   const input = document.getElementById('audit-page-url-input');
   if (input) {
