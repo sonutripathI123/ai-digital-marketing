@@ -181,6 +181,36 @@ def check_and_auto_catchup_daily_blog():
     except Exception as e:
         logger.warning(f"Daily blog check notice: {e}")
 
+_WP_POSTS_CACHE: Dict[str, Any] = {}
+
+def get_cached_wp_posts(site_domain: str, timeout: int = 4) -> Dict[str, Any]:
+    """Fetches live WordPress posts with 60-second in-memory cache to prevent blocking."""
+    global _WP_POSTS_CACHE
+    domain_key = site_domain.rstrip("/").lower()
+    now_ts = time.time()
+    cached = _WP_POSTS_CACHE.get(domain_key)
+    if cached and (now_ts - cached["timestamp"]) < 60:
+        return cached["data"]
+
+    import requests
+    import html as html_lib
+    wp_api_url = f"{site_domain.rstrip('/')}/wp-json/wp/v2/posts"
+    try:
+        res = requests.get(wp_api_url, params={"per_page": 50, "status": "publish"}, timeout=timeout)
+        if res.status_code == 200:
+            posts_json = res.json()
+            total_header = res.headers.get("X-WP-Total")
+            total_count = int(total_header) if total_header else len(posts_json)
+            result = {"total": total_count, "posts": posts_json}
+            _WP_POSTS_CACHE[domain_key] = {"timestamp": now_ts, "data": result}
+            return result
+    except Exception as e:
+        logger.debug(f"Live WP fetch notice: {e}")
+
+    if cached:
+        return cached["data"]
+    return {"total": 0, "posts": []}
+
 # Helper execution callbacks for autonomous background scheduler
 def _cron_run_blog_write():
     # 1. Generate & Auto-Optimize Post via SEO Content Brief Pipeline
@@ -1844,17 +1874,21 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
         topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
         published_posts = []
         approved_drafts = []
+        total_published_count = 0
+        topic_map = {}
+
         if topics_file.exists():
             import csv
             try:
-                today_str = datetime.now().strftime("%Y-%m-%d")
                 with open(topics_file, newline="", encoding="utf-8") as f:
                     rows = list(csv.DictReader(f))
                     for r in rows:
                         row_site = r.get("site", "ccm").lower()
                         if effective_site != "all" and row_site != effective_site:
                             continue
-                        pub_at = r.get("go_live_at") or ""
+                        tid = r.get("id")
+                        if tid:
+                            topic_map[tid] = r
                         if r.get("status") == "published":
                             published_posts.append({
                                 "id": r.get("id"),
@@ -1862,7 +1896,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
                                 "keyword": r.get("keyword"),
                                 "title": r.get("title_hint"),
                                 "suburb": r.get("suburb"),
-                                "published_at": pub_at,
+                                "published_at": r.get("go_live_at") or "",
                                 "wp_post_id": r.get("wp_post_id"),
                                 "url": r.get("notes") or f"{site_domain}/{r.get('id')}/",
                                 "is_today": False
@@ -1879,11 +1913,67 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             except Exception:
                 pass
 
+        total_published_count = len(published_posts)
+
+        # 🟢 Live WordPress REST API Synchronizer (Direct live stream from WordPress)
+        if site_domain:
+            try:
+                import html as html_lib
+                cached_res = get_cached_wp_posts(site_domain)
+                wp_posts_data = cached_res.get("posts", [])
+                if cached_res.get("total"):
+                    total_published_count = cached_res.get("total")
+                
+                if wp_posts_data:
+                    live_wp_posts = []
+                    for p in wp_posts_data:
+                        pid = str(p.get("id"))
+                        raw_title = p.get("title", {}).get("rendered", "")
+                        p_title = html_lib.unescape(raw_title).strip()
+                        p_date = p.get("date", "").replace("T", " ")
+                        p_link = p.get("link", "")
+                        p_slug = p.get("slug", "")
+                        
+                        # Match with topics.csv topic if available
+                        matched_topic = None
+                        for tid, tinfo in topic_map.items():
+                            if str(tinfo.get("wp_post_id")) == pid or (tinfo.get("notes") and tinfo.get("notes").strip("/") == p_link.strip("/")):
+                                matched_topic = tinfo
+                                break
+
+                        suburb = "Melbourne"
+                        if matched_topic and matched_topic.get("suburb"):
+                            suburb = matched_topic.get("suburb")
+                        else:
+                            sub_match = re.search(r"(in|from|to|for)\s+([A-Z][a-zA-Z\s]+)", p_title, re.IGNORECASE)
+                            if sub_match:
+                                suburb = sub_match.group(2).split(":")[0].strip()
+                            else:
+                                suburb = p_slug.replace("-", " ").title()
+
+                        kw = matched_topic.get("keyword") if matched_topic else p_slug.replace("-", " ")
+                        
+                        live_wp_posts.append({
+                            "id": f"wp-{pid}",
+                            "site": effective_site,
+                            "keyword": kw,
+                            "title": p_title,
+                            "suburb": suburb,
+                            "published_at": p_date,
+                            "wp_post_id": pid,
+                            "url": p_link,
+                            "is_today": False
+                        })
+                    
+                    if live_wp_posts:
+                        published_posts = live_wp_posts
+            except Exception as e:
+                logger.info(f"WP REST API live sync fallback to local topics: {e}")
+
         # Sort published posts strictly by publication date (newest first)
         published_posts_sorted = sorted(published_posts, key=lambda x: x.get("published_at") or "", reverse=True)
         today_str = datetime.now().strftime("%Y-%m-%d")
         if published_posts_sorted:
-            # Strictly at most 1 post (the latest one) can ever be marked is_today if published today
             first_pub_date = published_posts_sorted[0].get("published_at") or ""
             if today_str in first_pub_date:
                 published_posts_sorted[0]["is_today"] = True
@@ -1892,13 +1982,13 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
         next_scheduled = approved_drafts[0] if approved_drafts else None
 
         report["blog_metrics"] = {
-            "total_published": len(published_posts),
+            "total_published": total_published_count,
             "total_approved_queue": len(approved_drafts),
             "latest_published_post": latest_published,
             "published_posts_history": published_posts_sorted,
             "approved_drafts_queue": approved_drafts,
             "next_scheduled_post_tomorrow": {
-                "id": next_scheduled["id"] if next_scheduled else "t0016",
+                "id": next_scheduled["id"] if next_scheduled else "t0023",
                 "title": next_scheduled["title"] if next_scheduled else f"Executive Chauffeur Service in {site_loc}",
                 "keyword": next_scheduled["keyword"] if next_scheduled else f"{effective_site} luxury airport transfer",
                 "suburb": next_scheduled["suburb"] if next_scheduled else "CBD Transfer",
@@ -1911,7 +2001,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
             },
             "recommendations": [
                 f"Successfully published '{latest_published['title'] if latest_published else 'latest post'}' to {site_name}.",
-                f"Queue currently has {len(approved_drafts)} approved topics ready for daily 9 AM autonomous posting cadence."
+                f"Queue currently has {len(approved_drafts)} approved topics ready for daily autonomous posting cadence."
             ]
         }
 
