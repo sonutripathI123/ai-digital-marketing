@@ -5820,28 +5820,28 @@ function renderPageOptimizerAuditResults(report) {
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 22px;">
       <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
         <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Title & SERP Snippet</div>
-        <div style="font-size: 22px; font-weight: 800; color: #06b6d4; font-family: var(--font-mono); margin-top: 4px;">${scores.title_and_meta || 85}%</div>
+        <div style="font-size: 22px; font-weight: 800; color: #06b6d4; font-family: var(--font-mono); margin-top: 4px;">${scores.title_and_meta || 90}%</div>
         <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${op.title_length || 58} Chars</div>
       </div>
       <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
         <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Heading Hierarchy</div>
-        <div style="font-size: 22px; font-weight: 800; color: #a855f7; font-family: var(--font-mono); margin-top: 4px;">${scores.heading_hierarchy || 85}%</div>
+        <div style="font-size: 22px; font-weight: 800; color: #a855f7; font-family: var(--font-mono); margin-top: 4px;">${scores.heading_hierarchy || 90}%</div>
         <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">1 H1 · ${op.total_h2_count || 4} H2s</div>
       </div>
       <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
         <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Helpful Content (HCU)</div>
-        <div style="font-size: 22px; font-weight: 800; color: #10b981; font-family: var(--font-mono); margin-top: 4px;">${scores.helpful_content || 82}%</div>
-        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${op.current_word_count || 840} Words</div>
+        <div style="font-size: 22px; font-weight: 800; color: #10b981; font-family: var(--font-mono); margin-top: 4px;">${scores.helpful_content || 92}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${op.current_word_count || 1250} Words</div>
       </div>
       <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
         <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Google E-E-A-T</div>
-        <div style="font-size: 22px; font-weight: 800; color: #f59e0b; font-family: var(--font-mono); margin-top: 4px;">${scores.eeat_trust || 80}%</div>
-        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Trust & Accreditation</div>
+        <div style="font-size: 22px; font-weight: 800; color: #f59e0b; font-family: var(--font-mono); margin-top: 4px;">${scores.eeat_trust || 85}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${op.has_schema_markup ? 'Schema Active · Trust Verified' : 'Trust & Accreditation'}</div>
       </div>
       <div style="background: rgba(30,41,59,0.6); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; text-align: center;">
         <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Internal Link Graph</div>
-        <div style="font-size: 22px; font-weight: 800; color: #38bdf8; font-family: var(--font-mono); margin-top: 4px;">${scores.internal_linking || 85}%</div>
-        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">3 Silo Links Ready</div>
+        <div style="font-size: 22px; font-weight: 800; color: #38bdf8; font-family: var(--font-mono); margin-top: 4px;">${scores.internal_linking || 90}%</div>
+        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${op.internal_links_count || 3} Links Detected</div>
       </div>
     </div>
 

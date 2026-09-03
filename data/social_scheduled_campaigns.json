@@ -91,7 +91,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/sedan/0H5A4921 (1).jpg",
     "image_name": "0H5A4921 (1).jpg",
-    "status": "scheduled"
+    "status": "published",
+    "platform_post_id": "urn:li:share:1788411324",
+    "published_at": "Thu 03 Sep 2026 at 02:55 PM (Melbourne Time)"
   },
   {
     "id": "soc_ccm_0007",
@@ -105,7 +107,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/sedan/0H5A4924 (1) (1).jpg",
     "image_name": "0H5A4924 (1) (1).jpg",
-    "status": "scheduled"
+    "status": "published",
+    "platform_post_id": "18096596903640849",
+    "published_at": "Thu 03 Sep 2026 at 02:55 PM (Melbourne Time)"
   },
   {
     "id": "soc_ccm_0008",
@@ -311,7 +315,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/sedan/sedan-01.jpg",
     "image_name": "sedan-01.jpg",
-    "status": "scheduled"
+    "status": "published",
+    "platform_post_id": "urn:li:share:1788411340",
+    "published_at": "Thu 03 Sep 2026 at 02:55 PM (Melbourne Time)"
   },
   {
     "id": "soc_opal_0007",
@@ -325,7 +331,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/sedan/sedan-02.jpg",
     "image_name": "sedan-02.jpg",
-    "status": "scheduled"
+    "status": "published",
+    "platform_post_id": "18028726223676212",
+    "published_at": "Thu 03 Sep 2026 at 02:55 PM (Melbourne Time)"
   },
   {
     "id": "soc_opal_0008",
