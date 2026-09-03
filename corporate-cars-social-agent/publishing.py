@@ -23,6 +23,45 @@ from publishers.base import full_text, image_public_url, validate_post_integrity
 log = logging.getLogger(__name__)
 
 
+DAILY_LOCK_FILE = Path("logs/social_daily_published_lock.json")
+
+def _get_daily_lock(today_date_str: str) -> set:
+    """Returns the set of platform names already published today from the lock file."""
+    fpath = DAILY_LOCK_FILE if DAILY_LOCK_FILE.exists() else Path("../logs/social_daily_published_lock.json")
+    if not fpath.exists():
+        return set()
+    try:
+        with open(fpath, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            if data.get("date") == today_date_str:
+                return set(data.get("published_platforms", []))
+    except Exception:
+        pass
+    return set()
+
+def _record_daily_lock(today_date_str: str, platform_key: str):
+    """Records a published platform into the lock file to guarantee 0 additional posts today."""
+    fpath = DAILY_LOCK_FILE
+    if not fpath.parent.exists():
+        fpath = Path("../logs/social_daily_published_lock.json")
+    fpath.parent.mkdir(parents=True, exist_ok=True)
+    data = {"date": today_date_str, "published_platforms": []}
+    if fpath.exists():
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                content = json.load(f)
+                if content.get("date") == today_date_str:
+                    data = content
+        except Exception:
+            pass
+    if platform_key.lower() not in data["published_platforms"]:
+        data["published_platforms"].append(platform_key.lower())
+    try:
+        with open(fpath, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        log.warning("Could not update daily publish lock file: %s", e)
+
 def _is_same_melbourne_day(dt_obj, target_date_melbourne) -> bool:
     if not dt_obj:
         return False
@@ -46,15 +85,18 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
     now_utc = datetime.utcnow()
     now_mel = datetime.now(ZoneInfo("Australia/Melbourne"))
     today_mel_date = now_mel.date()
+    today_mel_str = str(today_mel_date)
 
     # Track platforms that have already published today in Melbourne timezone (strict 1 post per platform per day limit)
-    platforms_published_today = set()
+    platforms_published_today = _get_daily_lock(today_mel_str)
 
     # 1. Check SQLite published posts for today
     published_posts = session.query(Post).filter(Post.status == PostStatus.published).all()
     for p in published_posts:
         if _is_same_melbourne_day(p.updated_at, today_mel_date) or (p.schedule_entry and _is_same_melbourne_day(p.schedule_entry.last_attempt_at, today_mel_date)):
-            platforms_published_today.add(p.platform.value.lower())
+            plat_key = p.platform.value.lower()
+            platforms_published_today.add(plat_key)
+            _record_daily_lock(today_mel_str, plat_key)
 
     # 2. Check JSON campaigns for today
     sched_file = Path("data/social_scheduled_campaigns.json")
@@ -68,7 +110,9 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
                     if c.get("status") == "published" and c.get("published_at"):
                         pub_dt = parse_melbourne_time(c.get("published_at"))
                         if pub_dt and pub_dt.date() == today_mel_date:
-                            platforms_published_today.add(c.get("platform", "").lower())
+                            plat_key = c.get("platform", "").lower()
+                            platforms_published_today.add(plat_key)
+                            _record_daily_lock(today_mel_str, plat_key)
         except Exception:
             pass
 
@@ -273,6 +317,7 @@ def _publish_due_json_campaigns(now_mel: datetime, platforms_published: set = No
                         c["published_at"] = now_mel.strftime("%a %d %b %Y at %I:%M %p (Melbourne Time)")
                         published_count += 1
                         platforms_published.add(plat)
+                        _record_daily_lock(str(now_mel.date()), plat)
                         updated = True
                         log.info("Published Instagram campaign %s -> ID: %s", c.get("id"), pub_id)
                     else:
@@ -294,6 +339,7 @@ def _publish_due_json_campaigns(now_mel: datetime, platforms_published: set = No
                     c["published_at"] = now_mel.strftime("%a %d %b %Y at %I:%M %p (Melbourne Time)")
                     published_count += 1
                     platforms_published.add(plat)
+                    _record_daily_lock(str(now_mel.date()), plat)
                     updated = True
                     log.info("Published Facebook campaign %s -> ID: %s", c.get("id"), pub_id)
                 else:
@@ -305,6 +351,7 @@ def _publish_due_json_campaigns(now_mel: datetime, platforms_published: set = No
                 c["published_at"] = now_mel.strftime("%a %d %b %Y at %I:%M %p (Melbourne Time)")
                 published_count += 1
                 platforms_published.add(plat)
+                _record_daily_lock(str(now_mel.date()), plat)
                 updated = True
                 log.info("Published LinkedIn campaign %s", c.get("id"))
 
