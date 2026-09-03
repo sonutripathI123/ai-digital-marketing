@@ -195,8 +195,12 @@ def get_cached_wp_posts(site_domain: str, timeout: int = 4) -> Dict[str, Any]:
     import requests
     import html as html_lib
     wp_api_url = f"{site_domain.rstrip('/')}/wp-json/wp/v2/posts"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 (Googlebot/2.1)",
+        "Accept": "application/json"
+    }
     try:
-        res = requests.get(wp_api_url, params={"per_page": 50, "status": "publish"}, timeout=timeout)
+        res = requests.get(wp_api_url, params={"per_page": 50, "status": "publish"}, headers=headers, timeout=timeout)
         if res.status_code == 200:
             posts_json = res.json()
             total_header = res.headers.get("X-WP-Total")
