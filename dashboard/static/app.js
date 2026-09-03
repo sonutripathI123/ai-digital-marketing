@@ -1722,7 +1722,9 @@ async function viewAgentReport(agentId) {
             </div>
             <div style="font-size:11.5px; color:var(--text-muted); margin-top:3px;">Target: <strong>${data.site_name}</strong> &bull; Automated Cadence: Daily at 10:00 AM IST (2:30 PM Melbourne Time)</div>
           </div>
-          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn btn-sm" onclick="autoQueueHighVolumeKeywords()" style="background:linear-gradient(135deg, #ec4899, #8b5cf6); color:#fff; font-weight:700; font-size:11.5px; padding:7px 14px; border-radius:8px; border:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="Pulls winning high-search-volume keywords with zero duplicate overlap into the blog schedule">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Queue High-Volume Keywords
+            </button>
             <button class="btn btn-sm" onclick="openAgentReportModal('blog-agent')" style="background:rgba(6,182,212,0.15); border:1px solid rgba(6,182,212,0.4); color:var(--accent-cyan); font-weight:700; font-size:11.5px; padding:7px 14px; border-radius:8px; cursor:pointer;" title="Refresh live blog data">
               <i class="fa-solid fa-rotate"></i> Refresh Status
             </button>
@@ -6549,6 +6551,32 @@ function updateBlogTopicCounter() {
   if (!textarea || !badge) return;
   const lines = textarea.value.split('\n').filter(l => l.trim().length > 0);
   badge.textContent = `${lines.length} Topic${lines.length === 1 ? '' : 's'}`;
+}
+
+async function autoQueueHighVolumeKeywords() {
+  if (!requireAdminAction('auto-queue high-volume keywords')) return;
+  if (!confirm('Auto-queue top high-search-volume keywords into the future blog schedule with strict 0 duplicate keyword overlap?')) {
+    return;
+  }
+  try {
+    showToast('Selecting highest-volume unused keywords & preventing duplicate overlap...', 'info');
+    const res = await fetch(`/api/seo/keywords/auto-queue-high-volume?site_id=${currentSiteId}&count=6`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(currentUser?.token ? { 'Authorization': `Bearer ${currentUser.token}` } : {})
+      }
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      showToast(data.message || 'Keywords successfully queued!', 'success');
+      openAgentReportModal('blog-agent');
+    } else {
+      showToast(data.detail || 'Failed to auto-queue keywords', 'error');
+    }
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
 }
 
 async function handleSaveBlogTopics(e) {

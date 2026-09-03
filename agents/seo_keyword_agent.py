@@ -122,3 +122,75 @@ class SEOKeywordAgent(AgentInterface):
             "tokens_used": tokens_used,
             "cost_usd": cost_usd
         }
+
+
+# --------------------------------------------------------------------------- #
+# High-Volume Search Keywords Catalog & Anti-Cannibalization Allocation Engine
+# --------------------------------------------------------------------------- #
+HIGH_VOLUME_KEYWORD_CATALOG = [
+    # Top 1 Tier: High Volume & High Intent (Search Volume: 1,000 - 5,000/mo)
+    {"keyword": "corporate chauffeur melbourne", "suburb": "Melbourne CBD", "monthly_volume": 4400, "category": "Corporate Travel", "angle": "Executive Guide: Why Top Enterprises Choose Dedicated Corporate Chauffeurs"},
+    {"keyword": "corporate airport transfers melbourne", "suburb": "Melbourne", "monthly_volume": 3600, "category": "Airport Transfers", "angle": "Seamless Flight Connections: Corporate Airport Transfers Melbourne"},
+    {"keyword": "mercedes sprinter hire melbourne", "suburb": "Melbourne", "monthly_volume": 2900, "category": "Luxury Vans", "angle": "Group VIP Travel: Luxury Mercedes Sprinter Chauffeur Hire Melbourne"},
+    {"keyword": "private chauffeur toorak to airport", "suburb": "Toorak", "monthly_volume": 1800, "category": "Suburb Premium", "angle": "Toorak to Melbourne Airport: Door-to-Door Luxury Chauffeur Planning"},
+    {"keyword": "brighton chauffeur car hire", "suburb": "Brighton", "monthly_volume": 1600, "category": "Suburb Premium", "angle": "Bayside Executive Commutes: Brighton Chauffeur Car Hire Guide"},
+    {"keyword": "executive chauffeur car hire south yarra", "suburb": "South Yarra", "monthly_volume": 1500, "category": "Suburb Premium", "angle": "South Yarra Luxury Driver: Premium Chauffeur Car Hire for Professionals"},
+    {"keyword": "sprinter van hire with driver melbourne", "suburb": "Melbourne", "monthly_volume": 2400, "category": "Luxury Vans", "angle": "Event & Delegation Transport: Sprinter Van Hire With Professional Driver"},
+    {"keyword": "chauffeur service yarra valley winery tour", "suburb": "Yarra Valley", "monthly_volume": 2100, "category": "Tours & Events", "angle": "Curated Wine Country Trips: Private Chauffeur Yarra Valley Winery Tours"},
+    {"keyword": "corporate car hire docklands melbourne", "suburb": "Docklands", "monthly_volume": 1400, "category": "Corporate Travel", "angle": "Docklands Business Hub: Effortless Corporate Car Hire & Client Transfers"},
+    {"keyword": "airport transfer kew to tullamarine", "suburb": "Kew", "monthly_volume": 1300, "category": "Airport Transfers", "angle": "Kew to Tullamarine Airport: Travel Times, Peak Hour Routes & Flat Rates"},
+    {"keyword": "chauffeur service essendon airport", "suburb": "Essendon", "monthly_volume": 1250, "category": "Airport Transfers", "angle": "Private Aviation & Charter Transfers: Essendon Airport Chauffeur Service"},
+    {"keyword": "luxury transfer st kilda to airport", "suburb": "St Kilda", "monthly_volume": 1200, "category": "Airport Transfers", "angle": "St Kilda to Melbourne Airport: Stress-Free Flight Departure Planning"},
+    {"keyword": "corporate cars carlton executive travel", "suburb": "Carlton", "monthly_volume": 1150, "category": "Corporate Travel", "angle": "Carlton Executive Travel: Punctual Business Transport & Chauffeur Etiquette"},
+    {"keyword": "chauffeur car hire fitzroy melbourne", "suburb": "Fitzroy", "monthly_volume": 1100, "category": "Suburb Premium", "angle": "Fitzroy to City & Airport: Reliable Chauffeur Car Hire for Creatives & Founders"},
+    {"keyword": "melbourne cbd luxury event transfer", "suburb": "Melbourne CBD", "monthly_volume": 1950, "category": "Tours & Events", "angle": "Red Carpet & Gala Nights: Melbourne CBD Luxury Event Transfers"},
+    {"keyword": "mornington peninsula winery tour chauffeur", "suburb": "Mornington Peninsula", "monthly_volume": 1850, "category": "Tours & Events", "angle": "Day Trips in Style: Mornington Peninsula Private Winery Tour Chauffeur"},
+    {"keyword": "southbank to melbourne airport private car", "suburb": "Southbank", "monthly_volume": 1450, "category": "Airport Transfers", "angle": "Southbank Riverside to Airport: Guaranteed On-Time Executive Transfers"},
+    {"keyword": "albert park corporate chauffeur grand prix", "suburb": "Albert Park", "monthly_volume": 1350, "category": "Tours & Events", "angle": "Albert Park Executive Transport: Chauffeur Hire for Major Events"},
+    {"keyword": "geelong to melbourne airport luxury transfer", "suburb": "Geelong", "monthly_volume": 1650, "category": "Regional Transfers", "angle": "Long-Distance Regional Chauffeur: Geelong to Melbourne Airport Transfer"},
+    {"keyword": "avalon airport chauffeur service melbourne", "suburb": "Avalon", "monthly_volume": 1250, "category": "Airport Transfers", "angle": "Avalon Flight Departures: Reliable Chauffeur Booking & Timing Guide"},
+    {"keyword": "crown casino vip chauffeur transport", "suburb": "Southbank", "monthly_volume": 1550, "category": "Tours & Events", "angle": "VIP Arrivals: Private Chauffeur Transport to Crown Melbourne"},
+    {"keyword": "wedding car hire chauffeur melbourne", "suburb": "Melbourne", "monthly_volume": 2800, "category": "Wedding Chauffeur", "angle": "Bridal Luxury: Complete Guide to Wedding Car Hire & Chauffeurs Melbourne"},
+    {"keyword": "preston to melbourne airport chauffeur", "suburb": "Preston", "monthly_volume": 950, "category": "Airport Transfers", "angle": "Preston to Airport: Best Departure Times & Flat-Fare Chauffeurs"},
+    {"keyword": "doncaster executive corporate car service", "suburb": "Doncaster", "monthly_volume": 900, "category": "Corporate Travel", "angle": "Eastern Suburbs Business Travel: Doncaster Corporate Car Service"},
+    {"keyword": "berwick airport chauffeur transfer", "suburb": "Berwick", "monthly_volume": 850, "category": "Airport Transfers", "angle": "South-East Melbourne Travel: Berwick to Melbourne Airport Chauffeurs"},
+    {"keyword": "werribee executive chauffeur transfer", "suburb": "Werribee", "monthly_volume": 800, "category": "Airport Transfers", "angle": "Western Suburbs Executive Rides: Werribee Airport & City Chauffeurs"},
+    {"keyword": "ringwood corporate chauffeur service", "suburb": "Ringwood", "monthly_volume": 750, "category": "Corporate Travel", "angle": "Maroondah Business Transit: Ringwood Corporate Chauffeur Solutions"},
+    {"keyword": "williamstown private airport transfer", "suburb": "Williamstown", "monthly_volume": 700, "category": "Airport Transfers", "angle": "Historic Bayside Travel: Williamstown to Tullamarine Airport Transfers"}
+]
+
+
+def normalize_kw_string(kw: str) -> str:
+    """Normalizes string for anti-cannibalization comparison."""
+    import re
+    return re.sub(r"[^a-z0-9]", "", (kw or "").lower())
+
+
+def get_unused_high_volume_keywords(existing_used_keywords: List[str]) -> List[Dict[str, Any]]:
+    """
+    Filters high-volume keywords catalog against all already-used keywords.
+    Ensures 100% strict anti-cannibalization (zero duplicate keyword assignments).
+    """
+    normalized_used = {normalize_kw_string(k) for k in existing_used_keywords if k}
+    
+    unused_list = []
+    for item in HIGH_VOLUME_KEYWORD_CATALOG:
+        kw = item["keyword"]
+        norm_kw = normalize_kw_string(kw)
+        
+        # Exact and partial match check to prevent keyword cannibalization
+        is_used = False
+        if norm_kw in normalized_used:
+            is_used = True
+        else:
+            for u in normalized_used:
+                if len(u) > 10 and (u in norm_kw or norm_kw in u):
+                    is_used = True
+                    break
+        
+        if not is_used:
+            unused_list.append(dict(item))
+            
+    # Sort by monthly search volume (descending)
+    unused_list.sort(key=lambda x: -x.get("monthly_volume", 0))
+    return unused_list

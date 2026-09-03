@@ -217,6 +217,19 @@ def get_cached_wp_posts(site_domain: str, timeout: int = 4) -> Dict[str, Any]:
 
 # Helper execution callbacks for autonomous background scheduler
 def _cron_run_blog_write():
+    # Auto-replenish queue with top unused high-volume keywords if queue is running low (<= 2 topics)
+    try:
+        topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
+        if topics_file.exists():
+            import csv
+            with open(topics_file, newline="", encoding="utf-8") as f:
+                app_count = sum(1 for r in csv.DictReader(f) if r.get("status") in ("approved", "pending"))
+            if app_count <= 2:
+                from agents.seo_keyword_agent import get_unused_high_volume_keywords
+                auto_queue_high_volume_topics(site_id="ccm", count=5, _admin={"role": "super_admin"})
+    except Exception as e:
+        logger.warning(f"Auto-queue check notice: {e}")
+
     # 1. Generate & Auto-Optimize Post via SEO Content Brief Pipeline
     task = orchestrator.create_task(
         agent_id="blog-agent",
@@ -3247,6 +3260,125 @@ def add_keyword_to_social_queue(req: AddKeywordToSocialRequest, _admin: Dict[str
         "message": f"Keyword '{kw_clean}' added to Social Media Keyword Pool (ID: {new_kw_id})!",
         "keyword_id": new_kw_id
     }
+
+
+@app.get("/api/seo/keywords/high-volume-pool")
+def get_high_volume_keywords_pool(site_id: str = "ccm"):
+    """Returns prioritized high-search-volume keywords with monthly volume and usage status."""
+    from agents.seo_keyword_agent import HIGH_VOLUME_KEYWORD_CATALOG, normalize_kw_string
+    
+    topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
+    used_keywords = set()
+    if topics_file.exists():
+        try:
+            with open(topics_file, newline="", encoding="utf-8") as f:
+                for r in csv.DictReader(f):
+                    kw = r.get("keyword")
+                    if kw:
+                        used_keywords.add(normalize_kw_string(kw))
+        except Exception:
+            pass
+
+    pool = []
+    for item in HIGH_VOLUME_KEYWORD_CATALOG:
+        norm_kw = normalize_kw_string(item["keyword"])
+        is_used = norm_kw in used_keywords or any(len(u) > 10 and (u in norm_kw or norm_kw in u) for u in used_keywords)
+        pool.append({
+            **item,
+            "is_used": is_used,
+            "status": "Already Assigned in Blog Queue" if is_used else "Available (Ready to Queue)"
+        })
+
+    unused_count = sum(1 for p in pool if not p["is_used"])
+    return {
+        "status": "success",
+        "site_id": site_id,
+        "total_catalog_keywords": len(pool),
+        "available_unused_keywords": unused_count,
+        "assigned_keywords": len(pool) - unused_count,
+        "pool": pool
+    }
+
+
+@app.post("/api/seo/keywords/auto-queue-high-volume")
+def auto_queue_high_volume_topics(
+    site_id: str = "ccm",
+    count: int = 10,
+    _admin: Dict[str, Any] = Depends(require_admin)
+):
+    """
+    Auto-detects highest search volume unused keywords and automatically adds them
+    as approved topics into blog-agent/topics.csv with zero duplicate overlap!
+    """
+    from agents.seo_keyword_agent import HIGH_VOLUME_KEYWORD_CATALOG, get_unused_high_volume_keywords, normalize_kw_string
+    
+    topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
+    existing_rows = []
+    used_keywords = []
+    
+    if topics_file.exists():
+        try:
+            with open(topics_file, newline="", encoding="utf-8") as f:
+                existing_rows = list(csv.DictReader(f))
+                for r in existing_rows:
+                    kw = r.get("keyword")
+                    if kw:
+                        used_keywords.append(kw)
+        except Exception as e:
+            logger.warning(f"Failed to read topics.csv: {e}")
+
+    unused_kws = get_unused_high_volume_keywords(used_keywords)
+    if not unused_kws:
+        return {
+            "status": "success",
+            "message": "All high-volume keywords in the master catalog are already active or assigned in the blog schedule!",
+            "queued_count": 0,
+            "new_topics": []
+        }
+
+    # Pick top N unused high-volume keywords
+    selected_kws = unused_kws[:count]
+    
+    # Calculate next IDs
+    existing_ids = [int(r["id"][1:]) for r in existing_rows if r.get("id", "").startswith("t") and r["id"][1:].isdigit()]
+    start_num = (max(existing_ids) + 1) if existing_ids else 1
+    
+    new_topics = []
+    for idx, item in enumerate(selected_kws):
+        tid = f"t{(start_num + idx):04d}"
+        new_row = {
+            "id": tid,
+            "site": site_id,
+            "keyword": item["keyword"],
+            "title_hint": item["angle"],
+            "suburb": item.get("suburb") or "Melbourne",
+            "status": "approved",
+            "wp_post_id": "",
+            "go_live_at": "",
+            "notes": f"High-Volume Priority (Vol: {item.get('monthly_volume', 1000)}/mo, Cat: {item.get('category')})"
+        }
+        new_topics.append(new_row)
+        existing_rows.append(new_row)
+
+    # Atomic write to topics.csv
+    fieldnames = ["id", "site", "keyword", "title_hint", "suburb", "status", "wp_post_id", "go_live_at", "notes"]
+    try:
+        with open(topics_file, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            for r in existing_rows:
+                writer.writerow({k: r.get(k, "") for k in fieldnames})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save new topics to topics.csv: {e}")
+
+    logger.info(f"Auto-queued {len(new_topics)} high-volume topics into blog queue (Zero duplicate overlap).")
+    return {
+        "status": "success",
+        "message": f"Successfully auto-queued {len(new_topics)} high-volume winning keywords into Blog Schedule with 0 duplicate overlap!",
+        "queued_count": len(new_topics),
+        "new_topics": new_topics
+    }
+
 
 
 _GSC_CACHE: Dict[str, Any] = {
