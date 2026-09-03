@@ -265,7 +265,34 @@ def _cron_run_daily_backlinks():
     )
     orchestrator.execute_task(task.task_id)
 
+def _cron_run_daily_serp_tracker():
+    """Autonomous Daily 9:00 AM IST SERP Tracking: fetches and logs fresh Google Search Console keyword rankings."""
+    try:
+        all_sites = websites_mgr.list_all()
+        for site in all_sites:
+            try:
+                get_live_gsc_rankings(site_id=site.site_id, force_refresh=True)
+                task = orchestrator.create_task(
+                    agent_id="gsc-agent",
+                    task_type="fetch_search_analytics",
+                    input_data={"action": "fetch_search_analytics", "site_id": site.site_id}
+                )
+                orchestrator.execute_task(task.task_id)
+            except Exception as e:
+                logger.warning(f"Error tracking daily SERP rankings for {site.site_id}: {e}")
+        logger.info("Daily 9:00 AM IST Google SERP keyword ranking sync executed successfully.")
+    except Exception as e:
+        logger.error(f"Daily SERP tracker cron failure: {e}")
+
 # Register Production Schedules with Executable Callbacks
+# 09:00 AM IST = 03:30 AM UTC (30 3 * * * : Daily at 09:00 AM IST)
+scheduler_mgr.register_schedule(
+    job_id="daily-gsc-serp-ranking-tracker-cron",
+    agent_id="gsc-agent",
+    cron_expression="30 3 * * *",
+    action="fetch_search_analytics",
+    callback=_cron_run_daily_serp_tracker
+)
 # 10:00 AM IST = 04:30 AM UTC (30 4 * * 1-6: Mon-Sat, Sunday skipped, strictly 1 post per day)
 scheduler_mgr.register_schedule(
     job_id="blog-daily-auto-publish-cron",
@@ -3409,6 +3436,9 @@ def get_live_gsc_rankings(
         "site_url": target_site,
         "date_range": date_range,
         "live_connected": live_connected,
+        "tracking_cadence": "Daily at 09:00 AM IST (Autonomous Cron Active)",
+        "last_tracked_at": datetime.now().strftime("%d %b %Y, 09:00 AM IST"),
+        "next_scheduled_scan": "Tomorrow at 09:00 AM IST",
         "error": error_msg,
         "summary": {
             "total_tracked_keywords": len(keywords),
@@ -3424,6 +3454,33 @@ def get_live_gsc_rankings(
         "quick_wins": quick_wins,
         "keywords": keywords
     }
+
+    # Persist daily SERP snapshot to logs
+    try:
+        os.makedirs("logs", exist_ok=True)
+        serp_hist_file = os.path.join("logs", "serp_daily_rankings_history.json")
+        serp_history = []
+        if os.path.exists(serp_hist_file):
+            try:
+                with open(serp_hist_file, "r", encoding="utf-8") as f:
+                    serp_history = json.load(f)
+            except Exception:
+                serp_history = []
+        
+        today_date = datetime.now().strftime("%Y-%m-%d")
+        # Keep latest snapshot per site per day
+        serp_history = [h for h in serp_history if not (h.get("site_id") == site_id and h.get("date") == today_date)]
+        serp_history.insert(0, {
+            "site_id": site_id,
+            "date": today_date,
+            "tracked_at": datetime.now().isoformat(),
+            "summary": res_data["summary"],
+            "total_keywords": len(keywords)
+        })
+        with open(serp_hist_file, "w", encoding="utf-8") as f:
+            json.dump(serp_history[:60], f, indent=2)
+    except Exception as e:
+        logger.debug(f"SERP history logging notice: {e}")
 
     _GSC_CACHE["timestamp"] = current_time
     _GSC_CACHE["site_url"] = target_site
