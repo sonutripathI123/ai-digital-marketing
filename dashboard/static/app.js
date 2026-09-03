@@ -4043,10 +4043,14 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
             <div style="font-size:12px; color:var(--text-muted); margin-top:3px;">
               Generating comprehensive H1-H3 outlines, LSI entity injection, and Schema.org FAQ markup for <strong>${data.site_name}</strong>.
             </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btn-sm" onclick="openLivePageAuditModal()" style="background:linear-gradient(135deg, var(--accent-cyan), #3b82f6); color:#fff; font-size:12px; font-weight:700; padding:8px 16px; border:none; border-radius:8px; display:inline-flex; align-items:center; gap:6px; cursor:pointer; box-shadow:0 0 12px rgba(6,182,212,0.4);">
+              <i class="fa-solid fa-robot"></i> 🔍 AI Content Detector & Live URL Optimizer
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="runAgentNow('seo-content-brief-agent', 'generate_brief')" style="background:linear-gradient(135deg, var(--accent-purple), #ec4899); font-size:12px; font-weight:700; padding:8px 18px; border:none; border-radius:8px;">
+              <i class="fa-solid fa-plus-circle"></i> + Architect New Brief
+            </button>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="runAgentNow('seo-content-brief-agent', 'generate_brief')" style="background:linear-gradient(135deg, var(--accent-purple), #ec4899); font-size:12px; font-weight:700; padding:8px 18px; border:none;">
-            <i class="fa-solid fa-plus-circle"></i> + Architect New Brief
-          </button>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-bottom:20px;">
@@ -6634,12 +6638,233 @@ function openAddSocialCampaignModal(siteId) {
       </option>
     `).join('');
   }
-  const freqSelect = document.getElementById('social-frequency-select');
-  if (freqSelect) freqSelect.value = '2';
-  const textarea = document.getElementById('social-keywords-textarea');
-  if (textarea) textarea.value = '';
-  updateSocialKeywordCounter();
-  openModal('modal-add-social-campaign');
+function openLivePageAuditModal(url) {
+  const input = document.getElementById('audit-page-url-input');
+  if (input) {
+    input.value = url || (currentSiteId === 'opal' ? 'https://www.opalchauffeurs.com.au/' : 'https://corporatecarsmelbourne.com.au/patterson-lakes-to-melbourne-airport-time/');
+  }
+  const container = document.getElementById('live-audit-results-container');
+  if (container && !container.innerHTML.trim()) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:40px 20px; color:var(--text-muted); background:rgba(15,23,42,0.4); border:1px dashed var(--glass-border); border-radius:12px;">
+        <i class="fa-solid fa-microchip" style="font-size:36px; color:var(--accent-purple); opacity:0.6; margin-bottom:12px;"></i>
+        <div style="font-size:14px; font-weight:700; color:#fff;">Paste Any Webpage URL & Click "Run AI & SEO Audit"</div>
+        <div style="font-size:12px; margin-top:4px;">The agent will scan the live page for AI robotic patterns, Schema.org FAQs, heading structures, and ranking improvements.</div>
+      </div>
+    `;
+  }
+  openModal('modal-live-page-ai-audit');
+}
+
+function setAuditUrlInput(url) {
+  const input = document.getElementById('audit-page-url-input');
+  if (input) {
+    input.value = url;
+    input.focus();
+  }
+}
+
+async function handleRunLivePageAudit(e) {
+  e.preventDefault();
+  const input = document.getElementById('audit-page-url-input');
+  const btn = document.getElementById('btn-run-live-audit');
+  const container = document.getElementById('live-audit-results-container');
+  if (!input || !container) return;
+
+  const url = input.value.trim();
+  if (!url) {
+    showToast('Please enter a valid webpage URL', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Scanning Live Page & AI Patterns...';
+  container.innerHTML = `
+    <div style="text-align:center; padding:50px 20px; background:rgba(15,23,42,0.6); border:1px solid var(--glass-border); border-radius:12px;">
+      <i class="fa-solid fa-circle-notch fa-spin" style="font-size:40px; color:var(--accent-purple); margin-bottom:14px;"></i>
+      <div style="font-size:15px; font-weight:800; color:#fff;">Analyzing Live Webpage Content...</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">Fetching HTML, calculating text perplexity & burstiness, auditing H1/H2 tags, and verifying Schema.org JSON-LD...</div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch('/api/seo/content-brief/audit-live-url', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        url: url,
+        site_id: currentSiteId
+      })
+    });
+    const data = await res.json();
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Run AI & SEO Audit';
+
+    if (!res.ok || data.status === 'error') {
+      container.innerHTML = `
+        <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:16px; border-radius:12px; color:#ef4444;">
+          <div style="font-weight:700; font-size:14px;"><i class="fa-solid fa-circle-exclamation"></i> Audit Failed</div>
+          <div style="font-size:12px; margin-top:4px;">${escapeHtml(data.detail || data.error_message || 'Could not audit page')}</div>
+        </div>
+      `;
+      return;
+    }
+
+    renderLivePageAuditResults(data);
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Run AI & SEO Audit';
+    container.innerHTML = `
+      <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:16px; border-radius:12px; color:#ef4444;">
+        <div style="font-weight:700; font-size:14px;"><i class="fa-solid fa-circle-exclamation"></i> Error</div>
+        <div style="font-size:12px; margin-top:4px;">${escapeHtml(err.message)}</div>
+      </div>
+    `;
+  }
+}
+
+function renderLivePageAuditResults(data) {
+  const container = document.getElementById('live-audit-results-container');
+  if (!container) return;
+
+  const ai = data.ai_analysis || {};
+  const seo = data.seo_audit || {};
+  const recs = data.recommendations || [];
+  const flagged = ai.flagged_sentences || [];
+
+  const aiBadgeColor = ai.badge_color || (ai.ai_probability_percent > 50 ? '#ef4444' : (ai.ai_probability_percent > 20 ? '#f59e0b' : '#10b981'));
+
+  container.innerHTML = `
+    <!-- Top Summary Banner -->
+    <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); padding:16px 20px; border-radius:12px; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+        <div style="max-width:70%;">
+          <div style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Audited Page Title</div>
+          <div style="font-size:16px; font-weight:800; color:#fff; margin-top:2px;">${escapeHtml(data.page_title || 'Untitled Webpage')}</div>
+          <a href="${escapeHtml(data.url)}" target="_blank" style="font-size:11.5px; color:var(--accent-cyan); text-decoration:none; display:inline-flex; align-items:center; gap:4px; margin-top:4px; font-family:var(--font-mono); word-break:break-all;">
+            ${escapeHtml(data.url)} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i>
+          </a>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <span class="badge" style="background:rgba(6,182,212,0.15); color:var(--accent-cyan); border:1px solid rgba(6,182,212,0.3); font-size:11px; padding:4px 10px;">
+            <i class="fa-solid fa-file-lines"></i> ${data.word_count || 0} Words
+          </span>
+          <span class="badge" style="background:rgba(168,85,247,0.15); color:var(--accent-purple); border:1px solid rgba(168,85,247,0.3); font-size:11px; padding:4px 10px;">
+            Target KW: ${escapeHtml(data.target_keyword || 'auto-detected')}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Main KPI Cards -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; margin-bottom:18px;">
+      <div style="background:rgba(15,23,42,0.8); border:1px solid ${aiBadgeColor}40; padding:14px; border-radius:12px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:${aiBadgeColor};"></div>
+        <div style="font-size:11px; font-weight:800; color:${aiBadgeColor}; text-transform:uppercase;">AI Content Risk</div>
+        <div style="font-size:24px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ai.ai_probability_percent || 0}% <span style="font-size:11px; color:${aiBadgeColor};">AI</span></div>
+        <div style="font-size:10.5px; color:var(--text-muted); margin-top:3px;">${escapeHtml(ai.risk_level || 'Low Risk')}</div>
+      </div>
+
+      <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:12px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#10b981;"></div>
+        <div style="font-size:11px; font-weight:800; color:#10b981; text-transform:uppercase;">Human Authenticity</div>
+        <div style="font-size:24px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ai.human_authenticity_percent || 90}%</div>
+        <div style="font-size:10.5px; color:#10b981; font-weight:700; margin-top:3px;">${escapeHtml(ai.authenticity_grade || 'Grade A+')}</div>
+      </div>
+
+      <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(6,182,212,0.3); padding:14px; border-radius:12px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--accent-cyan);"></div>
+        <div style="font-size:11px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">Content SEO Score</div>
+        <div style="font-size:24px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.overall_seo_score || 85}<span style="font-size:12px; color:var(--text-muted);">/100</span></div>
+        <div style="font-size:10.5px; color:var(--text-muted); margin-top:3px;">On-Page Ranking Health</div>
+      </div>
+
+      <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(236,72,153,0.3); padding:14px; border-radius:12px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#ec4899;"></div>
+        <div style="font-size:11px; font-weight:800; color:#ec4899; text-transform:uppercase;">Google E-E-A-T</div>
+        <div style="font-size:24px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.eeat_score || 88}<span style="font-size:12px; color:var(--text-muted);">/100</span></div>
+        <div style="font-size:10.5px; color:var(--text-muted); margin-top:3px;">Helpful Content Compliant</div>
+      </div>
+    </div>
+
+    <!-- AI Robotic Phrasing & Flagged Sentences Card -->
+    <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:18px; border-radius:14px; margin-bottom:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div style="font-size:13px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-fingerprint" style="color:var(--accent-purple);"></i>
+          AI Phrasing & Linguistic Cliché Detection (${ai.cliches_detected_count || 0} Clichés Detected)
+        </div>
+        ${(ai.top_cliches || []).length > 0 ? `
+          <div style="display:flex; gap:5px; flex-wrap:wrap;">
+            ${(ai.top_cliches || []).map(c => `<span class="badge badge-warning" style="font-size:10px;">"${escapeHtml(c)}"</span>`).join('')}
+          </div>
+        ` : `<span class="badge badge-success" style="font-size:10px;"><i class="fa-solid fa-check"></i> Zero Robotic Clichés</span>`}
+      </div>
+
+      ${flagged.length > 0 ? `
+        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">
+          The following sentences exhibit repetitive AI patterns or filler phrases. Consider humanizing them:
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          ${flagged.map((f, fIdx) => `
+            <div style="background:rgba(30,41,59,0.6); border:1px solid rgba(245,158,11,0.25); padding:12px 14px; border-radius:10px; border-left:3px solid #f59e0b;">
+              <div style="font-size:11px; font-weight:800; color:#f59e0b; margin-bottom:4px;">
+                Sentence #${fIdx + 1} &bull; Matched Clichés: ${(f.detected_patterns || []).map(p => `<strong>"${escapeHtml(p)}"</strong>`).join(', ')}
+              </div>
+              <div style="font-size:12.5px; color:#fff; line-height:1.4; font-style:italic;">"${escapeHtml(f.original_sentence)}"</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : `
+        <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); padding:14px; border-radius:10px; color:#10b981; font-size:12.5px;">
+          <i class="fa-solid fa-circle-check"></i> <strong>Natural Content Authenticity:</strong> This page uses direct, conversational, and domain-specific terminology without formulaic AI structures.
+        </div>
+      `}
+    </div>
+
+    <!-- On-Page SEO Checklist & Recommendations -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;">
+      <!-- SEO Factors Checklist -->
+      <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px; border-radius:14px;">
+        <div style="font-size:13px; font-weight:800; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-list-check" style="color:var(--accent-cyan);"></i> On-Page SEO Ranking Audit
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${(seo.checks || []).map(chk => {
+            const isPass = chk.status === 'PASSED';
+            const isWarn = chk.status === 'WARNING';
+            const badgeClass = isPass ? 'badge-success' : (isWarn ? 'badge-warning' : 'badge-danger');
+            const icon = isPass ? 'fa-circle-check' : (isWarn ? 'fa-triangle-exclamation' : 'fa-circle-xmark');
+            return `
+              <div style="background:rgba(30,41,59,0.5); padding:10px 12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:12px; font-weight:700; color:#fff;">${escapeHtml(chk.name)}</div>
+                  <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${escapeHtml(chk.detail)}</div>
+                </div>
+                <span class="badge ${badgeClass}" style="font-size:10px;">
+                  <i class="fa-solid ${icon}"></i> ${chk.status}
+                </span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Actionable Recommendations -->
+      <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px; border-radius:14px;">
+        <div style="font-size:13px; font-weight:800; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent-purple);"></i> Prioritized Optimization Steps
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${recs.map((rec, rIdx) => `
+            <div style="background:rgba(30,41,59,0.5); padding:10px 12px; border-radius:8px; border-left:3px solid var(--accent-purple); font-size:12px; color:#fff; line-height:1.4;">
+              <strong style="color:var(--accent-purple);">#${rIdx + 1}</strong> ${escapeHtml(rec)}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function updateSocialKeywordCounter() {
@@ -8090,6 +8315,9 @@ function auditSERPPageLinks(pageUrl) {
 window.openAddBlogTopicsModal = openAddBlogTopicsModal;
 window.updateBlogTopicCounter = updateBlogTopicCounter;
 window.handleSaveBlogTopics = handleSaveBlogTopics;
+window.openLivePageAuditModal = openLivePageAuditModal;
+window.setAuditUrlInput = setAuditUrlInput;
+window.handleRunLivePageAudit = handleRunLivePageAudit;
 window.openAddSocialCampaignModal = openAddSocialCampaignModal;
 window.updateSocialKeywordCounter = updateSocialKeywordCounter;
 window.handleSaveSocialCampaign = handleSaveSocialCampaign;

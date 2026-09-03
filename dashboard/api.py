@@ -3380,6 +3380,43 @@ def auto_queue_high_volume_topics(
     }
 
 
+class LivePageAuditRequest(BaseModel):
+    url: str
+    target_keyword: Optional[str] = None
+    site_id: Optional[str] = "ccm"
+
+
+@app.post("/api/seo/content-brief/audit-live-url")
+def audit_live_page_content_api(
+    req: LivePageAuditRequest,
+    _admin: Dict[str, Any] = Depends(require_admin)
+):
+    """
+    Live Webpage Content Audit + AI Content Detection + Actionable Optimization Engine.
+    Scrapes any live URL, detects AI patterns & probability %, evaluates on-page SEO,
+    and returns prioritized humanization/optimization recommendations.
+    """
+    from agents.seo_content_brief_agent import analyze_live_page_content
+    
+    site_prof = websites_mgr.get(req.site_id or "ccm")
+    site_name = site_prof.name if site_prof else "Corporate Cars Melbourne"
+    site_domain = site_prof.domain if site_prof else "https://corporatecarsmelbourne.com.au"
+
+    if not req.url or not req.url.strip():
+        raise HTTPException(status_code=400, detail="Page URL is required.")
+
+    result = analyze_live_page_content(
+        url=req.url.strip(),
+        target_keyword=req.target_keyword.strip() if req.target_keyword else None,
+        site_name=site_name,
+        site_domain=site_domain
+    )
+
+    if result.get("status") == "error":
+        raise HTTPException(status_code=400, detail=result.get("error_message", "Failed to audit webpage"))
+
+    return result
+
 
 _GSC_CACHE: Dict[str, Any] = {
     "timestamp": 0,
