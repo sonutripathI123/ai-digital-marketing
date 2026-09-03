@@ -317,7 +317,7 @@ scheduler_mgr.register_schedule(
 scheduler_mgr.register_schedule(
     job_id="social-publish-daemon",
     agent_id="corporate-cars-social-agent",
-    cron_expression="*/5 * * * *",
+    cron_expression="*/15 * * * *",
     action="publish-due",
     callback=_cron_run_social_publish
 )

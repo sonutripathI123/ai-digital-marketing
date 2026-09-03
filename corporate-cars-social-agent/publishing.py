@@ -7,7 +7,9 @@ reached (or the error is non-retryable, e.g. missing credentials) — then the
 post is marked failed with the error stored on the row.
 """
 
+import json
 import logging
+from pathlib import Path
 from zoneinfo import ZoneInfo
 from datetime import datetime, timedelta, timezone
 
@@ -46,11 +48,29 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
     today_mel_date = now_mel.date()
 
     # Track platforms that have already published today in Melbourne timezone (strict 1 post per platform per day limit)
-    already_published_today = set()
+    platforms_published_today = set()
+
+    # 1. Check SQLite published posts for today
     published_posts = session.query(Post).filter(Post.status == PostStatus.published).all()
     for p in published_posts:
         if _is_same_melbourne_day(p.updated_at, today_mel_date) or (p.schedule_entry and _is_same_melbourne_day(p.schedule_entry.last_attempt_at, today_mel_date)):
-            already_published_today.add(p.platform)
+            platforms_published_today.add(p.platform.value.lower())
+
+    # 2. Check JSON campaigns for today
+    sched_file = Path("data/social_scheduled_campaigns.json")
+    if not sched_file.exists():
+        sched_file = Path("../data/social_scheduled_campaigns.json")
+    if sched_file.exists():
+        try:
+            with open(sched_file, "r", encoding="utf-8") as f:
+                camps = json.load(f)
+                for c in camps:
+                    if c.get("status") == "published" and c.get("published_at"):
+                        pub_dt = parse_melbourne_time(c.get("published_at"))
+                        if pub_dt and pub_dt.date() == today_mel_date:
+                            platforms_published_today.add(c.get("platform", "").lower())
+        except Exception:
+            pass
 
     due = (
         session.query(Schedule)
@@ -65,14 +85,13 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
     )
 
     counts = {"published": 0, "failed": 0, "skipped_backoff": 0, "skipped_daily_limit": 0, "skipped_integrity": 0, "dry_run": 0}
-    published_this_run = set()
 
     for entry in due:
         post = entry.post
         plat = post.platform
+        plat_key = plat.value.lower()
 
         # STRICT CONTENT + IMAGE INTEGRITY GUARD:
-        # Require BOTH high-res image and substantive caption text. Never publish text-only or image-only posts.
         try:
             validate_post_integrity(post, plat.value)
         except PublishError as e:
@@ -85,9 +104,9 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
             continue
 
         # Enforce strict maximum 1 post per platform per calendar day
-        if plat in already_published_today or plat in published_this_run:
+        if plat_key in platforms_published_today:
             counts["skipped_daily_limit"] += 1
-            log.info("Skipping post %d for %s — daily limit of 1 post reached for today", post.id, plat.value)
+            log.info("Skipping post %d for %s — daily limit of 1 post reached for today (%s)", post.id, plat.value, today_mel_date)
             continue
 
         if not _retry_due(entry, now_utc):
@@ -128,8 +147,7 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
         post.error_message = None
         entry.published = True
         counts["published"] += 1
-        published_this_run.add(plat)
-        already_published_today.add(plat)
+        platforms_published_today.add(plat_key)
         session.commit()
         log.info("Published post %d to %s (platform id %s)",
                  post.id, post.platform.value, platform_post_id)
@@ -137,7 +155,7 @@ def publish_due(session: Session, dry_run: bool = True) -> dict:
     # -------------------------------------------------------------
     # Dual Engine: Also publish any due campaigns in social_scheduled_campaigns.json
     # -------------------------------------------------------------
-    json_published = _publish_due_json_campaigns(now_mel, dry_run=dry_run)
+    json_published = _publish_due_json_campaigns(now_mel, platforms_published=platforms_published_today, dry_run=dry_run)
     counts["published"] += json_published
 
     return counts
@@ -167,14 +185,17 @@ def parse_melbourne_time(dt_str: str) -> datetime | None:
     return None
 
 
-def _publish_due_json_campaigns(now_mel: datetime, dry_run: bool = True) -> int:
-    """Publishes any due campaigns from data/social_scheduled_campaigns.json directly using platform API."""
+def _publish_due_json_campaigns(now_mel: datetime, platforms_published: set = None, dry_run: bool = True) -> int:
+    """Publishes any due campaigns from data/social_scheduled_campaigns.json directly with strict 1-post/day/platform guard."""
     import os
     import json
     import time
     from pathlib import Path
     import requests
     from dotenv import dotenv_values
+
+    if platforms_published is None:
+        platforms_published = set()
 
     sched_file = Path("data/social_scheduled_campaigns.json")
     if not sched_file.exists():
@@ -194,7 +215,7 @@ def _publish_due_json_campaigns(now_mel: datetime, dry_run: bool = True) -> int:
     meta_token = env.get("META_ACCESS_TOKEN") or os.getenv("META_ACCESS_TOKEN")
     page_id = env.get("META_PAGE_ID") or os.getenv("META_PAGE_ID")
     ig_id = env.get("INSTAGRAM_BUSINESS_ACCOUNT_ID") or os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID")
-    cloud_base = os.getenv("RENDER_EXTERNAL_URL", "https://ai-digital-marketing-gm68.onrender.com").rstrip("/")
+    cloud_base = os.getenv("RENDER_EXTERNAL_URL", "https://corporate-marketing-ai.onrender.com").rstrip("/")
     GRAPH = "https://graph.facebook.com/v21.0"
 
     published_count = 0
@@ -209,8 +230,13 @@ def _publish_due_json_campaigns(now_mel: datetime, dry_run: bool = True) -> int:
         if not scheduled_dt or scheduled_dt > now_mel:
             continue
         
-        # Post is DUE!
         plat = c.get("platform", "").lower()
+
+        # Strict 1-Post-Per-Platform-Per-Day Rate Limit Guard
+        if plat in platforms_published:
+            log.info("Skipping JSON campaign %s for %s — platform already published today (%s)", c.get("id"), plat, now_mel.date())
+            continue
+
         cap_full = f"{c.get('caption', '')}\n\n{c.get('hashtags', '')}".strip()
         img_rel = c.get("image_path") or ("images/" + c.get("image_name", "fleet-photo.jpg"))
         img_clean = img_rel.replace("images/", "").replace("\\", "/")
@@ -246,6 +272,7 @@ def _publish_due_json_campaigns(now_mel: datetime, dry_run: bool = True) -> int:
                         c["platform_post_id"] = pub_id
                         c["published_at"] = now_mel.strftime("%a %d %b %Y at %I:%M %p (Melbourne Time)")
                         published_count += 1
+                        platforms_published.add(plat)
                         updated = True
                         log.info("Published Instagram campaign %s -> ID: %s", c.get("id"), pub_id)
                     else:
@@ -266,6 +293,7 @@ def _publish_due_json_campaigns(now_mel: datetime, dry_run: bool = True) -> int:
                     c["platform_post_id"] = pub_id
                     c["published_at"] = now_mel.strftime("%a %d %b %Y at %I:%M %p (Melbourne Time)")
                     published_count += 1
+                    platforms_published.add(plat)
                     updated = True
                     log.info("Published Facebook campaign %s -> ID: %s", c.get("id"), pub_id)
                 else:
@@ -276,6 +304,7 @@ def _publish_due_json_campaigns(now_mel: datetime, dry_run: bool = True) -> int:
                 c["platform_post_id"] = f"urn:li:share:{int(time.time())}"
                 c["published_at"] = now_mel.strftime("%a %d %b %Y at %I:%M %p (Melbourne Time)")
                 published_count += 1
+                platforms_published.add(plat)
                 updated = True
                 log.info("Published LinkedIn campaign %s", c.get("id"))
 
