@@ -14,8 +14,78 @@ from core.ai_layer.router import ModelRouter
 from core.logging.logger import get_agent_logger
 from core.models.task import AgentTask
 from core.orchestrator.registry import AgentMetadata
+from integrations.ads.google_ads_client import GoogleAdsLiveClient
 
 logger = get_agent_logger("google-ads-monitoring-agent")
+
+
+def _fetch_live_performance(credentials, site_id, date_range):
+    """Try a real Google Ads API read. Returns (payload_or_None, live_status)."""
+    client = GoogleAdsLiveClient(credentials=credentials, site_id=site_id)
+    status = client.status()
+    if not client.is_configured():
+        return None, status
+    try:
+        perf = client.get_campaign_performance(date_range)
+        status = {**status, "code": "LIVE", "reason": "Live data fetched from Google Ads API."}
+        return perf, status
+    except Exception as e:
+        logger.warning(f"Live Google Ads fetch failed, falling back to benchmark: {e}")
+        return None, {**status, "code": "API_ERROR", "ready": False, "reason": f"Live fetch failed: {e}"}
+
+
+def _build_live_payload(action, account_id, perf, live_status):
+    """Shape a live API result into the agent's standard output payload."""
+    s = perf["summary"]
+    campaigns = []
+    for c in perf["campaigns"]:
+        campaigns.append({
+            "campaign_name": c["campaign_name"],
+            "campaign_id": c["campaign_id"],
+            "status": c["status"],
+            "channel": c.get("channel"),
+            "daily_budget_usd": c["daily_budget"],
+            "spend_usd": c["spend"],
+            "impressions": c["impressions"],
+            "clicks": c["clicks"],
+            "ctr_percent": c["ctr_percent"],
+            "avg_cpc_usd": c["avg_cpc"],
+            "conversions": c["conversions"],
+            "cpa_usd": c["cpa"],
+            "roas_ratio": c["roas"],
+        })
+    recs = []
+    top = max(perf["campaigns"], key=lambda x: x["conversions"], default=None) if perf["campaigns"] else None
+    if top and top["conversions"]:
+        recs.append(f"Top converter: '{top['campaign_name']}' — {top['conversions']} conv at "
+                    f"{s['currency']} {top['cpa']} CPA. Protect its budget.")
+    leak = next((x for x in perf["campaigns"] if x["clicks"] >= 10 and x["conversions"] == 0), None)
+    if leak:
+        recs.append(f"Conversion leak: '{leak['campaign_name']}' — {leak['clicks']} clicks, 0 conversions. "
+                    f"Review landing page / CTA.")
+    if not recs:
+        recs.append("Live data fetched. Not enough conversions yet to rank winners; keep collecting data.")
+    return {
+        "action": action,
+        "account_id": account_id,
+        "data_source": "LIVE (Google Ads API)",
+        "live_status": live_status,
+        "currency": s["currency"],
+        "date_range_label": f"Live · {perf['date_range']}",
+        "safety_guard_status": f"READ-ONLY (ADS_LIVE_EXECUTION_ENABLED={ADS_LIVE_EXECUTION_ENABLED})",
+        "account_summary": {
+            "total_spend_usd": s["total_spend"],
+            "total_impressions": s["total_impressions"],
+            "total_clicks": s["total_clicks"],
+            "avg_ctr_percent": s["avg_ctr_percent"],
+            "avg_cpc_usd": s["avg_cpc"],
+            "total_conversions": s["total_conversions"],
+            "avg_cpa_usd": s["avg_cpa"],
+            "overall_roas": s["overall_roas"],
+        },
+        "campaign_performance": campaigns,
+        "actionable_recommendations": recs,
+    }
 
 
 class GoogleAdsMonitoringAgent(AgentInterface):
@@ -55,7 +125,40 @@ class GoogleAdsMonitoringAgent(AgentInterface):
                 "cost_usd": 0.0
             }
 
-        # Real Live Google Ads Telemetry (Direct Sync from Account 194-940-8641: 16Aug_Ads_Campaign)
+        # ---- Attempt REAL live fetch from the Google Ads API first ----
+        credentials = input_data.get("credentials") or {}
+        site_id = input_data.get("site_id")
+        live_perf, live_status = _fetch_live_performance(credentials, site_id, date_range)
+        if live_perf is not None:
+            live_payload = _build_live_payload(action, account_id, live_perf, live_status)
+            tokens_used = 0
+            cost_usd = 0.0
+            model_used = "live-google-ads-api"
+            if use_ai:
+                try:
+                    llm_req = LLMRequest(
+                        user_prompt=(
+                            f"Analyze these LIVE Google Ads metrics for account '{account_id}': "
+                            f"{live_payload['account_summary']}. Identify CPA reduction and budget "
+                            f"re-allocation opportunities."
+                        ),
+                        task_type=TaskComplexity.STANDARD,
+                        json_output=True,
+                    )
+                    response = router.route_and_execute(llm_req)
+                    model_used = response.model_used
+                    tokens_used = response.tokens_in + response.tokens_out
+                    cost_usd = response.cost_usd
+                    live_payload["ai_insights"] = response.parsed_json or response.content
+                except Exception as e:
+                    logger.warning(f"AI enrichment on live data failed: {e}")
+            return {"output": live_payload, "model_used": model_used,
+                    "tokens_used": tokens_used, "cost_usd": cost_usd}
+
+        # ---- Fallback: DEMO / BENCHMARK data (NOT live) ----
+        # Reached only when live credentials are missing/incomplete or the API call
+        # failed. Numbers below are illustrative benchmarks, clearly labelled so they
+        # are never mistaken for the user's real account data.
         is_today = date_range.lower() in ["today", "current_day"]
         
         if is_today:
@@ -167,6 +270,10 @@ class GoogleAdsMonitoringAgent(AgentInterface):
         result_payload = {
             "action": action,
             "account_id": account_id,
+            "data_source": "DEMO / BENCHMARK — NOT LIVE",
+            "live_status": live_status,
+            "notice": ("This is illustrative benchmark data, not your real account. "
+                       f"To go live: {live_status.get('reason', 'add OAuth credentials')}"),
             "campaign_name": "16Aug_Ads_Campaign",
             "campaign_status": "ELIGIBLE",
             "campaign_type": "Search",

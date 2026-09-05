@@ -1738,10 +1738,28 @@ def perform_agent_connection_test(agent_id: str, creds: Dict[str, Any], site: We
         cust_id = creds.get("customer_id") or site.google_ads_id
         if not cust_id:
             return {"success": False, "message": "Google Ads 10-digit Customer ID is required."}
-        return {
-            "success": True,
-            "message": f"✅ Google Ads Customer ID '{cust_id}' connected and active."
-        }
+        # Actually test the live connection instead of blindly reporting success.
+        try:
+            from integrations.ads.google_ads_client import GoogleAdsLiveClient
+            client = GoogleAdsLiveClient(credentials={**creds, "customer_id": cust_id}, site_id=site.site_id)
+            if client.is_configured():
+                result = client.test_connection()
+                if result.get("live"):
+                    return {"success": True, "live": True, "message": result["message"]}
+                return {"success": False, "live": False,
+                        "message": result.get("message", "Live connection test failed.")}
+            st = client.status()
+            missing = ", ".join(st["missing_credentials"]) if st["missing_credentials"] else "none"
+            return {
+                "success": True,
+                "live": False,
+                "message": (f"⚠️ Customer ID '{cust_id}' saved, but NOT live yet. "
+                            f"{st['reason']} Missing: {missing}. "
+                            f"Add Developer Token + OAuth (Client ID, Client Secret, Refresh Token) to fetch real data."),
+            }
+        except Exception as e:
+            return {"success": True, "live": False,
+                    "message": f"⚠️ Customer ID '{cust_id}' saved, but live verification could not run: {e}"}
 
     elif agent_id == "meta-ads-monitoring-agent":
         act_id = creds.get("ad_account_id") or site.meta_ads_id
