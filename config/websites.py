@@ -252,3 +252,9 @@ class WebsiteManager:
             s for s in self._websites.values()
             if s.owner_email == email_clean or email_clean in s.assigned_client_emails
         ]
+
+
+# Shared module-level singleton so any module (agents, integrations) can read
+# per-site saved credentials without constructing its own manager. Backed by
+# the same on-disk store, so it stays consistent with dashboard's instance.
+websites_manager = WebsiteManager()
