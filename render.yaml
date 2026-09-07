@@ -1,9 +1,14 @@
-﻿services:
+services:
   - type: web
     name: ai-digital-marketing-os
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
+    # Install core deps first (always required), then google-ads best-effort.
+    # --prefer-binary forces prebuilt wheels (esp. grpcio) so the free-tier
+    # build does not compile from source and run out of memory.
+    buildCommand: |
+      pip install --prefer-binary --no-cache-dir -r requirements.txt
+      pip install --prefer-binary --no-cache-dir -r requirements-optional.txt || echo "WARN: optional deps (google-ads) not installed; app runs, live Google Ads reports library-missing until present"
     startCommand: python main.py
     envVars:
       - key: PORT
@@ -12,3 +17,5 @@
         value: 0.0.0.0
       - key: PYTHONUNBUFFERED
         value: "1"
+      - key: PYTHON_VERSION
+        value: "3.11.9"
