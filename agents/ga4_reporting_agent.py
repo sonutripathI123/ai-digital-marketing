@@ -47,20 +47,24 @@ class GA4ReportingAgent(AgentInterface):
         logger.info(f"Executing GA4ReportingAgent task: action={action}, property='{property_name}', date_range='{date_range}'")
 
         # Live GA4 Analytics Connection via Google Analytics Data API / Service Account
-        key_file = Path(ROOT_DIR) / "gsc-service-account.json"
         live_fetched = False
+        live_error = None
         channel_breakdown = []
         top_landing_pages = []
 
-        if key_file.exists():
+        from integrations.google_credentials import load_service_account_credentials
+
+        creds, cred_error = load_service_account_credentials(
+            ['https://www.googleapis.com/auth/analytics.readonly']
+        )
+        if cred_error:
+            live_error = cred_error
+            logger.warning(f"GA4 live fetch unavailable: {cred_error}")
+
+        if creds:
             try:
-                from google.oauth2 import service_account
                 from googleapiclient.discovery import build
 
-                creds = service_account.Credentials.from_service_account_file(
-                    str(key_file),
-                    scopes=['https://www.googleapis.com/auth/analytics.readonly']
-                )
                 data_service = build('analyticsdata', 'v1beta', credentials=creds)
                 
                 # Query 1: Acquisition Channels Breakdown
@@ -117,6 +121,7 @@ class GA4ReportingAgent(AgentInterface):
                 live_fetched = True
                 logger.info(f"Successfully authenticated and connected to live GA4 Data API for property {GA4_PROPERTY_ID}")
             except Exception as e:
+                live_error = f"GA4 Data API call failed: {e}"
                 logger.warning(f"GA4 Data API fetch notice: {e}")
 
         if live_fetched:
@@ -134,6 +139,7 @@ class GA4ReportingAgent(AgentInterface):
                 "measurement_id": GA4_MEASUREMENT_ID,
                 "account_id": GA4_ACCOUNT_ID,
                 "live_data_connected": True,
+                "live_error": None,
                 "data_source": "100% LIVE GOOGLE ANALYTICS 4 API",
                 "site_tag_status": "GOOGLE API CONNECTED & LISTENING",
                 "date_range": date_range,
@@ -161,7 +167,8 @@ class GA4ReportingAgent(AgentInterface):
                 "measurement_id": GA4_MEASUREMENT_ID,
                 "account_id": GA4_ACCOUNT_ID,
                 "live_data_connected": False,
-                "data_source": "Pending Connection",
+                "live_error": live_error,
+                "data_source": "NOT LIVE - no GA4 data returned",
                 "site_tag_status": "PENDING AUTHENTICATION",
                 "date_range": date_range,
                 "overview_metrics": {

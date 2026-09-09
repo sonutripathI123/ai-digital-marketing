@@ -42,20 +42,24 @@ class GSCAgent(AgentInterface):
         logger.info(f"Executing GSCAgent task: action={action}, site_url='{site_url}', date_range='{date_range}'")
 
         # Live Google Search Console API Connection
-        key_file = Path(ROOT_DIR) / "gsc-service-account.json"
         top_queries = []
         live_fetched = False
+        live_error = None
 
-        if key_file.exists():
+        from integrations.google_credentials import load_service_account_credentials
+
+        creds, cred_error = load_service_account_credentials(
+            ['https://www.googleapis.com/auth/webmasters.readonly']
+        )
+        if cred_error:
+            live_error = cred_error
+            logger.warning(f"GSC live fetch unavailable: {cred_error}")
+
+        if creds:
             try:
-                from google.oauth2 import service_account
                 from googleapiclient.discovery import build
                 from datetime import datetime, timedelta
 
-                creds = service_account.Credentials.from_service_account_file(
-                    str(key_file),
-                    scopes=['https://www.googleapis.com/auth/webmasters.readonly']
-                )
                 service = build('searchconsole', 'v1', credentials=creds)
 
                 end_d = datetime.now() - timedelta(days=2)
@@ -81,7 +85,10 @@ class GSCAgent(AgentInterface):
                             "position": round(float(row.get("position", 0)), 1)
                         })
                     live_fetched = True
+                else:
+                    live_error = "Search Console returned no rows for this date range."
             except Exception as e:
+                live_error = f"Search Console API call failed: {e}"
                 logger.warning(f"Failed to fetch live GSC API data: {e}")
 
         if not top_queries:
@@ -116,7 +123,10 @@ class GSCAgent(AgentInterface):
             "total_impressions": total_imps,
             "average_ctr_percent": avg_ctr,
             "average_position": avg_pos,
-            "data_source": "100% LIVE GOOGLE SEARCH CONSOLE API" if live_fetched else "Fallback Metrics"
+            "data_source": (
+                "100% LIVE GOOGLE SEARCH CONSOLE API" if live_fetched
+                else "SAMPLE DATA - NOT LIVE. Do not use for decisions."
+            )
         }
 
         result_payload = {
@@ -124,6 +134,7 @@ class GSCAgent(AgentInterface):
             "site_url": site_url,
             "date_range": date_range,
             "live_data_connected": live_fetched,
+            "live_error": live_error,
             "performance_summary": summary_metrics,
             "top_queries": top_queries,
             "quick_win_opportunities": opportunity_keywords,
