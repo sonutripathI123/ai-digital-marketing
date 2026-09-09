@@ -1,9 +1,12 @@
-﻿services:
+services:
   - type: web
     name: ai-digital-marketing-os
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
+    # --prefer-binary forces prebuilt wheels (esp. grpcio) so the free-tier
+    # build does not compile from source and run out of memory. Python is
+    # pinned to 3.11 (below and in .python-version) so those wheels exist.
+    buildCommand: pip install --prefer-binary --no-cache-dir -r requirements.txt
     startCommand: python main.py
     envVars:
       - key: PORT
@@ -12,3 +15,5 @@
         value: 0.0.0.0
       - key: PYTHONUNBUFFERED
         value: "1"
+      - key: PYTHON_VERSION
+        value: "3.11.9"

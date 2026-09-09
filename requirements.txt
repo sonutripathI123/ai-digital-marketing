@@ -15,6 +15,10 @@ google-api-python-client>=2.100.0
 google-auth>=2.20.0
 google-auth-httplib2>=0.2.0
 google-auth-oauthlib>=1.0.0
+# google-ads (grpcio/protobuf) installs from prebuilt wheels because Python is
+# pinned to 3.11 via .python-version / runtime.txt, so it no longer compiles
+# grpcio from source (which caused the free-tier out-of-memory build failure).
+google-ads>=25.1.0
 sqlalchemy>=2.0.0
 apscheduler>=3.10.0
 typer>=0.12.0
