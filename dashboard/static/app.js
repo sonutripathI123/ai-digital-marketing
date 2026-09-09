@@ -6,6 +6,41 @@ let categoryChartInstance = null;
 let currentUserRole = 'viewer';
 let authToken = localStorage.getItem('ccm_admin_token') || sessionStorage.getItem('ccm_admin_token') || null;
 
+// Attach the current session to every same-origin /api/ request. Read
+// endpoints now require a session, and this keeps every call — including ones
+// added later — authenticated without repeating header plumbing at each site.
+(function installApiAuthInterceptor() {
+  const nativeFetch = window.fetch.bind(window);
+
+  function currentSessionToken() {
+    return authToken
+      || localStorage.getItem('ai_visitor_session')
+      || sessionStorage.getItem('ai_visitor_session')
+      || null;
+  }
+
+  window.fetch = function (resource, init) {
+    try {
+      const url = typeof resource === 'string' ? resource : (resource && resource.url) || '';
+      const isOwnApi = url.startsWith('/api/') || url.startsWith(`${window.location.origin}/api/`);
+      const token = currentSessionToken();
+
+      if (isOwnApi && token) {
+        const opts = { ...(init || {}) };
+        const headers = new Headers(opts.headers || (typeof resource === 'object' ? resource.headers : undefined) || {});
+        if (!headers.has('Authorization')) {
+          headers.set('Authorization', `Bearer ${token}`);
+        }
+        opts.headers = headers;
+        return nativeFetch(resource, opts);
+      }
+    } catch (e) {
+      // Never let header plumbing break a request.
+    }
+    return nativeFetch(resource, init);
+  };
+})();
+
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Detect Client Portal Invite Link from Query or Hash first
   const urlParams = new URLSearchParams(window.location.search);
@@ -93,8 +128,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   const savedView = sessionStorage.getItem('ccm_active_view');
   const initialView = hashView || savedView || 'overview';
 
-  await initWebsiteSwitcher();
-  switchToView(initialView);
+  // Read endpoints require a session. With no session yet the email gate is
+  // showing, so skip the initial data load — handleVisitorGateLogin() runs it
+  // once the session exists, instead of firing requests that must 401.
+  const hasSession = authToken
+    || localStorage.getItem('ai_visitor_session')
+    || sessionStorage.getItem('ai_visitor_session');
+
+  if (hasSession) {
+    await initWebsiteSwitcher();
+    switchToView(initialView);
+  } else {
+    activeView = initialView;
+  }
 });
 
 /* ============================================================
@@ -110,6 +156,13 @@ function getAuthHeaders(customHeaders = {}) {
   if (authToken) {
     headers['Authorization'] = `Bearer ${authToken}`;
     headers['x-admin-token'] = authToken;
+    return headers;
+  }
+  // No admin/client session: fall back to the read-only email-gate session so
+  // read endpoints stay reachable without granting any write privilege.
+  const visitorSession = localStorage.getItem('ai_visitor_session') || sessionStorage.getItem('ai_visitor_session');
+  if (visitorSession) {
+    headers['Authorization'] = `Bearer ${visitorSession}`;
   }
   return headers;
 }
@@ -497,6 +550,10 @@ async function handleVisitorGateLogin(e) {
       gate.style.pointerEvents = 'none';
       setTimeout(() => { gate.style.display = 'none'; }, 400);
     }
+
+    // The initial data load was deferred until a session existed. Run it now.
+    await initWebsiteSwitcher();
+    switchToView(activeView || 'overview');
   } catch (err) {
     btn.disabled = false;
     btn.innerHTML = '<span>Enter AI Dashboard</span> <i class="fa-solid fa-arrow-right"></i>';
@@ -1019,6 +1076,16 @@ async function switchWebsite(siteId) {
 
   renderWebsiteDropdown();
   updateWebsiteHeaderUI();
+
+  // If the social campaign modal is open, follow the switch to the new site's
+  // own cadence instead of leaving the previous site's values on screen.
+  const socialModal = document.getElementById('modal-add-social-campaign');
+  const socialSiteSelect = document.getElementById('social-campaign-site-select');
+  if (socialModal && socialModal.style.display !== 'none' && socialSiteSelect) {
+    socialSiteSelect.value = siteId;
+    await loadSocialSettingsForSite(siteId);
+  }
+
   await loadCurrentView(activeView);
 }
 
@@ -6628,22 +6695,73 @@ async function handleSaveBlogTopics(e) {
   }
 }
 
+// Loads the selected website's OWN posting cadence and platform selection into
+// the campaign modal, so each site keeps its own setup independently.
+async function loadSocialSettingsForSite(siteId) {
+  const freqSelect = document.getElementById('social-frequency-select');
+  const hint = document.getElementById('social-cadence-hint');
+  if (!siteId) return;
+
+  if (hint) hint.textContent = 'Loading this website’s saved cadence…';
+
+  try {
+    const res = await fetch(`/api/sites/${encodeURIComponent(siteId)}/social-settings`, {
+      headers: getAuthHeaders()
+    });
+    const data = await res.json();
+    if (!res.ok || data.status !== 'success') throw new Error(data.detail || 'Could not load settings');
+
+    const s = data.settings;
+
+    if (freqSelect) {
+      const weekly = String(s.posts_per_week_per_platform);
+      // Keep an unlisted saved value (e.g. 5/week set via API) selectable.
+      if (!Array.from(freqSelect.options).some(o => o.value === weekly)) {
+        const opt = document.createElement('option');
+        opt.value = weekly;
+        opt.textContent = `${weekly} Posts Per Platform Per Week`;
+        freqSelect.appendChild(opt);
+      }
+      freqSelect.value = weekly;
+    }
+
+    // Re-check only this site's saved platforms.
+    document.querySelectorAll('input[name="social-platform"]').forEach(cb => {
+      cb.checked = (s.platforms || []).includes(cb.value);
+    });
+
+    if (hint) {
+      const ready = s.ready_platforms || [];
+      const notReady = Object.keys(s.missing_credentials || {});
+      let msg = `Saved for ${s.site_name}: ${s.posts_per_week_per_platform} per platform per week, max ${s.posts_per_day_per_platform} per platform per day.`;
+      if (ready.length) msg += ` Connected: ${ready.join(', ')}.`;
+      if (notReady.length) msg += ` Not connected yet: ${notReady.join(', ')}.`;
+      hint.textContent = msg;
+    }
+  } catch (err) {
+    if (freqSelect) freqSelect.value = '2';
+    if (hint) hint.textContent = `Could not load this website’s saved cadence (${err.message}). Using 2 per week.`;
+  }
+}
+
 function openAddSocialCampaignModal(siteId) {
   if (!requireAdminAction('create and schedule social campaigns')) return;
   const siteSelect = document.getElementById('social-campaign-site-select');
+  const activeSite = siteId || currentSiteId;
   if (siteSelect) {
     siteSelect.innerHTML = allWebsitesList.map(s => `
-      <option value="${s.site_id}" ${s.site_id === (siteId || currentSiteId) ? 'selected' : ''}>
+      <option value="${s.site_id}" ${s.site_id === activeSite ? 'selected' : ''}>
         ${s.name} (${s.domain.replace('https://', '').replace('http://', '')})
       </option>
     `).join('');
+    // Switching website inside the modal reloads that site's own cadence.
+    siteSelect.onchange = () => loadSocialSettingsForSite(siteSelect.value);
   }
-  const freqSelect = document.getElementById('social-frequency-select');
-  if (freqSelect) freqSelect.value = '2';
   const textarea = document.getElementById('social-keywords-textarea');
   if (textarea) textarea.value = '';
   updateSocialKeywordCounter();
   openModal('modal-add-social-campaign');
+  loadSocialSettingsForSite(siteSelect ? siteSelect.value : activeSite);
 }
 
 function openLivePageAuditModal(url) {

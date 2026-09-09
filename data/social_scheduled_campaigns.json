@@ -43,9 +43,10 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/people-mover/people-mover-01.jpg",
     "image_name": "people-mover-01.jpg",
-    "status": "published",
-    "published_at": "Fri 28 Aug 2026 at 06:11 AM (Melbourne Time)",
-    "post_id": "urn:li:share:7498834453058711553"
+    "status": "not_published",
+    "post_id": "urn:li:share:7498834453058711553",
+    "platform_post_id": "",
+    "not_published_reason": "Marked published by a LinkedIn publisher that made no API call. Never posted. Re-queue by setting status back to 'scheduled' with a future scheduled_for."
   },
   {
     "id": "soc_ccm_0004",
@@ -91,9 +92,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/sedan/0H5A4921 (1).jpg",
     "image_name": "0H5A4921 (1).jpg",
-    "status": "published",
-    "platform_post_id": "urn:li:share:1788411324",
-    "published_at": "Thu 03 Sep 2026 at 02:55 PM (Melbourne Time)"
+    "status": "not_published",
+    "platform_post_id": "",
+    "not_published_reason": "Marked published by a LinkedIn publisher that made no API call. Never posted. Re-queue by setting status back to 'scheduled' with a future scheduled_for."
   },
   {
     "id": "soc_ccm_0007",
@@ -267,9 +268,10 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/sedan/0H5A5157 (2).jpg",
     "image_name": "0H5A5157 (2).jpg",
-    "status": "published",
-    "published_at": "Tue 25 Aug 2026 at 05:38 PM (Melbourne Time)",
-    "post_id": "urn:li:share:7497920317714161664"
+    "status": "not_published",
+    "post_id": "urn:li:share:7497920317714161664",
+    "platform_post_id": "",
+    "not_published_reason": "Marked published by a LinkedIn publisher that made no API call. Never posted. Re-queue by setting status back to 'scheduled' with a future scheduled_for."
   },
   {
     "id": "soc_opal_0004",
@@ -315,9 +317,9 @@
     "cadence": "2 Posts Per Platform Per Week",
     "image_path": "images/sedan/sedan-01.jpg",
     "image_name": "sedan-01.jpg",
-    "status": "published",
-    "platform_post_id": "urn:li:share:1788411340",
-    "published_at": "Thu 03 Sep 2026 at 02:55 PM (Melbourne Time)"
+    "status": "not_published",
+    "platform_post_id": "",
+    "not_published_reason": "Marked published by a LinkedIn publisher that made no API call. Never posted. Re-queue by setting status back to 'scheduled' with a future scheduled_for."
   },
   {
     "id": "soc_opal_0007",

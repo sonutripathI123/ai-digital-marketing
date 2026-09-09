@@ -113,15 +113,26 @@ def schedule(weeks: int = typer.Option(1, "--weeks", help="number of weeks to qu
 @app.command("publish-due")
 def publish_due_cmd(
     live: bool = typer.Option(False, "--live", help="actually publish (default is dry run)"),
+    site: str = typer.Option("", "--site", help="restrict to one website id (e.g. ccm, opal); omit for all sites"),
 ):
-    """Publish everything whose scheduled time has passed."""
+    """Publish everything whose scheduled time has passed.
+
+    Quotas are per website, so every site's platforms are rate-limited
+    independently.
+    """
     from publishing import publish_due
     session = _session()
-    dry_run = config.DRY_RUN and not live
+
+    # Dry run unless --live is passed explicitly. DRY_RUN=true additionally
+    # acts as a hard kill switch that overrides --live.
+    # (Previously `DRY_RUN and not live` meant DRY_RUN=false published for real
+    # even without --live, so a plain `publish-due` posted to live accounts.)
+    dry_run = (not live) or config.DRY_RUN
     if dry_run:
-        typer.secho("DRY RUN — nothing will be posted (use --live to publish)",
+        reason = "DRY_RUN=true kill switch is set" if live else "no --live flag"
+        typer.secho(f"DRY RUN ({reason}) - nothing will be posted",
                     fg=typer.colors.YELLOW)
-    counts = publish_due(session, dry_run=dry_run)
+    counts = publish_due(session, dry_run=dry_run, site=site.strip() or None)
     typer.echo(f"Result: {counts}")
     session.close()
 

@@ -62,10 +62,16 @@ from config.settings import (
     ADMIN_PASSWORD,
     AUTH_SECRET_KEY,
     ADS_LIVE_EXECUTION_ENABLED,
+    DATA_DIR,
     LOGS_DIR,
     ROOT_DIR,
 )
 from config.websites import WebsiteManager, WebsiteProfile
+from config.social_credentials_bridge import (
+    SOCIAL_AGENT_ID,
+    social_connection_status,
+    sync_social_credentials,
+)
 from core.ai_layer.router import ModelRouter
 from core.models.task import AgentTask, TaskPriority, TaskStatus
 from core.orchestrator.master import MasterOrchestrator
@@ -97,6 +103,10 @@ router = ModelRouter()
 orchestrator = MasterOrchestrator(router=router)
 scheduler_mgr = SchedulerManager()
 websites_mgr = WebsiteManager()
+
+# Project saved per-site social credentials to where the publisher subprocess
+# reads them, so a restart or redeploy never leaves the two out of sync.
+sync_social_credentials(websites_mgr)
 
 # Register Production Sub-Agents
 blog_adapter = BlogAgentAdapter()
@@ -255,12 +265,22 @@ def _cron_run_blog_publish():
     orchestrator.execute_task(task.task_id)
 
 def _cron_run_social_publish():
-    task = orchestrator.create_task(
-        agent_id="corporate-cars-social-agent",
-        task_type="publish-due",
-        input_data={"action": "publish-due"}
-    )
-    orchestrator.execute_task(task.task_id)
+    """Run the social publish daemon once per registered website.
+
+    Each site gets its own task tagged with its site_id, so quotas, credentials
+    and task history stay isolated per brand. Newly added websites are picked up
+    automatically — no code change needed.
+    """
+    for site in websites_mgr.list_all(active_only=True):
+        try:
+            task = orchestrator.create_task(
+                agent_id="corporate-cars-social-agent",
+                task_type="publish-due",
+                input_data={"action": "publish-due", "site_id": site.site_id, "site": site.site_id}
+            )
+            orchestrator.execute_task(task.task_id)
+        except Exception as e:
+            logger.warning(f"Social publish daemon failed for site {site.site_id}: {e}")
 
 def _cron_run_monthly_report():
     task = orchestrator.create_task(
@@ -336,12 +356,20 @@ scheduler_mgr.register_schedule(
     callback=_cron_run_daily_backlinks
 )
 
-# Start autonomous background execution runner daemon
-scheduler_mgr.start_background_runner()
+# Start autonomous background execution runner daemon.
+# Set SCHEDULER_ENABLED=false to import the app without firing crons or the
+# blog catch-up — needed when running it locally for testing so a dev run can
+# never publish to live accounts. Production leaves it unset (enabled).
+SCHEDULER_ENABLED = os.getenv("SCHEDULER_ENABLED", "true").strip().lower() not in ("0", "false", "no")
 
-# Run initial auto-catchup check immediately on server startup in background thread
-import threading
-threading.Thread(target=check_and_auto_catchup_daily_blog, daemon=True, name="StartupBlogCatchup").start()
+if SCHEDULER_ENABLED:
+    scheduler_mgr.start_background_runner()
+
+    # Run initial auto-catchup check immediately on server startup in background thread
+    import threading
+    threading.Thread(target=check_and_auto_catchup_daily_blog, daemon=True, name="StartupBlogCatchup").start()
+else:
+    logger.warning("SCHEDULER_ENABLED=false — cron jobs and blog auto-catchup are OFF for this process.")
 
 
 # --- Request/Response Models ---
@@ -462,8 +490,17 @@ class AddSocialCampaignRequest(BaseModel):
     site: str = "ccm"
     keywords: str
     platforms: List[str] = Field(default_factory=lambda: ["instagram", "facebook", "linkedin", "x", "threads", "pinterest"])
-    posts_per_week: int = 3
+    # None means "use this website's own saved cadence" rather than a global default.
+    posts_per_week: Optional[int] = None
     auto_schedule: bool = True
+
+
+class SocialSettingsRequest(BaseModel):
+    """Per-website social posting configuration. Every field is optional so a
+    caller can update cadence alone without touching platform selection."""
+    posts_per_week_per_platform: Optional[int] = None
+    posts_per_day_per_platform: Optional[int] = None
+    platforms: Optional[List[str]] = None
 
 
 class KeywordAnalyzeRequest(BaseModel):
@@ -590,35 +627,83 @@ def verify_token(token: Optional[str]) -> Optional[Dict[str, Any]]:
             payload["allowed_sites"] = ["*"]
             return payload
 
-        # Check if Client User with assigned sites
+        payload["is_super_admin"] = False
+        declared_role = str(payload.get("role") or "visitor").strip().lower()
+
+        # Visitor tokens are issued by the passwordless email gate. They are
+        # read-only and must never inherit client or admin privileges, even if
+        # the email later shows up as an assigned client somewhere.
+        if declared_role not in ("admin", "super_admin", "client"):
+            payload["role"] = "visitor"
+            payload["allowed_sites"] = []
+            return payload
+
+        # Client / admin token: resolve which sites it may act on.
         sites = websites_mgr.get_sites_for_user(email, is_super_admin=False)
         allowed_site_ids = [s.site_id for s in sites] or payload.get("allowed_sites", [])
         payload["allowed_sites"] = allowed_site_ids
-        payload["is_super_admin"] = False
-        if allowed_site_ids or payload.get("role") == "client":
-            payload["role"] = "client"
+        payload["role"] = declared_role
         return payload
     except Exception:
         return None
+
+
+# Roles allowed to run tasks and change data. "visitor" is deliberately absent:
+# those tokens come from the passwordless email gate and are read-only.
+PRIVILEGED_ROLES = ("admin", "super_admin", "client")
+
+
+def _bearer_token(
+    authorization: Optional[str] = None,
+    x_admin_token: Optional[str] = None,
+) -> Optional[str]:
+    if authorization and authorization.startswith("Bearer "):
+        return authorization.split("Bearer ")[1].strip()
+    if x_admin_token:
+        return x_admin_token.strip()
+    return None
 
 
 def require_admin(
     authorization: Optional[str] = Header(None),
     x_admin_token: Optional[str] = Header(None),
 ) -> Dict[str, Any]:
-    token = None
-    if authorization and authorization.startswith("Bearer "):
-        token = authorization.split("Bearer ")[1].strip()
-    elif x_admin_token:
-        token = x_admin_token.strip()
+    payload = verify_token(_bearer_token(authorization, x_admin_token))
 
-    payload = verify_token(token)
-    if not payload:
+    # A valid signature is not enough — the token must carry a privileged role.
+    if not payload or not (
+        payload.get("is_super_admin") or payload.get("role") in PRIVILEGED_ROLES
+    ):
         raise HTTPException(
             status_code=403,
             detail="Admin access required. Only authorized Admin can run tasks, add topics, or modify settings.",
         )
     return payload
+
+
+def require_viewer(
+    authorization: Optional[str] = Header(None),
+    x_admin_token: Optional[str] = Header(None),
+) -> Dict[str, Any]:
+    """Any signed session — admin, client, or the read-only email gate.
+
+    Used on read endpoints so operational data is not world-readable.
+    """
+    payload = verify_token(_bearer_token(authorization, x_admin_token))
+    if not payload:
+        raise HTTPException(
+            status_code=401,
+            detail="Session required. Enter your email on the dashboard to get read access.",
+        )
+    return payload
+
+
+def optional_session(
+    authorization: Optional[str] = Header(None),
+    x_admin_token: Optional[str] = Header(None),
+) -> Optional[Dict[str, Any]]:
+    """Session if one was supplied, else None. For endpoints that stay public."""
+    return verify_token(_bearer_token(authorization, x_admin_token))
 
 
 def require_super_admin(
@@ -640,6 +725,8 @@ def check_site_access_permission(site_id: str, payload: Optional[Dict[str, Any]]
         return True  # Public read-only viewer mode
     if payload.get("is_super_admin"):
         return True
+    if payload.get("role") == "visitor":
+        return True  # Read-only email-gate session: may view, never modify
     allowed = payload.get("allowed_sites", [])
     if "*" in allowed or site_id in allowed:
         return True
@@ -944,7 +1031,7 @@ def get_super_admin_global_telemetry(_super: Dict[str, Any] = Depends(require_su
             blog_rows = []
 
     # Load Social Scheduled
-    sched_file = Path("data/social_scheduled_campaigns.json")
+    sched_file = DATA_DIR / "social_scheduled_campaigns.json"
     social_posts = []
     if sched_file.exists():
         try:
@@ -1159,7 +1246,7 @@ class VisitorLoginRequest(BaseModel):
     email: str
 
 
-VISITOR_LOGS_FILE = Path(ROOT_DIR) / "data" / "user_access_logs.json"
+VISITOR_LOGS_FILE = DATA_DIR / "user_access_logs.json"
 
 
 def load_visitor_logs() -> List[Dict[str, Any]]:
@@ -1291,34 +1378,39 @@ def logout():
     return {"status": "success", "message": "Logged out successfully."}
 
 
-@app.get("/api/websites")
-def list_websites(
-    authorization: Optional[str] = Header(None),
-    x_admin_token: Optional[str] = Header(None)
-):
-    """List registered multi-tenant websites (scoped for client users)."""
-    token = None
-    if authorization and authorization.startswith("Bearer "):
-        token = authorization.split("Bearer ")[1].strip()
-    elif x_admin_token:
-        token = x_admin_token.strip()
+# Fields on a website profile that must never reach a non-super-admin caller.
+# invite_token grants client access to a site; agent_credentials holds API keys.
+WEBSITE_SECRET_FIELDS = (
+    "invite_token",
+    "owner_email",
+    "assigned_client_emails",
+    "agent_credentials",
+)
 
-    payload = verify_token(token)
+
+def serialize_website(site: WebsiteProfile, payload: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Website profile safe to return. Secrets only for the super admin."""
+    data = site.model_dump()
+    if payload and payload.get("is_super_admin"):
+        return data
+    for field in WEBSITE_SECRET_FIELDS:
+        data.pop(field, None)
+    return data
+
+
+@app.get("/api/websites")
+def list_websites(payload: Optional[Dict[str, Any]] = Depends(optional_session)):
+    """List registered multi-tenant websites (scoped for client users)."""
+    sites = websites_mgr.list_all()
+
     if payload and not payload.get("is_super_admin") and payload.get("role") == "client":
         allowed = payload.get("allowed_sites", [])
-        all_sites = websites_mgr.list_all()
-        user_sites = [s for s in all_sites if s.site_id in allowed]
-        return {
-            "status": "success",
-            "count": len(user_sites),
-            "websites": [s.model_dump() for s in user_sites]
-        }
+        sites = [s for s in sites if s.site_id in allowed]
 
-    sites = websites_mgr.list_all()
     return {
         "status": "success",
         "count": len(sites),
-        "websites": [s.model_dump() for s in sites]
+        "websites": [serialize_website(s, payload) for s in sites]
     }
 
 
@@ -1350,19 +1442,19 @@ def add_website(request: CreateWebsiteRequest, _admin: Dict[str, Any] = Depends(
 
 
 @app.get("/api/websites/{site_id}")
-def get_website_detail(site_id: str):
+def get_website_detail(site_id: str, payload: Optional[Dict[str, Any]] = Depends(optional_session)):
     """Retrieve details for a specific website profile."""
     site = websites_mgr.get(site_id)
     if not site:
         raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
     return {
         "status": "success",
-        "website": site.model_dump()
+        "website": serialize_website(site, payload)
     }
 
 
 @app.get("/api/overview")
-def get_overview_data(site_id: Optional[str] = None):
+def get_overview_data(site_id: Optional[str] = None, payload: Dict[str, Any] = Depends(require_viewer)):
     """Aggregates overview statistics for the Dashboard homepage (filterable by site_id)."""
     agents = orchestrator.registry.list_all()
     all_tasks = orchestrator.queue.list_all()
@@ -1400,14 +1492,14 @@ def get_overview_data(site_id: Optional[str] = None):
 
     return {
         "status": "success",
-        "current_website": target_site.model_dump() if target_site else {
+        "current_website": serialize_website(target_site, payload) if target_site else {
             "site_id": "all",
             "name": "All Websites (Portfolio View)",
             "domain": "Multi-Tenant Aggregator",
             "location": "Global / All Locations",
             "color_accent": "#10b981"
         },
-        "all_websites": [s.model_dump() for s in all_sites],
+        "all_websites": [serialize_website(s, payload) for s in all_sites],
         "stats": {
             "total_agents": len(agents),
             "active_agents": active_agents,
@@ -1506,13 +1598,16 @@ def list_agents(site_id: Optional[str] = None):
 # ============================================================
 
 @app.get("/api/sites/{site_id}/agents/integrations")
-def get_site_agents_integrations(site_id: str):
+def get_site_agents_integrations(site_id: str, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Returns integration and connection status for all agents for a specific website."""
     site = websites_mgr.get(site_id) or websites_mgr.get("ccm")
     if not site:
         raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
 
     agent_creds = site.agent_credentials or {}
+    # Ask the publisher itself what it can post for this site, so the card
+    # reflects reality rather than the presence of a profile URL.
+    _social_status = social_connection_status(site.site_id)
 
     integration_catalog = [
         {
@@ -1532,9 +1627,19 @@ def get_site_agents_integrations(site_id: str):
             "category": "Social Media",
             "icon": "fa-solid fa-share-nodes",
             "color": "#a855f7",
-            "is_connected": "corporate-cars-social-agent" in agent_creds or bool(site.facebook_url or site.instagram_url),
-            "fields": ["facebook_page_id", "facebook_token", "instagram_account_id", "linkedin_token"],
-            "summary": "Publishes branded social media posts to Facebook, Instagram, and LinkedIn.",
+            # Connected means the publisher can actually post for THIS site —
+            # a public profile URL alone is not enough to publish anything.
+            "is_connected": bool(_social_status["ready_platforms"]),
+            "ready_platforms": _social_status["ready_platforms"],
+            "missing_credentials": _social_status["missing"],
+            "posts_per_day_per_platform": _social_status["posts_per_day_per_platform"],
+            "posts_per_week_per_platform": _social_status["posts_per_week_per_platform"],
+            "fields": [
+                "facebook_page_id", "facebook_token", "instagram_account_id",
+                "linkedin_token", "linkedin_org_urn",
+                "posts_per_day_per_platform", "posts_per_week_per_platform",
+            ],
+            "summary": "Publishes branded social media posts to this website's own Facebook, Instagram, and LinkedIn accounts.",
             "last_updated": agent_creds.get("corporate-cars-social-agent", {}).get("updated_at")
         },
         {
@@ -1625,7 +1730,7 @@ def get_site_agents_integrations(site_id: str):
 
 
 @app.get("/api/sites/{site_id}/agents/{agent_id}/credentials")
-def get_site_agent_credentials(site_id: str, agent_id: str):
+def get_site_agent_credentials(site_id: str, agent_id: str, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Fetches saved credentials for an agent on a specific website with sensitive values masked."""
     site = websites_mgr.get(site_id) or websites_mgr.get("ccm")
     if not site:
@@ -1778,6 +1883,9 @@ def connect_site_agent(site_id: str, agent_id: str, req: SaveAgentCredentialsReq
 
     websites_mgr.save_agent_credentials(site.site_id, agent_id, clean_creds)
 
+    if agent_id == SOCIAL_AGENT_ID:
+        sync_social_credentials(websites_mgr)
+
     test_result = None
     if req.test_after_save:
         test_result = perform_agent_connection_test(agent_id, clean_creds, site)
@@ -1811,9 +1919,92 @@ def disconnect_site_agent(site_id: str, agent_id: str):
         raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
 
     websites_mgr.disconnect_agent(site.site_id, agent_id)
+
+    if agent_id == SOCIAL_AGENT_ID:
+        sync_social_credentials(websites_mgr)
+
     return {
         "status": "success",
         "message": f"Agent '{agent_id}' disconnected from '{site.name}'."
+    }
+
+
+SOCIAL_PLATFORM_CHOICES = ["instagram", "facebook", "linkedin", "x", "threads", "pinterest"]
+DEFAULT_SOCIAL_PLATFORMS = ["instagram", "facebook", "linkedin"]
+
+
+def _read_social_settings(site: WebsiteProfile) -> Dict[str, Any]:
+    """This website's own posting cadence and platform selection."""
+    creds = (site.agent_credentials or {}).get(SOCIAL_AGENT_ID, {}) or {}
+    status = social_connection_status(site.site_id)
+
+    platforms = creds.get("platforms")
+    if not isinstance(platforms, list) or not platforms:
+        platforms = DEFAULT_SOCIAL_PLATFORMS
+
+    return {
+        "site_id": site.site_id,
+        "site_name": site.name,
+        "posts_per_week_per_platform": status["posts_per_week_per_platform"],
+        "posts_per_day_per_platform": status["posts_per_day_per_platform"],
+        "platforms": [p for p in platforms if p in SOCIAL_PLATFORM_CHOICES],
+        "ready_platforms": status["ready_platforms"],
+        "missing_credentials": status["missing"],
+    }
+
+
+@app.get("/api/sites/{site_id}/social-settings")
+def get_site_social_settings(site_id: str, _viewer: Dict[str, Any] = Depends(require_viewer)):
+    """Per-website social posting cadence, so switching sites loads its own setup."""
+    site = websites_mgr.get(site_id)
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
+    return {"status": "success", "settings": _read_social_settings(site)}
+
+
+@app.post("/api/sites/{site_id}/social-settings")
+def save_site_social_settings(
+    site_id: str,
+    req: SocialSettingsRequest,
+    _admin: Dict[str, Any] = Depends(require_admin),
+):
+    """Save this website's own cadence and platform selection (Admin Only).
+
+    Each site keeps its own values — setting 3 posts/week here does not touch
+    any other website's cadence.
+    """
+    site = websites_mgr.get(site_id)
+    if not site:
+        raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
+
+    updates: Dict[str, Any] = {}
+
+    if req.posts_per_week_per_platform is not None:
+        if not 1 <= req.posts_per_week_per_platform <= 14:
+            raise HTTPException(status_code=400, detail="Posting cadence must be between 1 and 14 posts per platform per week.")
+        updates["posts_per_week_per_platform"] = req.posts_per_week_per_platform
+
+    if req.posts_per_day_per_platform is not None:
+        if not 1 <= req.posts_per_day_per_platform <= 5:
+            raise HTTPException(status_code=400, detail="Daily cap must be between 1 and 5 posts per platform per day.")
+        updates["posts_per_day_per_platform"] = req.posts_per_day_per_platform
+
+    if req.platforms is not None:
+        chosen = [p.lower().strip() for p in req.platforms if p.lower().strip() in SOCIAL_PLATFORM_CHOICES]
+        if not chosen:
+            raise HTTPException(status_code=400, detail="Select at least one supported social platform.")
+        updates["platforms"] = chosen
+
+    if not updates:
+        raise HTTPException(status_code=400, detail="Nothing to update.")
+
+    websites_mgr.save_agent_credentials(site.site_id, SOCIAL_AGENT_ID, updates)
+    sync_social_credentials(websites_mgr)
+
+    return {
+        "status": "success",
+        "message": f"Posting cadence saved for '{site.name}'.",
+        "settings": _read_social_settings(websites_mgr.get(site.site_id)),
     }
 
 
@@ -1873,7 +2064,7 @@ def publish_google_ads_live(req: GoogleAdsPublishRequest):
 
 
 @app.get("/api/agents/{agent_id}/report")
-def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
+def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Generates a comprehensive live performance report for a specific sub-agent tailored to site_id."""
     agent = orchestrator.registry.get(agent_id)
     if not agent:
@@ -2051,7 +2242,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm"):
 
     # Special handling for Social Media Agent and Social Analytics Agent
     elif agent_id in ("corporate-cars-social-agent", "social-analytics-agent"):
-        sched_file = Path("data/social_scheduled_campaigns.json")
+        sched_file = DATA_DIR / "social_scheduled_campaigns.json"
         all_sched = []
         if sched_file.exists():
             try:
@@ -2752,7 +2943,7 @@ def toggle_agent_status(request: AgentStatusToggleRequest, _admin: Dict[str, Any
 # ============================================================
 
 @app.get("/api/agents/blog-agent/topics")
-def get_blog_topics(site: Optional[str] = None):
+def get_blog_topics(site: Optional[str] = None, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieve all queued and published blog topics from topics.csv."""
     topics_csv_path = ROOT_DIR / "blog-agent" / "topics.csv"
     topics = []
@@ -2876,47 +3067,71 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
     if not lines:
         raise HTTPException(status_code=400, detail="No valid keywords found.")
 
-    platforms = [p.lower() for p in req.platforms if p.lower() in ["instagram", "facebook", "linkedin", "x", "threads", "pinterest"]]
-    if not platforms:
-        platforms = ["instagram", "facebook", "linkedin"]
-
-    posts_per_week = req.posts_per_week or 2
     site_prof = websites_mgr.get(site)
+    saved_settings = _read_social_settings(site_prof) if site_prof else {}
+
+    platforms = [p.lower() for p in req.platforms if p.lower() in SOCIAL_PLATFORM_CHOICES]
+    if not platforms:
+        platforms = saved_settings.get("platforms") or DEFAULT_SOCIAL_PLATFORMS
+
+    # Cadence is per website: use what the caller picked, else this site's own
+    # saved cadence. Never a shared global default.
+    posts_per_week = req.posts_per_week or saved_settings.get("posts_per_week_per_platform") or 2
+    posts_per_week = max(1, min(14, int(posts_per_week)))
+
+    # Remember this site's choice so the publisher's weekly cap and the next
+    # campaign both follow it, and other websites stay untouched.
+    if site_prof:
+        websites_mgr.save_agent_credentials(site_prof.site_id, SOCIAL_AGENT_ID, {
+            "posts_per_week_per_platform": posts_per_week,
+            "platforms": platforms,
+        })
+        sync_social_credentials(websites_mgr)
+
     brand_name = site_prof.name if site_prof else ("Opal Chauffeurs" if site == "opal" else "Corporate Cars Melbourne")
     site_domain = site_prof.domain if site_prof else ("https://opalchauffeurs.com.au" if site == "opal" else "https://corporatecarsmelbourne.com.au")
 
-    # Build list of scheduled posts distributed evenly
-    raw_posts = []
-    for kw in lines:
-        for platform in platforms:
-            raw_posts.append((kw, platform.capitalize()))
-
-    # Build schedule slots in Melbourne local timezone
+    # Schedule each platform on its own track: every platform gets exactly
+    # posts_per_week slots per week for THIS site, and each platform keeps its
+    # own time of day so two platforms never collide on the same slot. Quotas
+    # are per site, so other websites' campaigns are unaffected.
     now_local = datetime.now(ZoneInfo("Australia/Melbourne"))
     days_to_tue = (1 - now_local.weekday()) % 7
     if days_to_tue == 0 and now_local.hour >= 15:
         days_to_tue = 7
     start_tue = (now_local + timedelta(days=days_to_tue)).date()
 
-    schedule_slots = []
-    for w in range(12):
-        tue_date = start_tue + timedelta(days=w * 7)
-        thu_date = tue_date + timedelta(days=2)
-        sat_date = tue_date + timedelta(days=4)
-        
-        schedule_slots.append((tue_date.strftime("%a %d %b %Y at 09:30 AM (Melbourne Time)"), w + 1))
-        schedule_slots.append((tue_date.strftime("%a %d %b %Y at 02:30 PM (Melbourne Time)"), w + 1))
-        schedule_slots.append((thu_date.strftime("%a %d %b %Y at 09:30 AM (Melbourne Time)"), w + 1))
-        schedule_slots.append((thu_date.strftime("%a %d %b %Y at 02:30 PM (Melbourne Time)"), w + 1))
-        schedule_slots.append((sat_date.strftime("%a %d %b %Y at 09:30 AM (Melbourne Time)"), w + 1))
-        schedule_slots.append((sat_date.strftime("%a %d %b %Y at 02:30 PM (Melbourne Time)"), w + 1))
+    # Day offsets from the anchor Tuesday, spread across the week as the
+    # weekly cadence grows: 2/week -> Tue+Thu, 3/week -> Tue+Thu+Sat, etc.
+    DAY_OFFSETS = [0, 2, 4, 1, 3, 5, 6]
+    # One posting time per platform, so platforms are staggered by design.
+    PLATFORM_TIMES = ["09:30 AM", "02:30 PM", "05:30 PM", "11:00 AM", "07:30 PM", "08:00 AM"]
+
+    def slot_for(platform_index: int, occurrence: int) -> tuple:
+        """(formatted Melbourne slot, week_number) for a platform's Nth post."""
+        week = occurrence // posts_per_week
+        within_week = occurrence % posts_per_week
+        day = start_tue + timedelta(days=week * 7 + DAY_OFFSETS[within_week % len(DAY_OFFSETS)])
+        post_time = PLATFORM_TIMES[platform_index % len(PLATFORM_TIMES)]
+        return day.strftime(f"%a %d %b %Y at {post_time} (Melbourne Time)"), week + 1
+
+    # Keyword x platform, grouped so each platform's occurrences count up cleanly.
+    raw_posts = []
+    for platform_index, platform in enumerate(platforms):
+        for occurrence, kw in enumerate(lines):
+            sched_time_str, week_num = slot_for(platform_index, occurrence)
+            raw_posts.append((kw, platform.capitalize(), sched_time_str, week_num))
 
     # Retrieve rotating images from luxury fleet image library (29 high-res fleet photos)
     img_dir = Path(ROOT_DIR) / "corporate-cars-social-agent" / "images"
     all_imgs = sorted(list(img_dir.rglob("*.jpg"))) if img_dir.exists() else []
 
+    # Deterministic per-site starting point in the image library, so different
+    # websites don't open with the same photo. Works for any site id.
+    site_img_offset = sum(ord(ch) * (i + 1) for i, ch in enumerate(site)) if all_imgs else 0
+
     # Read existing campaigns to determine ID offset
-    sched_file = Path("data/social_scheduled_campaigns.json")
+    sched_file = DATA_DIR / "social_scheduled_campaigns.json"
     sched_file.parent.mkdir(parents=True, exist_ok=True)
     existing_all = []
     if sched_file.exists():
@@ -2930,10 +3145,8 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
     start_id_num = site_existing_count + 1
 
     scheduled_posts = []
-    for idx, (kw, platform) in enumerate(raw_posts):
-        sched_time_str, week_num = schedule_slots[idx % len(schedule_slots)]
-        
-        assigned_img = all_imgs[(idx + (15 if site == "opal" else 0)) % len(all_imgs)] if all_imgs else None
+    for idx, (kw, platform, sched_time_str, week_num) in enumerate(raw_posts):
+        assigned_img = all_imgs[(idx + site_img_offset) % len(all_imgs)] if all_imgs else None
         img_rel = str(assigned_img.relative_to(img_dir.parent)).replace("\\", "/") if assigned_img else ""
         img_name = assigned_img.name if assigned_img else "luxury-fleet.jpg"
 
@@ -3263,7 +3476,7 @@ def add_keyword_to_social_queue(req: AddKeywordToSocialRequest, _admin: Dict[str
 
 
 @app.get("/api/seo/keywords/high-volume-pool")
-def get_high_volume_keywords_pool(site_id: str = "ccm"):
+def get_high_volume_keywords_pool(site_id: str = "ccm", _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Returns prioritized high-search-volume keywords with monthly volume and usage status."""
     from agents.seo_keyword_agent import HIGH_VOLUME_KEYWORD_CATALOG, normalize_kw_string
     
@@ -3659,7 +3872,7 @@ def get_live_gsc_rankings(
 
 
 @app.get("/api/tasks")
-def list_tasks(status: Optional[TaskStatus] = None, agent_id: Optional[str] = None, site_id: Optional[str] = None):
+def list_tasks(status: Optional[TaskStatus] = None, agent_id: Optional[str] = None, site_id: Optional[str] = None, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieve task queue items filtered by status, agent_id, or site_id."""
     tasks = orchestrator.queue.list_all(status=status, agent_id=agent_id)
     if site_id and site_id != "all":
@@ -3696,7 +3909,7 @@ def create_task(request: CreateTaskRequest, _admin: Dict[str, Any] = Depends(req
 
 
 @app.get("/api/tasks/{task_id}")
-def get_task_detail(task_id: str):
+def get_task_detail(task_id: str, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieve details for a specific task by task_id."""
     task = orchestrator.queue.get(task_id)
     if not task:
@@ -3721,7 +3934,7 @@ def execute_task(task_id: str, _admin: Dict[str, Any] = Depends(require_admin)):
 
 
 @app.get("/api/approvals")
-def list_pending_approvals(site_id: Optional[str] = None):
+def list_pending_approvals(site_id: Optional[str] = None, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """List all tasks awaiting human approval (filterable by site_id)."""
     pending = orchestrator.queue.list_all(status=TaskStatus.AWAITING_APPROVAL)
     if site_id and site_id != "all":
@@ -3810,7 +4023,7 @@ def reject_all_tasks(rejecter: str = "dashboard_user", _admin: Dict[str, Any] = 
 
 
 @app.get("/api/schedules")
-def list_schedules():
+def list_schedules(_viewer: Dict[str, Any] = Depends(require_viewer)):
     """List registered scheduler jobs."""
     jobs = scheduler_mgr.list_schedules()
     return {
@@ -3822,7 +4035,7 @@ def list_schedules():
 
 @app.get("/api/ai-usage")
 @app.get("/api/metrics/ai-usage")
-def get_ai_usage_metrics():
+def get_ai_usage_metrics(_viewer: Dict[str, Any] = Depends(require_viewer)):
     """Aggregates total token consumption, USD cost, and model breakdown."""
     all_tasks = orchestrator.queue.list_all()
     total_tokens = sum(t.tokens_used for t in all_tasks)
@@ -3861,7 +4074,7 @@ def get_ai_usage_metrics():
 
 
 @app.get("/api/logs")
-def get_logs(agent_id: Optional[str] = "central", limit: int = 100):
+def get_logs(agent_id: Optional[str] = "central", limit: int = 100, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieve structured central or per-agent logs without exposing secrets."""
     limit = max(1, min(500, limit))
 
@@ -3884,7 +4097,7 @@ def get_logs(agent_id: Optional[str] = "central", limit: int = 100):
 
 
 @app.get("/api/errors")
-def list_errors():
+def list_errors(_viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieve list of failed tasks and error details."""
     failed_tasks = orchestrator.queue.list_all(status=TaskStatus.FAILED)
     return {
@@ -3895,7 +4108,7 @@ def list_errors():
 
 
 @app.get("/api/audit-trail")
-def get_audit_trail(agent_id: Optional[str] = None, limit: int = 50):
+def get_audit_trail(agent_id: Optional[str] = None, limit: int = 50, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieve system audit events history."""
     events = orchestrator.audit.get_history(agent_id=agent_id, limit=limit)
     return {
@@ -3952,7 +4165,7 @@ def update_env_file(key: str, value: str):
 
 
 @app.get("/api/ai/providers")
-def get_ai_providers():
+def get_ai_providers(_viewer: Dict[str, Any] = Depends(require_viewer)):
     """Returns status and configuration details for all supported AI Providers."""
     providers = orchestrator.router.get_all_providers_status()
     return {
@@ -4057,7 +4270,7 @@ def test_ai_provider_key(request: TestAIKeyRequest):
 
 
 @app.get("/api/settings")
-def get_settings():
+def get_settings(_viewer: Dict[str, Any] = Depends(require_viewer)):
     """Returns configuration and safety status without exposing secrets."""
     primary = orchestrator.router.primary_provider_name
 
@@ -4235,7 +4448,7 @@ def analyze_competitor_ads(request: CompetitorAdSpyRequest, _admin: Dict[str, An
 
 
 @app.get("/api/agents/ad-spy/history")
-def get_competitor_ad_spy_history():
+def get_competitor_ad_spy_history(_viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieves list of past competitor ad spy intelligence reports."""
     from agents.competitor_ad_spy_agent import load_ad_spy_history
     history = load_ad_spy_history()
@@ -4274,7 +4487,7 @@ def audit_webpage(request: PageAuditRequest, _admin: Dict[str, Any] = Depends(re
 
 
 @app.get("/api/agents/page-optimizer/history")
-def get_page_optimizer_history():
+def get_page_optimizer_history(_viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieves list of past audited pages and Google Algorithm Health Scores."""
     from agents.page_optimizer_agent import load_page_optimizer_history
     history = load_page_optimizer_history()
@@ -4313,7 +4526,7 @@ def analyze_competitors_by_keyword(request: CompetitorKeywordAnalysisRequest, _a
 
 
 @app.get("/api/agents/competitor-analysis/history")
-def get_competitor_analysis_history(site_id: Optional[str] = Query(None)):
+def get_competitor_analysis_history(site_id: Optional[str] = Query(None), _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieves list of past keyword-based competitor intelligence reports."""
     from agents.competitor_agent import load_competitor_history
     history = load_competitor_history()
@@ -4407,7 +4620,7 @@ def run_seo_audit(request: SEOAuditRunRequest, _admin: Dict[str, Any] = Depends(
 
 
 @app.get("/api/agents/seo-audit/history")
-def get_seo_audit_history():
+def get_seo_audit_history(_viewer: Dict[str, Any] = Depends(require_viewer)):
     """Retrieves history of past SEO audits."""
     from agents.seo_audit_agent import load_seo_audit_history
     history = load_seo_audit_history()

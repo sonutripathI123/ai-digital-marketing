@@ -7,7 +7,7 @@ and an autonomous background execution daemon thread.
 import time
 import logging
 import threading
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Callable, Dict, List, Optional
 from pydantic import BaseModel, Field
 
@@ -91,6 +91,24 @@ def is_cron_due(cron_expr: str, dt_utc: datetime) -> bool:
     return True
 
 
+def compute_next_run(cron_expr: str, from_utc: Optional[datetime] = None, search_days: int = 40) -> Optional[str]:
+    """Next UTC firing time for a 5-part cron expression, as an ISO string.
+
+    Scans forward minute by minute from the next whole minute. 40 days covers
+    every schedule in use here, including the monthly 28-31 report job; returns
+    None if nothing matches within the window.
+    """
+    if not cron_expr or len(cron_expr.strip().split()) != 5:
+        return None
+
+    start = (from_utc or datetime.now(timezone.utc)).replace(second=0, microsecond=0) + timedelta(minutes=1)
+    for offset in range(search_days * 24 * 60):
+        candidate = start + timedelta(minutes=offset)
+        if is_cron_due(cron_expr, candidate):
+            return candidate.isoformat()
+    return None
+
+
 class SchedulerManager:
     def __init__(self):
         self._jobs: Dict[str, ScheduleJob] = {}
@@ -112,7 +130,7 @@ class SchedulerManager:
             agent_id=agent_id,
             cron_expression=cron_expression,
             action=action,
-            next_run_at=datetime.now(timezone.utc).isoformat(),
+            next_run_at=compute_next_run(cron_expression),
         )
         self._jobs[job_id] = job
         if callback:
@@ -120,6 +138,13 @@ class SchedulerManager:
         return job
 
     def list_schedules(self, agent_id: Optional[str] = None) -> List[ScheduleJob]:
+        # Recompute any next_run_at that has already gone by, so the dashboard
+        # never shows a firing time in the past.
+        now = datetime.now(timezone.utc)
+        for job in self._jobs.values():
+            if not job.next_run_at or datetime.fromisoformat(job.next_run_at) <= now:
+                job.next_run_at = compute_next_run(job.cron_expression, now)
+
         jobs = list(self._jobs.values())
         if agent_id:
             jobs = [j for j in jobs if j.agent_id == agent_id]
@@ -128,7 +153,9 @@ class SchedulerManager:
     def trigger_now(self, job_id: str) -> bool:
         job = self._jobs.get(job_id)
         if job and job.enabled:
-            job.last_run_at = datetime.now(timezone.utc).isoformat()
+            now = datetime.now(timezone.utc)
+            job.last_run_at = now.isoformat()
+            job.next_run_at = compute_next_run(job.cron_expression, now)
             callback = self._callbacks.get(job_id)
             if callback:
                 try:

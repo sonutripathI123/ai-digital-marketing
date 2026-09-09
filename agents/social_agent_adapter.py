@@ -52,7 +52,8 @@ class SocialAgentAdapter(AgentInterface):
         action = str(task.input_data.get("action", "status")).lower().strip()
         keywords = str(task.input_data.get("keywords", "")).strip()
         platform = str(task.input_data.get("platform", "all")).lower().strip()
-        logger.info(f"Executing SocialAgent task: action={action}, platform={platform}")
+        site_id = str(task.input_data.get("site_id") or task.input_data.get("site") or "").lower().strip()
+        logger.info(f"Executing SocialAgent task: action={action}, platform={platform}, site={site_id or 'all'}")
 
         if action == "generate_caption":
             prompt = f"Write a social media caption for platform {platform} targeting keyword '{keywords}'."
@@ -86,6 +87,8 @@ class SocialAgentAdapter(AgentInterface):
             cmd.extend(["--weeks", weeks])
         elif action == "publish-due":
             cmd.append("--live")
+            if site_id:
+                cmd.extend(["--site", site_id])
 
         result = subprocess.run(
             cmd,
@@ -103,6 +106,7 @@ class SocialAgentAdapter(AgentInterface):
             "output": {
                 "action": action,
                 "platform": platform,
+                "site_id": site_id or "all",
                 "details": output_str
             },
             "model_used": "subprocess-agent-flow",

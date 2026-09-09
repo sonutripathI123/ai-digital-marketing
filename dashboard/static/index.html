@@ -1275,13 +1275,16 @@
         </div>
 
         <div class="form-group" style="margin-bottom: 16px;">
-          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Posting Cadence (Schedule Frequency)</label>
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Posting Cadence (Schedule Frequency) &mdash; saved per website</label>
           <select class="form-control" id="social-frequency-select" style="width: 100%; font-size: 12.5px;">
-            <option value="2" selected>2 Posts Per Platform Per Week (Recommended)</option>
-            <option value="3">3 Posts Per Platform Per Week</option>
-            <option value="7">Daily (7 Posts Per Platform Per Week)</option>
             <option value="1">Weekly (1 Post Per Platform Per Week)</option>
+            <option value="2">2 Posts Per Platform Per Week (Recommended)</option>
+            <option value="3">3 Posts Per Platform Per Week</option>
+            <option value="4">4 Posts Per Platform Per Week</option>
+            <option value="5">5 Posts Per Platform Per Week</option>
+            <option value="7">Daily (7 Posts Per Platform Per Week)</option>
           </select>
+          <div id="social-cadence-hint" style="margin-top: 6px; font-size: 11px; color: var(--text-secondary); line-height: 1.5;"></div>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
@@ -1861,7 +1864,7 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=11.71.0"></script>
+  <script src="/static/app.js?v=11.73.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {

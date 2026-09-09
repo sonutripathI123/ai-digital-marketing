@@ -32,3 +32,9 @@ Thumbs.db
 logs/
 logs/*
 *.log
+
+# Per-site social credentials projected from the website registry (contains tokens)
+data/site_social_credentials.json
+
+# Visitor access telemetry (emails, IPs, user-agents) - runtime data, never commit
+data/user_access_logs.json

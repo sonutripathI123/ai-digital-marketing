@@ -77,8 +77,71 @@ TOKEN_PRICING: Dict[str, Dict[str, float]] = {
     "mock-model": {"input": 0.0, "output": 0.0},
 }
 
-# --- Database & Log Paths ---
-DATABASE_URL: str = os.getenv("COMMAND_CENTER_DB", f"sqlite:///{(ROOT_DIR / 'logs' / 'command_center.db').as_posix()}")
-LOGS_DIR: Path = ROOT_DIR / "logs"
-LOGS_DIR.mkdir(parents=True, exist_ok=True)
+# --- Runtime state locations ---
+#
+# Everything the app writes at runtime lives under two directories:
+#
+#   STATE_DIR  website registry (saved agent credentials, invite tokens),
+#              task history, agent report histories, SQLite DB, log files
+#   DATA_DIR   social campaign queue, visitor telemetry, per-site social
+#              credentials bridge
+#
+# Both default to folders inside the repo, which is fine locally. On a host
+# with an ephemeral filesystem (e.g. Render without a persistent disk) that
+# means every restart wipes saved credentials and history — point these at a
+# mounted disk instead:
+#
+#   STATE_DIR=/var/data/state
+#   DATA_DIR=/var/data/data
+#
+# Blog agent paths are deliberately not routed through here; it keeps its own
+# layout under blog-agent/.
+def _resolve_dir(env_var: str, default: Path) -> Path:
+    raw = (os.getenv(env_var) or "").strip()
+    path = Path(raw).expanduser() if raw else default
+    try:
+        path.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        # Unwritable override (bad mount, typo): fall back to the repo folder
+        # rather than crashing the whole app on boot.
+        path = default
+        path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+LOGS_DIR: Path = _resolve_dir("STATE_DIR", ROOT_DIR / "logs")
 (LOGS_DIR / "agents").mkdir(parents=True, exist_ok=True)
+
+DATA_DIR: Path = _resolve_dir("DATA_DIR", ROOT_DIR / "data")
+REPO_DATA_DIR: Path = ROOT_DIR / "data"
+
+DATABASE_URL: str = os.getenv("COMMAND_CENTER_DB", f"sqlite:///{(LOGS_DIR / 'command_center.db').as_posix()}")
+
+
+def seed_data_dir() -> list:
+    """Copy repo-committed data files into DATA_DIR on first boot.
+
+    Files like the social campaign queue ship in the repo as a starting point.
+    When DATA_DIR points at a freshly mounted disk it starts empty, so seed it
+    once. Existing files are never overwritten — runtime state always wins,
+    which is exactly what stops a redeploy from resurrecting old statuses.
+    """
+    if DATA_DIR.resolve() == REPO_DATA_DIR.resolve() or not REPO_DATA_DIR.exists():
+        return []
+
+    import shutil
+
+    seeded = []
+    for source in REPO_DATA_DIR.glob("*.json"):
+        target = DATA_DIR / source.name
+        if target.exists():
+            continue
+        try:
+            shutil.copy2(source, target)
+            seeded.append(source.name)
+        except OSError:
+            pass
+    return seeded
+
+
+SEEDED_DATA_FILES: list = seed_data_dir()
