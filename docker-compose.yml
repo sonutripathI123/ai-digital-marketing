@@ -13,11 +13,20 @@ services:
       - ADS_LIVE_EXECUTION_ENABLED=false
       - ALLOW_LIVE_PUBLISHING=true
       - DEFAULT_AI_PROVIDER=anthropic
+      # Social campaign statuses and visitor telemetry live here instead of
+      # /app/data. /app/data comes from the image, so it is replaced on every
+      # rebuild — and the repo copy of social_scheduled_campaigns.json still
+      # lists already-published campaigns as "scheduled", which would publish
+      # them a second time. This directory is outside the repo, so neither a
+      # rebuild nor a git pull can roll the statuses back.
+      # Seeded once from the image's data/ folder on first boot.
+      - DATA_DIR=/var/data
     env_file:
       - .env
     volumes:
       - ./logs:/app/logs
       - ./config:/app/config
+      - ./runtime-data:/var/data
       - ./blog-agent/topics.csv:/app/blog-agent/topics.csv
       - ./corporate-cars-social-agent/social_agent.db:/app/corporate-cars-social-agent/social_agent.db
       - ./gsc-service-account.json:/app/gsc-service-account.json
