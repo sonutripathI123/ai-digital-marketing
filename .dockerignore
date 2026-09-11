@@ -1,0 +1,49 @@
+# Build context excludes. The Dockerfile does `COPY . .`, so without this the
+# image would pull in Windows virtualenvs, git history and local runtime state.
+
+# Virtualenvs — these are host-specific (Windows) and useless in a Linux image.
+# blog-agent/ and corporate-cars-social-agent/ each carry one.
+.venv/
+**/.venv/
+venv/
+**/venv/
+env/
+
+# Python build artefacts
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Git history and tooling
+.git/
+.gitignore
+.github/
+
+# Runtime state. logs/ and runtime-data/ are bind-mounted by docker-compose;
+# baking a copy into the image only risks shadowing the mount.
+logs/
+runtime-data/
+
+# Secrets must never be baked into an image layer. docker-compose supplies
+# them at run time via env_file and the gsc-service-account.json bind mount.
+.env
+.env.*
+*.env
+gsc-service-account*.json
+credentials*.json
+client_secret*.json
+*.pem
+*.key
+
+# Local scratch and editor files
+scratch/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+*.pdf
