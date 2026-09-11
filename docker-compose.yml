@@ -27,6 +27,12 @@ services:
       - ./logs:/app/logs
       - ./config:/app/config
       - ./runtime-data:/var/data
+      # The WordPress and social credentials live in per-agent .env files, not
+      # in the root .env that env_file loads. They are gitignored and excluded
+      # from the image, so without these mounts the blog and social agents run
+      # with no credentials at all and quietly stop publishing.
+      - ./blog-agent/.env:/app/blog-agent/.env
+      - ./corporate-cars-social-agent/.env:/app/corporate-cars-social-agent/.env
       - ./blog-agent/topics.csv:/app/blog-agent/topics.csv
       - ./corporate-cars-social-agent/social_agent.db:/app/corporate-cars-social-agent/social_agent.db
       - ./gsc-service-account.json:/app/gsc-service-account.json

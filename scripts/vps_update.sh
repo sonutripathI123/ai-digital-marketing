@@ -36,7 +36,7 @@ echo
 echo "[1/5] Preflight checks"
 missing=0
 
-for f in .env gsc-service-account.json; do
+for f in .env blog-agent/.env corporate-cars-social-agent/.env gsc-service-account.json; do
     if [ -d "$f" ]; then
         echo "  FAIL  $f is a DIRECTORY (Docker created it on an earlier run)."
         echo "        Remove it and put the real file there:  rmdir '$f'"
