@@ -456,11 +456,18 @@ def _publish_due_json_campaigns(
     if not campaigns:
         return {}
 
-    cloud_base = os.getenv(
-        "RENDER_EXTERNAL_URL",
-        os.getenv("IMAGE_BASE_URL", "https://ai-digital-marketing-gm68.onrender.com/social-images")
-        .rsplit("/social-images", 1)[0],
-    ).rstrip("/")
+    # Instagram's Graph API will only accept an image it can fetch itself, so it
+    # needs the public origin this dashboard is served from. The old default
+    # pointed at a Render deployment that no longer exists (it answers 503), and
+    # nothing checked — so every Meta post since the move off Render died with
+    # "Missing or invalid image file" (code 324) while the log said only that
+    # the publish failed. There is no safe default for a public hostname, so an
+    # unset value is now an explicit error rather than a dead URL.
+    cloud_base = (
+        os.getenv("PUBLIC_BASE_URL")
+        or os.getenv("RENDER_EXTERNAL_URL")
+        or os.getenv("IMAGE_BASE_URL", "").rsplit("/social-images", 1)[0]
+    ).strip().rstrip("/")
     GRAPH = "https://graph.facebook.com/v21.0"
 
     counts = {
@@ -557,9 +564,25 @@ def _publish_due_json_campaigns(
 
         cap_full = f"{c.get('caption', '')}\n\n{c.get('hashtags', '')}".strip()
         img_rel = c.get("image_path") or ("images/" + c.get("image_name", "fleet-photo.jpg"))
-        img_clean = img_rel.replace("images/", "").replace("\\", "/")
+        img_clean = img_rel.replace("\\", "/")
+        # Strip only the leading "images/" segment. replace() stripped every
+        # occurrence, mangling any path with a folder of that name deeper in it.
+        if img_clean.startswith("images/"):
+            img_clean = img_clean[len("images/"):]
         encoded_img_path = "/".join(urllib.parse.quote(part) for part in img_clean.split("/"))
-        full_img_url = f"{cloud_base}/social-images/{encoded_img_path}"
+        full_img_url = f"{cloud_base}/social-images/{encoded_img_path}" if cloud_base else ""
+
+        # Instagram cannot be handed a local file, so an unreachable image URL
+        # stops it before Meta turns it into an opaque error code.
+        if plat == "instagram" and not cloud_base:
+            counts["failed"] += 1
+            log.error(
+                "Instagram campaign %s [%s] skipped: no public base URL configured. "
+                "Set PUBLIC_BASE_URL to the origin this dashboard is served from "
+                "(e.g. https://marketing.chaufr.au) so Meta can fetch the image.",
+                c.get("id"), site_id,
+            )
+            continue
 
         log.info(
             "Publishing due campaign %s | site=%s platform=%s | Sched: %s",
@@ -608,18 +631,50 @@ def _publish_due_json_campaigns(
                 log.info("Published Instagram campaign %s [%s] -> ID: %s", c.get("id"), site_id, pub_id)
 
             elif plat == "facebook":
-                r_fb = requests.post(
-                    f"{GRAPH}/{cfg.facebook_page_id}/photos",
-                    data={"url": full_img_url, "message": cap_full,
-                          "access_token": cfg.meta_access_token},
-                    timeout=60,
-                )
+                # Upload the file itself rather than asking Meta to fetch a URL.
+                # LinkedIn already works this way, which is exactly why it kept
+                # posting while Facebook and Instagram silently died on a stale
+                # public hostname. A local upload cannot be broken by one.
+                image_path = _resolve_local_image(c)
+                if image_path:
+                    with open(image_path, "rb") as fh:
+                        r_fb = requests.post(
+                            f"{GRAPH}/{cfg.facebook_page_id}/photos",
+                            data={"message": cap_full, "access_token": cfg.meta_access_token},
+                            files={"source": (image_path.name, fh)},
+                            timeout=120,
+                        )
+                elif full_img_url:
+                    r_fb = requests.post(
+                        f"{GRAPH}/{cfg.facebook_page_id}/photos",
+                        data={"url": full_img_url, "message": cap_full,
+                              "access_token": cfg.meta_access_token},
+                        timeout=60,
+                    )
+                else:
+                    counts["failed"] += 1
+                    log.error(
+                        "Facebook campaign %s [%s] has no local image (%s) and no public "
+                        "base URL to fall back on - image is mandatory.",
+                        c.get("id"), site_id, img_rel,
+                    )
+                    continue
+
                 if r_fb.status_code != 200:
                     counts["failed"] += 1
                     log.error("Facebook publish failed for %s [%s]: %s", c.get("id"), site_id, r_fb.text)
                     continue
                 body = r_fb.json()
                 pub_id = body.get("post_id") or body.get("id")
+                if not pub_id:
+                    # A 200 with no id means Meta did not record a post. Marking
+                    # it published would retire the campaign and lose the content.
+                    counts["failed"] += 1
+                    log.error(
+                        "Facebook returned 200 with no post id for %s [%s]: %s",
+                        c.get("id"), site_id, r_fb.text,
+                    )
+                    continue
                 mark_published(c, site_id, plat, pub_id)
                 log.info("Published Facebook campaign %s [%s] -> ID: %s", c.get("id"), site_id, pub_id)
 
