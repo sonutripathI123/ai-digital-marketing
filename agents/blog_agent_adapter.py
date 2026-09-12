@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 from config.settings import ROOT_DIR
+from config.blog_credentials_bridge import connection_status, env_overrides
 from agents.base import AgentInterface
 from core.ai_layer.base import LLMRequest, TaskComplexity
 from core.ai_layer.router import ModelRouter
@@ -50,6 +51,35 @@ class BlogAgentAdapter(AgentInterface):
             version="1.0.0"
         )
 
+    @staticmethod
+    def _require_publishing_credentials(action: str, site: str, env: Dict[str, str]) -> None:
+        """Fail early, and legibly, when a run cannot possibly publish.
+
+        Without this the CLI exits with a bare "Missing CCM_WP_USER /
+        CCM_WP_APP_PASSWORD in environment" that says nothing about where to put
+        them, and the scheduler burns every retry on a condition no retry fixes.
+        """
+        if action not in ("write", "publish"):
+            return
+
+        status = connection_status(site, env)
+        if not status["ready"]:
+            raise RuntimeError(
+                f"Blog Agent cannot publish for site '{site}': no WordPress credentials. "
+                f"Missing {' and '.join(status['missing'])}. "
+                f"Fix this in the dashboard under Integrations > WordPress Blog Agent "
+                f"(username + application password), or set those variables in the "
+                f"environment / blog-agent/.env on the server."
+            )
+
+        if action == "write" and not (env.get("ANTHROPIC_API_KEY") or "").strip():
+            raise RuntimeError(
+                "Blog Agent cannot write a post: ANTHROPIC_API_KEY is not set. "
+                "The post generator calls Anthropic directly, so the key must be "
+                "present in the server environment (or blog-agent/.env) — the "
+                "dashboard's AI provider setting does not reach this subprocess."
+            )
+
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
         action = str(task.input_data.get("action", "status")).lower().strip()
         site = str(task.input_data.get("site", "ccm")).strip()
@@ -85,13 +115,24 @@ class BlogAgentAdapter(AgentInterface):
             cmd.append("--force")
 
         import os
+
+        # The CLI resolves WordPress credentials from site-prefixed environment
+        # variables kept in blog-agent/.env — a gitignored file that is absent
+        # from any deployment built from the repository. Hand it whatever the
+        # operator saved through the dashboard so scheduled runs keep publishing
+        # there too. Real environment variables are never overwritten.
+        child_env = dict(os.environ)
+        child_env.update(env_overrides(child_env))
+
+        self._require_publishing_credentials(action, site, child_env)
+
         result = subprocess.run(
             cmd,
             cwd=BLOG_AGENT_DIR,
             text=True,
             capture_output=True,
             timeout=300,
-            env=dict(os.environ)
+            env=child_env
         )
 
         output_str = (result.stdout + "\n" + result.stderr).strip()

@@ -170,6 +170,29 @@ def parse_json(text):
 # --------------------------------------------------------------------------- #
 # WordPress REST helpers (Application Passwords)
 # --------------------------------------------------------------------------- #
+def saved_site_credentials(site_key):
+    """WordPress credentials this site's operator saved in the dashboard.
+
+    The dashboard writes them to DATA_DIR/site_blog_credentials.json (see
+    config/blog_credentials_bridge.py). DATA_DIR is persistent state, unlike
+    blog-agent/.env, which is gitignored and therefore missing on any server
+    built from the repository. Read as plain JSON so this CLI keeps running
+    standalone, without importing the dashboard package.
+    """
+    data_dir = (os.environ.get("DATA_DIR") or "").strip() or os.path.join(PARENT_DIR, "data")
+    bridge_file = os.path.join(data_dir, "site_blog_credentials.json")
+    try:
+        with open(bridge_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+    if not isinstance(data, dict):
+        return {}
+    creds = data.get(str(site_key).strip().lower())
+    return creds if isinstance(creds, dict) else {}
+
+
 def wp_auth(site_key, site_cfg):
     prefix = site_key.upper()
     user = os.environ.get(f"{prefix}_WP_USER")
@@ -181,9 +204,20 @@ def wp_auth(site_key, site_cfg):
         user = os.environ.get(f"{prefix}_WP_USER")
         pw = os.environ.get(f"{prefix}_WP_APP_PASSWORD")
     if not user or not pw:
-        raise SystemExit(f"Missing {prefix}_WP_USER / {prefix}_WP_APP_PASSWORD in environment")
+        saved = saved_site_credentials(site_key)
+        user = user or saved.get("wp_username")
+        pw = pw or saved.get("wp_app_password")
+    if not user or not pw:
+        raise SystemExit(
+            f"Missing {prefix}_WP_USER / {prefix}_WP_APP_PASSWORD in environment. "
+            f"Set them in blog-agent/.env or the server environment, or save this "
+            f"site's WordPress username and application password in the dashboard "
+            f"under Integrations > WordPress Blog Agent."
+        )
+    # WordPress shows application passwords in spaced groups of four; the REST
+    # API rejects them unless the spaces are stripped.
     api = site_cfg["base_url"].rstrip("/") + "/wp-json/wp/v2"
-    return api, (user, pw)
+    return api, (str(user).strip(), str(pw).replace(" ", ""))
 
 
 def wp_term_id(api, auth, taxonomy, name):

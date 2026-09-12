@@ -72,6 +72,11 @@ from config.social_credentials_bridge import (
     social_connection_status,
     sync_social_credentials,
 )
+from config.blog_credentials_bridge import (
+    BLOG_AGENT_ID,
+    connection_status as blog_connection_status,
+    sync_blog_credentials,
+)
 from core.ai_layer.router import ModelRouter
 from core.models.task import AgentTask, TaskPriority, TaskStatus
 from core.orchestrator.master import MasterOrchestrator
@@ -104,9 +109,11 @@ orchestrator = MasterOrchestrator(router=router)
 scheduler_mgr = SchedulerManager()
 websites_mgr = WebsiteManager()
 
-# Project saved per-site social credentials to where the publisher subprocess
-# reads them, so a restart or redeploy never leaves the two out of sync.
+# Project saved per-site social and blog credentials to where the publisher and
+# blog subprocesses read them, so a restart or redeploy never leaves them out of
+# sync — and the scheduled blog run does not start the day with no credentials.
 sync_social_credentials(websites_mgr)
+sync_blog_credentials(websites_mgr)
 
 # Register Production Sub-Agents
 blog_adapter = BlogAgentAdapter()
@@ -1608,6 +1615,7 @@ def get_site_agents_integrations(site_id: str, _viewer: Dict[str, Any] = Depends
     # Ask the publisher itself what it can post for this site, so the card
     # reflects reality rather than the presence of a profile URL.
     _social_status = social_connection_status(site.site_id)
+    _blog_status = blog_connection_status(site.site_id)
 
     integration_catalog = [
         {
@@ -1616,7 +1624,13 @@ def get_site_agents_integrations(site_id: str, _viewer: Dict[str, Any] = Depends
             "category": "Content & SEO",
             "icon": "fa-solid fa-blog",
             "color": "#06b6d4",
-            "is_connected": "blog-agent" in agent_creds or bool(site.domain),
+            # Connected means the agent can actually authenticate to WordPress
+            # for THIS site. Owning a domain is not a credential — treating it
+            # as one is what showed a green badge while every scheduled run was
+            # failing with "Missing CCM_WP_USER / CCM_WP_APP_PASSWORD".
+            "is_connected": _blog_status["ready"],
+            "credential_source": _blog_status["source"],
+            "missing_credentials": _blog_status["missing"],
             "fields": ["wp_url", "wp_username", "wp_app_password", "default_category"],
             "summary": "Publishes SEO optimized long-form blogs directly to your WordPress website.",
             "last_updated": agent_creds.get("blog-agent", {}).get("updated_at")
@@ -1903,6 +1917,8 @@ def connect_site_agent(site_id: str, agent_id: str, req: SaveAgentCredentialsReq
 
     if agent_id == SOCIAL_AGENT_ID:
         sync_social_credentials(websites_mgr)
+    elif agent_id == BLOG_AGENT_ID:
+        sync_blog_credentials(websites_mgr)
 
     test_result = None
     if req.test_after_save:
@@ -1940,6 +1956,8 @@ def disconnect_site_agent(site_id: str, agent_id: str):
 
     if agent_id == SOCIAL_AGENT_ID:
         sync_social_credentials(websites_mgr)
+    elif agent_id == BLOG_AGENT_ID:
+        sync_blog_credentials(websites_mgr)
 
     return {
         "status": "success",

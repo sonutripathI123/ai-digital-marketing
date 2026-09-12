@@ -36,6 +36,10 @@ logs/*
 # Per-site social credentials projected from the website registry (contains tokens)
 data/site_social_credentials.json
 
+# Per-site WordPress credentials projected from the website registry
+# (contains application passwords)
+data/site_blog_credentials.json
+
 # Visitor access telemetry (emails, IPs, user-agents) - runtime data, never commit
 data/user_access_logs.json
 
