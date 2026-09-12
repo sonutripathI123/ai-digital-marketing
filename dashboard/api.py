@@ -1778,7 +1778,7 @@ def get_site_agent_credentials(site_id: str, agent_id: str, _viewer: Dict[str, A
     masked = {}
     for k, v in creds.items():
         if any(s in k.lower() for s in ["pass", "token", "secret", "key"]) and v and isinstance(v, str) and len(v) > 4:
-            masked[k] = f"{v[:3]}••••••••{v[-3:]}"
+            masked[k] = mask_secret(v)
         else:
             masked[k] = v
 
@@ -1792,6 +1792,47 @@ def get_site_agent_credentials(site_id: str, agent_id: str, _viewer: Dict[str, A
     }
 
 
+# Secrets are echoed back to the browser as "abc••••••••xyz" so an operator can
+# see that something is stored without the value leaving the server. The browser
+# posts whatever sits in the field back to us, so every write path has to be able
+# to recognise that placeholder and refuse to treat it as a credential. Keeping
+# the mask and its detector next to each other stops them drifting apart — they
+# had, and the result was a saved password overwritten with its own mask.
+MASK_CHAR = "•"
+
+
+def mask_secret(value: str) -> str:
+    return f"{value[:3]}{MASK_CHAR * 8}{value[-3:]}"
+
+
+def is_masked(value: Any) -> bool:
+    """True when a submitted value is a display mask rather than a real secret."""
+    return isinstance(value, str) and MASK_CHAR in value
+
+
+def resolve_submitted_credentials(
+    submitted: Optional[Dict[str, Any]],
+    site_id: str,
+    agent_id: str,
+) -> Dict[str, Any]:
+    """Submitted credentials with masked fields restored from what is stored.
+
+    A field the operator did not retype comes back masked; the stored value is
+    the one to act on. Sending the mask onward raises UnicodeEncodeError the
+    moment requests puts it in a latin-1 Basic Auth header.
+    """
+    stored = dict(websites_mgr.get_agent_credentials(site_id, agent_id))
+    if not submitted:
+        return stored
+
+    resolved = dict(stored)
+    for key, value in submitted.items():
+        if value is None or is_masked(value):
+            continue
+        resolved[key] = value
+    return resolved
+
+
 def perform_agent_connection_test(agent_id: str, creds: Dict[str, Any], site: WebsiteProfile) -> Dict[str, Any]:
     """Helper function to perform connection testing across all agent types."""
     import requests
@@ -1801,6 +1842,20 @@ def perform_agent_connection_test(agent_id: str, creds: Dict[str, Any], site: We
         wp_url = (creds.get("wp_url") or site.domain).strip().rstrip('/')
         wp_user = creds.get("wp_username") or creds.get("wp_user")
         wp_pass = creds.get("wp_app_password") or creds.get("wp_password")
+
+        # An earlier version saved the display mask over the real password.
+        # Say so plainly — the alternative is a latin-1 encoding error that
+        # reads like the site is unreachable.
+        if is_masked(wp_user) or is_masked(wp_pass):
+            return {
+                "success": False,
+                "message": (
+                    "The stored credentials are a display mask, not a real password "
+                    "(saved by an earlier version of this form). Please type the "
+                    "WordPress username and a freshly generated Application Password "
+                    "again, then save."
+                )
+            }
 
         if not wp_user or not wp_pass:
             return {
@@ -1911,7 +1966,11 @@ def connect_site_agent(site_id: str, agent_id: str, req: SaveAgentCredentialsReq
     if not site:
         raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
 
-    clean_creds = {k: v for k, v in req.credentials.items() if v is not None and not str(v).startswith("•••")}
+    # A masked field means "leave this one as it is", not "the password is now
+    # abc••••••••xyz". The old guard only caught a value that *started* with the
+    # mask, which this mask never does — so re-saving the form overwrote the
+    # stored password with its own display mask and broke publishing for good.
+    clean_creds = {k: v for k, v in req.credentials.items() if v is not None and not is_masked(v)}
 
     websites_mgr.save_agent_credentials(site.site_id, agent_id, clean_creds)
 
@@ -1940,7 +1999,7 @@ def test_site_agent_connection(site_id: str, agent_id: str, req: TestAgentConnec
     if not site:
         raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
 
-    creds = req.credentials or websites_mgr.get_agent_credentials(site.site_id, agent_id)
+    creds = resolve_submitted_credentials(req.credentials, site.site_id, agent_id)
     result = perform_agent_connection_test(agent_id, creds, site)
     return result
 

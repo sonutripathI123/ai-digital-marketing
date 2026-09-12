@@ -38,12 +38,20 @@ _PASSWORD_KEYS = ("wp_app_password", "wp_password")
 _URL_KEYS = ("wp_url",)
 
 
+# The dashboard echoes stored secrets back to the browser as "abc••••••••xyz".
+# A value carrying that character is a display mask, never a credential — and a
+# stored one means an earlier save wrote the mask over the real password. Either
+# way it cannot authenticate, so treat it as absent rather than shipping it to
+# WordPress and failing with a latin-1 encoding error.
+_MASK_CHAR = "•"
+
+
 def _first(creds: Dict[str, Any], keys: Tuple[str, ...]) -> Optional[str]:
     for key in keys:
         value = creds.get(key)
         if value not in (None, ""):
             text = str(value).strip()
-            if text and not text.startswith("•••"):
+            if text and _MASK_CHAR not in text:
                 return text
     return None
 
