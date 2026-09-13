@@ -1646,6 +1646,7 @@ function getIconForAgent(agentId) {
 
 async function runAgentNow(agentId, action = 'fetch_overview') {
   if (!requireAdminAction(`run task '${action}' on ${agentId}`)) return;
+  if (!confirmLivePublish(agentId, action)) return;
   const btn = window.event ? (window.event.currentTarget || window.event.target) : null;
   let origText = '';
   if (btn) {
@@ -1684,8 +1685,38 @@ async function runAgentNow(agentId, action = 'fetch_overview') {
   }
 }
 
+// Actions that put content on a real public account the moment they run.
+// Everything else here is read-only or produces a draft, so only these ask.
+const LIVE_PUBLISH_ACTIONS = {
+  'publish-due': 'Publish every social post that is currently due, to this website\'s live Facebook, Instagram and LinkedIn accounts.',
+  'publish': 'Push queued drafts live.',
+  'write': 'Write a new blog post and publish it to the live WordPress site.'
+};
+
+// The chips are five identical grey labels reading "status", "generate",
+// "schedule", "publish-due", "add-keywords". Nothing in the wording says one of
+// them posts to the company's real accounts, so ask before it does.
+function confirmLivePublish(agentId, action) {
+  const detail = LIVE_PUBLISH_ACTIONS[action];
+  if (!detail) return true;
+
+  const site = allWebsitesList.find(s => s.site_id === currentSiteId);
+  const siteLabel = site ? `${site.name} (${currentSiteId})` : currentSiteId;
+
+  return confirm(
+    `PUBLISH LIVE — this posts publicly, right now.\n\n` +
+    `Website: ${siteLabel}\n` +
+    `Agent:   ${agentId}\n` +
+    `Action:  ${action}\n\n` +
+    `${detail}\n\n` +
+    `This cannot be undone from this dashboard — a published post has to be ` +
+    `removed on the platform itself.\n\nGo ahead?`
+  );
+}
+
 async function runAgentTask(agentId, action) {
   if (!requireAdminAction(`run task '${action}' on ${agentId}`)) return;
+  if (!confirmLivePublish(agentId, action)) return;
   try {
     const res = await fetch('/api/tasks/create', {
       method: 'POST',
@@ -4399,7 +4430,7 @@ async function loadTasks() {
         <td style="font-size:11px; font-family:var(--font-mono);">${t.created_at.substring(11, 19)}</td>
         <td>
           <button class="btn btn-secondary btn-sm" onclick="viewTaskDetail('${t.task_id}')">View</button>
-          ${t.status === 'APPROVED' || t.status === 'QUEUED' ? `<button class="btn btn-primary btn-sm" onclick="executeTask('${t.task_id}')">Exec</button>` : ''}
+          ${t.status === 'APPROVED' || t.status === 'QUEUED' ? `<button class="btn btn-primary btn-sm" onclick="executeTask('${t.task_id}', '${t.task_type || ''}', '${t.agent_id || ''}')">Exec</button>` : ''}
         </td>
       </tr>
     `).join('');
@@ -4408,8 +4439,11 @@ async function loadTasks() {
   }
 }
 
-async function executeTask(taskId) {
+async function executeTask(taskId, taskType, agentId) {
   if (!requireAdminAction(`execute task ${taskId}`)) return;
+  // Running a queued task is the second half of the same live publish: the
+  // chip only creates it, Exec is what actually posts.
+  if (!confirmLivePublish(agentId || 'this task', taskType || '')) return;
   try {
     const res = await fetch(`/api/tasks/execute/${taskId}`, {
       method: 'POST',
