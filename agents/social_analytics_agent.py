@@ -49,6 +49,56 @@ def format_utc_to_display(utc_str: Optional[str]) -> str:
         return str(utc_str)[:16]
 
 
+# Ids the publisher never returned — placeholders that must not be treated as
+# proof that a platform accepted the post.
+_PLACEHOLDER_POST_IDS = {"", "live verified", "none", "null"}
+
+
+def _is_real_post_id(post_id: Any) -> bool:
+    return str(post_id or "").strip().lower() not in _PLACEHOLDER_POST_IDS
+
+
+def _dedupe_published_history(history: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """One row per post.
+
+    The history is stitched together from the campaign queue, a local cache, the
+    Meta and LinkedIn APIs and the SQLite table, and the same post routinely
+    arrives from more than one of them — which is why the dashboard showed
+    identical posts two and three times over. Collapse on the platform's own id
+    where there is one, and otherwise on the post's identity (platform, time and
+    opening line), keeping the first and richest copy seen.
+
+    `is_live_api` is also corrected here. It was written as a hardcoded True on
+    every path, so it claimed platform confirmation for posts that never
+    returned an id.
+    """
+    seen_ids: set = set()
+    seen_fallback: set = set()
+    deduped: List[Dict[str, Any]] = []
+
+    for item in history:
+        post_id = item.get("platform_post_id")
+        if _is_real_post_id(post_id):
+            key = str(post_id).strip()
+            if key in seen_ids:
+                continue
+            seen_ids.add(key)
+        else:
+            key = (
+                str(item.get("platform", "")).lower(),
+                str(item.get("published_at", "")),
+                str(item.get("caption", ""))[:60],
+            )
+            if key in seen_fallback:
+                continue
+            seen_fallback.add(key)
+
+        item["is_live_api"] = _is_real_post_id(post_id)
+        deduped.append(item)
+
+    return deduped
+
+
 def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https://corporatecarsmelbourne.com.au", site_name: str = "Corporate Cars Melbourne") -> Dict[str, Any]:
     """
     Connects to real corporate-cars-social-agent/social_agent.db and queries live Meta & LinkedIn APIs
@@ -101,7 +151,12 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
                 camp_posts = json.load(sfp)
                 for cp in camp_posts:
                     if cp.get("site") == site_id and cp.get("status") == "published":
-                        pid = cp.get("post_id", "")
+                        # The publisher records the id as "platform_post_id";
+                        # only campaigns from the retired engine use "post_id".
+                        # Reading the old key alone left every current record
+                        # with a blank id, which then failed the SQLite
+                        # de-duplication below and listed each post twice.
+                        pid = cp.get("platform_post_id") or cp.get("post_id", "")
                         plat = cp.get("platform", "LinkedIn").capitalize()
                         cap = cp.get("caption", "")
                         title = cap.split("\n")[0] if cap else f"{plat} Post"
@@ -370,6 +425,8 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
     next_fb = next((s for s in scheduled_queue if s["platform"].lower() == "facebook"), None)
     next_ig = next((s for s in scheduled_queue if s["platform"].lower() == "instagram"), None)
     next_li = next((s for s in scheduled_queue if s["platform"].lower() == "linkedin"), None)
+
+    published_history = _dedupe_published_history(published_history)
 
     return {
         "live_connected_accounts": live_accounts,
