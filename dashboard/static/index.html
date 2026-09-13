@@ -1259,18 +1259,15 @@
               <input type="checkbox" name="social-platform" value="linkedin" checked style="accent-color: var(--accent-purple);" />
               <i class="fa-brands fa-linkedin" style="color: #0ea5e9;"></i> LinkedIn
             </label>
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fff; cursor: pointer; background: rgba(30,41,59,0.6); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border);">
-              <input type="checkbox" name="social-platform" value="x" checked style="accent-color: var(--accent-purple);" />
-              <i class="fa-brands fa-x-twitter" style="color: #f8fafc;"></i> X (Twitter)
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fff; cursor: pointer; background: rgba(30,41,59,0.6); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border);">
-              <input type="checkbox" name="social-platform" value="threads" checked style="accent-color: var(--accent-purple);" />
-              <i class="fa-brands fa-threads" style="color: #f8fafc;"></i> Threads
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fff; cursor: pointer; background: rgba(30,41,59,0.6); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border);">
-              <input type="checkbox" name="social-platform" value="pinterest" checked style="accent-color: var(--accent-purple);" />
-              <i class="fa-brands fa-pinterest" style="color: #ef4444;"></i> Pinterest
-            </label>
+            <!-- X, Threads and Pinterest were offered here, checked by default,
+                 and the publisher skipped every one of their posts: can_publish()
+                 in site_config.py answers for Facebook, Instagram and LinkedIn
+                 and returns False for everything else. Offering them scheduled
+                 posts that could never go out. Put them back only once that gate
+                 covers them. -->
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">
+            These are the channels the publisher can post to today.
           </div>
         </div>
 

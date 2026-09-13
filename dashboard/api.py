@@ -496,7 +496,7 @@ class AddBlogTopicsRequest(BaseModel):
 class AddSocialCampaignRequest(BaseModel):
     site: str = "ccm"
     keywords: str
-    platforms: List[str] = Field(default_factory=lambda: ["instagram", "facebook", "linkedin", "x", "threads", "pinterest"])
+    platforms: List[str] = Field(default_factory=lambda: ["instagram", "facebook", "linkedin"])
     # None means "use this website's own saved cadence" rather than a global default.
     posts_per_week: Optional[int] = None
     auto_schedule: bool = True
@@ -2024,7 +2024,13 @@ def disconnect_site_agent(site_id: str, agent_id: str):
     }
 
 
-SOCIAL_PLATFORM_CHOICES = ["instagram", "facebook", "linkedin", "x", "threads", "pinterest"]
+# Only what the publisher can actually post to. SiteSocialConfig.can_publish()
+# answers for these three and returns False for every other platform, so x,
+# threads and pinterest previously produced campaigns that were skipped on every
+# cycle and then silently retired — while the UI reported them as scheduled.
+# publishers/x.py and publishers/pinterest.py are written; add the names back
+# here once can_publish() recognises them.
+SOCIAL_PLATFORM_CHOICES = ["instagram", "facebook", "linkedin"]
 DEFAULT_SOCIAL_PLATFORMS = ["instagram", "facebook", "linkedin"]
 
 
@@ -3167,6 +3173,17 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
 
     platforms = [p.lower() for p in req.platforms if p.lower() in SOCIAL_PLATFORM_CHOICES]
     if not platforms:
+        # Asking only for platforms the publisher cannot post to used to fall
+        # through to this site's defaults, quietly scheduling somewhere the
+        # caller never chose. Say so instead.
+        if req.platforms:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"None of the requested platforms can be published to. "
+                    f"Supported: {', '.join(SOCIAL_PLATFORM_CHOICES)}."
+                ),
+            )
         platforms = saved_settings.get("platforms") or DEFAULT_SOCIAL_PLATFORMS
 
     # Cadence is per website: use what the caller picked, else this site's own
