@@ -2097,12 +2097,32 @@ def perform_agent_connection_test(agent_id: str, creds: Dict[str, Any], site: We
         }
 
     elif agent_id == "reputation-agent":
-        place_id = creds.get("place_id")
-        if not place_id:
-            return {"success": False, "message": "Google Business Profile Place ID is required."}
+        # This used to answer "connected" for any non-empty string, so a typo in
+        # the Place ID passed the test and failed silently every run afterwards.
+        # Ask Google instead.
+        place_id = (creds.get("place_id") or "").strip()
+        api_key = (creds.get("api_key") or "").strip()
+        missing = [n for n, v in (("Place ID", place_id), ("Places API key", api_key)) if not v]
+        if missing:
+            return {"success": False, "message": f"{' and '.join(missing)} required."}
+
+        from agents.reputation_agent import fetch_google_reviews
+
+        payload, error = fetch_google_reviews(place_id, api_key)
+        if error or payload is None:
+            return {"success": False, "message": error or "Google returned nothing."}
+
+        name = (payload.get("displayName") or {}).get("text", "this place")
+        rating = payload.get("rating")
+        total = payload.get("userRatingCount") or 0
+        returned = len(payload.get("reviews") or [])
         return {
             "success": True,
-            "message": f"✅ Google Business Place ID '{place_id}' connected for reviews monitoring."
+            "message": (
+                f"Connected to '{name}' — {rating if rating is not None else 'no'} average over "
+                f"{total} reviews. Google returned {returned} review(s) to read."
+            ),
+            "details": {"rating": rating, "total_reviews": total, "reviews_returned": returned},
         }
 
     elif agent_id == "competitor-analysis-agent":
@@ -2943,6 +2963,39 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
                     f"Configure GA4 Measurement ID & Property ID for {site_name} in Settings."
                 ]
             }
+
+    elif agent_id == "reputation-agent":
+        from agents.reputation_agent import ReviewReputationAgent
+        from core.models.task import AgentTask
+
+        rep_creds = websites_mgr.get_agent_credentials(effective_site, "reputation-agent") or {}
+        rep_task = AgentTask(
+            task_id="reputation-live-query",
+            agent_id="reputation-agent",
+            task_type="fetch_reviews",
+            input_data={
+                "action": "fetch_reviews",
+                "site_id": effective_site,
+                "credentials": rep_creds,
+            },
+            site_id=effective_site,
+        )
+        try:
+            out_data = ReviewReputationAgent().run_task(rep_task, router=orchestrator.router).get("output", {})
+        except Exception as e:
+            out_data = {
+                "live_data_connected": False,
+                "data_source": "REQUEST FAILED",
+                "live_error": str(e),
+                "recent_reviews": [],
+                "reputation_overview": {"average_rating": None, "total_reviews": 0},
+            }
+
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("actionable_recommendations", []),
+        }
 
     elif agent_id == "google-ads-monitoring-agent":
         from agents.google_ads_monitoring_agent import GoogleAdsMonitoringAgent

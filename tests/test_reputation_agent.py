@@ -46,8 +46,19 @@ class TestReviewReputationAgent(unittest.TestCase):
         res = self.agent.run_task(task, self.router)
         self.assertIn("output", res)
         output = res["output"]
-        self.assertGreater(output["reputation_overview"]["average_rating"], 0)
-        self.assertGreater(len(output["recent_reviews"]), 0)
+        # These used to require a rating above zero and a non-empty review list,
+        # which held only while the agent returned a fixed 4.8 over 142 reviews
+        # and three invented reviewers. Whether this profile has reviews is
+        # Google's business; the contract is that nothing is reported unless
+        # Google answered.
+        self.assertIn("live_data_connected", output)
+        self.assertIsInstance(output["recent_reviews"], list)
+        if output["live_data_connected"]:
+            self.assertIsNotNone(output["reputation_overview"]["average_rating"])
+        else:
+            self.assertEqual(output["recent_reviews"], [])
+            self.assertIsNone(output["reputation_overview"]["average_rating"])
+            self.assertTrue(output["live_error"])
 
     def test_run_task_draft_reply(self):
         task = AgentTask(
@@ -64,8 +75,13 @@ class TestReviewReputationAgent(unittest.TestCase):
         )
         res = self.agent.run_task(task, self.router)
         output = res["output"]
-        self.assertTrue(output["approval_required"])
+        # `approval_required` implied the reply could then be published from
+        # here. It cannot -- the Places API is read-only -- so the payload now
+        # says that outright instead.
         self.assertIn("draft_response", output)
+        self.assertTrue(output["draft_response"])
+        self.assertFalse(output["can_publish_from_here"])
+        self.assertIn("draft_method", output)
 
     def test_orchestrator_execution(self):
         task = self.orchestrator.create_task(

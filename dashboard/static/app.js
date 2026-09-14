@@ -3647,149 +3647,131 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
       const ro = lf.reputation_overview || {};
       const reviews = lf.recent_reviews || [];
       const sb = ro.sentiment_breakdown || {};
+      const sbk = lf.star_breakdown || {};
+      const repLive = lf.live_data_connected === true;
+
+      // The panel used to show a gold "LIVE BRAND REPUTATION SENTINEL" badge
+      // over four zeros whether or not anything was connected, and the numbers
+      // behind it came from a fixed 4.8 rating over 142 reviews with three
+      // invented reviewers. Nothing renders now unless Google answered.
+      if (!repLive) {
+        container.innerHTML = `
+          <div style="background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.35); padding:20px 22px; border-radius:14px;">
+            <div style="font-size:15px; font-weight:800; color:#facc15; margin-bottom:8px;">
+              <i class="fa-solid fa-plug-circle-exclamation"></i> Google reviews abhi connect nahi hain
+            </div>
+            <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+              ${escapeHtml(lf.live_error || 'No Google Places credentials are configured for this site.')}
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:12px; line-height:1.6;">
+              Jab tak Google jawab nahi deta, yahan koi rating ya review nahi dikhayi jayegi &mdash;
+              zero ka matlab hai "pata nahi", "zero reviews" nahi.
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openAgentIntegration('reputation-agent')" style="margin-top:14px; background:linear-gradient(135deg, #eab308, #ca8a04); border:none; font-size:12px; font-weight:700; color:#000;">
+              <i class="fa-solid fa-plug"></i> Connect Google reviews
+            </button>
+          </div>`;
+        return;
+      }
+
+      const pct = (n) => sbk.counted_over ? Math.round((n / sbk.counted_over) * 100) : 0;
+      const stars = (n) => '★'.repeat(Math.max(0, n || 0)) + '☆'.repeat(Math.max(0, 5 - (n || 0)));
+      window._reputationReviews = reviews;
 
       container.innerHTML = `
-        <!-- Reputation Header Banner -->
         <div style="background:linear-gradient(135deg, rgba(234,179,8,0.15), rgba(15,23,42,0.8)); border:1px solid rgba(234,179,8,0.3); padding:18px 22px; border-radius:14px; margin-bottom:20px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div>
-              <div style="display:flex; align-items:center; gap:8px;">
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800; background:rgba(234,179,8,0.2); color:#facc15;">
-                  <i class="fa-solid fa-star" style="font-size:10px; margin-right:4px;"></i> LIVE BRAND REPUTATION SENTINEL
+                  <i class="fa-brands fa-google" style="font-size:10px; margin-right:4px;"></i> Live from Google Places API
                 </span>
-                <span style="font-size:12px; color:var(--text-muted);">Multi-Platform Review & Sentiment Engine</span>
+                <span style="font-size:12px; color:var(--text-muted);">Reading Google only &mdash; ${escapeHtml((lf.platforms_not_connected || []).join(', ') || 'no other platform')} not connected</span>
               </div>
-              <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">Google Business Profile & Social Reviews (${data.site_name})</h3>
-              <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
-                Monitors customer feedback across Google, TripAdvisor & Trustpilot, calculates AI sentiment, and drafts responses.
-              </div>
+              <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">${escapeHtml(lf.business_name || data.site_name)}</h3>
+              ${lf.profile_url ? `<a href="${escapeHtml(lf.profile_url)}" target="_blank" rel="noopener" style="font-size:11.5px; color:var(--accent-cyan);">View the profile on Google Maps</a>` : ''}
             </div>
             <button class="btn btn-primary btn-sm" onclick="runAgentNow('reputation-agent', 'fetch_reviews')" style="background:linear-gradient(135deg, #eab308, #ca8a04); border:none; font-size:12px; font-weight:700; color:#000;">
-              <i class="fa-solid fa-arrows-rotate"></i> Sync Fresh Reviews
+              <i class="fa-solid fa-arrows-rotate"></i> Refresh
             </button>
           </div>
         </div>
 
-        <!-- 4 KPI Stat Cards -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-bottom:20px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:20px;">
           <div style="background:rgba(234,179,8,0.1); border:1px solid rgba(234,179,8,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#facc15; text-transform:uppercase;">Overall Rating</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.average_rating ?? 0} <span style="font-size:14px; color:#facc15;">★</span></div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Out of 5.0 Stars</div>
+            <div style="font-size:10.5px; font-weight:800; color:#facc15; text-transform:uppercase;">Average Rating</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.average_rating ?? '&mdash;'} <span style="font-size:14px; color:#facc15;">&#9733;</span></div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Google profile average</div>
           </div>
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Total Reviews</div>
             <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.total_reviews ?? 0}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Aggregated Feed</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">on the whole profile</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">5-Star Reviews</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.five_star_count ?? 0}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Top Rating</div>
+            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Reviews Readable</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ro.reviews_returned ?? 0}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Google caps this API at 5</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Positive Sentiment</div>
+            <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">4&ndash;5 Star</div>
             <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sb.positive_percent ?? 0}%</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">AI Sentiment Score</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">of the ${sb.sample_size ?? 0} read</div>
           </div>
         </div>
 
-        <!-- Rating & Sentiment Visual Distribution -->
         <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
-          <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-            <i class="fa-solid fa-chart-simple" style="color:#facc15;"></i> Star Ratings & Sentiment Breakdown
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">
+            <i class="fa-solid fa-chart-simple" style="color:#facc15;"></i> Star breakdown
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-            <div>
-              <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:8px;"><strong>Star Rating Distribution:</strong></div>
-              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; font-size:12px;">
-                <span style="color:#facc15; font-weight:700; width:50px;">5 Star</span>
-                <div style="flex:1; background:rgba(255,255,255,0.08); height:8px; border-radius:4px; overflow:hidden;">
-                  <div style="width:${ro.total_reviews ? (Math.round(((ro.five_star_count || 0) / ro.total_reviews) * 100)) : 0}%; background:#10b981; height:100%;"></div>
-                </div>
-                <span style="font-family:var(--font-mono); color:#fff; width:30px;">${ro.five_star_count ?? 0}</span>
+          <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:12px;">${escapeHtml(sbk.note || '')}</div>
+          ${[['5 Star', sbk.five_star, '#10b981'], ['4 Star', sbk.four_star, '#38bdf8'], ['3 Star or less', sbk.three_star_and_below, '#ef4444']].map(row => `
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; font-size:11.5px;">
+              <span style="width:92px; color:var(--text-secondary);">${row[0]}</span>
+              <div style="flex:1; height:8px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden;">
+                <div style="width:${pct(row[1])}%; background:${row[2]}; height:100%;"></div>
               </div>
-              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; font-size:12px;">
-                <span style="color:#facc15; font-weight:700; width:50px;">4 Star</span>
-                <div style="flex:1; background:rgba(255,255,255,0.08); height:8px; border-radius:4px; overflow:hidden;">
-                  <div style="width:${ro.total_reviews ? (Math.round(((ro.four_star_count || 0) / ro.total_reviews) * 100)) : 0}%; background:#38bdf8; height:100%;"></div>
-                </div>
-                <span style="font-family:var(--font-mono); color:#fff; width:30px;">${ro.four_star_count ?? 0}</span>
-              </div>
-              <div style="display:flex; align-items:center; gap:10px; font-size:12px;">
-                <span style="color:#facc15; font-weight:700; width:50px;">≤3 Star</span>
-                <div style="flex:1; background:rgba(255,255,255,0.08); height:8px; border-radius:4px; overflow:hidden;">
-                  <div style="width:${ro.total_reviews ? (Math.round(((ro.three_star_and_below_count || 0) / ro.total_reviews) * 100)) : 0}%; background:#ef4444; height:100%;"></div>
-                </div>
-                <span style="font-family:var(--font-mono); color:#fff; width:30px;">${ro.three_star_and_below_count ?? 0}</span>
-              </div>
-            </div>
-            <div>
-              <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:8px;"><strong>AI Sentiment Analysis:</strong></div>
-              <div style="background:rgba(15,23,42,0.6); padding:12px; border-radius:10px; display:flex; flex-direction:column; gap:8px;">
-                <div style="display:flex; justify-content:space-between; font-size:12px;">
-                  <span style="color:#10b981;"><i class="fa-solid fa-face-smile"></i> Positive Customer Sentiment</span>
-                  <strong style="color:#10b981; font-family:var(--font-mono);">${sb.positive_percent ?? 0}%</strong>
-                </div>
-                <div style="display:flex; justify-content:space-between; font-size:12px;">
-                  <span style="color:#f59e0b;"><i class="fa-solid fa-face-meh"></i> Neutral / Informative</span>
-                  <strong style="color:#f59e0b; font-family:var(--font-mono);">${sb.neutral_percent ?? 0}%</strong>
-                </div>
-                <div style="display:flex; justify-content:space-between; font-size:12px;">
-                  <span style="color:#ef4444;"><i class="fa-solid fa-face-frown"></i> Negative Feedback</span>
-                  <strong style="color:#ef4444; font-family:var(--font-mono);">${sb.negative_percent ?? 0}%</strong>
-                </div>
-              </div>
-            </div>
+              <span style="font-family:var(--font-mono); color:#fff; width:30px; text-align:right;">${row[1] ?? 0}</span>
+            </div>`).join('')}
+          <div style="font-size:11px; color:var(--text-muted); margin-top:10px;">
+            Positive / neutral / negative is ${escapeHtml(sb.method || 'derived from star ratings')}.
           </div>
         </div>
 
-        <!-- Recent Customer Reviews & AI Reply Feed -->
         <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
-          <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; margin-bottom:14px;">
-            <i class="fa-solid fa-comments" style="color:#38bdf8;"></i> Recent Multi-Platform Reviews & AI Auto-Replies
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:12px;">
+            <i class="fa-solid fa-comments" style="color:#38bdf8;"></i> Reviews Google returned (${reviews.length})
           </div>
-          <div style="display:flex; flex-direction:column; gap:12px;">
-            ${reviews.map(r => `
+          ${reviews.length ? `<div style="display:flex; flex-direction:column; gap:12px;">
+            ${reviews.map((r, i) => `
               <div style="background:rgba(30,41,59,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:14px 16px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
-                  <div style="display:flex; align-items:center; gap:10px;">
-                    <strong style="color:#fff; font-size:13px;">${r.author}</strong>
-                    <span class="action-chip" style="font-size:10px;">
-                      <i class="${r.platform.includes('Google') ? 'fa-brands fa-google' : 'fa-solid fa-globe'}"></i> ${r.platform}
-                    </span>
-                    <span style="color:#facc15; font-size:11px; letter-spacing:1px;">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+                  <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <strong style="color:#fff; font-size:13px;">${escapeHtml(r.author || 'Google user')}</strong>
+                    <span class="action-chip" style="font-size:10px;"><i class="fa-brands fa-google"></i> Google</span>
+                    <span style="color:#facc15; font-size:11px; letter-spacing:1px;">${stars(r.rating)}</span>
                   </div>
-                  <span class="badge ${r.status === 'RESPONDED' ? 'badge-success' : (r.status === 'DRAFTED' ? 'badge-info' : 'badge-warning')}" style="font-size:10px; font-weight:800;">
-                    ${r.status}
-                  </span>
+                  <span style="font-size:11px; color:var(--text-muted);">${escapeHtml(r.published_relative || '')}</span>
                 </div>
-                <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.4; margin-bottom:10px; font-style:italic;">
-                  "${r.text}"
-                </div>
-                <div style="background:rgba(15,23,42,0.7); border-left:3px solid ${r.status === 'RESPONDED' ? '#10b981' : '#38bdf8'}; border-radius:6px; padding:10px 12px;">
-                  <div style="font-size:11px; font-weight:800; color:${r.status === 'RESPONDED' ? '#10b981' : '#38bdf8'}; text-transform:uppercase; margin-bottom:3px;">
-                    ${r.status === 'RESPONDED' ? '✓ Published Reply' : '⚡ AI Response Draft (Pending Approval)'}:
-                  </div>
-                  <div style="font-size:12px; color:#e2e8f0;">
-                    ${r.response || r.draft_response}
-                  </div>
-                </div>
-              </div>
-            `).join('')}
+                <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.5;">${escapeHtml(r.text || '(no text)')}</div>
+                <button class="btn btn-sm" onclick="draftReviewReply(${i})" style="margin-top:10px; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.4); color:#38bdf8; font-size:11.5px; font-weight:700;">
+                  <i class="fa-solid fa-pen"></i> Draft a reply to copy
+                </button>
+              </div>`).join('')}
+          </div>` : `<div style="font-size:12.5px; color:var(--text-muted);">Google returned no review text for this profile.</div>`}
+          <div style="font-size:11.5px; color:var(--text-muted); margin-top:14px; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+            <i class="fa-solid fa-circle-info"></i> ${escapeHtml(lf.publish_note || '')}
           </div>
         </div>
 
-        <!-- Recommendations -->
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
           <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">
-            <i class="fa-solid fa-lightbulb"></i> Reputation & Review Growth Strategy for ${data.site_name}:
+            <i class="fa-solid fa-lightbulb"></i> What to do about it:
           </div>
           ${(lf.actionable_recommendations || dm.recommendations || []).map(r => `
             <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:flex-start; gap:8px;">
-              <i class="fa-solid fa-check" style="color:var(--accent-purple); margin-top:3px;"></i> <span>${r}</span>
-            </div>
-          `).join('')}
+              <i class="fa-solid fa-check" style="color:var(--accent-purple); margin-top:3px;"></i> <span>${escapeHtml(r)}</span>
+            </div>`).join('')}
         </div>
       `;
     } else if (agentId === 'lead-management-agent') {
@@ -9167,6 +9149,7 @@ const AGENT_INTEGRATION_CONFIGS = {
     subtitle: 'Pulls real customer reviews, calculates sentiment, and crafts professional AI reply drafts.',
     fields: [
       { key: 'place_id', label: 'Google Place ID', type: 'text', placeholder: 'ChIJN1t_tDeuEmsRUsoyG83frY4', required: true, help: 'Unique Google Maps identifier for your business location' },
+      { key: 'api_key', label: 'Google Places API Key', type: 'password', placeholder: 'AIza...', required: true, help: 'From Google Cloud Console, with the Places API (New) enabled' },
       { key: 'business_name', label: 'Business Name on Google Maps', type: 'text', placeholder: 'Opal Chauffeurs Melbourne', required: false, help: 'Exact registered name on Google Business Profile' }
     ],
     guide: `
@@ -9245,6 +9228,74 @@ const AGENT_INTEGRATION_CONFIGS = {
     `
   }
 };
+
+// Drafts a reply to one of the reviews Google actually returned. The reply is
+// never posted from here -- the Places API is read-only -- so the dialog says
+// so rather than implying the reply has gone live.
+async function draftReviewReply(index) {
+  const reviews = window._reputationReviews || [];
+  const review = reviews[index];
+  if (!review) { alert('That review is no longer on screen. Refresh and try again.'); return; }
+
+  const btn = window.event ? (window.event.currentTarget || window.event.target) : null;
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Drafting...'; }
+
+  try {
+    const createRes = await fetch('/api/tasks/create', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        agent_id: 'reputation-agent',
+        task_type: 'draft_reply',
+        input_data: {
+          action: 'draft_reply',
+          site_id: currentSiteId,
+          use_ai: true,
+          rating: review.rating,
+          review_text: review.text || ''
+        },
+        site_id: currentSiteId,
+        requires_approval: false
+      })
+    });
+    const created = await createRes.json();
+    const taskId = created && created.task && created.task.task_id;
+    if (!createRes.ok || !taskId) throw new Error((created && created.detail) || 'Could not start the task.');
+
+    const execRes = await fetch('/api/tasks/execute/' + taskId, {
+      method: 'POST', headers: getAuthHeaders({ 'Content-Type': 'application/json' })
+    });
+    const done = await execRes.json();
+    const out = (done && done.task && done.task.output_data) || {};
+
+    if (!out.draft_response) {
+      alert('Koi draft nahi bana: ' + (out.error || 'the agent returned nothing.'));
+      return;
+    }
+
+    const NL = String.fromCharCode(10);
+    const msg = 'Reply draft for ' + (review.author || 'this reviewer') + ':' + NL + NL +
+      out.draft_response + NL + NL +
+      '(' + (out.draft_method || 'draft') + ')' + NL + NL +
+      'Ye sirf draft hai. Isko copy karke apne Google Business Profile par khud post karna hoga ' +
+      '- yahan se reply publish nahi hota.';
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try { await navigator.clipboard.writeText(out.draft_response); } catch (e) { /* clipboard blocked */ }
+    }
+    alert(msg);
+  } catch (err) {
+    alert('Draft nahi ban paya: ' + (err.message || err));
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = orig; }
+  }
+}
+
+function openAgentIntegration(agentId) {
+  if (typeof openAgentIntegrationModal === 'function') return openAgentIntegrationModal(agentId, 'settings');
+  alert('Open this agent from the Integrations panel to connect it.');
+}
 
 async function openAgentIntegrationModal(agentId, initialTab = 'settings') {
   currentIntegrationAgentId = agentId;
