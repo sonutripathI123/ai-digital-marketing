@@ -3160,9 +3160,10 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
 
             report["seo_audit_metrics"] = {
                 "data_source": (
-                    f"Whole-site crawl of {latest.get('pages_audited_count')} pages on {latest.get('domain_url', site_domain)}"
+                    f"Whole-site crawl of {detail.get('pages_audited_count', 0)} pages on "
+                    f"{detail.get('domain_url', latest.get('domain_url', site_domain))}"
                     if latest.get("audit_mode") == "whole_website"
-                    else f"Single-page audit of {latest.get('url', site_domain)}"
+                    else f"Single-page audit of {latest.get('url', detail.get('audited_url', site_domain))}"
                 ),
                 "audit_mode": latest.get("audit_mode", "single_page"),
                 "audited_at": latest.get("created_at") or latest.get("timestamp"),
