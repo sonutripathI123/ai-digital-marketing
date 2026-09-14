@@ -73,6 +73,58 @@ def resolve_place_credentials(
     return creds
 
 
+SEARCH_ENDPOINT = "https://places.googleapis.com/v1/places:searchText"
+SEARCH_FIELDS = "places.id,places.displayName,places.formattedAddress,places.rating,places.userRatingCount"
+
+
+def search_places(query: str, api_key: str) -> Tuple[List[Dict[str, Any]], Optional[str]]:
+    """Find candidate places by name, so the Place ID need not be copied by hand.
+
+    Returns (candidates, error). An empty list with no error means Google found
+    nothing matching -- which is an answer, not a failure to be papered over.
+    """
+    import requests
+
+    try:
+        res = requests.post(
+            SEARCH_ENDPOINT,
+            headers={
+                "X-Goog-Api-Key": api_key,
+                "X-Goog-FieldMask": SEARCH_FIELDS,
+                "Content-Type": "application/json",
+            },
+            json={"textQuery": query},
+            timeout=FETCH_TIMEOUT_SECONDS,
+        )
+    except Exception as e:
+        return [], f"Could not reach the Google Places API: {e}"
+
+    if res.status_code != 200:
+        detail = ""
+        try:
+            detail = res.json().get("error", {}).get("message", "")
+        except Exception:
+            detail = res.text[:200]
+        return [], f"Google Places search returned HTTP {res.status_code}. {detail}".strip()
+
+    try:
+        places = res.json().get("places") or []
+    except Exception as e:
+        return [], f"Google Places search returned a response that could not be read: {e}"
+
+    return [
+        {
+            "place_id": p.get("id"),
+            "name": (p.get("displayName") or {}).get("text"),
+            "address": p.get("formattedAddress"),
+            "rating": p.get("rating"),
+            "total_reviews": p.get("userRatingCount"),
+        }
+        for p in places
+        if p.get("id")
+    ], None
+
+
 def fetch_google_reviews(place_id: str, api_key: str) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
     """Call the Places API. Returns (payload, error) -- never a stand-in for one."""
     import requests

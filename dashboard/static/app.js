@@ -9148,9 +9148,9 @@ const AGENT_INTEGRATION_CONFIGS = {
     color: '#fbbf24',
     subtitle: 'Pulls real customer reviews, calculates sentiment, and crafts professional AI reply drafts.',
     fields: [
-      { key: 'place_id', label: 'Google Place ID', type: 'text', placeholder: 'ChIJN1t_tDeuEmsRUsoyG83frY4', required: true, help: 'Unique Google Maps identifier for your business location' },
+      { key: 'place_id', label: 'Google Place ID', type: 'text', placeholder: 'Leave blank — Test Connection will find it', required: false, help: 'Filled in automatically once the API key works. Only set it by hand to pick a different location.' },
       { key: 'api_key', label: 'Google Places API Key', type: 'password', placeholder: 'AIza...', required: true, help: 'From Google Cloud Console, with the Places API (New) enabled' },
-      { key: 'business_name', label: 'Business Name on Google Maps', type: 'text', placeholder: 'Opal Chauffeurs Melbourne', required: false, help: 'Exact registered name on Google Business Profile' }
+      { key: 'business_name', label: 'Business Name on Google Maps', type: 'text', placeholder: 'Corporate Cars Melbourne', required: false, help: 'Used to find your Place ID. Type it exactly as it appears on Google Maps.' }
     ],
     guide: `
       <div style="line-height:1.6; font-size:13px; color:#cbd5e1;">
@@ -9463,6 +9463,12 @@ async function handleTestAgentConnection() {
       feedback.style.border = '1px solid rgba(16,185,129,0.5)';
       feedback.style.color = '#6ee7b7';
       feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${data.message || 'Connection test successful!'}`;
+      // When the test worked out a value the operator could not easily find --
+      // a Place ID, for instance -- put it in the box rather than describing it.
+      if (data.details && data.details.place_id) {
+        const placeInput = document.getElementById('int-field-place_id');
+        if (placeInput) placeInput.value = data.details.place_id;
+      }
     } else {
       feedback.style.background = 'rgba(239,68,68,0.18)';
       feedback.style.border = '1px solid rgba(239,68,68,0.5)';

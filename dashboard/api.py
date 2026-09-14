@@ -2102,23 +2102,46 @@ def perform_agent_connection_test(agent_id: str, creds: Dict[str, Any], site: We
         # Ask Google instead.
         place_id = (creds.get("place_id") or "").strip()
         api_key = (creds.get("api_key") or "").strip()
-        missing = [n for n, v in (("Place ID", place_id), ("Places API key", api_key)) if not v]
-        if missing:
-            return {"success": False, "message": f"{' and '.join(missing)} required."}
+        if not api_key:
+            return {"success": False, "message": "Places API key required."}
 
-        # Browsers autofill this box with an email address. Catch that here so
-        # the operator's own address is not put into a request URL to Google.
-        if "@" in place_id or " " in place_id:
+        from agents.reputation_agent import fetch_google_reviews, search_places
+
+        # Copying a Place ID out of Google's finder is the step people get wrong
+        # -- one operator pasted their email address into the box. With the key
+        # present we can just ask Google which place this is.
+        if not place_id or "@" in place_id or " " in place_id:
+            query = (creds.get("business_name") or "").strip() or f"{site.name} {site.domain}"
+            candidates, search_error = search_places(query, api_key)
+            if search_error:
+                return {"success": False, "message": search_error}
+            if not candidates:
+                return {
+                    "success": False,
+                    "message": (
+                        f"Google found no business matching '{query}'. Put the exact name as it "
+                        f"appears on Google Maps in the Business Name field and test again."
+                    ),
+                }
+            best = candidates[0]
             return {
-                "success": False,
+                "success": True,
                 "message": (
-                    f"'{place_id}' is not a Place ID — that looks like something your browser "
-                    f"filled in. A Place ID has no spaces or @, and usually starts with 'ChIJ'. "
-                    f"Get yours from Google's Place ID Finder."
+                    f"Found '{best['name']}' at {best['address']} — "
+                    f"{best['rating'] if best['rating'] is not None else 'no'} average over "
+                    f"{best['total_reviews'] or 0} reviews. Its Place ID has been filled in for "
+                    f"you; press Save & Connect to use it."
                 ),
+                "details": {
+                    "place_id": best["place_id"],
+                    "resolved_by_search": True,
+                    "query": query,
+                    "other_matches": [
+                        {"name": c["name"], "address": c["address"], "place_id": c["place_id"]}
+                        for c in candidates[1:4]
+                    ],
+                },
             }
-
-        from agents.reputation_agent import fetch_google_reviews
 
         payload, error = fetch_google_reviews(place_id, api_key)
         if error or payload is None:
