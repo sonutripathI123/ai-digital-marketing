@@ -2106,6 +2106,18 @@ def perform_agent_connection_test(agent_id: str, creds: Dict[str, Any], site: We
         if missing:
             return {"success": False, "message": f"{' and '.join(missing)} required."}
 
+        # Browsers autofill this box with an email address. Catch that here so
+        # the operator's own address is not put into a request URL to Google.
+        if "@" in place_id or " " in place_id:
+            return {
+                "success": False,
+                "message": (
+                    f"'{place_id}' is not a Place ID — that looks like something your browser "
+                    f"filled in. A Place ID has no spaces or @, and usually starts with 'ChIJ'. "
+                    f"Get yours from Google's Place ID Finder."
+                ),
+            }
+
         from agents.reputation_agent import fetch_google_reviews
 
         payload, error = fetch_google_reviews(place_id, api_key)
