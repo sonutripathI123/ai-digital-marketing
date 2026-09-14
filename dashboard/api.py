@@ -324,6 +324,12 @@ def _cron_run_daily_serp_tracker():
     except Exception as e:
         logger.error(f"Daily SERP tracker cron failure: {e}")
 
+def _looks_like_place_id(value: Any) -> bool:
+    """A Place ID is an opaque token, not an email address or a sentence."""
+    text = str(value or "").strip()
+    return bool(text) and "@" not in text and " " not in text and len(text) >= 12
+
+
 def _google_ads_account_for_site(site_id: str, site_profile: Any = None) -> Dict[str, Any]:
     """Which Google Ads account, if any, belongs to this site.
 
@@ -1858,8 +1864,15 @@ def get_site_agents_integrations(site_id: str, _viewer: Dict[str, Any] = Depends
             "category": "Reputation",
             "icon": "fa-solid fa-star",
             "color": "#fbbf24",
-            "is_connected": "reputation-agent" in agent_creds,
-            "fields": ["place_id", "google_api_key", "business_name"],
+            # The badge read CONNECTED & VERIFIED as soon as the agent had any
+            # saved credentials at all -- including a Place ID of
+            # "sonutripathi9305@gmail.com" that the browser had autofilled and
+            # that Google would reject on every run.
+            "is_connected": bool(
+                (agent_creds.get("reputation-agent") or {}).get("api_key")
+                and _looks_like_place_id((agent_creds.get("reputation-agent") or {}).get("place_id"))
+            ),
+            "fields": ["place_id", "api_key", "business_name"],
             "summary": "Monitors Google 5-star reviews, customer ratings, and drafts AI review responses.",
             "last_updated": agent_creds.get("reputation-agent", {}).get("updated_at")
         },
