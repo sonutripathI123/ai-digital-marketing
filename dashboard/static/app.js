@@ -2728,12 +2728,19 @@ async function viewAgentReport(agentId) {
         avg_cpc_usd: summary.avg_cpc_usd ?? 0,
         conversions: summary.total_conversions ?? 0
       };
-      const todaySnap = lf.today_snapshot || (lf.live_status && lf.live_status.ready ? summarySnap : emptySnap);
+      // Without a daily snapshot there is no today figure. Showing the 30-day
+      // totals under a heading that says "Today" overstates a day by a month.
+      const hasToday = !!lf.today_snapshot;
+      const todaySnap = lf.today_snapshot || emptySnap;
       const allTimeSnap = lf.all_time_snapshot || summarySnap;
 
       const activeSnap = isToday ? todaySnap : allTimeSnap;
       const campaigns = lf.campaign_performance || [];
       const anomalies = lf.detected_anomalies || [];
+      // The banner used to read "2/2 ADS LIVE & RUNNING" and name a single
+      // campaign as live. On this account that campaign is PAUSED, so the
+      // panel announced a campaign was running that Google had stopped.
+      const enabledCampaigns = campaigns.filter(c => String(c.status).toUpperCase() === 'ENABLED');
 
       container.innerHTML = `
         <!-- Safety Guard & Status Banner -->
@@ -2742,16 +2749,16 @@ async function viewAgentReport(agentId) {
             <div>
               <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800; background:rgba(16,185,129,0.25); color:#10b981; border:1px solid rgba(16,185,129,0.4);">
-                  <i class="fa-solid fa-circle-check"></i> 🟢 2/2 ADS LIVE & RUNNING
+                  <i class="fa-solid fa-circle-check"></i> ${enabledCampaigns.length} of ${campaigns.length} campaigns enabled
                 </span>
-                <span style="font-size:12px; color:var(--text-muted);">Customer ID: <strong style="color:#f59e0b; font-family:var(--font-mono);">${(lf.account_id && !lf.account_id.includes('ccm-gads')) ? lf.account_id : '194-940-8641'}</strong></span>
+                <span style="font-size:12px; color:var(--text-muted);">Customer ID: <strong style="color:#f59e0b; font-family:var(--font-mono);">${escapeHtml(lf.account_id || '-')}</strong></span>
                 <span class="badge" style="background:rgba(59,130,246,0.2); color:#38bdf8; font-size:11px; font-weight:800; border:1px solid rgba(59,130,246,0.4);">
-                  <i class="fa-solid fa-chart-line"></i> 16Aug_Ads_Campaign (A$55.00/day &bull; Opt Score: 83.6%)
+                  <i class="fa-solid fa-chart-line"></i> ${enabledCampaigns.length ? escapeHtml(enabledCampaigns.map(c => c.campaign_name).join(', ')) : 'no campaign is currently enabled'}
                 </span>
               </div>
               <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">Google Ads Performance Sentinel (${data.site_name})</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
-                Direct Cloud Sync Streaming from Customer ID 194-940-8641. Continuous budget telemetry, keyword CTR monitoring, and CPC anomaly detection.
+                Campaign spend, clicks, CTR and conversions read from the Google Ads API for account ${escapeHtml(lf.account_id || '-')}.
               </div>
             </div>
             <div style="display:flex; gap:8px; align-items:center;">
@@ -2769,8 +2776,10 @@ async function viewAgentReport(agentId) {
             <div style="display:flex; align-items:center; gap:10px;">
               <i class="fa-solid fa-circle-check" style="color:#10b981; font-size:16px; flex-shrink:0;"></i>
               <div>
-                <strong style="color:#fff;">Live Telemetry Connected (Account 194-940-8641):</strong> 
-                Both Ad Groups (<code>Corporate Chauffeur & Cars</code> & <code>Corporate Airport Transfers</code>) are <strong>🟢 ELIGIBLE & LIVE</strong> on Google Search.
+                <strong style="color:#fff;">Connected to account ${escapeHtml(lf.account_id || '-')}.</strong>
+                ${enabledCampaigns.length
+                  ? `Enabled right now: ${escapeHtml(enabledCampaigns.map(c => c.campaign_name).join(', '))}.`
+                  : `No campaign is enabled - every campaign on this account is paused, so nothing is serving on Google Search.`}
               </div>
             </div>
             <!-- Quick Date Filter Switcher -->
@@ -2789,7 +2798,9 @@ async function viewAgentReport(agentId) {
         <!-- 4 KPI Stat Cards (Dynamic Switcher for Today vs All-Time) -->
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
           <div style="font-size:12px; font-weight:800; color:var(--text-secondary); text-transform:uppercase;">
-            <i class="fa-solid fa-chart-pie" style="color:#10b981; margin-right:6px;"></i> ${isToday ? 'Today\'s Live Performance (Sep 3, 2026):' : 'All-Time Cumulative Performance (16Aug_Ads_Campaign):'}
+            <i class="fa-solid fa-chart-pie" style="color:#10b981; margin-right:6px;"></i> ${isToday
+              ? (hasToday ? "Today:" : "Today: the API returned no per-day breakdown - switch to the full range")
+              : escapeHtml(lf.date_range_label || "Reporting period")}
           </div>
           <div style="font-size:11.5px; color:var(--text-muted);">
             <span style="color:#10b981; font-weight:700;">● Spend: A$${activeSnap.spend_usd.toFixed(2)}</span> &bull; <span style="color:#38bdf8;">Clicks: ${activeSnap.clicks}</span>
@@ -2823,18 +2834,18 @@ async function viewAgentReport(agentId) {
         <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
           <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
             <div style="display:flex; align-items:center; gap:8px;">
-              <i class="fa-solid fa-layer-group" style="color:#10b981;"></i> Live Active Ad Groups in 16Aug_Ads_Campaign (${campaigns.length} Groups)
+              <i class="fa-solid fa-layer-group" style="color:#10b981;"></i> Campaigns on this account (${campaigns.length})
             </div>
             <span class="badge badge-success" style="font-size:10.5px; font-weight:800;">
-              <i class="fa-solid fa-circle-dot"></i> Live Direct Cloud Sync Active (${isToday ? 'Today' : 'All-Time'})
+              <i class="fa-solid fa-circle-dot"></i> ${escapeHtml(lf.date_range_label || 'Google Ads API')}
             </span>
           </div>
           <div style="overflow-x:auto;">
             <table class="table" style="width:100%; font-size:12px; margin-bottom:0;">
               <thead>
                 <tr style="border-bottom:1px solid var(--glass-border); color:var(--text-secondary); font-size:11px; text-transform:uppercase;">
-                  <th style="padding:8px 10px;">Ad Group Name</th>
                   <th style="padding:8px 10px;">Campaign</th>
+                  <th style="padding:8px 10px;">Channel</th>
                   <th style="padding:8px 10px;">Daily Budget</th>
                   <th style="padding:8px 10px;">Spend (Cost)</th>
                   <th style="padding:8px 10px;">Impressions</th>
@@ -2851,7 +2862,7 @@ async function viewAgentReport(agentId) {
                     <td style="padding:8px 10px; font-weight:700; color:#fff;">
                       <i class="fa-solid fa-rectangle-ad" style="color:#10b981; margin-right:6px;"></i> ${c.campaign_name}
                     </td>
-                    <td style="padding:8px 10px; font-size:11px; color:#38bdf8;">16Aug_Ads_Campaign</td>
+                    <td style="padding:8px 10px; font-size:11px; color:#38bdf8;">${escapeHtml(c.channel || '-')}</td>
                     <td style="padding:8px 10px; font-family:var(--font-mono); color:var(--text-secondary);">$${c.daily_budget_usd}/day</td>
                     <td style="padding:8px 10px; font-family:var(--font-mono); color:#10b981; font-weight:700;">A$${c.spend_usd.toFixed(2)}</td>
                     <td style="padding:8px 10px; font-family:var(--font-mono); color:#cbd5e1;">${(c.impressions || 0).toLocaleString()}</td>
@@ -2860,9 +2871,9 @@ async function viewAgentReport(agentId) {
                     <td style="padding:8px 10px; font-family:var(--font-mono); color:#f59e0b;">${c.avg_cpc_usd > 0 ? `A$${c.avg_cpc_usd.toFixed(2)}` : '-'}</td>
                     <td style="padding:8px 10px; font-family:var(--font-mono); color:#10b981; font-weight:800;">${c.conversions}</td>
                     <td style="padding:8px 10px;">
-                      <span class="badge badge-success" style="font-size:10px; font-weight:800; background:rgba(16,185,129,0.2); color:#10b981; border:1px solid rgba(16,185,129,0.4);">
-                        🟢 ELIGIBLE
-                      </span>
+                      ${String(c.status).toUpperCase() === 'ENABLED'
+                        ? `<span class="badge badge-success" style="font-size:10px; font-weight:800; background:rgba(16,185,129,0.2); color:#10b981; border:1px solid rgba(16,185,129,0.4);">ENABLED</span>`
+                        : `<span class="badge" style="font-size:10px; font-weight:800; background:rgba(148,163,184,0.18); color:#cbd5e1; border:1px solid rgba(148,163,184,0.4);">${escapeHtml(c.status || 'UNKNOWN')}</span>`}
                     </td>
                   </tr>
                 `).join('')}
