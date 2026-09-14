@@ -2164,6 +2164,112 @@ def publish_google_ads_live(req: GoogleAdsPublishRequest):
     }
 
 
+def _seo_keyword_metrics_from_gsc(site_id: str, site_name: str, loc_city: str) -> Optional[Dict[str, Any]]:
+    """Keyword metrics built from Search Console, or None when it is not connected.
+
+    The block this replaces reported a fixed 168 keywords, 24,800 monthly
+    searches, 28% difficulty and $6.40 CPC — literals, identical on every load,
+    with a second hardcoded set for the other site. Search Console reports what
+    this site actually ranks for, so the figures below are measured.
+
+    Search Console does not publish search volume, keyword difficulty or CPC,
+    and nothing here invents them. Those columns are absent rather than filled
+    with a guess; they return when Keyword Planner is reachable.
+    """
+    try:
+        rankings = get_live_gsc_rankings(site_id=site_id, date_range="last_90_days")
+    except Exception as e:
+        logger.warning(f"Search Console keyword metrics unavailable for {site_id}: {e}")
+        return None
+
+    if not rankings.get("live_connected"):
+        return None
+    keywords = rankings.get("keywords") or []
+    if not keywords:
+        return None
+
+    summary = rankings.get("summary") or {}
+    transactional = [k for k in keywords if k.get("intent") == "Transactional"]
+
+    # Group by the intent the ranking engine already assigned, so the clusters
+    # describe real traffic rather than invented volume bands.
+    clusters = []
+    for intent in ("Transactional", "Commercial", "Informational"):
+        members = [k for k in keywords if k.get("intent") == intent]
+        if not members:
+            continue
+        positions = [k["position"] for k in members if k.get("position")]
+        clusters.append({
+            "name": f"{intent} queries",
+            "intent": intent,
+            "count": len(members),
+            "impressions": sum(k.get("impressions", 0) for k in members),
+            "clicks": sum(k.get("clicks", 0) for k in members),
+            "avg_position": round(sum(positions) / len(positions), 1) if positions else 0.0,
+        })
+
+    # Page 2 with impressions behind it is the cheapest win available: the page
+    # already ranks, it just ranks below the fold.
+    opportunities = []
+    for k in sorted(
+        (k for k in keywords if 10 < (k.get("position") or 0) <= 20 and k.get("impressions", 0) > 0),
+        key=lambda k: -k.get("impressions", 0),
+    )[:10]:
+        opportunities.append({
+            "keyword": k.get("keyword"),
+            "intent": k.get("intent"),
+            "impressions": k.get("impressions", 0),
+            "clicks": k.get("clicks", 0),
+            "position": k.get("position"),
+            "ctr": k.get("ctr", 0.0),
+            "landing_page": k.get("landing_page"),
+            "why": f"Position {k.get('position')} — already ranking on page 2 with "
+                   f"{k.get('impressions', 0):,} impressions.",
+        })
+
+    total_impressions = summary.get("total_impressions", 0)
+    total_clicks = summary.get("total_clicks", 0)
+    recommendations = []
+    if opportunities:
+        recommendations.append(
+            f"{summary.get('striking_distance_count', 0)} keywords sit at positions 11-20. "
+            f"Improving the pages behind the top few is the cheapest available traffic gain."
+        )
+    if total_impressions and (total_clicks / total_impressions) < 0.01:
+        recommendations.append(
+            f"{site_name} was shown {total_impressions:,} times for {total_clicks} clicks "
+            f"({round(total_clicks / total_impressions * 100, 2)}% CTR). Titles and meta "
+            f"descriptions are the constraint, not rankings."
+        )
+    if summary.get("top_3_count"):
+        recommendations.append(
+            f"{summary['top_3_count']} keywords already rank in the top 3 — protect these "
+            f"pages before chasing new terms."
+        )
+    if not recommendations:
+        recommendations.append(f"Search Console returned no actionable movement for {site_name} in the last 90 days.")
+
+    return {
+        "data_source": "GOOGLE SEARCH CONSOLE — LIVE (last 90 days)",
+        "is_live": True,
+        "summary": {
+            "total_tracked_keywords": summary.get("total_tracked_keywords", len(keywords)),
+            "high_intent_transactional": len(transactional),
+            "total_clicks": total_clicks,
+            "total_impressions": total_impressions,
+            "average_position": summary.get("average_position", 0.0),
+            "average_ctr_percent": summary.get("average_ctr", 0.0),
+            "top_3_count": summary.get("top_3_count", 0),
+            "page_1_count": summary.get("page_1_count", 0),
+            "striking_distance_count": summary.get("striking_distance_count", 0),
+            "top_performing_suburb": f"{loc_city} organic search",
+        },
+        "clusters": clusters,
+        "top_keyword_opportunities": opportunities,
+        "recommendations": recommendations,
+    }
+
+
 @app.get("/api/agents/{agent_id}/report")
 def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Generates a comprehensive live performance report for a specific sub-agent tailored to site_id."""
@@ -2719,8 +2825,15 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
 
     elif agent_id == "seo-keyword-agent":
         loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
-        if effective_site == "ccm":
+        # Measured data when Search Console is reachable; the benchmark blocks
+        # below are only a placeholder for when it is not, and say so.
+        live_metrics = _seo_keyword_metrics_from_gsc(effective_site, site_name, loc_city)
+        if live_metrics:
+            report["seo_keyword_metrics"] = live_metrics
+        elif effective_site == "ccm":
             report["seo_keyword_metrics"] = {
+                "data_source": "BENCHMARK ESTIMATE — NOT MEASURED. Connect Search Console for real figures.",
+                "is_live": False,
                 "summary": {
                     "total_tracked_keywords": 168,
                     "high_intent_transactional": 84,
@@ -2750,6 +2863,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
             }
         elif effective_site == "opal":
             report["seo_keyword_metrics"] = {
+                "data_source": "BENCHMARK ESTIMATE — NOT MEASURED. Connect Search Console for real figures.",
+                "is_live": False,
                 "summary": {
                     "total_tracked_keywords": 142,
                     "high_intent_transactional": 74,
@@ -2780,6 +2895,8 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
             }
         else:
             report["seo_keyword_metrics"] = {
+                "data_source": "NOT CONNECTED",
+                "is_live": False,
                 "summary": {
                     "total_tracked_keywords": 0,
                     "high_intent_transactional": 0,
@@ -3804,7 +3921,11 @@ def get_live_gsc_rankings(
         try:
             from google.oauth2 import service_account
             from googleapiclient.discovery import build
-            from datetime import datetime, timedelta
+            # datetime and timedelta are imported at module scope. Re-importing
+            # them here made them local to this whole function, so when the key
+            # file was missing — the branch below never ran — every later
+            # datetime.now() raised UnboundLocalError and the endpoint answered
+            # 500 instead of falling back to the sample rows it has ready.
 
             creds = service_account.Credentials.from_service_account_file(
                 str(key_file),

@@ -4059,14 +4059,41 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
             <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sum.high_intent_transactional ?? 0}</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:11px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Avg Keyword Difficulty</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sum.average_keyword_difficulty ?? 0}% <span style="font-size:11px; color:${sum.average_keyword_difficulty ? '#10b981' : 'var(--text-muted)'};">${sum.average_keyword_difficulty ? '(Low)' : ''}</span></div>
+            <div style="font-size:11px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">${km.is_live ? 'Avg Google Position' : 'Avg Keyword Difficulty'}</div>
+            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${km.is_live ? (sum.average_position ?? 0) : `${sum.average_keyword_difficulty ?? 0}%`} ${!km.is_live && sum.average_keyword_difficulty ? '<span style="font-size:11px; color:#10b981;">(Low)</span>' : ''}</div>
           </div>
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:11px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Est. Monthly Searches</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(sum.estimated_monthly_searches ?? 0).toLocaleString()}</div>
+            <div style="font-size:11px; font-weight:800; color:#f59e0b; text-transform:uppercase;">${km.is_live ? 'Impressions (90 days)' : 'Est. Monthly Searches'}</div>
+            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${km.is_live ? (sum.total_impressions ?? 0).toLocaleString() : (sum.estimated_monthly_searches ?? 0).toLocaleString()}</div>
           </div>
         </div>
+
+        ${km.data_source ? `
+        <div style="display:flex; align-items:center; gap:8px; background:${km.is_live ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.12)'}; border:1px solid ${km.is_live ? 'rgba(16,185,129,0.35)' : 'rgba(245,158,11,0.4)'}; padding:9px 14px; border-radius:10px; margin-bottom:18px;">
+          <i class="fa-solid ${km.is_live ? 'fa-circle-check' : 'fa-triangle-exclamation'}" style="color:${km.is_live ? '#10b981' : '#f59e0b'};"></i>
+          <span style="font-size:11.5px; font-weight:700; color:${km.is_live ? '#10b981' : '#f59e0b'};">${escapeHtml(km.data_source)}</span>
+          ${km.is_live ? '<span style="font-size:11px; color:var(--text-muted);">Search Console does not publish search volume, difficulty or CPC — those columns appear once Keyword Planner is connected.</span>' : ''}
+        </div>` : ''}
+
+        ${km.is_live ? `
+        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:20px;">
+          <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); padding:12px; border-radius:12px;">
+            <div style="font-size:10.5px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Top 3 Positions</div>
+            <div style="font-size:20px; font-weight:800; color:#10b981; font-family:var(--font-mono);">${sum.top_3_count ?? 0}</div>
+          </div>
+          <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); padding:12px; border-radius:12px;">
+            <div style="font-size:10.5px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Page 1</div>
+            <div style="font-size:20px; font-weight:800; color:var(--accent-cyan); font-family:var(--font-mono);">${sum.page_1_count ?? 0}</div>
+          </div>
+          <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); padding:12px; border-radius:12px;">
+            <div style="font-size:10.5px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Striking Distance (11-20)</div>
+            <div style="font-size:20px; font-weight:800; color:#f59e0b; font-family:var(--font-mono);">${sum.striking_distance_count ?? 0}</div>
+          </div>
+          <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); padding:12px; border-radius:12px;">
+            <div style="font-size:10.5px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Clicks / CTR</div>
+            <div style="font-size:20px; font-weight:800; color:#fff; font-family:var(--font-mono);">${sum.total_clicks ?? 0} <span style="font-size:12px; color:var(--text-muted);">/ ${sum.average_ctr_percent ?? 0}%</span></div>
+          </div>
+        </div>` : ''}
 
         <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-layer-group" style="color:var(--accent-purple);"></i> Categorized Keyword Opportunity Clusters:</h3>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
@@ -4077,9 +4104,15 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
                 <span class="badge badge-info" style="font-size:10px;">${c.intent}</span>
               </div>
               <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:11.5px; color:var(--text-secondary);">
-                <span>Volume: <strong style="color:var(--accent-cyan);">${(c.volume || 0).toLocaleString()} /mo</strong></span>
-                <span>Difficulty: <strong style="color:#10b981;">${c.kd}</strong></span>
-                <span>Avg CPC: <strong style="color:#f59e0b;">${c.cpc}</strong></span>
+                ${km.is_live ? `
+                  <span>Keywords: <strong style="color:var(--accent-cyan);">${(c.count || 0).toLocaleString()}</strong></span>
+                  <span>Impressions: <strong style="color:#10b981;">${(c.impressions || 0).toLocaleString()}</strong></span>
+                  <span>Avg position: <strong style="color:#f59e0b;">${c.avg_position ?? '-'}</strong></span>
+                ` : `
+                  <span>Volume: <strong style="color:var(--accent-cyan);">${(c.volume || 0).toLocaleString()} /mo</strong></span>
+                  <span>Difficulty: <strong style="color:#10b981;">${c.kd}</strong></span>
+                  <span>Avg CPC: <strong style="color:#f59e0b;">${c.cpc}</strong></span>
+                `}
               </div>
             </div>
           `).join('') : `
@@ -4096,14 +4129,23 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
               <tr style="background:rgba(15,23,42,0.8); color:var(--text-muted); text-transform:uppercase;">
                 <th style="padding:10px 14px;">Target Keyword</th>
                 <th style="padding:10px 14px;">Search Intent</th>
-                <th style="padding:10px 14px;">Monthly Volume</th>
-                <th style="padding:10px 14px;">Difficulty (KD%)</th>
-                <th style="padding:10px 14px;">Est. CPC (AUD)</th>
-                <th style="padding:10px 14px;">SERP Rich Feature</th>
+                <th style="padding:10px 14px;">${km.is_live ? 'Impressions (90d)' : 'Monthly Volume'}</th>
+                <th style="padding:10px 14px;">${km.is_live ? 'Clicks' : 'Difficulty (KD%)'}</th>
+                <th style="padding:10px 14px;">${km.is_live ? 'Google Position' : 'Est. CPC (AUD)'}</th>
+                <th style="padding:10px 14px;">${km.is_live ? 'Why It Is An Opportunity' : 'SERP Rich Feature'}</th>
               </tr>
             </thead>
             <tbody>
-              ${(km.top_keyword_opportunities && km.top_keyword_opportunities.length > 0) ? km.top_keyword_opportunities.map(k => `
+              ${(km.top_keyword_opportunities && km.top_keyword_opportunities.length > 0) ? km.top_keyword_opportunities.map(k => km.is_live ? `
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px 14px; font-weight:700; color:var(--accent-cyan);">${escapeHtml(k.keyword || '')}</td>
+                  <td style="padding:10px 14px;"><span class="action-chip" style="font-size:11px;">${escapeHtml(k.intent || '')}</span></td>
+                  <td style="padding:10px 14px; font-family:var(--font-mono);">${(k.impressions || 0).toLocaleString()}</td>
+                  <td style="padding:10px 14px; font-family:var(--font-mono); color:${k.clicks ? '#10b981' : 'var(--text-muted)'};">${k.clicks || 0}</td>
+                  <td style="padding:10px 14px; font-family:var(--font-mono); color:#f59e0b; font-weight:700;">${k.position ?? '-'}</td>
+                  <td style="padding:10px 14px; font-size:11px; color:var(--text-muted);">${escapeHtml(k.why || '')}</td>
+                </tr>
+              ` : `
                 <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
                   <td style="padding:10px 14px; font-weight:700; color:var(--accent-cyan);">${k.keyword}</td>
                   <td style="padding:10px 14px;"><span class="action-chip" style="font-size:11px;">${k.intent}</span></td>
