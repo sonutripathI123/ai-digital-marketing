@@ -2919,9 +2919,41 @@ async function viewAgentReport(agentId) {
     } else if (agentId === 'google-ads-optimization-agent') {
       const dm = data.domain_metrics || {};
       const lf = dm.latest_findings || {};
-      const negKws = lf.recommended_negative_keywords || ["cheap car rental", "taxi cab fare", "bus timetable", "uber driver salary", "self drive rental"];
+      // Everything below is read off what the agent actually measured. The
+      // defaults used to be a hardcoded negative-keyword list and two invented
+      // ad groups, so the panel looked identical whether or not Google Ads had
+      // answered.
+      const negKws = lf.recommended_negative_keywords || [];
       const bidAdjs = lf.proposed_bid_adjustments || [];
       const budgetShifts = lf.proposed_budget_shifts || [];
+      const adsLive = lf.data_source === 'LIVE (Google Ads API)';
+      const winners = lf.winning_keywords || [];
+      const wasteful = lf.wasteful_keywords || [];
+      const newKws = lf.recommended_new_keywords || [];
+      const totals = lf.account_totals || {};
+      const campaignLabel = (lf.campaigns || []).join(', ') || '—';
+      const savings = lf.estimated_monthly_savings_usd ?? lf.estimated_monthly_savings ?? 0;
+      const money = (v) => 'A$' + Number(v || 0).toFixed(2);
+
+      if (!adsLive) {
+        container.innerHTML = `
+          <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.35); padding:20px 22px; border-radius:14px;">
+            <div style="font-size:15px; font-weight:800; color:#fca5a5; margin-bottom:8px;">
+              <i class="fa-solid fa-plug-circle-xmark"></i> Google Ads se data nahi mila
+            </div>
+            <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+              ${escapeHtml(lf.live_error || lf.live_status?.reason || 'The Google Ads API did not return data for this account.')}
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">
+              Is panel mein koi recommendation nahi dikhayi ja rahi, kyunki neeche dikhane
+              layak kuch measure nahi hua. Connection theek karke dobara run karein.
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="runAgentNow('google-ads-optimization-agent', 'recommend_optimizations')" style="margin-top:14px; font-size:12px; font-weight:700;">
+              <i class="fa-solid fa-rotate"></i> Retry
+            </button>
+          </div>`;
+        return;
+      }
 
       container.innerHTML = `
         <!-- Strategy & Safety Banner -->
@@ -2933,9 +2965,9 @@ async function viewAgentReport(agentId) {
                   <i class="fa-solid fa-wand-magic-sparkles" style="font-size:10px; margin-right:4px;"></i> AI OPTIMIZATION STRATEGIST & STUDIO
                 </span>
                 <span class="badge" style="background:rgba(59,130,246,0.2); color:#38bdf8; font-size:10.5px; font-weight:800; border:1px solid rgba(59,130,246,0.4);">
-                  16Aug_Ads_Campaign (A$55.00/day)
+                  ${escapeHtml(campaignLabel)}
                 </span>
-                <span style="font-size:12px; color:var(--text-muted); margin-left:6px;">Customer ID: <strong style="color:#10b981; font-family:var(--font-mono);">${(lf.account_id && !lf.account_id.includes('ccm-gads')) ? lf.account_id : '194-940-8641'}</strong></span>
+                <span style="font-size:12px; color:var(--text-muted); margin-left:6px;">Customer ID: <strong style="color:#10b981; font-family:var(--font-mono);">${escapeHtml(lf.account_id || '—')}</strong></span>
               </div>
               <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">Google Ads CPA & ROAS Optimization Engine</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
@@ -2957,13 +2989,13 @@ async function viewAgentReport(agentId) {
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(135px, 1fr)); gap:12px; margin-bottom:20px;">
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Estimated Savings</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${lf.estimated_monthly_savings_usd || 185}.00/mo</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">From Negative Keywords</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${money(savings)}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Spend on 0-conversion terms</div>
           </div>
           <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Conversion Lift</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">+${lf.estimated_conversion_lift_percent || 34.5}%</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Expected Lead Growth</div>
+            <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Account Spend</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${money(totals.spend)}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${totals.conversions || 0} conversions${totals.cpa ? ' &bull; CPA ' + money(totals.cpa) : ''}</div>
           </div>
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Negative Keywords</div>
@@ -2971,76 +3003,101 @@ async function viewAgentReport(agentId) {
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Wasted Clicks Filter</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Optimization Score</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">83.6%</div>
-            <div style="font-size:10px; color:var(--accent-purple); margin-top:2px;">Google Ads Audit</div>
+            <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Keywords Analysed</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${lf.keywords_analysed || 0}</div>
+            <div style="font-size:10px; color:var(--accent-purple); margin-top:2px;">${lf.search_terms_analysed || 0} search terms</div>
           </div>
         </div>
 
-        <!-- Live Ad Groups Analysis & Future Ad Copy Generator (16Aug_Ads_Campaign) -->
+        <!-- Keyword performance, straight from the Google Ads API -->
+        <!-- This used to be two fixed cards describing ad groups with invented
+             click counts and a CPA nobody measured. It now renders the rows the
+             API returned, and says so plainly when there are none. -->
         <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(6,182,212,0.4); border-radius:14px; padding:20px; margin-bottom:20px;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
             <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
-              <i class="fa-solid fa-brain" style="color:var(--accent-cyan);"></i> Live Ad Groups Intelligence & Future Copy Generator (16Aug_Ads_Campaign)
+              <i class="fa-solid fa-key" style="color:var(--accent-cyan);"></i> Keyword Performance (last 30 days)
             </div>
             <span class="badge badge-success" style="font-size:10px; font-weight:800;">
-              <i class="fa-solid fa-chart-line"></i> Deep Telemetry Audited
+              <i class="fa-solid fa-database"></i> ${lf.keywords_analysed || 0} keywords from Google Ads API
             </span>
           </div>
 
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:16px;">
-            <!-- Winner Ad Group 1 -->
-            <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:16px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <span class="badge badge-success" style="font-size:10px; font-weight:800;">🔥 PROVEN WINNER</span>
-                <span style="font-size:11px; color:#10b981; font-weight:700;">4 Leads &bull; A$109.71 CPA</span>
-              </div>
-              <h4 style="font-size:14.5px; font-weight:800; color:#fff; margin-bottom:4px;">Corporate Chauffeur & VIP Travel</h4>
-              <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:10px; line-height:1.4;">
-                <strong>AI Audit (Live PDF Data):</strong> <strong>4 Leads</strong> generated from <code>"vip chauffeur hire"</code> (2 leads), <code>[melbourne chauffeur service]</code> (1 lead), and <code>"business chauffeur hire"</code> (12.5% conv rate).
-              </div>
 
-              <!-- Generated Future Ad Copy Suggestion -->
-              <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px; margin-bottom:10px;">
-                <div style="font-size:10.5px; font-weight:800; color:#facc15; text-transform:uppercase; margin-bottom:4px;">
-                  <i class="fa-solid fa-wand-magic-sparkles"></i> Future RSA Copy (Matched to Winning Keywords):
-                </div>
-                <div style="font-size:11.5px; color:#fff; line-height:1.5;">
-                  • <strong>Headline:</strong> VIP Chauffeur Hire Melbourne | Melbourne Chauffeur Service | Business Chauffeur Hire<br>
-                  • <strong>Description:</strong> <em>Discreet, punctual VIP & business chauffeur hire across Melbourne. Dedicated monthly invoicing & pristine Mercedes fleet.</em>
-                </div>
+            <!-- Converting keywords -->
+            <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:16px;">
+              <div style="font-size:13px; font-weight:800; color:#10b981; margin-bottom:10px;">
+                <i class="fa-solid fa-arrow-trend-up"></i> Converting keywords (${winners.length})
               </div>
-              <button onclick="loadDraftIntoEditor(2)" class="btn btn-sm" style="width:100%; background:rgba(16,185,129,0.2); color:#10b981; border:1px solid rgba(16,185,129,0.4); font-size:11.5px; font-weight:700; cursor:pointer;">
-                <i class="fa-solid fa-pen-to-square"></i> Load & Customize This Winner Copy Below &darr;
-              </button>
+              ${winners.length ? `
+              <div style="overflow-x:auto;">
+                <table class="table" style="width:100%; font-size:11.5px; margin:0;">
+                  <thead><tr style="color:var(--text-secondary); font-size:10px; text-transform:uppercase;">
+                    <th style="padding:6px 8px; text-align:left;">Keyword</th>
+                    <th style="padding:6px 8px;">Clicks</th>
+                    <th style="padding:6px 8px;">Conv</th>
+                    <th style="padding:6px 8px;">Spend</th>
+                    <th style="padding:6px 8px;">CPA</th>
+                  </tr></thead>
+                  <tbody>
+                    ${winners.map(k => `
+                      <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <td style="padding:6px 8px; color:#fff; font-family:var(--font-mono);">${escapeHtml(k.keyword)}<div style="font-size:9.5px; color:var(--text-muted);">${escapeHtml(k.match_type || '')} &bull; ${escapeHtml(k.ad_group || '')}</div></td>
+                        <td style="padding:6px 8px; text-align:center;">${k.clicks}</td>
+                        <td style="padding:6px 8px; text-align:center; color:#10b981; font-weight:800;">${k.conversions}</td>
+                        <td style="padding:6px 8px; text-align:center; font-family:var(--font-mono);">${money(k.spend)}</td>
+                        <td style="padding:6px 8px; text-align:center; font-family:var(--font-mono);">${k.cpa ? money(k.cpa) : '—'}</td>
+                      </tr>`).join('')}
+                  </tbody>
+                </table>
+              </div>` : `<div style="font-size:12px; color:var(--text-muted);">No keyword recorded a conversion in this window.</div>`}
             </div>
 
-            <!-- Fixable Leak Ad Group 2 -->
+            <!-- Spend without conversions -->
             <div style="background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.3); border-radius:12px; padding:16px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:10px; font-weight:800; border:1px solid rgba(234,179,8,0.4);">⚠️ FIXABLE CTR LEAK</span>
-                <span style="font-size:11px; color:#facc15; font-weight:700;">12.04% CTR &bull; 0 Conversions</span>
+              <div style="font-size:13px; font-weight:800; color:#facc15; margin-bottom:10px;">
+                <i class="fa-solid fa-money-bill-transfer"></i> Spend, no conversions (${wasteful.length})
               </div>
-              <h4 style="font-size:14.5px; font-weight:800; color:#fff; margin-bottom:4px;">Corporate Airport Transfers</h4>
-              <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:10px; line-height:1.4;">
-                <strong>AI Audit:</strong> 12.04% CTR is exceptionally high (55 clicks), but customers bounce due to lack of immediate pricing & direct call options.
+              ${wasteful.length ? `
+              <div style="overflow-x:auto;">
+                <table class="table" style="width:100%; font-size:11.5px; margin:0;">
+                  <thead><tr style="color:var(--text-secondary); font-size:10px; text-transform:uppercase;">
+                    <th style="padding:6px 8px; text-align:left;">Keyword</th>
+                    <th style="padding:6px 8px;">Clicks</th>
+                    <th style="padding:6px 8px;">CTR</th>
+                    <th style="padding:6px 8px;">Spend</th>
+                  </tr></thead>
+                  <tbody>
+                    ${wasteful.map(k => `
+                      <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <td style="padding:6px 8px; color:#fff; font-family:var(--font-mono);">${escapeHtml(k.keyword)}<div style="font-size:9.5px; color:var(--text-muted);">${escapeHtml(k.match_type || '')} &bull; ${escapeHtml(k.ad_group || '')}</div></td>
+                        <td style="padding:6px 8px; text-align:center;">${k.clicks}</td>
+                        <td style="padding:6px 8px; text-align:center;">${k.ctr_percent}%</td>
+                        <td style="padding:6px 8px; text-align:center; font-family:var(--font-mono); color:#facc15; font-weight:800;">${money(k.spend)}</td>
+                      </tr>`).join('')}
+                  </tbody>
+                </table>
               </div>
-
-              <!-- Generated Future Ad Copy Suggestion -->
-              <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px; margin-bottom:10px;">
-                <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:4px;">
-                  <i class="fa-solid fa-wand-magic-sparkles"></i> Future RSA Copy Variation (Fix Conversion Leak):
-                </div>
-                <div style="font-size:11.5px; color:#fff; line-height:1.5;">
-                  • <strong>Headline:</strong> Melbourne Airport Chauffeur | Fixed $95 Airport Flat Rate | Call Now For Instant Pickup<br>
-                  • <strong>Description:</strong> <em>Land at Tullamarine & step straight into luxury. No surge pricing. Free flight delay tracking. Call +61 400 000 000.</em>
-                </div>
-              </div>
-              <button onclick="loadDraftIntoEditor(1)" class="btn btn-sm" style="width:100%; background:rgba(6,182,212,0.2); color:var(--accent-cyan); border:1px solid rgba(6,182,212,0.4); font-size:11.5px; font-weight:700; cursor:pointer;">
-                <i class="fa-solid fa-pen-to-square"></i> Load & Customize This High-Converting Copy Below &darr;
-              </button>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:10px;">
+                These drew clicks and spent budget without a recorded conversion. Pause them,
+                lower the bid, or fix the landing page they point at.
+              </div>` : `<div style="font-size:12px; color:var(--text-muted);">No keyword spent meaningfully without converting.</div>`}
             </div>
           </div>
+
+          ${newKws.length ? `
+          <div style="margin-top:16px; background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:16px;">
+            <div style="font-size:13px; font-weight:800; color:#38bdf8; margin-bottom:8px;">
+              <i class="fa-solid fa-plus"></i> Search terms worth adding as keywords (${newKws.length})
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              ${newKws.map(t => `
+                <span style="background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.35); color:#bfdbfe; padding:6px 12px; border-radius:8px; font-size:11.5px; font-family:var(--font-mono);">
+                  ${escapeHtml(t.keyword)} <span style="color:var(--text-muted);">&bull; ${t.clicks} clicks &bull; ${t.conversions} conv</span>
+                </span>`).join('')}
+            </div>
+          </div>` : ''}
         </div>
 
         <!-- Expandable Draft Ad Copies Explorer Section -->
@@ -3050,7 +3107,7 @@ async function viewAgentReport(agentId) {
               <span class="badge" style="background:rgba(234,179,8,0.2); color:#facc15; font-size:11.5px; font-weight:800; border:1px solid rgba(234,179,8,0.4);">
                 <i class="fa-solid fa-folder-tree"></i> ALL DRAFT AD COPIES & BLUEPRINTS
               </span>
-              <span style="font-size:13px; font-weight:700; color:#fff;">Account: 194-940-8641 (${data.site_name})</span>
+              <span style="font-size:13px; font-weight:700; color:#fff;">Account: ${escapeHtml(lf.account_id || '—')} (${data.site_name})</span>
             </div>
             <div style="font-size:11.5px; color:var(--text-muted);">
               2 Draft Campaigns &bull; Status: <span style="color:#facc15; font-weight:700;">Ready for Studio Review</span>
@@ -3115,8 +3172,8 @@ async function viewAgentReport(agentId) {
               <button class="btn btn-primary btn-sm" onclick="runAiAdCopyEnhancer()" style="background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-size:11px; font-weight:700;">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> AI Enhance Copy
               </button>
-              <button class="btn btn-success btn-sm" id="btn-publish-gads-live" onclick="publishGoogleAdLive()" style="background:linear-gradient(135deg, #10b981, #059669); border:none; font-size:11.5px; font-weight:800; color:#fff; box-shadow:0 0 12px rgba(16,185,129,0.4);" title="Publish this ad live to Google Ads">
-                <i class="fa-solid fa-rocket"></i> 🚀 1-Click Publish Live
+              <button class="btn btn-secondary btn-sm" id="btn-publish-gads-live" onclick="publishGoogleAdLive()" style="background:rgba(148,163,184,0.18); border:1px solid rgba(148,163,184,0.4); font-size:11.5px; font-weight:800; color:#e2e8f0;" title="Saves the blueprint in this dashboard. It is not sent to Google Ads.">
+                <i class="fa-solid fa-floppy-disk"></i> Save Blueprint (not sent to Google Ads)
               </button>
             </div>
           </div>
@@ -3246,7 +3303,7 @@ async function viewAgentReport(agentId) {
 
                 <div style="margin-bottom:10px;">
                   <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:2px;">📞 Call Extension (Phone Number)</label>
-                  <input type="text" id="ad-phone" value="+61 400 000 000" oninput="updateLiveAdPreview()" class="form-control" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#10b981; font-weight:700; border-radius:6px;" />
+                  <input type="text" id="ad-phone" value="" placeholder="Apna asli phone number daalein" oninput="updateLiveAdPreview()" class="form-control" style="width:100%; padding:7px 10px; font-size:12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); color:#10b981; font-weight:700; border-radius:6px;" />
                 </div>
 
                 <div style="margin-bottom:10px;">
@@ -3325,7 +3382,7 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
                     <span style="font-size:12px; color:#202124;" id="preview-url">${data.site_domain.replace('https://','')}</span>
                   </div>
                   <span id="preview-call-badge" style="font-size:11px; font-weight:700; color:#1a0dab; background:#f1f3f4; padding:2px 8px; border-radius:4px;">
-                    📞 +61 400 000 000
+                    <span id="ad-preview-phone"></span>
                   </span>
                 </div>
                 
@@ -3381,6 +3438,7 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
             </div>
             <span class="badge badge-danger" style="font-size:10.5px; font-family:var(--font-mono);">${negKws.length} Search Terms to Exclude</span>
           </div>
+          ${negKws.length ? '' : `<div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">No search term met the threshold for exclusion in this window.</div>`}
           <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
             ${negKws.map(kw => `
               <span style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); color:#fca5a5; padding:6px 12px; border-radius:8px; font-size:12px; font-family:var(--font-mono); display:inline-flex; align-items:center; gap:6px;">
@@ -3389,7 +3447,9 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
             `).join('')}
           </div>
           <div style="font-size:12px; color:var(--text-muted); background:rgba(15,23,42,0.5); padding:10px 14px; border-radius:8px; border-left:3px solid #ef4444;">
-            <strong style="color:#fff;">Why this matters:</strong> Adding these negative keywords stops Google from serving your ads to low-intent searchers looking for bus timetables or self-drive rentals, saving you ~$185/month in wasted click spend.
+            <strong style="color:#fff;">Why this matters:</strong> These are search terms that actually
+            triggered your ads, took clicks and spent ${money(savings)} in the last 30 days without a single
+            recorded conversion. Excluding them stops that spend; it does not guarantee it returns as leads elsewhere.
           </div>
         </div>
 
@@ -3398,7 +3458,12 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
           <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; margin-bottom:12px;">
             <i class="fa-solid fa-sliders" style="color:var(--accent-cyan);"></i> Strategic Bid Adjustments & Budget Reallocations
           </div>
-          <div style="overflow-x:auto;">
+          ${(bidAdjs.length || budgetShifts.length) ? '' : `
+            <div style="font-size:12px; color:var(--text-muted); background:rgba(15,23,42,0.5); padding:10px 14px; border-radius:8px; border-left:3px solid var(--text-muted);">
+              This agent does not calculate bid or budget changes from your account data yet, so
+              nothing is proposed here. Use the keyword tables above to decide what to scale or pause.
+            </div>`}
+          <div style="overflow-x:auto; ${(bidAdjs.length || budgetShifts.length) ? '' : 'display:none;'}">
             <table class="table" style="width:100%; font-size:12px; margin-bottom:0;">
               <thead>
                 <tr style="border-bottom:1px solid var(--glass-border); color:var(--text-secondary); font-size:11px; text-transform:uppercase;">
@@ -9449,7 +9514,7 @@ function updateLiveAdPreview() {
   const d1 = document.getElementById('ad-d1')?.value || '';
   const d2 = document.getElementById('ad-d2')?.value || '';
   const d3 = document.getElementById('ad-d3')?.value || '';
-  const phone = document.getElementById('ad-phone')?.value || '+61 400 000 000';
+  const phone = document.getElementById('ad-phone')?.value || '';
   const st1 = document.getElementById('ad-st1-name')?.value || 'Meet & Greet Service';
   const st2 = document.getElementById('ad-st2-name')?.value || 'Fixed Price Calculator';
   const st3 = document.getElementById('ad-st3-name')?.value || 'Fleet Gallery';
@@ -9509,7 +9574,7 @@ function copyInspectedAdCopy() {
   const d3 = document.getElementById('ad-d3')?.value || '';
   const keywords = document.getElementById('ad-keywords')?.value || '';
   const negatives = document.getElementById('ad-negatives')?.value || '';
-  const phone = document.getElementById('ad-phone')?.value || '+61 400 000 000';
+  const phone = document.getElementById('ad-phone')?.value || '';
   const st1 = document.getElementById('ad-st1-name')?.value || 'Meet & Greet Service';
   const st1Url = document.getElementById('ad-st1-url')?.value || '/airport-transfers';
   const st2 = document.getElementById('ad-st2-name')?.value || 'Fixed Price Calculator';
@@ -9663,7 +9728,7 @@ function loadDraftIntoEditor(draftId) {
     if (d3In) d3In.value = "Transparent fixed pricing with no surge rates. Executive transport across Melbourne.";
     if (kwIn) kwIn.value = "[melbourne airport chauffeur]\n[tullamarine airport private transfer]\n[chauffeur to melbourne airport]\n\"corporate cars melbourne\"\n\"executive car hire melbourne airport\"\n\"luxury airport pickup melbourne\"";
     if (negIn) negIn.value = "-cheap, -taxi meter, -bus timetable, -uber driver, -salary, -rental car, -jobs, -driver vacancies";
-    if (phoneIn) phoneIn.value = "+61 400 000 000";
+    if (phoneIn) phoneIn.value = "";
     if (st1Name) st1Name.value = "Airport Meet & Greet";
     if (st1Url) st1Url.value = "/airport-transfers";
     if (st2Name) st2Name.value = "Fixed Fare Calculator";
@@ -9685,7 +9750,7 @@ function loadDraftIntoEditor(draftId) {
     if (d3In) d3In.value = "Executive car service for Collins St boardrooms & VIP airport pickups. 100% on time.";
     if (kwIn) kwIn.value = "\"vip chauffeur hire\"\n[melbourne chauffeur service]\n\"business chauffeur hire\"\n[executive chauffeur melbourne]\n\"executive cars melbourne\"\n[corporate chauffeur melbourne]\n\"corporate chauffeur hire\"\n\"melbourne corporate cars\"";
     if (negIn) negIn.value = "-cheap, -taxi, -uber driver, -salary, -jobs, -driver vacancies, -self drive, -car rental";
-    if (phoneIn) phoneIn.value = "+61 400 000 000";
+    if (phoneIn) phoneIn.value = "";
     if (st1Name) st1Name.value = "Corporate Business Accounts";
     if (st1Url) st1Url.value = "/corporate-travel";
     if (st2Name) st2Name.value = "VIP Fleet Showcase";
@@ -9756,7 +9821,7 @@ Status: Draft / Ready for Review
 🧩 ASSETS & EXTENSIONS (ALL INCLUDED):
 -----------------------------------------------------
 📞 Call Asset / Extension:
-   - Phone Number: +61 400 000 000 (24/7 Dedicated Chauffeur Dispatch)
+   - Phone Number: [YOUR PHONE NUMBER] (24/7 Dedicated Chauffeur Dispatch)
 
 🔗 Sitelink Extensions (4 Assets):
    1. Sitelink: Airport Meet & Greet
@@ -9837,7 +9902,7 @@ Status: Draft / Ready for Review
 🧩 ASSETS & EXTENSIONS (ALL INCLUDED):
 -----------------------------------------------------
 📞 Call Asset / Extension:
-   - Phone Number: +61 400 000 000 (Priority Executive Chauffeur Line)
+   - Phone Number: [YOUR PHONE NUMBER] (Priority Executive Chauffeur Line)
 
 🔗 Sitelink Extensions (4 Assets):
    1. Sitelink: Corporate Business Accounts
@@ -9889,7 +9954,7 @@ async function publishGoogleAdLive() {
   const d3 = document.getElementById('ad-d3')?.value || '';
   const keywords = (document.getElementById('ad-keywords')?.value || '').split('\n').map(k => k.trim()).filter(Boolean);
   const negatives = (document.getElementById('ad-negatives')?.value || '').split(',').map(n => n.trim()).filter(Boolean);
-  const phone = document.getElementById('ad-phone')?.value || '+61 400 000 000';
+  const phone = document.getElementById('ad-phone')?.value || '';
   const st1 = document.getElementById('ad-st1-name')?.value || 'Meet & Greet Service';
   const st1Url = document.getElementById('ad-st1-url')?.value || '/airport-transfers';
   const st2 = document.getElementById('ad-st2-name')?.value || 'Fixed Price Calculator';
@@ -9901,27 +9966,30 @@ async function publishGoogleAdLive() {
   const budgetRaw = document.getElementById('ad-budget')?.value || '$40.00';
   const budgetNum = parseFloat(budgetRaw.replace(/[^0-9.]/g, '')) || 40.0;
 
-  const confirmMsg = `🚀 CONFIRM GOOGLE ADS LIVE LAUNCH\n` +
-    `----------------------------------------\n` +
-    `Account Customer ID: 194-940-8641\n` +
-    `Campaign: Search - Airport Transfers Tullamarine\n` +
-    `Daily Budget: $${budgetNum.toFixed(2)}/day\n` +
-    `Headlines: ${h1} | ${h2} | ${h3}\n\n` +
-    `Are you sure you want to PUBLISH this campaign LIVE now to Google Ads?`;
+  // This used to say "CONFIRM GOOGLE ADS LIVE LAUNCH" for a request that
+  // never reaches Google Ads. It saves a blueprint; the wording says so now.
+  const NL = String.fromCharCode(10);
+  const confirmMsg = 'SAVE AD BLUEPRINT' + NL +
+    '----------------------------------------' + NL +
+    'Daily budget noted: $' + budgetNum.toFixed(2) + '/day' + NL +
+    'Headlines: ' + [h1, h2, h3].filter(Boolean).join(' | ') + NL + NL +
+    'This saves the blueprint in this dashboard only.' + NL +
+    'It does NOT create a Google Ads campaign and spends no budget.' + NL + NL +
+    'Save it?';
 
   if (!confirm(confirmMsg)) return;
 
   const btn = document.getElementById('btn-publish-gads-live');
   if (btn) {
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publishing Live to Google Ads...';
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving blueprint...';
     btn.disabled = true;
   }
 
   try {
     const payload = {
       site_id: (typeof currentSiteId !== 'undefined' && currentSiteId) ? currentSiteId : 'ccm',
-      customer_id: '194-940-8641',
-      campaign_name: 'Search - Airport Transfers Tullamarine',
+      customer_id: (document.getElementById('gads-customer-id')?.textContent || '').trim(),
+      campaign_name: (document.getElementById('ad-campaign-name')?.value || 'Untitled blueprint'),
       headlines: [h1, h2, h3, h4, h5].filter(Boolean),
       descriptions: [d1, d2, d3].filter(Boolean),
       keywords: keywords,
@@ -9945,12 +10013,11 @@ async function publishGoogleAdLive() {
 
     const data = await res.json();
     if (res.ok && data.success) {
-      alert(`🎉 100% SUCCESS! YOUR AD IS NOW OFFICIALLY LIVE ON GOOGLE SEARCH!\n\n` +
-        `• Customer ID: 194-940-8641\n` +
-        `• Status: 🟢 ACTIVE / LIVE\n` +
-        `• Daily Budget: $${budgetNum.toFixed(2)}/day\n` +
-        `• Published At: ${new Date(data.published_at).toLocaleTimeString()}\n\n` +
-        `Live search impressions and telemetry will now begin tracking automatically!`);
+      alert('Blueprint saved in this dashboard.' + NL + NL +
+        '- Status: saved locally, NOT published to Google Ads' + NL +
+        '- No campaign was created and no budget is being spent' + NL +
+        '- Saved at: ' + new Date(data.saved_at || Date.now()).toLocaleTimeString() + NL + NL +
+        'To actually run it, copy this blueprint into your Google Ads account.');
       
       // Update UI badges to LIVE
       const badges = document.querySelectorAll('.badge');

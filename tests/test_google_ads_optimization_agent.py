@@ -48,9 +48,20 @@ class TestGoogleAdsOptimizationAgent(unittest.TestCase):
         self.assertIn("output", res)
         output = res["output"]
         self.assertEqual(output["account_id"], "123-456-7890")
-        self.assertIn("Requires Human Approval", output["approval_status"])
-        self.assertGreater(len(output["recommended_negative_keywords"]), 0)
-        self.assertGreater(len(output["proposed_bid_adjustments"]), 0)
+        # These used to require a non-empty negative-keyword list and at least
+        # one proposed bid adjustment, which only held while the agent invented
+        # both for an account it had never read. Whether there is anything to
+        # recommend depends on the account; the contract is that a run with no
+        # live data recommends nothing and says why.
+        self.assertIn("recommended_negative_keywords", output)
+        self.assertIsInstance(output["recommended_negative_keywords"], list)
+        if output["data_source"] == "LIVE (Google Ads API)":
+            self.assertIn("keywords_analysed", output)
+        else:
+            self.assertEqual(output["recommended_negative_keywords"], [])
+            self.assertEqual(output["winning_keywords"], [])
+            self.assertEqual(output["estimated_monthly_savings"], 0.0)
+            self.assertTrue(output["live_error"])
 
     def test_orchestrator_execution(self):
         task = self.orchestrator.create_task(

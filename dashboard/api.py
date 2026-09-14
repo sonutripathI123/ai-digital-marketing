@@ -2144,7 +2144,19 @@ def save_site_social_settings(
 
 @app.post("/api/agents/google-ads/publish-live")
 def publish_google_ads_live(req: GoogleAdsPublishRequest):
-    """Publishes optimized ad copy and campaign blueprint live to Google Ads."""
+    """Saves an ad-copy blueprint locally. This does NOT create a Google Ads campaign.
+
+    It never did. The body below writes a JSON file and returns success; there
+    is no call to the Google Ads API anywhere in it, no mutate, no campaign
+    created. It nonetheless reported status "LIVE" and told the operator their
+    ad was "officially LIVE on Google Ads" -- about an account that spends real
+    money, where believing a campaign exists means believing leads are coming
+    from somewhere they are not.
+
+    Creating a live campaign spends the owner's budget and is not something to
+    wire up quietly, so this endpoint now does honestly what it always did:
+    stores the blueprint so it can be copied into Google Ads by hand.
+    """
     site = websites_mgr.get(req.site_id) or websites_mgr.get("ccm")
     effective_site = site.site_id if site else "ccm"
 
@@ -2155,8 +2167,8 @@ def publish_google_ads_live(req: GoogleAdsPublishRequest):
         "site_id": effective_site,
         "customer_id": cust_id,
         "campaign_name": req.campaign_name,
-        "status": "LIVE",
-        "published_at": datetime.now().isoformat(),
+        "status": "DRAFT_SAVED_LOCALLY",
+        "saved_at": datetime.now().isoformat(),
         "daily_budget_usd": req.daily_budget_usd,
         "headlines": req.headlines,
         "descriptions": req.descriptions,
@@ -2185,15 +2197,20 @@ def publish_google_ads_live(req: GoogleAdsPublishRequest):
     except Exception as e:
         logger.warning(f"Could not persist live campaign history: {e}")
 
-    logger.info(f"🚀 [Google Ads Direct Mutate] Published Campaign LIVE for {effective_site} (Account {cust_id}): {req.campaign_name}")
+    logger.info(f"[Google Ads] Blueprint saved locally for {effective_site} (Account {cust_id}): {req.campaign_name} — NOT published to Google Ads")
 
     return {
         "success": True,
-        "status": "LIVE",
+        "status": "DRAFT_SAVED_LOCALLY",
+        "published_to_google_ads": False,
         "campaign_name": req.campaign_name,
         "customer_id": cust_id,
-        "published_at": live_record["published_at"],
-        "message": f"🎉 Campaign '{req.campaign_name}' is now officially LIVE on Google Ads Account {cust_id}!"
+        "saved_at": live_record["saved_at"],
+        "message": (
+            f"Blueprint '{req.campaign_name}' saved locally. "
+            f"It has NOT been sent to Google Ads — no campaign was created and no budget "
+            f"is being spent. Copy it into Google Ads account {cust_id} to run it."
+        ),
     }
 
 
