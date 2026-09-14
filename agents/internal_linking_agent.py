@@ -14,7 +14,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 import requests
 
 from config.settings import ROOT_DIR
@@ -106,6 +106,78 @@ def load_candidate_internal_pages(site_key: str = "ccm") -> List[Dict[str, str]]
             logger.warning(f"Could not load all pages CSV: {e}")
 
     return candidates
+
+
+LINK_CHECK_TIMEOUT_SECONDS = 10
+LINK_CHECK_LIMIT = 40
+LINK_CHECK_USER_AGENT = "AI-Digital-Marketing-OS/1.0 (internal link audit)"
+
+
+def check_link_targets(hrefs: List[str], base_url: str) -> Dict[str, Dict[str, Any]]:
+    """Resolve each link and report whether it actually loads.
+
+    The audit graded anchor wording and never asked whether the target existed,
+    so a link to a page returning 404 was reported as "Optimal". Results are
+    keyed by the href exactly as it appeared in the markup.
+
+    HEAD first because it is cheap; some servers reject it, so those fall back
+    to GET. Anything that is neither an http(s) page — mailto:, tel:, #anchor —
+    is skipped rather than guessed at.
+    """
+    import requests
+
+    results: Dict[str, Dict[str, Any]] = {}
+    session = requests.Session()
+    session.headers.update({"User-Agent": LINK_CHECK_USER_AGENT})
+
+    seen: Dict[str, Dict[str, Any]] = {}
+    checked = 0
+
+    for href in hrefs:
+        raw = (href or "").strip()
+        if not raw or raw.startswith(("mailto:", "tel:", "javascript:", "#")):
+            results[href] = {"checked": False, "reason": "not a page link"}
+            continue
+
+        absolute = urljoin(base_url.rstrip("/") + "/", raw)
+        if not absolute.startswith(("http://", "https://")):
+            results[href] = {"checked": False, "reason": "not a page link"}
+            continue
+
+        if absolute in seen:
+            results[href] = seen[absolute]
+            continue
+
+        if checked >= LINK_CHECK_LIMIT:
+            results[href] = {"checked": False, "reason": f"beyond the {LINK_CHECK_LIMIT}-link check limit"}
+            continue
+
+        checked += 1
+        outcome: Dict[str, Any]
+        try:
+            resp = session.head(absolute, timeout=LINK_CHECK_TIMEOUT_SECONDS, allow_redirects=True)
+            if resp.status_code in (403, 405, 501):  # server dislikes HEAD
+                resp = session.get(absolute, timeout=LINK_CHECK_TIMEOUT_SECONDS, allow_redirects=True, stream=True)
+                resp.close()
+            outcome = {
+                "checked": True,
+                "status_code": resp.status_code,
+                "is_broken": resp.status_code >= 400,
+                "redirected": resp.url.rstrip("/") != absolute.rstrip("/"),
+                "final_url": resp.url,
+            }
+        except Exception as e:
+            outcome = {
+                "checked": True,
+                "status_code": None,
+                "is_broken": True,
+                "error": f"{type(e).__name__}: {str(e)[:100]}",
+            }
+
+        seen[absolute] = outcome
+        results[href] = outcome
+
+    return results
 
 
 def audit_page_internal_links(url_or_slug: str, site_key: str = "ccm") -> Dict[str, Any]:
@@ -233,6 +305,31 @@ def audit_page_internal_links(url_or_slug: str, site_key: str = "ccm") -> Dict[s
             "notes": notes
         })
 
+    # 1b. Do the targets actually load? Anchor wording was graded without ever
+    # asking, so a link to a 404 came back "Optimal".
+    link_status = check_link_targets([l["href"] for l in existing_links], site_cfg["base_url"])
+    broken_links: List[Dict[str, Any]] = []
+    for link in existing_links:
+        status = link_status.get(link["href"], {})
+        link["link_check"] = status
+        if status.get("is_broken"):
+            code = status.get("status_code")
+            link["quality"] = "Broken Link"
+            link["verdict_badge"] = "danger"
+            link["notes"] = (
+                f"Target returns HTTP {code}."
+                if code else f"Target could not be reached ({status.get('error', 'no response')})."
+            ) + " Fix or remove this link — it costs the reader and wastes crawl budget."
+            broken_links.append({
+                "href": link["href"],
+                "anchor_text": link["anchor_text"],
+                "status_code": code,
+                "error": status.get("error"),
+                "is_internal": link["is_internal"],
+            })
+        elif status.get("redirected"):
+            link["notes"] += f" Redirects to {status.get('final_url')}."
+
     # 2. Discover New Contextual Linking Opportunities
     candidates = load_candidate_internal_pages(site_key)
     opportunities: List[Dict[str, Any]] = []
@@ -317,6 +414,11 @@ def audit_page_internal_links(url_or_slug: str, site_key: str = "ccm") -> Dict[s
     elif any(l["quality"] == "Generic Anchor" for l in existing_links):
         audit_score = 80
 
+    # A page carrying dead links is not a healthy page, whatever its anchor
+    # wording. Before this, the score ignored them entirely.
+    if broken_links:
+        audit_score = min(audit_score, 55 if len(broken_links) > 1 else 65)
+
     return {
         "post_id": post_id,
         "post_type": post_type,
@@ -328,7 +430,17 @@ def audit_page_internal_links(url_or_slug: str, site_key: str = "ccm") -> Dict[s
         "opportunities_count": len(opportunities),
         "opportunities": opportunities,
         "audit_score": audit_score,
-        "seo_recommendations": [
+        "broken_links_count": len(broken_links),
+        "broken_links": broken_links,
+        "links_checked": sum(1 for s in link_status.values() if s.get("checked")),
+        "seo_recommendations": (
+            [
+                f"{len(broken_links)} link{'s' if len(broken_links) != 1 else ''} on this page "
+                f"{'do' if len(broken_links) != 1 else 'does'} not load: "
+                f"{', '.join((b['href'] or '')[:60] for b in broken_links[:3])}. "
+                f"Fix or remove {'them' if len(broken_links) != 1 else 'it'} first."
+            ] if broken_links else []
+        ) + [
             f"Current internal links found: {existing_count}. Google recommends 3 to 5 internal links per 1,000 words.",
             "Distribute links evenly across the Introduction, Body paragraphs, and Conclusion CTA.",
             "Use descriptive target keyword anchors (e.g. 'Melbourne Airport Transfers') rather than generic words."
