@@ -324,6 +324,43 @@ def _cron_run_daily_serp_tracker():
     except Exception as e:
         logger.error(f"Daily SERP tracker cron failure: {e}")
 
+def _google_ads_account_for_site(site_id: str, site_profile: Any = None) -> Dict[str, Any]:
+    """Which Google Ads account, if any, belongs to this site.
+
+    Credentials fall back to environment variables when a site has none of its
+    own, so every site resolves to whichever account the server was configured
+    with. That is fine for the site that owns it and wrong for every other one:
+    the second site's panel showed the first site's spend, campaigns and
+    conversions under its own name.
+
+    Returns the resolved account, the account the site claims, and whether they
+    are the same account.
+    """
+    from integrations.ads.google_ads_client import GoogleAdsLiveClient
+
+    def digits(v: Any) -> str:
+        return "".join(c for c in str(v or "") if c.isdigit())
+
+    status = GoogleAdsLiveClient(credentials={}, site_id=site_id).status()
+    resolved = digits(status.get("customer_id"))
+
+    saved = (websites_mgr.get_agent_credentials(site_id, "google-ads-monitoring-agent") or {})
+    if not saved.get("customer_id"):
+        saved = (websites_mgr.get_agent_credentials(site_id, "google-ads-optimization-agent") or {})
+    declared_raw = saved.get("customer_id") or getattr(site_profile, "google_ads_id", None)
+    declared = digits(declared_raw)
+
+    return {
+        "resolved": resolved,
+        "declared": declared_raw,
+        "ready": bool(status.get("ready")),
+        # A declared id of "opal-gads-104" has no digits to match on, so it is
+        # a placeholder rather than an account, and owns nothing.
+        "owns_account": bool(resolved) and len(declared) >= 8 and declared == resolved,
+        "reason": status.get("reason"),
+    }
+
+
 def _cron_run_daily_google_ads_check():
     """Daily read-only Google Ads check.
 
@@ -342,11 +379,21 @@ def _cron_run_daily_google_ads_check():
     snapshots = []
     for site in websites_mgr.list_all():
         try:
+            account = _google_ads_account_for_site(site.site_id, site)
+            if not account["owns_account"]:
+                logger.info(
+                    f"[Google Ads cron] skipping {site.site_id}: it has no Google Ads account "
+                    f"of its own (declares {account['declared']!r}), and the configured "
+                    f"credentials belong to account {account['resolved'] or 'none'}."
+                )
+                continue
+
             mon_task = AgentTask(
                 task_id=f"cron-gads-mon-{site.site_id}",
                 agent_id="google-ads-monitoring-agent",
                 task_type="fetch_campaigns",
-                input_data={"action": "fetch_campaigns", "site_id": site.site_id},
+                input_data={"action": "fetch_campaigns", "site_id": site.site_id,
+                            "account_id": account["resolved"]},
                 site_id=site.site_id,
             )
             mon = GoogleAdsMonitoringAgent().run_task(mon_task, orchestrator.router)["output"]
@@ -366,7 +413,8 @@ def _cron_run_daily_google_ads_check():
                 task_id=f"cron-gads-opt-{site.site_id}",
                 agent_id="google-ads-optimization-agent",
                 task_type="recommend_optimizations",
-                input_data={"action": "recommend_optimizations", "site_id": site.site_id},
+                input_data={"action": "recommend_optimizations", "site_id": site.site_id,
+                            "account_id": account["resolved"]},
                 site_id=site.site_id,
             )
             opt = GoogleAdsOptimizationAgent().run_task(opt_task, orchestrator.router)["output"]
@@ -374,7 +422,7 @@ def _cron_run_daily_google_ads_check():
             snapshot = {
                 "checked_at": datetime.now().isoformat(),
                 "site_id": site.site_id,
-                "account_id": mon.get("account_id"),
+                "account_id": account["resolved"],
                 "campaigns_total": len(campaigns),
                 "campaigns_enabled": len(enabled),
                 "enabled_names": [c.get("campaign_name") for c in enabled],
@@ -2900,10 +2948,35 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
         from agents.google_ads_monitoring_agent import GoogleAdsMonitoringAgent
         from core.models.task import AgentTask
 
-        creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
-        raw_id = creds.get("customer_id") or site_profile.google_ads_id
-        cust_id = "194-940-8641" if (not raw_id or "ccm-gads" in str(raw_id) or effective_site == "ccm") else raw_id
+        # `cust_id` used to be forced to 194-940-8641 for ccm and for any site
+        # whose id looked like a placeholder, while the credentials themselves
+        # always came from the environment. Every site therefore rendered the
+        # same account's campaigns under its own name.
+        account = _google_ads_account_for_site(effective_site, site_profile)
+        if not account["owns_account"]:
+            report["domain_metrics"] = {
+                "recent_tasks_count": len(completed_tasks) or 1,
+                "latest_findings": {
+                    "account_id": account["declared"],
+                    "data_source": "NOT CONNECTED — this site has no Google Ads account",
+                    "live_error": (
+                        f"{site_name} has no Google Ads account of its own. The credentials on "
+                        f"this server belong to account {account['resolved'] or 'none'}, so showing "
+                        f"them here would report another site's spend and campaigns as this one's."
+                    ),
+                    "campaign_performance": [],
+                    "winning_keywords": [],
+                    "wasteful_keywords": [],
+                    "recommended_negative_keywords": [],
+                    "account_summary": {},
+                },
+                "recommendations": [
+                    f"Connect a Google Ads account for {site_name} to see its own campaign data here.",
+                ],
+            }
+            return report
 
+        cust_id = account["resolved"]
         gads_agent = GoogleAdsMonitoringAgent()
         task_stub = AgentTask(
             task_id="gads-live-query",
@@ -2932,12 +3005,31 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
         from agents.google_ads_optimization_agent import GoogleAdsOptimizationAgent
         from core.models.task import AgentTask
 
-        creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
-        if not creds:
-            creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-optimization-agent")
-        raw_id = creds.get("customer_id") or site_profile.google_ads_id
-        cust_id = "194-940-8641" if (not raw_id or "ccm-gads" in str(raw_id) or effective_site == "ccm") else raw_id
+        account = _google_ads_account_for_site(effective_site, site_profile)
+        if not account["owns_account"]:
+            report["domain_metrics"] = {
+                "recent_tasks_count": len(completed_tasks) or 1,
+                "latest_findings": {
+                    "account_id": account["declared"],
+                    "data_source": "NOT CONNECTED — this site has no Google Ads account",
+                    "live_error": (
+                        f"{site_name} has no Google Ads account of its own. The credentials on "
+                        f"this server belong to account {account['resolved'] or 'none'}, so showing "
+                        f"them here would report another site's spend and campaigns as this one's."
+                    ),
+                    "campaign_performance": [],
+                    "winning_keywords": [],
+                    "wasteful_keywords": [],
+                    "recommended_negative_keywords": [],
+                    "account_summary": {},
+                },
+                "recommendations": [
+                    f"Connect a Google Ads account for {site_name} to see its own campaign data here.",
+                ],
+            }
+            return report
 
+        cust_id = account["resolved"]
         opt_agent = GoogleAdsOptimizationAgent()
         task_stub = AgentTask(
             task_id="gads-opt-live-query",
