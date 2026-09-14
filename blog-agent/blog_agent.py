@@ -344,7 +344,7 @@ def pick_featured_image(api, auth, cfg, site_key, row):
             for m in wp_list_media(api, auth, search=term):
                 if m["id"] not in seen:
                     seen.add(m["id"])
-                    candidates.append(m["id"])
+                    candidates.append(m)
         except requests.RequestException:
             continue
     if not candidates:  # fallback: any images in the library
@@ -352,18 +352,52 @@ def pick_featured_image(api, auth, cfg, site_key, row):
             for m in wp_list_media(api, auth, per_page=50):
                 if m["id"] not in seen:
                     seen.add(m["id"])
-                    candidates.append(m["id"])
+                    candidates.append(m)
         except requests.RequestException:
             pass
 
     recent = load_used_images(site_key)
     avoid = set(recent[-fi.get("avoid_repeat_last", 12):])
-    fresh = [c for c in candidates if c not in avoid]
-    chosen = (fresh or candidates or [None])[0]
-    if chosen:
-        recent.append(chosen)
-        save_used_images(site_key, recent)
-    return chosen
+    fresh = [c for c in candidates if c["id"] not in avoid]
+    picked = (fresh or candidates or [None])[0]
+    if not picked:
+        return None
+
+    recent.append(picked["id"])
+    save_used_images(site_key, recent)
+    ensure_media_alt_text(api, auth, picked, row)
+    return picked["id"]
+
+
+def ensure_media_alt_text(api, auth, media, row):
+    """Give a library image alt text when it has none.
+
+    The agent reuses images already in the media library, so an image uploaded
+    without alt text kept being attached to new posts with none. Screen readers
+    get nothing from it and Google has no description of it. This fills the gap
+    once, the first time the image is used, from the post it is illustrating.
+    """
+    if (media.get("alt_text") or "").strip():
+        return
+
+    suburb = (row.get("suburb") or "").strip()
+    keyword = (row.get("keyword") or "").strip()
+    descriptor = keyword or media.get("title") or "chauffeur vehicle"
+    alt = f"{descriptor} — {suburb}".strip(" —") if suburb else descriptor
+    alt = alt[:120].strip()
+    if not alt:
+        return
+
+    try:
+        r = requests.post(f"{api}/media/{media['id']}", json={"alt_text": alt},
+                          auth=auth, timeout=30)
+        if r.status_code in (200, 201):
+            log.info("Set alt text on media %s: %r", media["id"], alt)
+        else:
+            log.warning("Could not set alt text on media %s: HTTP %s", media["id"], r.status_code)
+    except requests.RequestException as e:
+        # Never let this stop a post from publishing.
+        log.warning("Could not set alt text on media %s: %s", media["id"], e)
 
 
 def wp_publish(api, auth, post_id):

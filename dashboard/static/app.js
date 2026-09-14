@@ -5145,7 +5145,7 @@ function renderCompetitorKeywordAnalysisResults(report, historyList) {
           ${(report.my_page_measured.word_count || 0).toLocaleString()} words &middot;
           H1 x${report.my_page_measured.h1_count} &middot; H2 x${report.my_page_measured.h2_count} &middot;
           ${report.my_page_measured.internal_links} internal links &middot;
-          ${report.my_page_measured.images_missing_alt}/${report.my_page_measured.images_total} images missing alt &middot;
+          ${report.my_page_measured.images_missing_alt}/${report.my_page_measured.images_total} images with no alt text &middot;
           ${report.my_page_measured.response_seconds}s / ${report.my_page_measured.page_kb}KB<br>
           Schema: ${(report.my_page_measured.schema_types || []).length ? escapeHtml((report.my_page_measured.schema_types || []).join(', ')) : '<span style="color:#ef4444;">none declared</span>'} &middot;
           FAQ schema: ${report.my_page_measured.has_faq_schema ? 'yes' : '<span style="color:#ef4444;">no</span>'}<br>
@@ -5217,7 +5217,7 @@ function renderCompetitorKeywordAnalysisResults(report, historyList) {
                   <strong>Measured on their page:</strong><br>
                   Title ${c.measured.title_length} chars &middot; Meta ${c.measured.meta_description_length} chars &middot;
                   H1 x${c.measured.h1_count} &middot; ${c.measured.internal_links} internal links &middot;
-                  ${c.measured.images_missing_alt}/${c.measured.images_total} images missing alt<br>
+                  ${c.measured.images_missing_alt}/${c.measured.images_total} images with no alt text<br>
                   Schema: ${(c.measured.schema_types || []).length ? escapeHtml((c.measured.schema_types || []).join(', ')) : 'none declared'}<br>
                   "${escapeHtml(report.target_keyword || '')}" &mdash; title: ${c.measured.keyword_in_title ? 'yes' : 'no'},
                   H1: ${c.measured.keyword_in_h1 ? 'yes' : 'no'}, mentions: ${c.measured.keyword_occurrences}

@@ -89,6 +89,35 @@ def measure_page(html: str, url: str, target_keyword: str) -> Dict[str, Any]:
     from bs4 import BeautifulSoup
 
     soup = BeautifulSoup(html, "html.parser")
+
+    # Read JSON-LD before stripping scripts. Stripping first removed the very
+    # nodes the schema scan then looked for, so every page — including ones
+    # carrying a full Yoast schema graph — was reported as declaring none.
+    schema_types: List[str] = []
+
+    def _collect_type(value: Any) -> None:
+        for t in (value if isinstance(value, list) else [value]):
+            if isinstance(t, str) and t not in schema_types:
+                schema_types.append(t)
+
+    for node in soup.find_all("script", attrs={"type": re.compile(r"application/ld\+json", re.I)}):
+        raw = node.string or node.get_text() or ""
+        try:
+            parsed = json.loads(raw)
+        except (ValueError, TypeError):
+            continue
+        for entry in (parsed if isinstance(parsed, list) else [parsed]):
+            if not isinstance(entry, dict):
+                continue
+            _collect_type(entry.get("@type"))
+            for sub in entry.get("@graph", []) or []:
+                if isinstance(sub, dict):
+                    _collect_type(sub.get("@type"))
+                    # Yoast nests FAQ questions one level deeper again.
+                    for item in (sub.get("mainEntity") or []) if isinstance(sub.get("mainEntity"), list) else []:
+                        if isinstance(item, dict):
+                            _collect_type(item.get("@type"))
+
     for tag in soup(["script", "style", "noscript"]):
         tag.decompose()
 
@@ -106,28 +135,6 @@ def measure_page(html: str, url: str, target_keyword: str) -> Dict[str, Any]:
     words = re.findall(r"[A-Za-z']+", body_text)
     word_count = len(words)
 
-    # Schema.org types actually declared in JSON-LD.
-    schema_types: List[str] = []
-    for node in soup.find_all("script", attrs={"type": re.compile(r"application/ld\+json", re.I)}):
-        raw = node.string or node.get_text() or ""
-        try:
-            parsed = json.loads(raw)
-        except (ValueError, TypeError):
-            continue
-        for entry in (parsed if isinstance(parsed, list) else [parsed]):
-            if not isinstance(entry, dict):
-                continue
-            found = entry.get("@type")
-            for t in (found if isinstance(found, list) else [found]):
-                if isinstance(t, str) and t not in schema_types:
-                    schema_types.append(t)
-            for sub in entry.get("@graph", []) or []:
-                if isinstance(sub, dict):
-                    t = sub.get("@type")
-                    for tt in (t if isinstance(t, list) else [t]):
-                        if isinstance(tt, str) and tt not in schema_types:
-                            schema_types.append(tt)
-
     kw = target_keyword.strip().lower()
     lower_text = body_text.lower()
 
@@ -144,7 +151,11 @@ def measure_page(html: str, url: str, target_keyword: str) -> Dict[str, Any]:
             external_links += 1
 
     images = soup.find_all("img")
-    images_missing_alt = sum(1 for i in images if not (i.get("alt") or "").strip())
+    # alt="" is the correct markup for a purely decorative image, so it is
+    # counted apart from an image with no alt attribute at all. Lumping them
+    # together reports valid markup as a defect.
+    images_no_alt_attribute = sum(1 for i in images if i.get("alt") is None)
+    images_empty_alt = sum(1 for i in images if i.get("alt") is not None and not i["alt"].strip())
 
     return {
         "page_title": title,
@@ -166,7 +177,9 @@ def measure_page(html: str, url: str, target_keyword: str) -> Dict[str, Any]:
         "internal_links": internal_links,
         "external_links": external_links,
         "images_total": len(images),
-        "images_missing_alt": images_missing_alt,
+        "images_no_alt_attribute": images_no_alt_attribute,
+        "images_empty_alt": images_empty_alt,
+        "images_missing_alt": images_no_alt_attribute + images_empty_alt,
     }
 
 
