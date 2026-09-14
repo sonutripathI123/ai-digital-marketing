@@ -118,8 +118,22 @@ class GA4ReportingAgent(AgentInterface):
                         "conversions": p_conv
                     })
 
-                live_fetched = True
-                logger.info(f"Successfully authenticated and connected to live GA4 Data API for property {GA4_PROPERTY_ID}")
+                # An authenticated call that returns no rows is not live data.
+                # This used to set live_fetched regardless, so a property with
+                # nothing in it reported "100% LIVE GOOGLE ANALYTICS 4 API"
+                # beside zero users, zero sessions and zero conversions —
+                # indistinguishable from a property that is genuinely quiet.
+                if channel_breakdown:
+                    live_fetched = True
+                    logger.info(f"Live GA4 data returned for property {GA4_PROPERTY_ID}")
+                else:
+                    live_error = (
+                        f"The GA4 API answered for property {GA4_PROPERTY_ID} but returned no rows. "
+                        f"The service account has access and the property exists, so the property is "
+                        f"receiving no traffic — check that a GA4 tag for {GA4_MEASUREMENT_ID} is "
+                        f"firing on the site, and that this is the property it reports to."
+                    )
+                    logger.warning(f"GA4 property {GA4_PROPERTY_ID} returned no rows.")
             except Exception as e:
                 live_error = f"GA4 Data API call failed: {e}"
                 logger.warning(f"GA4 Data API fetch notice: {e}")
@@ -168,8 +182,17 @@ class GA4ReportingAgent(AgentInterface):
                 "account_id": GA4_ACCOUNT_ID,
                 "live_data_connected": False,
                 "live_error": live_error,
-                "data_source": "NOT LIVE - no GA4 data returned",
-                "site_tag_status": "PENDING AUTHENTICATION",
+                # Distinguish "we could not reach GA4" from "GA4 answered and
+                # had nothing to give"; they need different fixes.
+                "data_source": (
+                    "CONNECTED TO GA4 — PROPERTY RETURNED NO DATA"
+                    if creds and not cred_error
+                    else "NOT CONNECTED - no GA4 credentials"
+                ),
+                "site_tag_status": (
+                    "API connected; property has no traffic"
+                    if creds and not cred_error else "PENDING AUTHENTICATION"
+                ),
                 "date_range": date_range,
                 "overview_metrics": {
                     "total_users": 0,

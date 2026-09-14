@@ -2714,17 +2714,25 @@ async function viewAgentReport(agentId) {
       const dateRange = window.currentGadsDateRange || 'today';
       
       const isToday = (dateRange === 'today');
-      const todaySnap = lf.today_snapshot || { spend_usd: 13.65, clicks: 7, impressions: 71, ctr_percent: 9.86, avg_cpc_usd: 1.95, conversions: 0.00 };
-      const allTimeSnap = lf.all_time_snapshot || { spend_usd: 570.57, clicks: 244, impressions: 2313, ctr_percent: 10.56, avg_cpc_usd: 2.34, conversions: 4.00 };
-      
+      // These panels used to fall back to fixed numbers — A$13.65 spend, 244
+      // clicks, and two invented campaigns — whenever the payload lacked a
+      // today/all-time snapshot. The live Google Ads payload has neither key,
+      // so real data was fetched and demo figures were displayed over it.
+      const emptySnap = { spend_usd: 0, clicks: 0, impressions: 0, ctr_percent: 0, avg_cpc_usd: 0, conversions: 0 };
+      const summary = lf.account_summary || {};
+      const summarySnap = {
+        spend_usd: summary.total_spend_usd ?? 0,
+        clicks: summary.total_clicks ?? 0,
+        impressions: summary.total_impressions ?? 0,
+        ctr_percent: summary.avg_ctr_percent ?? 0,
+        avg_cpc_usd: summary.avg_cpc_usd ?? 0,
+        conversions: summary.total_conversions ?? 0
+      };
+      const todaySnap = lf.today_snapshot || (lf.live_status && lf.live_status.ready ? summarySnap : emptySnap);
+      const allTimeSnap = lf.all_time_snapshot || summarySnap;
+
       const activeSnap = isToday ? todaySnap : allTimeSnap;
-      const campaigns = isToday ? [
-        { campaign_name: "Corporate Chauffeur & Cars", daily_budget_usd: 55.00, spend_usd: 13.65, impressions: 61, clicks: 7, ctr_percent: 11.48, avg_cpc_usd: 1.95, conversions: 0.00, status: "ELIGIBLE" },
-        { campaign_name: "Corporate Airport Transfers", daily_budget_usd: 55.00, spend_usd: 0.00, impressions: 10, clicks: 0, ctr_percent: 0.00, avg_cpc_usd: 0.00, conversions: 0.00, status: "ELIGIBLE" }
-      ] : (lf.campaign_performance || [
-        { campaign_name: "Corporate Chauffeur & Cars", daily_budget_usd: 55.00, spend_usd: 438.85, impressions: 1853, clicks: 189, ctr_percent: 10.20, avg_cpc_usd: 2.32, conversions: 4.00, status: "ELIGIBLE" },
-        { campaign_name: "Corporate Airport Transfers", daily_budget_usd: 55.00, spend_usd: 131.72, impressions: 457, clicks: 55, ctr_percent: 12.04, avg_cpc_usd: 2.39, conversions: 0.00, status: "ELIGIBLE" }
-      ]);
+      const campaigns = lf.campaign_performance || [];
       const anomalies = lf.detected_anomalies || [];
 
       container.innerHTML = `
@@ -2801,7 +2809,7 @@ async function viewAgentReport(agentId) {
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
             <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Average CPC</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">A$${activeSnap.avg_cpc_usd ? activeSnap.avg_cpc_usd.toFixed(2) : '1.95'}</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">A$${(activeSnap.avg_cpc_usd || 0).toFixed(2)}</div>
             <div style="font-size:10px; color:var(--accent-purple); margin-top:2px;">Avg Cost Per Click</div>
           </div>
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">

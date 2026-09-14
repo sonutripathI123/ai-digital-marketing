@@ -48,9 +48,20 @@ class TestGA4ReportingAgent(unittest.TestCase):
         self.assertIn("output", res)
         output = res["output"]
         self.assertEqual(output["property_name"], "Corporate Cars Melbourne GA4")
-        self.assertGreater(output["overview_metrics"]["total_users"], 0)
-        self.assertGreater(len(output["acquisition_channel_breakdown"]), 0)
-        self.assertGreater(len(output["top_landing_pages"]), 0)
+        # These used to assert users > 0 and non-empty breakdowns, which only
+        # passed while the agent invented numbers. Whether the property has
+        # traffic is not this test's business; the contract is. A property with
+        # nothing in it must report zeros and say it is not live, rather than
+        # claiming "100% LIVE" over an empty result.
+        self.assertIn("overview_metrics", output)
+        self.assertIn("total_users", output["overview_metrics"])
+        self.assertIsInstance(output["acquisition_channel_breakdown"], list)
+        self.assertIsInstance(output["top_landing_pages"], list)
+        if not output["acquisition_channel_breakdown"]:
+            self.assertFalse(output["live_data_connected"])
+            self.assertEqual(output["overview_metrics"]["total_users"], 0)
+        else:
+            self.assertTrue(output["live_data_connected"])
 
     def test_orchestrator_execution(self):
         task = self.orchestrator.create_task(
