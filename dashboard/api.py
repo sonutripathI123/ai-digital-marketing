@@ -324,6 +324,102 @@ def _cron_run_daily_serp_tracker():
     except Exception as e:
         logger.error(f"Daily SERP tracker cron failure: {e}")
 
+def _cron_run_daily_google_ads_check():
+    """Daily read-only Google Ads check.
+
+    Reads campaign status and keyword performance and records a snapshot. It
+    creates nothing, changes no bid or budget, and publishes no ad -- the
+    Google Ads client used here issues read-only GAQL queries, and the
+    blueprint endpoint that saves ad copy is not called from any cron.
+
+    The point of running it daily is the thing a dashboard opened once a week
+    will miss: a campaign paused without anyone noticing, or spend climbing on
+    keywords that are not converting.
+    """
+    from agents.google_ads_monitoring_agent import GoogleAdsMonitoringAgent
+    from agents.google_ads_optimization_agent import GoogleAdsOptimizationAgent
+
+    snapshots = []
+    for site in websites_mgr.list_all():
+        try:
+            mon_task = AgentTask(
+                task_id=f"cron-gads-mon-{site.site_id}",
+                agent_id="google-ads-monitoring-agent",
+                task_type="fetch_campaigns",
+                input_data={"action": "fetch_campaigns", "site_id": site.site_id},
+                site_id=site.site_id,
+            )
+            mon = GoogleAdsMonitoringAgent().run_task(mon_task, orchestrator.router)["output"]
+
+            if mon.get("data_source") != "LIVE (Google Ads API)":
+                logger.warning(
+                    f"[Google Ads cron] {site.site_id}: no live data — "
+                    f"{mon.get('live_status', {}).get('reason', 'unknown reason')}"
+                )
+                continue
+
+            campaigns = mon.get("campaign_performance") or []
+            enabled = [c for c in campaigns if str(c.get("status", "")).upper() == "ENABLED"]
+            summary = mon.get("account_summary") or {}
+
+            opt_task = AgentTask(
+                task_id=f"cron-gads-opt-{site.site_id}",
+                agent_id="google-ads-optimization-agent",
+                task_type="recommend_optimizations",
+                input_data={"action": "recommend_optimizations", "site_id": site.site_id},
+                site_id=site.site_id,
+            )
+            opt = GoogleAdsOptimizationAgent().run_task(opt_task, orchestrator.router)["output"]
+
+            snapshot = {
+                "checked_at": datetime.now().isoformat(),
+                "site_id": site.site_id,
+                "account_id": mon.get("account_id"),
+                "campaigns_total": len(campaigns),
+                "campaigns_enabled": len(enabled),
+                "enabled_names": [c.get("campaign_name") for c in enabled],
+                "spend": summary.get("total_spend_usd"),
+                "clicks": summary.get("total_clicks"),
+                "conversions": summary.get("total_conversions"),
+                "cpa": summary.get("avg_cpa_usd"),
+                "converting_keywords": len(opt.get("winning_keywords") or []),
+                "spend_without_conversions": opt.get("estimated_monthly_savings"),
+            }
+            snapshots.append(snapshot)
+
+            # Worth saying out loud rather than burying in a JSON file.
+            if not enabled:
+                logger.warning(
+                    f"[Google Ads cron] {site.site_id}: no campaign is enabled — "
+                    f"all {len(campaigns)} are paused, nothing is serving."
+                )
+            logger.info(
+                f"[Google Ads cron] {site.site_id}: {len(enabled)}/{len(campaigns)} enabled, "
+                f"spend {summary.get('total_spend_usd')}, {summary.get('total_conversions')} conversions, "
+                f"{snapshot['spend_without_conversions']} spent on keywords that did not convert."
+            )
+        except Exception as e:
+            logger.warning(f"[Google Ads cron] {site.site_id} failed: {e}")
+
+    if not snapshots:
+        return
+    try:
+        os.makedirs("logs", exist_ok=True)
+        path = os.path.join("logs", "google_ads_daily_checks.json")
+        history = []
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    history = json.load(f)
+            except Exception:
+                history = []
+        history = snapshots + history
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(history[:400], f, indent=2)
+    except Exception as e:
+        logger.warning(f"Could not persist Google Ads daily check: {e}")
+
+
 # Register Production Schedules with Executable Callbacks
 # 09:00 AM IST = 03:30 AM UTC (30 3 * * * : Daily at 09:00 AM IST)
 scheduler_mgr.register_schedule(
@@ -354,6 +450,14 @@ scheduler_mgr.register_schedule(
     cron_expression="59 23 28-31 * *",
     action="generate_report",
     callback=_cron_run_monthly_report
+)
+# 08:00 AM IST = 02:30 AM UTC. Read-only: reports on the ads, never changes them.
+scheduler_mgr.register_schedule(
+    job_id="daily-google-ads-check-cron",
+    agent_id="google-ads-monitoring-agent",
+    cron_expression="30 2 * * *",
+    action="fetch_campaigns",
+    callback=_cron_run_daily_google_ads_check
 )
 scheduler_mgr.register_schedule(
     job_id="daily-backlinks-outreach-cron",
