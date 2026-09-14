@@ -2164,6 +2164,19 @@ def publish_google_ads_live(req: GoogleAdsPublishRequest):
     }
 
 
+def _int_or_default(value: Any, default: int) -> int:
+    """Integer from a model response, keeping a genuine 0.
+
+    Only a missing or unparseable value falls back to the default.
+    """
+    if value is None:
+        return default
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def _seo_keyword_metrics_from_gsc(site_id: str, site_name: str, loc_city: str) -> Optional[Dict[str, Any]]:
     """Keyword metrics built from Search Console, or None when it is not connected.
 
@@ -3496,7 +3509,11 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
 
 
 @app.post("/api/seo/keyword/analyze")
-def analyze_custom_keyword(req: KeywordAnalyzeRequest):
+def analyze_custom_keyword(req: KeywordAnalyzeRequest, _viewer: Dict[str, Any] = Depends(require_viewer)):
+    # Every call here bills an LLM request. Without a session requirement the
+    # endpoint answered anyone on the internet, so a loop against it ran up the
+    # AI bill. The dashboard's fetch interceptor attaches the session token to
+    # every /api/ call, so the UI is unaffected.
     """Deep SEO & Commercial Intent Analysis for any custom keyword powered by Claude AI & SEO Router."""
     raw_kw = req.keyword.strip()
     if not raw_kw:
@@ -3570,12 +3587,17 @@ Return ONLY a valid JSON object with this exact structure:
                 "keyword": raw_kw,
                 "location": loc,
                 "detected_suburb": detected_suburb,
-                "search_volume": int(ai_data.get("search_volume") or 1200),
-                "difficulty_percent": int(ai_data.get("difficulty_percent") or 25),
+                # `or` treats a legitimate 0 as missing. A keyword the model
+                # judged to have no searches was reported as 1,200, and one it
+                # scored 0% relevant was reported as 90% relevant — the two
+                # answers an operator most needs to see were the two that could
+                # not survive. Fall back only when the model omitted the field.
+                "search_volume": _int_or_default(ai_data.get("search_volume"), 1200),
+                "difficulty_percent": _int_or_default(ai_data.get("difficulty_percent"), 25),
                 "difficulty_label": str(ai_data.get("difficulty_label") or "25% (Easy)"),
                 "search_intent": str(ai_data.get("search_intent") or "Transactional (Direct Booking Intent)"),
                 "estimated_cpc_aud": str(ai_data.get("estimated_cpc_aud") or "$7.20 - $9.50 AUD"),
-                "business_relevance_score": int(ai_data.get("business_relevance_score") or 90),
+                "business_relevance_score": _int_or_default(ai_data.get("business_relevance_score"), 90),
                 "ranking_potential": str(ai_data.get("ranking_potential") or "HIGH (Page 1 Expected in 14-21 Days)"),
                 "ranking_impact_verdict": str(ai_data.get("ranking_impact_verdict") or f"High-intent opportunity for {site_name} across Melbourne."),
                 "actionable_strategy": list(ai_data.get("actionable_strategy") or [
@@ -3727,6 +3749,39 @@ def add_keyword_to_social_queue(req: AddKeywordToSocialRequest, _admin: Dict[str
         "status": "success",
         "message": f"Keyword '{kw_clean}' added to Social Media Keyword Pool (ID: {new_kw_id})!",
         "keyword_id": new_kw_id
+    }
+
+
+@app.get("/api/seo/keywords/social-pool")
+def get_social_keyword_pool(_viewer: Dict[str, Any] = Depends(require_viewer)):
+    """Keywords saved to the social pool that have not been used in a post yet.
+
+    "Add to Social Pool" wrote to the publisher's `keywords` table, and nothing
+    read it back: the CLI's `generate` takes the keywords it is given and never
+    selects from the pool, so every keyword added this way sat there unused.
+    This exposes them so the campaign form can offer them, which is what the
+    button implied all along.
+    """
+    db_path = Path(ROOT_DIR) / "corporate-cars-social-agent" / "social_agent.db"
+    if not db_path.exists():
+        return {"status": "success", "keywords": [], "total_unused": 0}
+
+    import sqlite3
+    try:
+        conn = sqlite3.connect(str(db_path))
+        rows = conn.execute(
+            "SELECT keyword, category FROM keywords "
+            "WHERE last_used_at IS NULL ORDER BY priority DESC, id ASC LIMIT 40"
+        ).fetchall()
+        conn.close()
+    except sqlite3.Error as e:
+        logger.warning(f"Social keyword pool unreadable: {e}")
+        return {"status": "success", "keywords": [], "total_unused": 0}
+
+    return {
+        "status": "success",
+        "keywords": [{"keyword": r[0], "category": r[1]} for r in rows],
+        "total_unused": len(rows),
     }
 
 

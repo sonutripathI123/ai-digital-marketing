@@ -6838,6 +6838,28 @@ function openAddSocialCampaignModal(siteId) {
   updateSocialKeywordCounter();
   openModal('modal-add-social-campaign');
   loadSocialSettingsForSite(siteSelect ? siteSelect.value : activeSite);
+  prefillSocialKeywordsFromPool();
+}
+
+// "Add to Social Pool" saved keywords the publisher never read back, so they
+// accumulated unused. Offer them here, where they can actually become posts.
+// Only ever pre-fills an empty box, so it cannot overwrite what is being typed.
+async function prefillSocialKeywordsFromPool() {
+  const textarea = document.getElementById('social-keywords-textarea');
+  if (!textarea || textarea.value.trim()) return;
+  try {
+    const res = await fetch('/api/seo/keywords/social-pool');
+    if (!res.ok) return;
+    const data = await res.json();
+    const words = (data.keywords || []).map(k => k.keyword).filter(Boolean);
+    if (!words.length || textarea.value.trim()) return;
+    textarea.value = words.slice(0, 12).join('\n');
+    updateSocialKeywordCounter();
+    const badge = document.getElementById('social-keywords-count-badge');
+    if (badge) badge.title = `Pre-filled from your saved keyword pool (${data.total_unused} unused)`;
+  } catch (e) {
+    // The form works fine without a pre-fill.
+  }
 }
 
 function openLivePageAuditModal(url) {
