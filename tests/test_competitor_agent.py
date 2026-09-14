@@ -30,7 +30,11 @@ class TestCompetitorAnalysisAgent(unittest.TestCase):
         self.assertEqual(meta.name, "Competitor Analysis Agent")
         self.assertEqual(meta.category, "SEO & Content")
         self.assertTrue(meta.enabled)
-        self.assertIn("analyze", meta.supported_actions)
+        # "analyze", "gap_analysis", "compare" and "recommendations" were
+        # advertised alongside this one and all did exactly the same thing:
+        # run_task never branched on `action`, and the UI opened the same form
+        # for every chip. Only the operation that exists is listed now.
+        self.assertEqual(["find_by_keyword"], meta.supported_actions)
 
     def test_run_task_rule_based(self):
         task = AgentTask(

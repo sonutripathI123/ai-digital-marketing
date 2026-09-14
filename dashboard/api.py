@@ -1953,6 +1953,39 @@ def perform_agent_connection_test(agent_id: str, creds: Dict[str, Any], site: We
             "message": f"✅ Google Business Place ID '{place_id}' connected for reviews monitoring."
         }
 
+    elif agent_id == "competitor-analysis-agent":
+        # Actually fetch the URLs. The generic branch below reports success for
+        # anything, which would say "verified" for a list of dead domains — and
+        # seven of the ten the agent shipped with no longer resolve.
+        raw = creds.get("competitor_urls") or ""
+        urls = [u.strip() for u in re.split(r"[\n,]+", str(raw)) if u.strip()]
+        if not urls:
+            return {
+                "success": False,
+                "message": "Add at least one competitor URL, one per line."
+            }
+
+        from agents.competitor_agent import fetch_page
+
+        reachable, unreachable = [], []
+        for u in urls[:8]:
+            if not u.startswith(("http://", "https://")):
+                u = "https://" + u
+            if fetch_page(u).get("reachable"):
+                reachable.append(u)
+            else:
+                unreachable.append(u)
+
+        if not reachable:
+            return {
+                "success": False,
+                "message": f"None of the {len(urls)} URLs could be fetched: {', '.join(unreachable[:3])}"
+            }
+        msg = f"🎉 Fetched {len(reachable)} of {len(urls)} competitor pages."
+        if unreachable:
+            msg += f" Could not reach: {', '.join(unreachable[:3])}."
+        return {"success": True, "message": msg, "details": {"reachable": reachable, "unreachable": unreachable}}
+
     return {
         "success": True,
         "message": f"✅ Agent '{agent_id}' configuration verified successfully."

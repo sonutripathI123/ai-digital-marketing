@@ -9111,6 +9111,33 @@ const AGENT_INTEGRATION_CONFIGS = {
       </div>
     `
   },
+  // Without an entry here the Connect button fell through to a generic
+  // "API Key / Token" form, for an agent that calls no API and reads no key —
+  // whatever was typed was stored and never used. What it actually needs is
+  // the list of competitors to fetch.
+  'competitor-analysis-agent': {
+    title: 'Competitor Analysis',
+    icon: 'fa-solid fa-user-secret',
+    color: '#f59e0b',
+    subtitle: 'The competitor sites to fetch and compare your pages against.',
+    fields: [
+      { key: 'competitor_urls', label: 'Competitor Website URLs', type: 'textarea', placeholder: 'https://competitor-one.com.au\nhttps://competitor-two.com.au', required: false, help: 'One per line. Used instead of the built-in suggestions, which are not search results.' }
+    ],
+    guide: `
+      <div style="line-height:1.6; font-size:13px; color:#f59e0b; margin-bottom:10px;">
+        <h4 style="color:#f59e0b; font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-user-secret"></i> Which competitors to add:</h4>
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:12px;">
+          Search your main keyword on Google and take the businesses that outrank you. Paste their
+          home page or their page for that service, one per line.<br><br>
+          The agent fetches each page and compares it with yours on word count, headings,
+          Schema.org types, keyword placement, internal links and image alt text. It does not
+          estimate domain authority, traffic or search volume &mdash; a page fetch cannot measure those,
+          so they are not shown.<br><br>
+          A site that cannot be fetched is reported as unreachable rather than described.
+        </div>
+      </div>
+    `
+  },
   'page-optimizer-agent': {
     title: 'Page Doctor & Technical SEO Audit',
     icon: 'fa-solid fa-stethoscope',
@@ -9198,6 +9225,17 @@ async function openAgentIntegrationModal(agentId, initialTab = 'settings') {
         <label style="display:block; font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:5px;">
           ${f.label} ${f.required ? '<span style="color:#ef4444;">*</span>' : ''}
         </label>
+        ${f.type === 'textarea' ? `
+        <textarea
+          id="int-field-${f.key}"
+          name="${f.key}"
+          rows="4"
+          placeholder="${escapeHtml(f.placeholder || '')}"
+          ${f.required ? 'required' : ''}
+          class="form-control"
+          style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:13px; font-family:var(--font-mono); line-height:1.5;"
+        >${escapeHtml(val)}</textarea>
+        ` : `
         <input 
           type="${f.type}" 
           id="int-field-${f.key}" 
@@ -9208,6 +9246,7 @@ async function openAgentIntegrationModal(agentId, initialTab = 'settings') {
           class="form-control" 
           style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:13px;"
         />
+        `}
         ${f.help ? `<div style="font-size:11px; color:var(--text-secondary); margin-top:3px;">${f.help}</div>` : ''}
       </div>
     `;

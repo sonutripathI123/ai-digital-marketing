@@ -255,7 +255,11 @@ class CompetitorAnalysisAgent(AgentInterface):
             category="SEO & Content",
             enabled=True,
             paused=False,
-            supported_actions=["find_by_keyword", "analyze", "gap_analysis", "compare", "recommendations"],
+            # One operation exists: fetch the pages and compare them. The other
+            # four names were rendered as separate chips on the agent card, all
+            # opening the same form, and run_task never branched on `action` —
+            # so every one of them did the same thing under a different label.
+            supported_actions=["find_by_keyword"],
             version="1.1.0"
         )
 
@@ -273,39 +277,24 @@ class CompetitorAnalysisAgent(AgentInterface):
             if cleaned:
                 return cleaned
 
-        # Dynamic heuristic competitor discovery based on keyword category & location
+        # Fallback suggestions only. These are not search results — the agent
+        # does not query a SERP — and the previous list named ten domains of
+        # which seven no longer resolve, so every run spent its time reporting
+        # dead sites. Only domains that still answer are kept. Save your real
+        # competitors against the site (Connect > Competitor Analysis) and those
+        # are used instead of this list.
         kw_lower = target_keyword.lower()
 
-        if "wedding" in kw_lower or "event" in kw_lower:
-            return [
-                "https://melbourneweddingcars.com.au",
-                "https://enrikchauffeurs.com.au",
-                "https://silverexecutivetravel.com.au"
-            ]
-        elif "airport" in kw_lower or "tullamarine" in kw_lower or "avalon" in kw_lower:
-            return [
-                "https://chauffeurcarsmelbourne.com.au",
-                "https://melbourneairportchauffeurs.com.au",
-                "https://crownchauffeursmelbourne.com.au"
-            ]
-        elif "funeral" in kw_lower:
-            return [
-                "https://funeralcarsmelbourne.com.au",
-                "https://luxurydriver.com.au",
-                "https://silverexecutivetravel.com.au"
-            ]
-        elif "tour" in kw_lower or "winery" in kw_lower:
+        if "tour" in kw_lower or "winery" in kw_lower or "wine" in kw_lower:
             return [
                 "https://yarravalleywinetours.com.au",
-                "https://melbournechauffeurhire.com.au",
-                "https://luxurydriver.com.au"
+                "https://melbourneairportchauffeurs.com.au",
             ]
-        else:
-            return [
-                "https://chauffeurcarsmelbourne.com.au",
-                "https://luxurydriver.com.au",
-                "https://silverexecutivetravel.com.au"
-            ]
+        return [
+            "https://melbourneairportchauffeurs.com.au",
+            "https://chauffeurcarsmelbourne.com.au",
+            "https://yarravalleywinetours.com.au",
+        ]
 
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
         input_data = task.input_data or {}
@@ -319,11 +308,27 @@ class CompetitorAnalysisAgent(AgentInterface):
         if isinstance(raw_competitor_urls, str):
             raw_competitor_urls = [raw_competitor_urls] if raw_competitor_urls.strip() else []
 
-        competitor_urls = self._discover_competitors_for_keyword(target_keyword, location, raw_competitor_urls)
-
         # Retrieve active site profile
         site_mgr = WebsiteManager()
         site_profile = site_mgr.get(site_id) or site_mgr.get("ccm")
+
+        # Competitors the operator saved against this website beat the built-in
+        # suggestions. Without this the agent could only ever look at a fixed
+        # list that knows nothing about who this site actually competes with.
+        url_source = "operator-supplied URLs"
+        if not raw_competitor_urls and site_profile:
+            saved = (site_profile.agent_credentials or {}).get("competitor-analysis-agent", {}) or {}
+            saved_urls = saved.get("competitor_urls") or ""
+            if isinstance(saved_urls, str):
+                saved_urls = [u.strip() for u in re.split(r"[\n,]+", saved_urls) if u.strip()]
+            if saved_urls:
+                raw_competitor_urls = saved_urls
+                url_source = "saved against this website"
+
+        if not raw_competitor_urls:
+            url_source = "built-in suggestion list (not live search results)"
+
+        competitor_urls = self._discover_competitors_for_keyword(target_keyword, location, raw_competitor_urls)
         my_brand = site_profile.name if site_profile else "Corporate Cars Melbourne"
         my_domain = site_profile.domain if site_profile else "https://corporatecarsmelbourne.com.au"
 
@@ -456,7 +461,7 @@ class CompetitorAnalysisAgent(AgentInterface):
             "competitors_reachable_count": reachable_count,
             "competitors_unreachable_count": len(competitor_urls) - reachable_count,
             "competitors_discovered": [urlparse(u).netloc or u for u in competitor_urls],
-            "competitor_source": "operator-supplied URLs" if raw_competitor_urls else "built-in suggestion list (not live search results)",
+            "competitor_source": url_source,
             "my_page_measured": my_page,
             "competitor_insights": gap_insights,
             "identified_content_gaps_count": sum(len(g["content_gaps"]) for g in gap_insights),
