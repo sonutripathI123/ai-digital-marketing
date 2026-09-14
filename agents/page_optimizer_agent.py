@@ -70,16 +70,21 @@ def fetch_live_page_content(url: str, timeout: int = 15) -> Dict[str, Any]:
     }
     
     html = ""
-    status_code = 200
+    status_code = None
+    fetch_error = None
     try:
         req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=timeout) as response:
             status_code = response.getcode()
             charset = response.headers.get_content_charset() or "utf-8"
             html = response.read().decode(charset, errors="replace")
+    except urllib.error.HTTPError as e:
+        status_code = e.code
+        fetch_error = f"The page answered HTTP {e.code}."
+        logger.info(f"Live fetch for '{url}' returned HTTP {e.code}")
     except Exception as e:
-        logger.info(f"Live fetch notice for '{url}': {e}")
-        html = ""
+        fetch_error = f"The page could not be fetched: {e}"
+        logger.info(f"Live fetch failed for '{url}': {e}")
 
     # Parse extracted elements using regex
     title = ""
@@ -119,14 +124,24 @@ def fetch_live_page_content(url: str, timeout: int = 15) -> Dict[str, Any]:
                 internal_links.append(l_clean)
 
     # Trust signals (E-E-A-T detection)
-    has_phone = bool(re.search(r'(tel:|\+61|04\d{2}|1300|1800|\(\d{2}\))', html, re.IGNORECASE))
-    has_reviews = bool(re.search(r'(review|rating|star|trustpilot|google review|testimonial)', html, re.IGNORECASE))
-    has_accreditation = bool(re.search(r'(accredited|police check|commercial|insurance|licensed|cpv|driver)', html, re.IGNORECASE))
+    # "driver" counted as an accreditation signal and "star" as a review
+    # signal, so every page of a chauffeur site scored full marks on both
+    # whether or not it showed any such proof. A phone number still has to be
+    # callable, and the other two now need a phrase that means what it claims.
+    has_phone = bool(re.search(r'href=["\']tel:', html, re.IGNORECASE))
+    has_reviews = bool(re.search(
+        r'(customer review|google review|testimonial|trustpilot|aggregateRating|'
+        r'\breviews?\b[^<]{0,30}\b(rated|rating|stars?)\b)', html, re.IGNORECASE))
+    has_accreditation = bool(re.search(
+        r'(accredited|accreditation|police check|working with children|'
+        r'commercial passenger vehicle|\bCPVV?\b|public liability|fully insured|licen[cs]ed driver)',
+        html, re.IGNORECASE))
 
     return {
         "url": url,
         "fetched_live": bool(html),
-        "status_code": status_code if html else 200,
+        "status_code": status_code,
+        "fetch_error": fetch_error,
         "title": title,
         "meta_description": meta_desc,
         "h1s": h1s,
@@ -205,20 +220,39 @@ class PageOptimizerAgent(AgentInterface):
         if not kw_tokens:
             kw_tokens = ["chauffeur", "airport", "transfers", "melbourne"]
 
-        # If live fetch was completely empty, provide fallback on-page structure
-        if not page_data["title"]:
-            page_data["title"] = f"{focus_kw.title()} | {brand_name}"
-        if not page_data["h1s"]:
-            page_data["h1s"] = [f"{focus_kw.title()} in {loc_city}"]
-        if not page_data["h2s"]:
-            page_data["h2s"] = [
-                f"Why Choose {brand_name} for {focus_kw.title()}",
-                f"Airport Transfers & Executive Fleet Options in {loc_city}",
-                f"Comparing Private Chauffeur vs Standard Rideshare",
-                f"How to Book Your Dedicated {loc_city} Chauffeur"
-            ]
-        if page_data["word_count"] < 100:
-            page_data["word_count"] = 1250
+        # A page that could not be read cannot be audited. What stood here
+        # supplied a title, an H1, four H2 headings and a word count of 1,250
+        # when the fetch came back empty, and the scoring engine then graded
+        # those invented values -- so an unreachable URL was reported as having
+        # "excellent content depth" and scored in the 80s.
+        if not page_data["fetched_live"]:
+            return {
+                "output": {
+                    "action": action,
+                    "audited_url": page_url,
+                    "focus_keyword": focus_kw,
+                    "page_read": False,
+                    "status_code": page_data.get("status_code"),
+                    "error": page_data.get("fetch_error") or "The page returned no HTML.",
+                    "overall_health_score": None,
+                    "grade": None,
+                    "algorithm_scores": {},
+                    "on_page_metrics": {},
+                    "identified_issues": [{
+                        "level": "CRITICAL",
+                        "item": "Page could not be read",
+                        "fix": "Check that the URL is correct and the page loads for visitors.",
+                    }],
+                    "executive_action_checklist": [
+                        f"This page was not audited: {page_data.get('fetch_error') or 'no HTML was returned'}.",
+                        "No score is shown, because nothing was measured.",
+                    ],
+                    "audited_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+                },
+                "model_used": "page fetch failed",
+                "tokens_used": 0,
+                "cost_usd": 0.0,
+            }
 
         # 2. Dynamic Real-Time Google Algorithm Scoring Engine
         scores = {}
@@ -244,7 +278,9 @@ class PageOptimizerAgent(AgentInterface):
         elif title_len < 30:
             title_score = max(65, title_score - 15)
 
-        scores["title_and_meta"] = min(100, max(50, title_score))
+        # The floors here (50, 40, 50) meant a page missing everything still
+        # scored around 65 -- a "C" for a page with no title, no H1 and no text.
+        scores["title_and_meta"] = min(100, max(0, title_score))
 
         # --- B. Heading Hierarchy H1/H2/H3 (25% Weight) ---
         heading_score = 80
@@ -280,7 +316,7 @@ class PageOptimizerAgent(AgentInterface):
             heading_score -= 15
             checklist.append("⚠️ [H2 SUBHEADINGS] Add at least 3-4 H2 subsections to structure your content.")
 
-        scores["heading_hierarchy"] = min(100, max(40, heading_score))
+        scores["heading_hierarchy"] = min(100, max(0, heading_score))
 
         # --- C. Google Helpful Content Update (HCU) & Word Count (25% Weight) ---
         current_words = page_data["word_count"]
@@ -317,7 +353,7 @@ class PageOptimizerAgent(AgentInterface):
             eeat_score += 10
             checklist.append("✅ [SOCIAL PROOF] Customer reviews / rating signals detected.")
 
-        scores["eeat_trust"] = min(100, max(50, eeat_score))
+        scores["eeat_trust"] = min(100, max(0, eeat_score))
 
         # --- E. Internal Linking & Silo Graph (15% Weight) ---
         links_cnt = page_data["internal_links_count"]
@@ -356,7 +392,7 @@ class PageOptimizerAgent(AgentInterface):
                 f"1. Why {brand_name} {focus_kw.title()} Outperforms Standard Rideshare in {loc_city}",
                 f"2. Seamless Airport Transfers & Flight-Tracking Guarantee at Melbourne Tullamarine",
                 f"3. Transparent Fixed Pricing & Corporate Billing Accounts",
-                f"4. Luxury European Fleet: Mercedes-Benz S-Class, E-Class & Executive V-Class",
+                f"4. The Vehicles Available for This Service",
                 f"5. Frequently Asked Questions About Our {loc_city} Chauffeur Services"
             ],
             "proposed_h3_faqs": [
@@ -378,39 +414,84 @@ class PageOptimizerAgent(AgentInterface):
                 "name": location
             },
             "priceRange": "$$$",
-            "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.9",
-                "reviewCount": "142"
-            }
         }
+        # The generated JSON-LD shipped with aggregateRating 4.9 over 142
+        # reviews and told the operator to paste it into their site. Those
+        # numbers were invented, and publishing a review count you cannot
+        # substantiate is a structured-data violation Google issues manual
+        # actions for. The rating is filled in only when the reputation agent
+        # has read it from Google, and omitted otherwise.
+        rating_note = (
+            "aggregateRating is omitted: it must reflect reviews that are actually "
+            "shown on the page. Connect the reviews agent, or add it by hand from "
+            "your real Google rating."
+        )
+        try:
+            from agents.reputation_agent import ReviewReputationAgent
+
+            rep_out = ReviewReputationAgent().run_task(
+                AgentTask(task_id="page-opt-rep", agent_id="reputation-agent",
+                          task_type="fetch_reviews",
+                          input_data={"action": "fetch_reviews", "site_id": site_id},
+                          site_id=site_id),
+                router,
+            ).get("output", {})
+            if rep_out.get("live_data_connected"):
+                overview = rep_out.get("reputation_overview") or {}
+                if overview.get("average_rating") and overview.get("total_reviews"):
+                    schema_json["aggregateRating"] = {
+                        "@type": "AggregateRating",
+                        "ratingValue": str(overview["average_rating"]),
+                        "reviewCount": str(overview["total_reviews"]),
+                    }
+                    rating_note = (
+                        f"aggregateRating read from this business's Google profile "
+                        f"({overview['average_rating']} over {overview['total_reviews']} reviews). "
+                        f"Only publish it on a page that shows those reviews."
+                    )
+        except Exception as e:
+            logger.warning(f"Could not read the real rating for schema: {e}")
         schema_code_str = json.dumps(schema_json, indent=2)
 
-        internal_links_suggested = [
-            {
-                "target_url": f"{brand_domain}/services/airport-transfers",
-                "recommended_anchor": f"{location} Airport Transfers",
-                "context": "Contextual link from the airport transportation section to primary airport pillar page.",
-                "importance": "HIGH"
-            },
-            {
-                "target_url": f"{brand_domain}/fleet",
-                "recommended_anchor": "Executive Luxury Fleet",
-                "context": "Link from vehicle description section to showcase Mercedes S-Class / V-Class specs.",
-                "importance": "HIGH"
-            },
-            {
-                "target_url": f"{brand_domain}/services/corporate-transfers",
-                "recommended_anchor": "Corporate Chauffeur Accounts",
-                "context": "Link from business travel section to capture high-value corporate billing leads.",
-                "importance": "MEDIUM"
-            }
-        ]
+        # These three targets were fixed strings: /services/airport-transfers,
+        # /fleet and /services/corporate-transfers. On this site /fleet is a 404
+        # and the other two only redirect, so following the advice would have
+        # added internal links to pages that do not exist. Suggestions now come
+        # from the pages the linking agent has actually indexed.
+        internal_links_suggested = []
+        try:
+            from agents.internal_linking_agent import load_candidate_internal_pages
+
+            audited_path = urlparse(page_url).path.rstrip("/")
+            scored = []
+            for page in load_candidate_internal_pages(site_id):
+                target = page.get("url") or ""
+                if not target or urlparse(target).path.rstrip("/") == audited_path:
+                    continue
+                haystack = f"{page.get('title', '')} {target}".lower()
+                overlap = sum(1 for t in kw_tokens if t in haystack)
+                if overlap:
+                    scored.append((overlap, page))
+            scored.sort(key=lambda pair: pair[0], reverse=True)
+            for overlap, page in scored[:5]:
+                internal_links_suggested.append({
+                    "target_url": page.get("url"),
+                    "recommended_anchor": page.get("title") or page.get("keyword") or "",
+                    "context": (
+                        f"Shares {overlap} term(s) with this page's focus keyword "
+                        f"'{focus_kw}'."
+                    ),
+                    "importance": "HIGH" if overlap >= 2 else "MEDIUM",
+                })
+        except Exception as e:
+            logger.warning(f"Could not read indexed pages for link suggestions: {e}")
 
         # Format Final Result Payload
         result_payload = {
             "action": action,
             "audited_url": page_url,
+            "page_read": True,
+            "status_code": page_data.get("status_code"),
             "focus_keyword": focus_kw,
             "location": location,
             "target_brand": brand_name,
@@ -421,7 +502,16 @@ class PageOptimizerAgent(AgentInterface):
             "on_page_metrics": {
                 "title": page_data["title"],
                 "title_length": title_len,
-                "meta_description": page_data["meta_description"] or f"Experience executive {focus_kw} in {location} with {brand_name}. Punctual, luxury vehicles and 24/7 flight tracking. Book online now.",
+                # A page with no meta description was reported as having one,
+                # because the fallback text was placed in the field that
+                # describes what the page currently has.
+                "meta_description": page_data["meta_description"] or None,
+                "meta_description_missing": not page_data["meta_description"],
+                "suggested_meta_description": (
+                    None if page_data["meta_description"] else
+                    f"Executive {focus_kw} in {location} with {brand_name}. "
+                    f"Professional chauffeurs, fixed pricing, flight monitoring."
+                ),
                 "current_h1": page_data["h1s"][0] if page_data["h1s"] else "(None)",
                 "total_h2_count": len(page_data["h2s"]),
                 "current_word_count": page_data["word_count"],
@@ -433,6 +523,7 @@ class PageOptimizerAgent(AgentInterface):
             "internal_linking_recommendations": internal_links_suggested,
             "identified_issues": issues,
             "ready_to_paste_schema_json": schema_code_str,
+            "schema_rating_note": rating_note,
             "executive_action_checklist": checklist,
             "audited_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
         }

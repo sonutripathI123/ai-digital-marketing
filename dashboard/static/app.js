@@ -6006,8 +6006,29 @@ function renderPageOptimizerAuditResults(report) {
   const container = document.getElementById('page-opt-results-container');
   if (!container) return;
 
-  const score = report.overall_health_score || 78;
-  const grade = report.grade || 'B+';
+  // A page the crawler could not read carries no score. This used to read
+  // `report.overall_health_score || 78`, so an unreachable URL was presented
+  // with a B+ and a health score of 78 out of 100.
+  if (report && report.page_read === false) {
+    container.innerHTML = `
+      <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.35); padding:20px 22px; border-radius:14px;">
+        <div style="font-size:15px; font-weight:800; color:#fca5a5; margin-bottom:8px;">
+          <i class="fa-solid fa-link-slash"></i> Ye page padha nahi ja saka
+        </div>
+        <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+          ${escapeHtml(report.audited_url || '')}<br>
+          ${escapeHtml(report.error || 'No HTML was returned.')}
+          ${report.status_code ? ` (HTTP ${report.status_code})` : ''}
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:12px;">
+          Koi score nahi dikhaya ja raha, kyunki kuch measure hi nahi hua. URL check karein.
+        </div>
+      </div>`;
+    return;
+  }
+
+  const score = report.overall_health_score;
+  const grade = report.grade || '';
   const scores = report.algorithm_scores || {};
   const op = report.on_page_metrics || {};
   const headings = report.optimized_headings_recommendations || {};
@@ -6273,8 +6294,29 @@ function renderPageOptimizerAuditResultsCustom(report, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const score = report.overall_health_score || 78;
-  const grade = report.grade || 'B+';
+  // A page the crawler could not read carries no score. This used to read
+  // `report.overall_health_score || 78`, so an unreachable URL was presented
+  // with a B+ and a health score of 78 out of 100.
+  if (report && report.page_read === false) {
+    container.innerHTML = `
+      <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.35); padding:20px 22px; border-radius:14px;">
+        <div style="font-size:15px; font-weight:800; color:#fca5a5; margin-bottom:8px;">
+          <i class="fa-solid fa-link-slash"></i> Ye page padha nahi ja saka
+        </div>
+        <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+          ${escapeHtml(report.audited_url || '')}<br>
+          ${escapeHtml(report.error || 'No HTML was returned.')}
+          ${report.status_code ? ` (HTTP ${report.status_code})` : ''}
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:12px;">
+          Koi score nahi dikhaya ja raha, kyunki kuch measure hi nahi hua. URL check karein.
+        </div>
+      </div>`;
+    return;
+  }
+
+  const score = report.overall_health_score;
+  const grade = report.grade || '';
   const scores = report.algorithm_scores || {};
   const op = report.on_page_metrics || {};
   const headings = report.optimized_headings_recommendations || {};

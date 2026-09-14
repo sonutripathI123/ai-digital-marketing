@@ -92,10 +92,21 @@ class TestPageOptimizerAgent(unittest.TestCase):
         data = resp.json()
         self.assertEqual(data["status"], "success")
         self.assertIn("output", data)
-        self.assertGreater(data["output"]["overall_health_score"], 0)
+        output = data["output"]
+        # This URL is a 404. The assertion here used to be
+        # `overall_health_score > 0`, and it passed because an unreadable page
+        # was given an invented title, H1, four H2s and a 1,250 word count and
+        # then scored on them. A page that cannot be read now carries no score.
+        if output.get("page_read"):
+            self.assertGreater(output["overall_health_score"], 0)
+        else:
+            self.assertIsNone(output["overall_health_score"])
+            self.assertIsNone(output["grade"])
+            self.assertTrue(output["error"])
+            self.assertEqual(output["on_page_metrics"], {})
 
     def test_fastapi_history_endpoint(self):
-        resp = self.client.get("/api/agents/page-optimizer/history")
+        resp = self.client.get("/api/agents/page-optimizer/history", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")
