@@ -3414,16 +3414,19 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
                 </div>
               </div>
 
-              <!-- Quality Score Diagnostics -->
-              <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:10px; padding:12px 14px; margin-top:12px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <span id="preview-ad-strength" style="font-size:12px; font-weight:700; color:#10b981;">
-                    <i class="fa-solid fa-circle-check"></i> Ad Strength: Excellent (98/100)
-                  </span>
-                  <span style="font-size:11px; color:var(--text-muted);">CTR Potential: Very High (5.8%+)</span>
+              <!-- Character limits: the only thing this preview can actually check.
+                   It used to claim "Ad Strength: Excellent (98/100)" and
+                   "CTR Potential: Very High (5.8%+)" over whatever was typed in
+                   the boxes. Ad Strength is computed by Google against the live
+                   ad; nothing here can know it, and a fixed 98/100 shown beside
+                   an empty draft is a score for nothing. -->
+              <div style="background:rgba(148,163,184,0.1); border:1px solid rgba(148,163,184,0.3); border-radius:10px; padding:12px 14px; margin-top:12px;">
+                <div id="preview-ad-strength" style="font-size:12px; font-weight:700; color:#cbd5e1;">
+                  <i class="fa-solid fa-ruler-horizontal"></i> Character limits checked here only
                 </div>
                 <div style="font-size:11.5px; color:var(--text-secondary); margin-top:4px;">
-                  ✓ Keywords Mapped &bull; ✓ Sitelinks & Call Assets Active &bull; ✓ Character Limits Passed
+                  Ad Strength and CTR are reported by Google against the live ad. This preview
+                  cannot measure either, so it does not show a score.
                 </div>
               </div>
             </div>
@@ -9641,46 +9644,72 @@ Target Website URL: https://corporatecarsmelbourne.com.au/`;
   });
 }
 
-function runAiAdCopyEnhancer() {
-  const variations = [
-    {
-      h1: "Melbourne Airport Chauffeur",
-      h2: "Skip The Taxi Queue At MEL",
-      h3: "Fixed Rate Luxury Transit",
-      d1: "Land at Tullamarine & step straight into luxury. Professional accredited chauffeurs.",
-      d2: "Flight telemetry tracked in real time. Complimentary waiting time. Book online in 60s."
-    },
-    {
-      h1: "Executive Chauffeur Melbourne",
-      h2: "Private Airport Transfers",
-      h3: "Corporate Cars Melbourne",
-      d1: "Punctual European sedans for corporate executives and airport transit. Fixed transparent pricing.",
-      d2: "24/7 dedicated dispatch and terminal meet-and-greet. Reserve your ride online today."
-    },
-    {
-      h1: "Luxury Melbourne Chauffeurs",
-      h2: "Fixed Price Transfers",
-      h3: "Mercedes & BMW Fleet",
-      d1: "Direct Tullamarine airport pickups with live flight monitoring. Discreet, punctual drivers.",
-      d2: "No surge pricing. Free cancellations up to 2 hours before pickup. Book your car now!"
+async function runAiAdCopyEnhancer() {
+  // This used to be Math.random() over three hardcoded ad variations, followed
+  // by an alert saying "AI has applied a high-converting Responsive Search Ad
+  // copy". No model was called and the copy did not come from this account's
+  // data. It now asks the agent to write copy from the keywords that actually
+  // converted, and reports plainly when that fails.
+  const btn = window.event ? (window.event.currentTarget || window.event.target) : null;
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Writing copy from your winning keywords...'; }
+
+  try {
+    const createRes = await fetch('/api/tasks/create', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        agent_id: 'google-ads-optimization-agent',
+        task_type: 'recommend_optimizations',
+        input_data: { action: 'recommend_optimizations', site_id: currentSiteId, use_ai: true },
+        site_id: currentSiteId,
+        requires_approval: false
+      })
+    });
+    const created = await createRes.json();
+    const taskId = created?.task?.task_id;
+    if (!createRes.ok || !taskId) throw new Error(created?.detail || 'Could not start the task.');
+
+    const execRes = await fetch(`/api/tasks/execute/${taskId}`, {
+      method: 'POST', headers: getAuthHeaders({ 'Content-Type': 'application/json' })
+    });
+    const done = await execRes.json();
+    const out = done?.task?.output_data || {};
+
+    if (out.data_source !== 'LIVE (Google Ads API)') {
+      alert('Google Ads se live data nahi mila, isliye koi copy nahi banayi gayi.\n\n' +
+            (out.live_error || 'The Google Ads API did not return data.'));
+      return;
     }
-  ];
 
-  const pick = variations[Math.floor(Math.random() * variations.length)];
-  const h1In = document.getElementById('ad-h1');
-  const h2In = document.getElementById('ad-h2');
-  const h3In = document.getElementById('ad-h3');
-  const d1In = document.getElementById('ad-d1');
-  const d2In = document.getElementById('ad-d2');
+    const copy = out.generated_ad_copy;
+    const heads = copy && (copy.headlines || copy.Headlines);
+    const descs = copy && (copy.descriptions || copy.Descriptions);
+    if (!Array.isArray(heads) || !heads.length) {
+      alert('Live data to mil gaya, par model se ad copy nahi aayi.\n\n' +
+            'Kuch bhi bharke dikhaya nahi ja raha — dobara koshish karein.');
+      return;
+    }
 
-  if (h1In) h1In.value = pick.h1;
-  if (h2In) h2In.value = pick.h2;
-  if (h3In) h3In.value = pick.h3;
-  if (d1In) d1In.value = pick.d1;
-  if (d2In) d2In.value = pick.d2;
+    ['ad-h1','ad-h2','ad-h3','ad-h4','ad-h5'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && heads[i]) el.value = String(heads[i]).slice(0, 30);
+    });
+    ['ad-d1','ad-d2','ad-d3'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && Array.isArray(descs) && descs[i]) el.value = String(descs[i]).slice(0, 90);
+    });
+    if (typeof updateLiveAdPreview === 'function') updateLiveAdPreview();
 
-  updateLiveAdPreview();
-  alert('✨ AI has applied a high-converting Responsive Search Ad copy variation optimized for Quality Score!');
+    const winners = (out.winning_keywords || []).map(k => k.keyword).slice(0, 5).join(', ');
+    alert('Ad copy ' + (out.model_used || 'the model') + ' se likhi gayi, aapke converting keywords par:\n\n' +
+          (winners || 'no converting keywords in this window') + '\n\n' +
+          'Ye ek draft hai — check karke hi Google Ads mein daalein.');
+  } catch (err) {
+    alert('Ad copy nahi ban payi: ' + (err.message || err));
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = orig; }
+  }
 }
 
 function toggleDraftAdsExplorer() {
