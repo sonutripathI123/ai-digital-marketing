@@ -3031,86 +3031,54 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
             }
 
     elif agent_id == "internal-linking-agent":
-        loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
-        if effective_site == "opal":
-            report["internal_linking_metrics"] = {
-                "summary": {
-                    "indexed_linkable_pages": 128,
-                    "link_equity_health_score": "92/100 (Optimal)",
-                    "avg_internal_links_per_post": 4.2,
-                    "orphan_pages_count": 0,
-                    "anchor_text_diversity": "86% Natural Distribution"
-                },
-                "recent_link_opportunities": [
-                    {
-                        "source_title": "Why Choose Opal Luxury Airport Chauffeurs Melbourne",
-                        "target_page": f"https://{site_domain}/melbourne-airport-transfers/",
-                        "anchor_text": "Melbourne Airport Transfers",
-                        "link_type": "Contextual In-Content",
-                        "equity_boost": "+16% Authority Flow",
-                        "status": "APPLIED"
-                    },
-                    {
-                        "source_title": "Yarra Valley Private Chauffeur Wine Tours Guide",
-                        "target_page": f"https://{site_domain}/services/winery-tours/",
-                        "anchor_text": "luxury Yarra Valley winery tour chauffeur",
-                        "link_type": "Contextual In-Content",
-                        "equity_boost": "+14% Authority Flow",
-                        "status": "APPLIED"
-                    }
-                ],
-                "recommendations": [
-                    f"Ensure newly published blog posts link to at least 2 suburb service pages on {site_name}.",
-                    "Maintain natural anchor text variation (Avoid over-optimizing exact-match keywords)."
-                ]
-            }
-        elif effective_site == "ccm":
-            report["internal_linking_metrics"] = {
-                "summary": {
-                    "indexed_linkable_pages": 312,
-                    "link_equity_health_score": "94/100 (Optimal)",
-                    "avg_internal_links_per_post": 4.8,
-                    "orphan_pages_count": 0,
-                    "anchor_text_diversity": "88% Natural Distribution"
-                },
-                "recent_link_opportunities": [
-                    {
-                        "source_title": "Essendon Airport Travel Time: What to Expect",
-                        "target_page": f"{site_domain}/melbourne-airport-transfers/",
-                        "anchor_text": "Melbourne Airport Transfers",
-                        "link_type": "Contextual In-Content",
-                        "equity_boost": "+18% Authority Flow",
-                        "status": "APPLIED"
-                    },
-                    {
-                        "source_title": "Airport Transfer Tips Blackburn: A Traveller's Guide",
-                        "target_page": f"{site_domain}/fleet/mercedes-benz-s-class/",
-                        "anchor_text": "luxury Mercedes chauffeur fleet",
-                        "link_type": "Contextual In-Content",
-                        "equity_boost": "+15% Authority Flow",
-                        "status": "APPLIED"
-                    }
-                ],
-                "recommendations": [
-                    f"Ensure newly published blog posts link to at least 2 suburb service pages on {site_name}.",
-                    "Maintain natural anchor text variation (Avoid over-optimizing exact-match keywords)."
-                ]
-            }
+        # This block used to be literals: 312 linkable pages, "94/100 (Optimal)"
+        # link equity, 4.8 links per post, "88% Natural Distribution", and two
+        # sample opportunities carrying an invented "+18% Authority Flow" and a
+        # status of "APPLIED" — claiming links had been placed that never were.
+        # None of it moved and none of it was measured. The counts below come
+        # from the page catalogue the agent actually links against.
+        from agents.internal_linking_agent import load_candidate_internal_pages
+
+        try:
+            candidates = load_candidate_internal_pages(effective_site)
+        except Exception as e:
+            logger.warning(f"Could not load internal link candidates for {effective_site}: {e}")
+            candidates = []
+
+        by_category: Dict[str, int] = {}
+        for c in candidates:
+            by_category[c.get("category", "Uncategorised")] = by_category.get(c.get("category", "Uncategorised"), 0) + 1
+
+        recs = []
+        if candidates:
+            recs.append(
+                f"{len(candidates)} pages are available as internal link targets for {site_name}, "
+                f"read from the site's own page catalogue."
+            )
+            recs.append(
+                "Audit a page above to see its existing links and the opportunities against this catalogue."
+            )
         else:
-            report["internal_linking_metrics"] = {
-                "summary": {
-                    "indexed_linkable_pages": 0,
-                    "link_equity_health_score": "0/100 (Uninitialized)",
-                    "avg_internal_links_per_post": 0,
-                    "orphan_pages_count": 0,
-                    "anchor_text_diversity": "N/A"
-                },
-                "recent_link_opportunities": [],
-                "recommendations": [
-                    f"No internal linking audits performed for {site_name} yet.",
-                    f"Audit {site_domain} pages to discover internal linking opportunities."
-                ]
-            }
+            recs.append(
+                f"No page catalogue found for {site_name}. The agent reads "
+                f"blog-agent/all_pages_{effective_site}.csv and suburb_pages_{effective_site}.csv."
+            )
+
+        report["internal_linking_metrics"] = {
+            "data_source": (
+                f"Page catalogue for {effective_site} ({len(candidates)} target pages)"
+                if candidates else "No page catalogue available"
+            ),
+            "summary": {
+                "indexed_linkable_pages": len(candidates),
+                "link_target_categories": len(by_category),
+                "targets_by_category": by_category,
+            },
+            # Populated by running an audit; nothing is shown until one has run.
+            "recent_link_opportunities": [],
+            "recommendations": recs,
+        }
+
 
     elif agent_id == "seo-audit-agent":
         if effective_site in ["ccm", "opal"]:

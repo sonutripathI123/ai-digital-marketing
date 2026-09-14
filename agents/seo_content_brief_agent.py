@@ -536,6 +536,14 @@ def analyze_live_page_content(
         "h3_headings": h3_tags[:6],
         "schema_types_found": schema_types_found,
         "ai_analysis": {
+            # This is a style heuristic, not AI detection. It counts clichéd
+            # phrases and measures sentence-length variance, then subtracts for
+            # concrete details (prices, distances, suburb names, phone numbers).
+            # Presenting it as "92% Human Authenticity, Grade A+" implied a
+            # measurement of something that cannot be measured this way, so the
+            # basis travels with the number.
+            "method": "style heuristic — cliché density and sentence-length variance, not AI detection",
+            "is_measurement": False,
             "ai_probability_percent": ai_prob_percent,
             "human_authenticity_percent": human_authenticity_percent,
             "risk_level": ai_risk_level,
@@ -554,10 +562,16 @@ def analyze_live_page_content(
             "internal_links_count": len(internal_links)
         },
         "recommendations": recommendations,
+        # The rewrite used to be a fixed paragraph about Patterson Lakes to
+        # Melbourne Airport, printed under whatever sentence had been flagged —
+        # so auditing a wedding-car page suggested rewriting it into an airport
+        # transfer. Each flagged sentence already carries a suggestion derived
+        # from its own text; that is what belongs here.
         "humanized_rewrite_sample": (
             f"Original: {flagged_sentences[0]['original_sentence']}\n\n"
-            f"Recommended Humanized: Traveling from Patterson Lakes to Melbourne Airport usually takes 45 to 60 minutes via the M1 and Tullamarine Freeway. Booking a dedicated private chauffeur ensures a clean vehicle, luggage assistance, and on-time flight arrivals without surge pricing."
-            if flagged_sentences else "Content style is natural and already exhibits strong human authenticity."
+            f"Suggested: {flagged_sentences[0]['humanized_suggestion']}"
+            if flagged_sentences
+            else "No clichéd phrasing was detected in this page's sentences."
         )
     }
 

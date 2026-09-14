@@ -27,7 +27,7 @@ class TestSEOContentBriefAgent(unittest.TestCase):
     def test_agent_metadata(self):
         meta = self.agent.metadata
         self.assertEqual(meta.agent_id, "seo-content-brief-agent")
-        self.assertEqual(meta.name, "SEO Content Brief Agent")
+        self.assertEqual(meta.name, "SEO Content Brief & Optimization Agent")
         self.assertEqual(meta.category, "SEO & Content")
         self.assertTrue(meta.enabled)
         self.assertIn("create_brief", meta.supported_actions)

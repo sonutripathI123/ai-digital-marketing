@@ -62,21 +62,14 @@ def load_candidate_internal_pages(site_key: str = "ccm") -> List[Dict[str, str]]
     candidates: List[Dict[str, str]] = []
     seen_urls = set()
 
-    # 1. Main Service Pillars
-    pillars = [
-        {"url": "https://corporatecarsmelbourne.com.au/services/airport-transfers/", "keyword": "airport transfers", "category": "Core Service"},
-        {"url": "https://corporatecarsmelbourne.com.au/services/corporate-transfers/", "keyword": "corporate chauffeur", "category": "Core Service"},
-        {"url": "https://corporatecarsmelbourne.com.au/services/wedding-car-hire/", "keyword": "wedding car hire", "category": "Core Service"},
-        {"url": "https://corporatecarsmelbourne.com.au/services/winery-tours/", "keyword": "winery tours", "category": "Core Service"},
-        {"url": "https://corporatecarsmelbourne.com.au/fleet/executive-sedans/", "keyword": "executive sedan", "category": "Fleet"},
-        {"url": "https://corporatecarsmelbourne.com.au/fleet/luxury-suv/", "keyword": "luxury SUV", "category": "Fleet"},
-        {"url": "https://corporatecarsmelbourne.com.au/fleet/people-mover/", "keyword": "people mover", "category": "Fleet"},
-    ]
-    for p in pillars:
-        candidates.append(p)
-        seen_urls.add(p["url"].rstrip("/"))
+    # The seven "service pillar" URLs that used to be hardcoded here do not
+    # exist on the site: /services/wedding-car-hire/, /services/winery-tours/,
+    # /fleet/executive-sedans/ and /fleet/people-mover/ all answer 404, and the
+    # rest only redirect. Suggesting them produced internal links to dead pages.
+    # The CSVs below are exported from the live site, so they describe pages
+    # that are actually there.
 
-    # 2. Suburb Pages
+    # 1. Suburb Pages
     suburb_file = BLOG_AGENT_DIR / f"suburb_pages_{site_key}.csv"
     if suburb_file.exists():
         try:
@@ -177,8 +170,31 @@ def audit_page_internal_links(url_or_slug: str, site_key: str = "ccm") -> Dict[s
             logger.warning(f"Public fallback fetch failed: {e}")
 
     if not raw_content:
-        # Fallback dummy post to demonstrate live analysis
-        raw_content = f"<p>Welcome to {post_title}. We provide premium airport transfers and corporate chauffeur services across Melbourne. Contact our team for luxury private drivers and executive car hire.</p>"
+        # A page that could not be read has no links to audit. This used to
+        # substitute an invented paragraph — "Welcome to {title}. We provide
+        # premium airport transfers..." — and then audit that, so a URL that
+        # does not exist still produced a confident report about its links.
+        return {
+            "post_id": post_id,
+            "post_type": None,
+            "post_title": post_title,
+            "post_url": post_link,
+            "slug": slug,
+            "readable": False,
+            "error": (
+                f"Could not read '{url_or_slug}'. It was not found through the WordPress API "
+                f"and the public URL returned no content. Check the slug, or that the blog "
+                f"agent's WordPress credentials are set for this site."
+            ),
+            "existing_links_count": 0,
+            "existing_links": [],
+            "opportunities_count": 0,
+            "opportunities": [],
+            "audit_score": None,
+            "seo_recommendations": [
+                "Nothing was audited — the page could not be read.",
+            ],
+        }
 
     # 1. Audit Existing Links
     existing_links: List[Dict[str, Any]] = []
