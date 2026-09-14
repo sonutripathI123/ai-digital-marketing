@@ -2581,16 +2581,22 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
         if not hist:
             hist = [h for h in all_hist if h.get("site_name", "").lower() == site_name.lower()]
 
-        latest = hist[0] if hist else (all_hist[0] if all_hist else None)
+        # Falling back to another site's history presented that site's analysis
+        # as this one's, and `len(hist) if hist else 1` reported one analysis
+        # when none had ever run — the agent had no history file at all and the
+        # dashboard still claimed a count of 1.
+        latest = hist[0] if hist else None
         report["competitor_analysis_metrics"] = {
-            "total_keyword_analyses": len(hist) if hist else 1,
+            "total_keyword_analyses": len(hist),
             "latest_analysis": latest,
-            "all_analyses": hist[:10] if hist else (all_hist[:10] if all_hist else []),
-            "recommendations": [
-                f"Target missing suburb keyword variations identified across competitors for {site_name}.",
-                f"Deploy localized Schema.org FAQPage markup on all {site_name} service pillars.",
-                f"Maintain 1,200+ word content depth on high-converting transactional pages."
-            ]
+            "all_analyses": hist[:10],
+            "recommendations": (
+                (latest.get("data", {}) or {}).get("actionable_recommendations")
+                or [f"No competitor analysis has been run for {site_name} yet."]
+            ) if latest else [
+                f"No competitor analysis has been run for {site_name} yet.",
+                "Use 'Find by Keyword' to fetch competitor pages and compare them against your own.",
+            ],
         }
 
     elif agent_id == "competitor-ad-spy-agent":

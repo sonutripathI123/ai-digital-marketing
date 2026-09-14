@@ -5122,15 +5122,38 @@ function renderCompetitorKeywordAnalysisResults(report, historyList) {
             <i class="fa-solid fa-crosshairs" style="color:#f59e0b;"></i> Target Keyword: <span style="color:#f59e0b;">"${report.target_keyword}"</span>
           </div>
           <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
-            Target Market: <strong>${report.location}</strong> | Discovered Competitors: <strong style="color:#fff;">${competitors.length}</strong> | Total Content Gaps: <strong style="color:#ef4444;">${report.identified_content_gaps_count || 0}</strong>
+            Target Market: <strong>${report.location}</strong> |
+            Pages fetched: <strong style="color:#fff;">${report.competitors_reachable_count ?? competitors.length}</strong> of <strong>${report.competitors_analyzed_count ?? competitors.length}</strong> |
+            Measured gaps: <strong style="color:#ef4444;">${report.identified_content_gaps_count || 0}</strong>
           </div>
+          ${report.competitor_source ? `<div style="font-size:11px; color:var(--text-muted); margin-top:3px;">Competitor list: ${escapeHtml(report.competitor_source)}</div>` : ''}
         </div>
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-          <span class="badge badge-warning" style="font-size:12px; padding:6px 12px; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.4);">
-            <i class="fa-solid fa-trophy"></i> Outranking Opportunity: HIGH
-          </span>
+          ${report.competitors_unreachable_count ? `
+          <span class="badge badge-danger" style="font-size:12px; padding:6px 12px;">
+            <i class="fa-solid fa-plug-circle-xmark"></i> ${report.competitors_unreachable_count} unreachable
+          </span>` : ''}
         </div>
       </div>
+
+      ${report.my_page_measured ? `
+      <div style="background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.3); border-radius:12px; padding:14px 18px; margin-bottom:20px;">
+        <div style="font-size:12px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:6px;">
+          <i class="fa-solid fa-house-chimney"></i> Your page, measured (${escapeHtml(report.my_domain || '')})
+        </div>
+        <div style="font-size:11.5px; color:var(--text-secondary); line-height:1.7; font-family:var(--font-mono);">
+          ${(report.my_page_measured.word_count || 0).toLocaleString()} words &middot;
+          H1 x${report.my_page_measured.h1_count} &middot; H2 x${report.my_page_measured.h2_count} &middot;
+          ${report.my_page_measured.internal_links} internal links &middot;
+          ${report.my_page_measured.images_missing_alt}/${report.my_page_measured.images_total} images missing alt &middot;
+          ${report.my_page_measured.response_seconds}s / ${report.my_page_measured.page_kb}KB<br>
+          Schema: ${(report.my_page_measured.schema_types || []).length ? escapeHtml((report.my_page_measured.schema_types || []).join(', ')) : '<span style="color:#ef4444;">none declared</span>'} &middot;
+          FAQ schema: ${report.my_page_measured.has_faq_schema ? 'yes' : '<span style="color:#ef4444;">no</span>'}<br>
+          "${escapeHtml(report.target_keyword || '')}" &mdash; title: ${report.my_page_measured.keyword_in_title ? 'yes' : '<span style="color:#ef4444;">no</span>'},
+          H1: ${report.my_page_measured.keyword_in_h1 ? 'yes' : '<span style="color:#ef4444;">no</span>'},
+          mentions: ${report.my_page_measured.keyword_occurrences}
+        </div>
+      </div>` : ''}
 
       <!-- Strategy Highlight Box -->
       <div style="background:rgba(15,23,42,0.8); border-left:4px solid #f59e0b; border:1px solid var(--glass-border); border-left-width:4px; padding:14px 18px; border-radius:10px; margin-bottom:22px;">
@@ -5144,7 +5167,7 @@ function renderCompetitorKeywordAnalysisResults(report, historyList) {
 
       <!-- Discovered Competitors Grid -->
       <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:14px; display:flex; align-items:center; gap:8px;">
-        <i class="fa-solid fa-users-viewfinder" style="color:#f59e0b;"></i> Top Discovered Competitors for "${report.target_keyword}":
+        <i class="fa-solid fa-users-viewfinder" style="color:#f59e0b;"></i> Competitor pages measured for "${report.target_keyword}":
       </h3>
 
       <div style="display:grid; grid-template-columns:1fr; gap:16px; margin-bottom:24px;">
@@ -5160,12 +5183,15 @@ function renderCompetitorKeywordAnalysisResults(report, historyList) {
                   ${c.competitor_url} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i>
                 </a>
               </div>
-              <div style="display:flex; gap:8px; align-items:center;">
-                <span class="badge badge-info" style="font-size:11px; font-family:var(--font-mono);">DA ${c.domain_authority}</span>
-                <span class="badge badge-secondary" style="font-size:11px;">Content: ${c.content_depth_score}</span>
-                <span class="badge ${c.difficulty_to_outrank === 'EASY' ? 'badge-success' : 'badge-warning'}" style="font-size:11px; font-weight:700;">
-                  Beat Difficulty: ${c.difficulty_to_outrank}
-                </span>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                ${c.reachable === false ? `
+                  <span class="badge badge-danger" style="font-size:11px; font-weight:700;">UNREACHABLE</span>
+                ` : `
+                  <span class="badge badge-info" style="font-size:11px; font-family:var(--font-mono);">${((c.measured || {}).word_count || 0).toLocaleString()} words</span>
+                  <span class="badge badge-secondary" style="font-size:11px; font-family:var(--font-mono);">H2 x${(c.measured || {}).h2_count ?? 0}</span>
+                  <span class="badge ${(c.measured || {}).has_faq_schema ? 'badge-success' : 'badge-secondary'}" style="font-size:11px;">${(c.measured || {}).has_faq_schema ? 'FAQ schema' : 'no FAQ schema'}</span>
+                  <span class="badge badge-secondary" style="font-size:11px; font-family:var(--font-mono);">${c.response_seconds ?? '-'}s / ${c.page_kb ?? '-'}KB</span>
+                `}
               </div>
             </div>
 
@@ -5184,11 +5210,18 @@ function renderCompetitorKeywordAnalysisResults(report, historyList) {
                   <i class="fa-solid fa-crosshairs"></i> Winning Counter-Strategy:
                 </div>
                 <div style="font-size:12.5px; color:#e2e8f0; line-height:1.4;">
-                  ${c.counter_strategy}
+                  ${escapeHtml(c.counter_strategy || '')}
                 </div>
-                <div style="margin-top:8px; font-size:11px; color:var(--text-muted);">
-                  <strong>Targeted Keywords:</strong> ${(c.targeted_keywords || []).slice(0, 3).join(', ')}
-                </div>
+                ${c.reachable !== false && c.measured ? `
+                <div style="margin-top:8px; font-size:11px; color:var(--text-muted); line-height:1.6;">
+                  <strong>Measured on their page:</strong><br>
+                  Title ${c.measured.title_length} chars &middot; Meta ${c.measured.meta_description_length} chars &middot;
+                  H1 x${c.measured.h1_count} &middot; ${c.measured.internal_links} internal links &middot;
+                  ${c.measured.images_missing_alt}/${c.measured.images_total} images missing alt<br>
+                  Schema: ${(c.measured.schema_types || []).length ? escapeHtml((c.measured.schema_types || []).join(', ')) : 'none declared'}<br>
+                  "${escapeHtml(report.target_keyword || '')}" &mdash; title: ${c.measured.keyword_in_title ? 'yes' : 'no'},
+                  H1: ${c.measured.keyword_in_h1 ? 'yes' : 'no'}, mentions: ${c.measured.keyword_occurrences}
+                </div>` : ''}
               </div>
             </div>
           </div>
