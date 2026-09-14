@@ -60,9 +60,21 @@ def _build_live_optimization(action, account_id, goal, data, live_status):
         key=lambda t: (t["conversions"], t["clicks"]), reverse=True,
     )[:15]
 
-    # Negative keyword candidates: spend, zero conversions, weak CTR.
+    # Negative keyword candidates: spend, zero conversions.
+    # The same search term can come back once per ad group, so spend is summed
+    # per term rather than listing the term twice and counting it twice.
+    spend_by_term: Dict[str, Dict[str, Any]] = {}
+    for t in terms:
+        if t["conversions"] or t["spend"] <= 0:
+            continue
+        term = t["search_term"].strip().lower()
+        agg = spend_by_term.setdefault(
+            term, {"search_term": t["search_term"], "spend": 0.0, "clicks": 0}
+        )
+        agg["spend"] = round(agg["spend"] + t["spend"], 2)
+        agg["clicks"] += t["clicks"]
     negative_candidates = sorted(
-        [t for t in terms if t["conversions"] == 0 and t["spend"] >= 10],
+        [v for v in spend_by_term.values() if v["spend"] >= 10],
         key=lambda t: t["spend"], reverse=True,
     )[:15]
 
@@ -101,6 +113,14 @@ def _build_live_optimization(action, account_id, goal, data, live_status):
              "ctr_percent": t["ctr_percent"]}
             for t in new_keyword_ideas
         ],
+        # Named "candidates", not "recommended": this rule finds terms that
+        # spent without converting, which on this account includes core terms
+        # like the business's own service name. Excluding one of those would
+        # cut real demand, so the list is for review, not for applying blind.
+        "negative_keyword_candidates": [
+            {"search_term": t["search_term"], "spend": t["spend"], "clicks": t["clicks"]}
+            for t in negative_candidates
+        ],
         "recommended_negative_keywords": [t["search_term"] for t in negative_candidates],
         "estimated_monthly_savings": est_waste,
         "estimated_monthly_savings_usd": est_waste,
@@ -108,7 +128,8 @@ def _build_live_optimization(action, account_id, goal, data, live_status):
             f"Scale the {len(winners)} winning keywords (highest conversions) with higher bids/budget.",
             f"Pause or reduce bids on {len(wasteful)} wasteful keywords (clicks but 0 conversions).",
             f"Add {len(new_keyword_ideas)} converting search terms as new exact/phrase keywords.",
-            f"Add {len(negative_candidates)} negative keywords to stop ~{est_waste} wasted spend.",
+            f"Review {len(negative_candidates)} search terms that spent {est_waste} without converting "
+            f"— exclude only the ones genuinely off-target, not your own service terms.",
         ],
     }
 

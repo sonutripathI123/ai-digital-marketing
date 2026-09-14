@@ -3434,7 +3434,7 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
         <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
             <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
-              <i class="fa-solid fa-ban" style="color:#ef4444;"></i> Recommended Negative Keywords (Budget Waste Preventer)
+              <i class="fa-solid fa-ban" style="color:#ef4444;"></i> Negative Keyword Candidates (review before excluding)
             </div>
             <span class="badge badge-danger" style="font-size:10.5px; font-family:var(--font-mono);">${negKws.length} Search Terms to Exclude</span>
           </div>
@@ -3447,9 +3447,10 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
             `).join('')}
           </div>
           <div style="font-size:12px; color:var(--text-muted); background:rgba(15,23,42,0.5); padding:10px 14px; border-radius:8px; border-left:3px solid #ef4444;">
-            <strong style="color:#fff;">Why this matters:</strong> These are search terms that actually
-            triggered your ads, took clicks and spent ${money(savings)} in the last 30 days without a single
-            recorded conversion. Excluding them stops that spend; it does not guarantee it returns as leads elsewhere.
+            <strong style="color:#fff;">Read this before excluding any of them:</strong> these search terms
+            triggered your ads and spent ${money(savings)} in the last 30 days without a recorded conversion.
+            That is a reason to look, not a verdict &mdash; this list can include your own core service terms,
+            and excluding one of those cuts real demand. Exclude only what is genuinely off-target.
           </div>
         </div>
 
