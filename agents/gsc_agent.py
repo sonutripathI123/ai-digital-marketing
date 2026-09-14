@@ -18,6 +18,48 @@ from core.orchestrator.registry import AgentMetadata
 logger = get_agent_logger("gsc-agent")
 
 
+def _build_insights(top_queries: List[Dict[str, Any]], summary: Dict[str, Any],
+                    opportunities: List[Dict[str, Any]]) -> List[str]:
+    """Insights drawn from the rows just returned, not written in advance."""
+    if not top_queries:
+        return ["Search Console returned no queries for this window."]
+
+    insights: List[str] = []
+
+    if opportunities:
+        best = max(opportunities, key=lambda o: o["impressions"])
+        insights.append(
+            f"'{best['query']}' sits at position {best['current_position']} on "
+            f"{best['impressions']:,} impressions — the closest page-one gain available."
+        )
+
+    zero_click = [q for q in top_queries if q["clicks"] == 0 and q["impressions"] >= 50]
+    if zero_click:
+        worst = max(zero_click, key=lambda q: q["impressions"])
+        insights.append(
+            f"'{worst['query']}' drew {worst['impressions']:,} impressions and no clicks at "
+            f"position {worst['position']} — the snippet is not earning the click."
+        )
+
+    ctr = summary.get("average_ctr_percent") or 0
+    if ctr and ctr < 1.0:
+        insights.append(
+            f"Site CTR is {ctr}% across {summary.get('total_impressions', 0):,} impressions. "
+            f"Titles and meta descriptions are the constraint before rankings."
+        )
+
+    ranked_well = [q for q in top_queries if q["position"] <= 3]
+    if ranked_well:
+        insights.append(
+            f"{len(ranked_well)} of the queries shown already rank in the top 3 — "
+            f"protect those pages before chasing new terms."
+        )
+
+    return insights or [
+        f"{len(top_queries)} queries returned; nothing in this window stands out as an outlier."
+    ]
+
+
 class GSCAgent(AgentInterface):
     @property
     def metadata(self) -> AgentMetadata:
@@ -45,6 +87,7 @@ class GSCAgent(AgentInterface):
         top_queries = []
         live_fetched = False
         live_error = None
+        site_totals = None
 
         from integrations.google_credentials import load_service_account_credentials
 
@@ -62,9 +105,16 @@ class GSCAgent(AgentInterface):
 
                 service = build('searchconsole', 'v1', credentials=creds)
 
+                # date_range was accepted and then ignored: the window was always
+                # the last 30 days whatever the caller asked for.
+                window_days = {
+                    "last_7_days": 7, "last_28_days": 28, "last_30_days": 30,
+                    "last_90_days": 90, "last_180_days": 180,
+                }.get(date_range, 30)
+
                 end_d = datetime.now() - timedelta(days=2)
-                start_d = end_d - timedelta(days=30)
-                
+                start_d = end_d - timedelta(days=window_days)
+
                 request_body = {
                     'startDate': start_d.strftime('%Y-%m-%d'),
                     'endDate': end_d.strftime('%Y-%m-%d'),
@@ -85,6 +135,30 @@ class GSCAgent(AgentInterface):
                             "position": round(float(row.get("position", 0)), 1)
                         })
                     live_fetched = True
+
+                    # The summary used to be the sum of these 15 rows and call
+                    # itself "total" — 761 impressions against a site doing
+                    # 21,000. A query with no dimensions returns the real totals.
+                    try:
+                        totals_res = service.searchanalytics().query(
+                            siteUrl=target_site,
+                            body={
+                                'startDate': start_d.strftime('%Y-%m-%d'),
+                                'endDate': end_d.strftime('%Y-%m-%d'),
+                                'dimensions': [],
+                            },
+                        ).execute()
+                        rows = totals_res.get("rows") or []
+                        if rows:
+                            r0 = rows[0]
+                            site_totals = {
+                                "clicks": int(r0.get("clicks", 0)),
+                                "impressions": int(r0.get("impressions", 0)),
+                                "ctr_percent": round(float(r0.get("ctr", 0)) * 100, 2),
+                                "position": round(float(r0.get("position", 0)), 1),
+                            }
+                    except Exception as e:
+                        logger.warning(f"Could not fetch Search Console site totals: {e}")
                 else:
                     live_error = "Search Console returned no rows for this date range."
             except Exception as e:
@@ -113,16 +187,29 @@ class GSCAgent(AgentInterface):
                     "recommendation": f"Add dedicated blog content targeting '{q['query']}' and pair with internal links."
                 })
 
-        total_clks = sum(q["clicks"] for q in top_queries)
-        total_imps = sum(q["impressions"] for q in top_queries)
-        avg_ctr = round(sum(q["ctr"] for q in top_queries) / len(top_queries), 2) if top_queries else 0.0
-        avg_pos = round(sum(q["position"] for q in top_queries) / len(top_queries), 1) if top_queries else 0.0
+        # CTR is clicks over impressions. Averaging the per-query percentages
+        # gave every query equal weight regardless of size, which reported
+        # 14.18% for a site whose actual CTR over the same rows was 1.97%.
+        # Position is weighted by impressions for the same reason.
+        shown_clicks = sum(q["clicks"] for q in top_queries)
+        shown_imps = sum(q["impressions"] for q in top_queries)
+        shown_ctr = round(shown_clicks / shown_imps * 100, 2) if shown_imps else 0.0
+        shown_pos = (
+            round(sum(q["position"] * q["impressions"] for q in top_queries) / shown_imps, 1)
+            if shown_imps else 0.0
+        )
 
         summary_metrics = {
-            "total_clicks": total_clks,
-            "total_impressions": total_imps,
-            "average_ctr_percent": avg_ctr,
-            "average_position": avg_pos,
+            # Site-wide when the API gave them; otherwise the rows shown, and
+            # the scope says which.
+            "total_clicks": site_totals["clicks"] if site_totals else shown_clicks,
+            "total_impressions": site_totals["impressions"] if site_totals else shown_imps,
+            "average_ctr_percent": site_totals["ctr_percent"] if site_totals else shown_ctr,
+            "average_position": site_totals["position"] if site_totals else shown_pos,
+            "scope": "whole site" if site_totals else f"top {len(top_queries)} queries shown",
+            "top_queries_clicks": shown_clicks,
+            "top_queries_impressions": shown_imps,
+            "top_queries_ctr_percent": shown_ctr,
             "data_source": (
                 "100% LIVE GOOGLE SEARCH CONSOLE API" if live_fetched
                 else "SAMPLE DATA - NOT LIVE. Do not use for decisions."
@@ -138,10 +225,10 @@ class GSCAgent(AgentInterface):
             "performance_summary": summary_metrics,
             "top_queries": top_queries,
             "quick_win_opportunities": opportunity_keywords,
-            "actionable_insights": [
-                "1. Focus content optimization on 'melbourne corporate cars' (Position 7.6 - Page 1 opportunity!).",
-                "2. Create dedicated pillar page for 'sprinter van hire melbourne' (Position 11.6 - Top of Page 2)."
-            ]
+            # These two lines used to be fixed text quoting positions 7.6 and
+            # 11.6 for two named keywords — figures from the sample data, shown
+            # unchanged over live results that said something else entirely.
+            "actionable_insights": _build_insights(top_queries, summary_metrics, opportunity_keywords)
         }
 
         # Optional AI Enrichment

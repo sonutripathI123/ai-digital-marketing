@@ -163,7 +163,7 @@ def render_keep_alive_worker():
     render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://corporate-marketing-ai.onrender.com")
     health_url = f"{render_url.rstrip('/')}/health"
     logger.info(f"Render keep-alive ping engine started for {health_url}")
-    
+
     while True:
         try:
             req = urllib.request.Request(
@@ -983,7 +983,7 @@ def client_self_onboard_register(req: RegisterClientSiteRequest):
     clean_slug = re.sub(r'[^a-zA-Z0-9]+', '-', req.name.strip().lower()).strip('-')
     if not clean_slug or len(clean_slug) < 2:
         clean_slug = f"site-{secrets.token_hex(3)}"
-    
+
     # Check if slug exists
     if websites_mgr.get(clean_slug):
         clean_slug = f"{clean_slug}-{secrets.token_hex(2)}"
@@ -1025,7 +1025,7 @@ def get_super_admin_global_telemetry(_super: Dict[str, Any] = Depends(require_su
     """Consolidated Multi-Site Master Intelligence Telemetry across ALL client websites (Super Admin Only)."""
     all_sites = websites_mgr.list_all()
     all_tasks = orchestrator.queue.list_all()
-    
+
     # Load Blog Topics
     topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
     blog_rows = []
@@ -1427,7 +1427,7 @@ def add_website(request: CreateWebsiteRequest, _admin: Dict[str, Any] = Depends(
     existing = websites_mgr.get(request.site_id)
     if existing:
         raise HTTPException(status_code=400, detail=f"Website with site_id '{request.site_id}' already exists.")
-    
+
     clean_id = request.site_id.strip().lower().replace(" ", "-")
     profile = WebsiteProfile(
         site_id=clean_id,
@@ -1470,7 +1470,7 @@ def get_overview_data(site_id: Optional[str] = None, payload: Dict[str, Any] = D
 
     # Filter tasks if site_id is provided and not "all"
     target_site = websites_mgr.get(site_id) if (site_id and site_id != "all") else None
-    
+
     if target_site:
         tasks = [
             t for t in all_tasks 
@@ -2147,10 +2147,10 @@ def publish_google_ads_live(req: GoogleAdsPublishRequest):
     """Publishes optimized ad copy and campaign blueprint live to Google Ads."""
     site = websites_mgr.get(req.site_id) or websites_mgr.get("ccm")
     effective_site = site.site_id if site else "ccm"
-    
+
     creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
     cust_id = req.customer_id or creds.get("customer_id") or "194-940-8641"
-    
+
     live_record = {
         "site_id": effective_site,
         "customer_id": cust_id,
@@ -2167,7 +2167,7 @@ def publish_google_ads_live(req: GoogleAdsPublishRequest):
         "callouts": req.callouts,
         "geo_targeting": req.geo_targeting
     }
-    
+
     # Store live published campaign history in logs/
     try:
         os.makedirs("logs", exist_ok=True)
@@ -2411,7 +2411,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
                 wp_posts_data = cached_res.get("posts", [])
                 if cached_res.get("total"):
                     total_published_count = cached_res.get("total")
-                
+
                 if wp_posts_data:
                     live_wp_posts = []
                     for p in wp_posts_data:
@@ -2421,7 +2421,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
                         p_date = p.get("date", "").replace("T", " ")
                         p_link = p.get("link", "")
                         p_slug = p.get("slug", "")
-                        
+
                         # Match with topics.csv topic if available
                         matched_topic = None
                         for tid, tinfo in topic_map.items():
@@ -2440,7 +2440,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
                                 suburb = p_slug.replace("-", " ").title()
 
                         kw = matched_topic.get("keyword") if matched_topic else p_slug.replace("-", " ")
-                        
+
                         live_wp_posts.append({
                             "id": f"wp-{pid}",
                             "site": effective_site,
@@ -2452,7 +2452,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
                             "url": p_link,
                             "is_today": False
                         })
-                    
+
                     if live_wp_posts:
                         published_posts = live_wp_posts
             except Exception as e:
@@ -2503,7 +2503,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
                     all_sched = json.load(f)
             except Exception:
                 all_sched = []
-        
+
         site_sched = [p for p in all_sched if p.get("site") == effective_site]
         fb_published = len([p for p in site_sched if p.get("platform", "").lower() == "facebook" and p.get("status") == "published"])
         fb_sched = len([p for p in site_sched if p.get("platform", "").lower() == "facebook" and p.get("status") == "scheduled"])
@@ -2778,11 +2778,11 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
     elif agent_id == "google-ads-monitoring-agent":
         from agents.google_ads_monitoring_agent import GoogleAdsMonitoringAgent
         from core.models.task import AgentTask
-        
+
         creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
         raw_id = creds.get("customer_id") or site_profile.google_ads_id
         cust_id = "194-940-8641" if (not raw_id or "ccm-gads" in str(raw_id) or effective_site == "ccm") else raw_id
-        
+
         gads_agent = GoogleAdsMonitoringAgent()
         task_stub = AgentTask(
             task_id="gads-live-query",
@@ -2797,7 +2797,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
             out_data["account_id"] = cust_id
         except Exception as e:
             out_data = {"error": str(e), "account_id": cust_id}
-            
+
         report["domain_metrics"] = {
             "recent_tasks_count": len(completed_tasks) or 1,
             "latest_findings": out_data,
@@ -2810,13 +2810,13 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
     elif agent_id == "google-ads-optimization-agent":
         from agents.google_ads_optimization_agent import GoogleAdsOptimizationAgent
         from core.models.task import AgentTask
-        
+
         creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
         if not creds:
             creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-optimization-agent")
         raw_id = creds.get("customer_id") or site_profile.google_ads_id
         cust_id = "194-940-8641" if (not raw_id or "ccm-gads" in str(raw_id) or effective_site == "ccm") else raw_id
-        
+
         opt_agent = GoogleAdsOptimizationAgent()
         task_stub = AgentTask(
             task_id="gads-opt-live-query",
@@ -2831,7 +2831,7 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
             out_data["account_id"] = cust_id
         except Exception as e:
             out_data = {"error": str(e), "account_id": cust_id}
-            
+
         report["domain_metrics"] = {
             "recent_tasks_count": len(completed_tasks) or 1,
             "latest_findings": out_data,
@@ -3081,61 +3081,133 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
 
 
     elif agent_id == "seo-audit-agent":
-        if effective_site in ["ccm", "opal"]:
-            from agents.seo_audit_agent import load_seo_audit_history
-            all_hist = load_seo_audit_history()
-            domain_clean = site_domain.replace("https://", "").replace("http://", "").replace("www.", "").strip("/")
-            hist = [h for h in all_hist if domain_clean in (h.get("url", "") or "")]
-            latest = hist[0] if hist else None
+        from agents.seo_audit_agent import load_seo_audit_history
 
-            score_val = latest.get("score") if latest else (94 if effective_site == "opal" else 84)
-            loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
+        all_hist = load_seo_audit_history()
+        domain_clean = site_domain.replace("https://", "").replace("http://", "").replace("www.", "").strip("/")
+        hist = [h for h in all_hist if domain_clean in (h.get("domain_url", "") or h.get("url", "") or "")]
+        latest = hist[0] if hist else None
 
-            # Opal specific Vitals vs CCM Vitals
-            vitals = {
-                "lcp": "1.1s (Fast - Good)" if effective_site == "opal" else "1.4s (Good)",
-                "fid": "10ms (Instant Response)" if effective_site == "opal" else "14ms (Instant Response)",
-                "cls": "0.00 (Zero Layout Shift)" if effective_site == "opal" else "0.01 (Zero Layout Shift)"
-            }
+        if latest:
+            # Everything below is read off the stored crawl. The block this
+            # replaces asserted a passing five-item checklist, "Core Web Vitals:
+            # PASSED (Mobile & Desktop)", LCP 1.4s / FID 14ms / CLS 0.01 and
+            # "TLS 1.3 Active" — none of which the agent measures, shown even
+            # when no audit had ever run.
+            # A single-page audit stores its detail under "data"; a whole-site
+            # crawl stores it at the top level.
+            detail = latest.get("data") if isinstance(latest.get("data"), dict) else latest
+            diag = detail.get("technical_diagnostics", latest.get("technical_diagnostics", {})) or {}
+            score_val = (
+                latest.get("site_health_score")
+                or latest.get("score")
+                or detail.get("overall_seo_health_score")
+                or 0
+            )
+
+            checklist = []
+            if diag:
+                checklist = [
+                    {"item": "HTTPS / SSL", "status": diag.get("https_ssl", "UNKNOWN"),
+                     "result": "PASS" if diag.get("https_ssl") == "ACTIVE" else "FAIL", "impact": "High"},
+                    {"item": "robots.txt", "status": diag.get("robots_txt", "UNKNOWN"),
+                     "result": "PASS" if diag.get("robots_txt") == "ACTIVE" else "FAIL", "impact": "Critical"},
+                    {"item": "XML Sitemap", "status": diag.get("xml_sitemap", "UNKNOWN"),
+                     "result": "PASS" if diag.get("xml_sitemap") == "ACTIVE" else "FAIL", "impact": "Critical"},
+                ]
+            if detail.get("schema_coverage_pct", latest.get("schema_coverage_pct")) is not None:
+                cov = detail.get("schema_coverage_pct", latest.get("schema_coverage_pct"))
+                checklist.append({
+                    "item": "Schema.org coverage", "status": f"{cov}% of audited pages",
+                    "result": "PASS" if cov >= 80 else "WARNING", "impact": "High"})
+            if detail.get("h1_compliance_pct", latest.get("h1_compliance_pct")) is not None:
+                h1 = detail.get("h1_compliance_pct", latest.get("h1_compliance_pct"))
+                checklist.append({
+                    "item": "Single H1 per page", "status": f"{h1}% of audited pages",
+                    "result": "PASS" if h1 >= 90 else "WARNING", "impact": "Medium"})
+            if detail.get("total_missing_alts", latest.get("total_missing_alts")) is not None:
+                alts = detail.get("total_missing_alts", latest.get("total_missing_alts"))
+                checklist.append({
+                    "item": "Image alt text", "status": f"{alts} images with no alt text",
+                    "result": "PASS" if alts == 0 else "WARNING", "impact": "Medium"})
+
+            # A single-page audit records its own measurements under different
+            # names; surface those rather than leaving the panel empty.
+            if latest.get("audit_mode") == "single_page":
+                if detail.get("has_schema") is not None:
+                    checklist.append({
+                        "item": "Schema.org markup",
+                        "status": ", ".join(detail.get("schema_types") or []) or "none declared",
+                        "result": "PASS" if detail.get("has_schema") else "WARNING", "impact": "High"})
+                if detail.get("h1_count") is not None:
+                    checklist.append({
+                        "item": "Single H1", "status": f"{detail['h1_count']} H1 tag(s)",
+                        "result": "PASS" if detail["h1_count"] == 1 else "WARNING", "impact": "Medium"})
+                if detail.get("missing_alt_count") is not None:
+                    checklist.append({
+                        "item": "Image alt text",
+                        "status": f"{detail['missing_alt_count']} of {detail.get('images_count', 0)} images with no alt text",
+                        "result": "PASS" if detail["missing_alt_count"] == 0 else "WARNING", "impact": "Medium"})
+                if detail.get("word_count") is not None:
+                    checklist.append({
+                        "item": "Content depth", "status": f"{detail['word_count']} words",
+                        "result": "PASS" if detail["word_count"] >= 600 else "WARNING", "impact": "High"})
+                if detail.get("response_time_ms") is not None:
+                    checklist.append({
+                        "item": "Response time",
+                        "status": f"{detail['response_time_ms']} ms, {detail.get('page_size_kb', '?')} KB",
+                        "result": "PASS" if detail["response_time_ms"] < 1500 else "WARNING", "impact": "Medium"})
 
             report["seo_audit_metrics"] = {
+                "data_source": (
+                    f"Whole-site crawl of {latest.get('pages_audited_count')} pages on {latest.get('domain_url', site_domain)}"
+                    if latest.get("audit_mode") == "whole_website"
+                    else f"Single-page audit of {latest.get('url', site_domain)}"
+                ),
+                "audit_mode": latest.get("audit_mode", "single_page"),
+                "audited_at": latest.get("created_at") or latest.get("timestamp"),
                 "summary": {
                     "site_health_score": score_val,
-                    "grade": "A+ (Excellent)" if score_val >= 90 else "A (Very Good)",
-                    "core_web_vitals": "PASSED (Mobile & Desktop)",
-                    "technical_errors_count": 0,
-                    "https_ssl_status": "Valid (TLS 1.3 Active)",
-                    "sitemap_status": "Clean (Indexed & Live)"
+                    "grade": "A+ (Excellent)" if score_val >= 90 else ("A (Very Good)" if score_val >= 80 else "Needs work"),
+                    "pages_audited": detail.get("pages_audited_count", latest.get("pages_audited_count", 0)),
+                    "schema_coverage_pct": detail.get("schema_coverage_pct", latest.get("schema_coverage_pct")),
+                    "h1_compliance_pct": detail.get("h1_compliance_pct", latest.get("h1_compliance_pct")),
+                    "images_missing_alt": detail.get("total_missing_alts", latest.get("total_missing_alts")),
+                    "https_ssl_status": diag.get("https_ssl", "UNKNOWN"),
+                    "sitemap_status": diag.get("xml_sitemap", "UNKNOWN"),
+                    "robots_status": diag.get("robots_txt", "UNKNOWN"),
                 },
-                "technical_checklist": [
-                    {"item": "HTTPS / SSL Certificate", "status": "Secure (256-bit)", "result": "PASS", "impact": "High"},
-                    {"item": "Robots.txt & Sitemap.xml", "status": "Properly Configured", "result": "PASS", "impact": "Critical"},
-                    {"item": "Mobile Viewport & Responsiveness", "status": "100% Mobile-Friendly", "result": "PASS", "impact": "Critical"},
-                    {"item": "Schema.org Structured Data", "status": "LocalBusiness + FAQ Injected", "result": "PASS", "impact": "High"},
-                    {"item": "Heading Hierarchies (H1-H4)", "status": "Strict Single H1 Structure", "result": "PASS", "impact": "Medium"}
-                ],
-                "core_web_vitals": vitals,
-                "recommendations": [
-                    f"Continue automated technical crawl monitoring on {site_name}.",
-                    "Maintain WebP compressed imagery to preserve sub-1.5s mobile page load times."
-                ]
+                "technical_checklist": checklist,
+                # Core Web Vitals need field data from CrUX or a Lighthouse run.
+                # This agent fetches HTML, so it cannot measure them and no
+                # longer pretends to.
+                "core_web_vitals": None,
+                "core_web_vitals_note": "Not measured — Core Web Vitals require PageSpeed Insights or CrUX, which this agent does not call.",
+                "pages_breakdown": detail.get("pages_breakdown", latest.get("pages_breakdown", []))[:10],
+                "recommendations": (
+                    detail.get("domain_recommendations")
+                    or detail.get("actionable_priorities")
+                    or detail.get("issues_summary")
+                    or latest.get("recommendations", [])
+                ),
             }
         else:
             report["seo_audit_metrics"] = {
+                "data_source": "No audit has been run for this website yet",
                 "summary": {
-                    "site_health_score": 0,
-                    "grade": "Pending Initial Audit",
-                    "core_web_vitals": "Not Audited Yet",
-                    "technical_errors_count": 0,
-                    "https_ssl_status": "Pending Crawl",
-                    "sitemap_status": "Pending Crawl"
+                    "site_health_score": None,
+                    "grade": "Not audited",
+                    "pages_audited": 0,
                 },
                 "technical_checklist": [],
-                "core_web_vitals": {"lcp": "-", "fid": "-", "cls": "-"},
+                "core_web_vitals": None,
+                "core_web_vitals_note": "Not measured — this agent does not call PageSpeed Insights.",
+                "pages_breakdown": [],
                 "recommendations": [
-                    f"Click 'Run Full Site Audit' to crawl and diagnose {site_domain}."
-                ]
+                    f"Run a full site audit to crawl and diagnose {site_domain}.",
+                ],
             }
+
 
     # Handling for all other agents
     else:
@@ -3191,7 +3263,7 @@ def get_blog_topics(site: Optional[str] = None, _viewer: Dict[str, Any] = Depend
             for row in reader:
                 if not site or site == "all" or row.get("site", "").lower() == site.lower():
                     topics.append(row)
-    
+
     published = [t for t in topics if t.get("status") == "published"]
     queued = [t for t in topics if t.get("status") in ("approved", "queued")]
     drafts = [t for t in topics if t.get("status") == "draft"]
@@ -3796,7 +3868,7 @@ def get_social_keyword_pool(_viewer: Dict[str, Any] = Depends(require_viewer)):
 def get_high_volume_keywords_pool(site_id: str = "ccm", _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Returns prioritized high-search-volume keywords with monthly volume and usage status."""
     from agents.seo_keyword_agent import HIGH_VOLUME_KEYWORD_CATALOG, normalize_kw_string
-    
+
     topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
     used_keywords = set()
     if topics_file.exists():
@@ -3841,11 +3913,11 @@ def auto_queue_high_volume_topics(
     as approved topics into blog-agent/topics.csv with zero duplicate overlap!
     """
     from agents.seo_keyword_agent import HIGH_VOLUME_KEYWORD_CATALOG, get_unused_high_volume_keywords, normalize_kw_string
-    
+
     topics_file = Path(ROOT_DIR) / "blog-agent" / "topics.csv"
     existing_rows = []
     used_keywords = []
-    
+
     if topics_file.exists():
         try:
             with open(topics_file, newline="", encoding="utf-8") as f:
@@ -3868,11 +3940,11 @@ def auto_queue_high_volume_topics(
 
     # Pick top N unused high-volume keywords
     selected_kws = unused_kws[:count]
-    
+
     # Calculate next IDs
     existing_ids = [int(r["id"][1:]) for r in existing_rows if r.get("id", "").startswith("t") and r["id"][1:].isdigit()]
     start_num = (max(existing_ids) + 1) if existing_ids else 1
-    
+
     new_topics = []
     for idx, item in enumerate(selected_kws):
         tid = f"t{(start_num + idx):04d}"
@@ -3927,7 +3999,7 @@ def audit_live_page_content_api(
     and returns prioritized humanization/optimization recommendations.
     """
     from agents.seo_content_brief_agent import analyze_live_page_content
-    
+
     site_prof = websites_mgr.get(req.site_id or "ccm")
     site_name = site_prof.name if site_prof else "Corporate Cars Melbourne"
     site_domain = site_prof.domain if site_prof else "https://corporatecarsmelbourne.com.au"
@@ -4169,7 +4241,7 @@ def get_live_gsc_rankings(
                     serp_history = json.load(f)
             except Exception:
                 serp_history = []
-        
+
         today_date = datetime.now().strftime("%Y-%m-%d")
         # Keep latest snapshot per site per day
         serp_history = [h for h in serp_history if not (h.get("site_id") == site_id and h.get("date") == today_date)]
@@ -4954,7 +5026,7 @@ def get_seo_audit_history(_viewer: Dict[str, Any] = Depends(require_viewer)):
 def download_master_handbook_pdf():
     """Generates and serves the complete AI Digital Marketing Master Operation Handbook PDF."""
     pdf_path = Path(ROOT_DIR) / "AI_Digital_Marketing_Master_Handbook.pdf"
-    
+
     # If not existing or older than 1 hour, generate freshly
     if not pdf_path.exists() or (time.time() - pdf_path.stat().st_mtime > 3600):
         try:
@@ -4964,7 +5036,7 @@ def download_master_handbook_pdf():
             logger.warning(f"Failed to generate fresh handbook PDF: {e}")
             if not pdf_path.exists():
                 raise HTTPException(status_code=500, detail=f"PDF generation failed: {e}")
-                
+
     return FileResponse(
         path=str(pdf_path),
         filename="AI_Digital_Marketing_Master_Handbook.pdf",
