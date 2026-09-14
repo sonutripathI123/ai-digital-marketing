@@ -3917,181 +3917,164 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
       const lf = dm.latest_findings || {};
       const cp = lf.channel_performance || {};
       const seo = cp.seo_and_content || {};
+      const web = cp.website_analytics || {};
       const ads = cp.paid_advertising || {};
       const soc = cp.organic_social || {};
       const rep = cp.reputation_and_reviews || {};
       const lds = cp.sales_and_leads || {};
-      const isMtd = lf.is_instant_mtd_report || false;
-      const blogsList = seo.published_blogs_inventory || [];
+      const blogs = seo.blogs || {};
+      const blogsList = lf.published_blogs_inventory || [];
       const queriesList = seo.top_queries || [];
+      const notMeasured = lf.channels_not_measured || [];
+
+      const num = (v) => (v === null || v === undefined) ? '—' : Number(v).toLocaleString();
+      const cur = (v, c) => (v === null || v === undefined) ? '—' : (c || 'A$') + Number(v).toFixed(2);
+
+      // Every tile carries the source it came from, and an unmeasured channel
+      // is drawn grey with the reason rather than as a zero or a placeholder.
+      // The banner used to read "100% ALL-AGENT CONSOLIDATED REPORT" and
+      // "Synthesizes data across ALL 19 Agents" over blocks that were literals.
+      const tile = (label, value, sub, block, colour) => {
+        const live = block && block.measured;
+        const c = live ? (colour || '#06b6d4') : '#94a3b8';
+        return `
+          <div style="background:rgba(${live ? '6,182,212' : '148,163,184'},0.08); border:1px solid rgba(${live ? '6,182,212' : '148,163,184'},0.3); padding:14px; border-radius:14px;">
+            <div style="font-size:10.5px; font-weight:800; color:${c}; text-transform:uppercase;">${label}</div>
+            <div style="font-size:22px; font-weight:900; color:${live ? '#fff' : '#94a3b8'}; font-family:var(--font-mono); margin-top:4px;">${live ? value : 'not measured'}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:3px; line-height:1.4;">${escapeHtml(live ? (sub || '') : ((block && (block.error || block.note)) || (block && block.source) || ''))}</div>
+          </div>`;
+      };
 
       container.innerHTML = `
-        <!-- Consolidated Header & 1-Click PDF Export Button -->
         <div style="background:linear-gradient(135deg, rgba(168,85,247,0.18), rgba(15,23,42,0.9)); border:1px solid rgba(168,85,247,0.35); padding:18px 22px; border-radius:14px; margin-bottom:20px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800; background:rgba(168,85,247,0.25); color:#d8b4fe;">
-                  <i class="fa-solid fa-layer-group" style="font-size:10px; margin-right:4px;"></i> 100% ALL-AGENT CONSOLIDATED REPORT
-                </span>
-                <span class="badge badge-info" style="font-size:10.5px; font-family:var(--font-mono);">${lf.reporting_period || 'August 2026 MTD'}</span>
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <span class="badge badge-info" style="font-size:10.5px; font-family:var(--font-mono);">${escapeHtml(lf.reporting_period || '')}</span>
+                <span class="badge" style="font-size:10.5px; font-weight:800; background:rgba(148,163,184,0.18); color:#cbd5e1; border:1px solid rgba(148,163,184,0.4);">${escapeHtml(lf.coverage || '')}</span>
               </div>
-              <h3 style="font-size:18px; font-weight:800; color:#fff; margin-top:6px;">Executive Cross-Channel Multi-Agent Performance Report</h3>
+              <h3 style="font-size:18px; font-weight:800; color:#fff; margin-top:6px;">Cross-Channel Performance Report</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
-                Synthesizes data across <strong>ALL 19 Agents</strong>: Blog, SEO Audit, GSC, GA4, Paid Ads, Social Media, Reviews & Leads for <strong>${data.site_name}</strong>.
+                Built for <strong>${escapeHtml(data.site_name)}</strong> from what each agent measured. Generated ${escapeHtml(lf.generated_at || '')}.
               </div>
             </div>
-            
-            <!-- Triple Action Buttons: 1-Click PDF + Instant MTD + Full Sync -->
-            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-              <button class="btn btn-sm" onclick="exportMonthlyPDFReport('${currentSiteId}')" style="background:linear-gradient(135deg, #10b981, #059669); border:none; font-size:12px; font-weight:800; color:#fff; padding:8px 16px; box-shadow:0 4px 14px rgba(16,185,129,0.35); cursor:pointer;">
-                <i class="fa-solid fa-file-pdf"></i> 📄 Download Executive PDF Report
-              </button>
-              <button class="btn btn-primary btn-sm" onclick="runAgentNow('monthly-report-agent', 'generate_instant_mtd_report')" style="background:linear-gradient(135deg, #06b6d4, #0284c7); border:none; font-size:12px; font-weight:700; color:#fff; box-shadow:0 4px 14px rgba(6,182,212,0.3);">
-                <i class="fa-solid fa-calendar-day"></i> Instant MTD Sync
-              </button>
-            </div>
+            <button class="btn btn-primary btn-sm" onclick="runAgentNow('monthly-report-agent', 'generate_instant_mtd_report')" style="background:linear-gradient(135deg, #06b6d4, #0284c7); border:none; font-size:12px; font-weight:700; color:#fff;">
+              <i class="fa-solid fa-rotate"></i> Rebuild report
+            </button>
           </div>
         </div>
 
-        <!-- 4 High-Level Executive KPI Cards (Verified Real Data) -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(135px, 1fr)); gap:12px; margin-bottom:20px;">
-          <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">Live Published Blogs</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.blogs_published ?? 0} Posts</div>
-            <div style="font-size:10px; color:#10b981; margin-top:2px;">[WordPress Verified]</div>
+        ${notMeasured.length ? `
+        <div style="background:rgba(148,163,184,0.08); border:1px solid rgba(148,163,184,0.3); border-radius:12px; padding:14px 16px; margin-bottom:20px;">
+          <div style="font-size:12px; font-weight:800; color:#cbd5e1; text-transform:uppercase; margin-bottom:6px;">
+            <i class="fa-solid fa-circle-info"></i> Not measured in this report
           </div>
-          <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Organic Search Clicks</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.gsc_clicks ?? 0} Clicks</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${seo.gsc_impressions ?? 0} Impressions [GSC API]</div>
+          <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+            ${notMeasured.map(n => escapeHtml(String(n).replace(/_/g, ' '))).join(' &bull; ')}
           </div>
-          <div style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#ec4899; text-transform:uppercase;">Verified Social Posts</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${soc.total_published_posts ?? 0} Live</div>
-            <div style="font-size:10px; color:#10b981; margin-top:2px;">[Meta & LinkedIn Connected]</div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:6px;">
+            These channels are shown as "not measured" rather than as zero. Nothing below is estimated or projected.
           </div>
-          <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">SEO Site Health</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${seo.site_health_score || (currentSiteId === 'ccm' ? '96 / 100' : '0 / 100')}</div>
-            <div style="font-size:10px; color:#10b981; margin-top:2px;">[Core Web Vitals Passed]</div>
-          </div>
+        </div>` : ''}
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(165px, 1fr)); gap:12px; margin-bottom:20px;">
+          ${tile('Organic Clicks', num(seo.clicks), `${num(seo.impressions)} impressions &bull; pos ${seo.average_position ?? '—'}`, seo, '#06b6d4')}
+          ${tile('Website Sessions', num(web.sessions), `${num(web.users)} users`, web, '#8b5cf6')}
+          ${tile('Ad Spend', cur(ads.spend, ads.currency), `${num(ads.conversions)} conversions &bull; ${ads.campaigns_enabled ?? 0}/${ads.campaigns_total ?? 0} enabled`, ads, '#f59e0b')}
+          ${tile('Google Rating', rep.average_rating ?? '—', `${num(rep.total_reviews)} reviews`, rep, '#facc15')}
+          ${tile('Blogs Published', num(blogs.published), `${num(blogs.queued)} queued`, blogs, '#10b981')}
+          ${tile('Social Posts', num(soc.posts_published), 'reach not measured', soc, '#38bdf8')}
+          ${tile('Leads &amp; Revenue', '—', '', lds, '#ef4444')}
         </div>
 
-        <!-- 5-Channel Cross-Agent Performance Breakdown Grid -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:14px; margin-bottom:20px;">
-          <!-- Channel 1: SEO & Content -->
-          <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px; border-radius:14px;">
-            <div style="font-size:12px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-magnifying-glass"></i> 1. SEO & Organic Engine
-            </div>
-            <div style="font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
-              <div>• <strong>Published Blogs:</strong> <span style="color:#fff; font-weight:700;">${seo.blogs_published ?? 0} Live Posts</span></div>
-              <div>• <strong>Approved Queue:</strong> <span style="color:var(--accent-purple);">${seo.approved_queue_count ?? 0} Posts Queued</span></div>
-              <div>• <strong>GSC Organic Clicks:</strong> <span style="color:#10b981; font-weight:700;">${seo.gsc_clicks ?? 0} Clicks</span></div>
-              <div>• <strong>GSC Impressions:</strong> <span style="color:#38bdf8;">${seo.gsc_impressions ?? 0} Views</span></div>
-              <div>• <strong>Average Position:</strong> <span style="color:#fff;">${seo.avg_position ?? '-'}</span></div>
-            </div>
+        <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:10px;">
+            <i class="fa-solid fa-file-lines" style="color:var(--accent-purple);"></i> Executive summary
           </div>
-
-          <!-- Channel 2: Social Media -->
-          <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px; border-radius:14px;">
-            <div style="font-size:12px; font-weight:800; color:#ec4899; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-              <i class="fa-brands fa-instagram"></i> 2. Multi-Platform Social
-            </div>
-            <div style="font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
-              <div>• <strong>Verified Live Posts:</strong> <span style="color:#fff; font-weight:700;">${soc.total_published_posts ?? 0} Posts</span></div>
-              <div>• <strong>Connected:</strong> <span style="color:#10b981; font-weight:700;">FB, IG, LinkedIn</span></div>
-              <div>• <strong>Est. Social Reach:</strong> <span style="color:#38bdf8;">${(soc.total_reach ?? 0).toLocaleString()}</span></div>
-              <div>• <strong>Avg Engagement:</strong> <span style="color:#10b981; font-weight:700;">${soc.avg_engagement_rate_percent ?? 0}%</span></div>
-            </div>
-          </div>
-
-          <!-- Channel 3: Paid Advertising (Safety Guard Note) -->
-          <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px; border-radius:14px;">
-            <div style="font-size:12px; font-weight:800; color:#f59e0b; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-shield-halved"></i> 3. Paid Ads Guard
-            </div>
-            <div style="font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
-              <div>• <strong>Live Ad Spend:</strong> <span style="color:#10b981; font-weight:800;">$0.00 AUD (Protected)</span></div>
-              <div>• <strong>Safety Status:</strong> <span style="color:#38bdf8;">Zero-Spend Guard Active</span></div>
-              <div>• <strong>Simulated Benchmark:</strong> <span style="color:#fff;">4.23x Projected ROAS</span></div>
-              <div>• <strong>Target Conversions:</strong> <span style="color:var(--text-muted);">150 Leads (On Live Activate)</span></div>
-            </div>
-          </div>
-
-          <!-- Channel 4: Customer Experience & Reviews -->
-          <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px; border-radius:14px;">
-            <div style="font-size:12px; font-weight:800; color:#facc15; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-star"></i> 4. Reviews & Reputation
-            </div>
-            <div style="font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
-              <div>• <strong>Aggregated Rating:</strong> <span style="color:#facc15; font-weight:700;">${rep.average_rating ?? 0} / 5.0 ★</span></div>
-              <div>• <strong>Total Reviews:</strong> <span style="color:#fff;">${rep.total_reviews ?? 0} Reviews</span></div>
-              <div>• <strong>Positive Sentiment:</strong> <span style="color:#10b981;">${rep.positive_sentiment_percent ?? 0}%</span></div>
-            </div>
-          </div>
-
-          <!-- Channel 5: Sales & CRM Pipeline -->
-          <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); padding:16px; border-radius:14px;">
-            <div style="font-size:12px; font-weight:800; color:#10b981; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-briefcase"></i> 5. Sales & Lead Pipeline
-            </div>
-            <div style="font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
-              <div>• <strong>Total Inbound Leads:</strong> <span style="color:#fff;">${lds.total_inbound_leads || 42} Leads</span></div>
-              <div>• <strong>Corporate Accounts:</strong> <span style="color:#10b981; font-weight:700;">${lds.qualified_corporate_accounts || 18} Accounts</span></div>
-              <div>• <strong>Total Pipeline:</strong> <span style="color:#38bdf8;">$${(lds.total_pipeline_value_usd || 18400).toLocaleString()} AUD</span></div>
-              <div>• <strong>Closed Revenue:</strong> <span style="color:#10b981; font-weight:800;">$${(lds.closed_won_revenue_usd || 12800).toLocaleString()} AUD</span></div>
-            </div>
-          </div>
+          ${(lf.executive_summary || []).map((line, i) => `
+            <div style="font-size:12.5px; color:${i === 0 ? '#fff' : 'var(--text-secondary)'}; font-weight:${i === 0 ? '800' : '400'}; margin-bottom:6px; line-height:1.55;">
+              ${i === 0 ? '' : '<i class="fa-solid fa-minus" style="color:var(--accent-purple); margin-right:6px; font-size:9px;"></i>'}${escapeHtml(line)}
+            </div>`).join('')}
         </div>
 
-        ${blogsList.length > 0 ? `
-          <!-- Verified Live Published Blogs Inventory Table -->
-          <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;">
-            <i class="fa-solid fa-square-check" style="color:var(--status-success);"></i> Exact Live Published Blogs Inventory for ${data.site_name} (100% Real):
-          </h3>
-          <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; margin-bottom:20px; max-height:260px; overflow-y:auto;">
-            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
-              <thead>
-                <tr style="background:rgba(15,23,42,0.8); color:var(--text-muted); text-transform:uppercase; position:sticky; top:0;">
-                  <th style="padding:10px 14px;">ID</th>
-                  <th style="padding:10px 14px;">Published Date</th>
-                  <th style="padding:10px 14px;">Target Keyword</th>
-                  <th style="padding:10px 14px;">Title</th>
-                  <th style="padding:10px 14px;">Live URL</th>
-                </tr>
-              </thead>
+        <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:10px;">
+            <i class="fa-solid fa-list-check" style="color:var(--accent-cyan);"></i> Where each number came from
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="table" style="width:100%; font-size:12px; margin:0;">
+              <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
+                <th style="padding:7px 9px; text-align:left;">Channel</th>
+                <th style="padding:7px 9px; text-align:left;">Source</th>
+                <th style="padding:7px 9px;">Measured</th>
+              </tr></thead>
               <tbody>
-                ${blogsList.map(b => `
+                ${Object.keys(cp).map(k => `
                   <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                    <td style="padding:8px 14px; font-family:var(--font-mono); color:var(--accent-cyan);">${b.id}</td>
-                    <td style="padding:8px 14px; font-size:11px; font-family:var(--font-mono);">${b.published_at ? b.published_at.substring(0, 10) : 'August 2026'}</td>
-                    <td style="padding:8px 14px; color:var(--accent-purple); font-weight:600;">${b.keyword}</td>
-                    <td style="padding:8px 14px; font-weight:700; color:#fff;">${b.title}</td>
-                    <td style="padding:8px 14px;">
-                      <a href="${b.url}" target="_blank" class="action-chip" style="color:var(--accent-cyan); text-decoration:none; font-weight:700;">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Post
-                      </a>
+                    <td style="padding:7px 9px; color:#fff; font-weight:700;">${escapeHtml(k.replace(/_/g, ' '))}</td>
+                    <td style="padding:7px 9px; color:var(--text-secondary);">${escapeHtml((cp[k] && cp[k].source) || '')}</td>
+                    <td style="padding:7px 9px; text-align:center;">
+                      ${(cp[k] && cp[k].measured)
+                        ? '<span class="badge badge-success" style="font-size:10px; font-weight:800;">yes</span>'
+                        : '<span class="badge" style="font-size:10px; font-weight:800; background:rgba(148,163,184,0.18); color:#cbd5e1; border:1px solid rgba(148,163,184,0.4);">no</span>'}
                     </td>
-                  </tr>
-                `).join('')}
+                  </tr>`).join('')}
               </tbody>
             </table>
           </div>
-        ` : ''}
-
-        <!-- Strategic Recommendations -->
-        <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
-          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">
-            <i class="fa-solid fa-lightbulb"></i> Executive Strategic Growth Priorities for ${data.site_name}:
-          </div>
-          ${(lf.top_strategic_recommendations || dm.recommendations || []).map(r => `
-            <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:flex-start; gap:8px;">
-              <i class="fa-solid fa-check-double" style="color:var(--accent-purple); margin-top:3px;"></i> <span>${r}</span>
-            </div>
-          `).join('')}
         </div>
+
+        ${queriesList.length ? `
+        <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:10px;">
+            <i class="fa-brands fa-google" style="color:#06b6d4;"></i> Top search queries
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="table" style="width:100%; font-size:12px; margin:0;">
+              <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
+                <th style="padding:7px 9px; text-align:left;">Query</th><th style="padding:7px 9px;">Clicks</th>
+                <th style="padding:7px 9px;">Impressions</th><th style="padding:7px 9px;">Position</th>
+              </tr></thead>
+              <tbody>
+                ${queriesList.map(q => `
+                  <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <td style="padding:7px 9px; color:#fff; font-family:var(--font-mono);">${escapeHtml(q.query || '')}</td>
+                    <td style="padding:7px 9px; text-align:center;">${q.clicks}</td>
+                    <td style="padding:7px 9px; text-align:center;">${(q.impressions || 0).toLocaleString()}</td>
+                    <td style="padding:7px 9px; text-align:center;">${q.position}</td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>` : ''}
+
+        ${blogsList.length ? `
+        <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px;">
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:10px;">
+            <i class="fa-solid fa-blog" style="color:#10b981;"></i> Published posts (${blogsList.length})
+          </div>
+          <div style="overflow-x:auto; max-height:320px;">
+            <table class="table" style="width:100%; font-size:12px; margin:0;">
+              <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
+                <th style="padding:7px 9px; text-align:left;">Published</th>
+                <th style="padding:7px 9px; text-align:left;">Keyword</th>
+                <th style="padding:7px 9px; text-align:left;">Title</th>
+                <th style="padding:7px 9px;">Link</th>
+              </tr></thead>
+              <tbody>
+                ${blogsList.map(b => `
+                  <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <td style="padding:7px 9px; color:var(--text-secondary); font-family:var(--font-mono); white-space:nowrap;">${escapeHtml(b.published_at || '')}</td>
+                    <td style="padding:7px 9px; color:#38bdf8;">${escapeHtml(b.keyword || '')}</td>
+                    <td style="padding:7px 9px; color:#fff;">${escapeHtml(b.title || '')}</td>
+                    <td style="padding:7px 9px; text-align:center;">
+                      ${b.url ? `<a href="${escapeHtml(b.url)}" target="_blank" rel="noopener" style="color:var(--accent-cyan);"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : '<span style="color:var(--text-muted);">—</span>'}
+                    </td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>` : ''}
       `;
     } else if (agentId === 'seo-keyword-agent' && data.seo_keyword_metrics) {
       const km = data.seo_keyword_metrics;

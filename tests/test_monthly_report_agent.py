@@ -47,10 +47,24 @@ class TestMonthlyReportAgent(unittest.TestCase):
         res = self.agent.run_task(task, self.router)
         self.assertIn("output", res)
         output = res["output"]
-        self.assertEqual(output["reporting_period"], "August 2026")
+        # The period is now a readable label rather than the bare month string.
+        self.assertIn("August 2026", output["reporting_period"])
         self.assertIn("executive_summary", output)
         self.assertIn("channel_performance", output)
         self.assertIn("seo_and_content", output["channel_performance"])
+        # Every channel has to say where it came from and whether anyone
+        # measured it. The blocks this replaces carried figures -- $12,800 of
+        # revenue, 142 reviews, a 96/100 site health score -- with no source at
+        # all, so there was nothing to check them against.
+        for name, block in output["channel_performance"].items():
+            self.assertIn("source", block, name)
+            self.assertIn("measured", block, name)
+        # Leads and revenue have no connected source, so they must never carry
+        # a figure.
+        leads = output["channel_performance"]["sales_and_leads"]
+        self.assertFalse(leads["measured"])
+        self.assertIsNone(leads["closed_revenue"])
+        self.assertIsNone(leads["pipeline_value"])
 
     def test_orchestrator_execution(self):
         task = self.orchestrator.create_task(

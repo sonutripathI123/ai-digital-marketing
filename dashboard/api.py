@@ -2906,43 +2906,34 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
         }
 
     elif agent_id == "monthly-report-agent":
-        if effective_site == "ccm":
-            from agents.monthly_report_agent import MonthlyReportAgent
-            from core.models.task import AgentTask
-            monthly_agent = MonthlyReportAgent()
-            task_stub = AgentTask(
-                task_id="monthly-live-query",
-                agent_id="monthly-report-agent",
-                task_type="generate_instant_mtd_report",
-                input_data={"action": "generate_instant_mtd_report", "site_id": effective_site},
-                site_id=effective_site
-            )
-            try:
-                task_res = monthly_agent.run_task(task_stub, router=orchestrator.router)
-                out_data = task_res.get("output", {})
-            except Exception as e:
-                out_data = {"error": str(e)}
-            report["domain_metrics"] = {
-                "recent_tasks_count": len(completed_tasks) or 1,
-                "latest_findings": out_data,
-                "recommendations": out_data.get("top_strategic_recommendations", [
-                    f"Continue daily blog publishing cadence to expand {site_name} organic keyword dominance.",
-                    f"Maintain high-ROAS Google Ads campaigns.",
-                    f"Rapidly respond to VIP corporate leads within 15 minutes to maximize close rate."
-                ])
-            }
-        else:
-            report["domain_metrics"] = {
-                "recent_tasks_count": 0,
-                "latest_findings": {
-                    "status": "pending_data",
-                    "message": f"No historical reporting data recorded for {site_name} ({site_domain}) yet."
-                },
-                "recommendations": [
-                    f"Execute agent tasks for {site_name} to generate multi-channel performance data.",
-                    f"Connect Google Analytics 4 and Google Search Console for {site_name}."
-                ]
-            }
+        # The report only ran for ccm; every other site was told "no historical
+        # reporting data recorded" regardless of what its agents could measure.
+        # The agent reads per-site sources, so it can answer for any of them.
+        from agents.monthly_report_agent import MonthlyReportAgent
+        from core.models.task import AgentTask
+
+        task_stub = AgentTask(
+            task_id="monthly-live-query",
+            agent_id="monthly-report-agent",
+            task_type="generate_instant_mtd_report",
+            input_data={"action": "generate_instant_mtd_report", "site_id": effective_site},
+            site_id=effective_site,
+        )
+        try:
+            out_data = MonthlyReportAgent().run_task(task_stub, router=orchestrator.router).get("output", {})
+        except Exception as e:
+            out_data = {"error": str(e), "executive_summary": [f"The report could not be built: {e}"]}
+
+        # The fallback recommendations named a "high-ROAS Google Ads campaign"
+        # and a lead response time for a pipeline this system does not measure.
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": [
+                f"{name.replace('_', ' ')} has no measured data — connect it to include it in this report."
+                for name in (out_data.get("channels_not_measured") or [])
+            ],
+        }
 
     elif agent_id == "gsc-agent":
         if effective_site == "ccm":
