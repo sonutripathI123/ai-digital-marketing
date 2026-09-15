@@ -1226,8 +1226,17 @@ def client_login(req: ClientLoginRequest):
 
 
 @app.post("/api/portal/onboard-register")
-def client_self_onboard_register(req: RegisterClientSiteRequest):
-    """Allows a new business client to self-register their website domain & brand."""
+def client_self_onboard_register(
+    req: RegisterClientSiteRequest,
+    _admin: Dict[str, Any] = Depends(require_admin),
+):
+    """Register a client website and mint that client's access token.
+
+    This had no dependency at all: anyone on the internet could create a site
+    and be handed a token for it. Nothing in the dashboard calls it, so the
+    open version was reachable only by someone who went looking. Adding a
+    website is an admin action.
+    """
     email_clean = (req.assigned_client_email or "").strip().lower()
     if not email_clean or "@" not in email_clean:
         raise HTTPException(status_code=400, detail="A valid contact email is required.")
