@@ -1,20 +1,51 @@
 """
 Agent: Competitor Ad Spy & Intelligence Agent (`competitor-ad-spy-agent`).
 
-Reverse-engineers competitor Google Ads (Search & Display) and Meta Ads (Facebook & Instagram),
-extracts targeted bidding keywords, headlines, descriptions, extensions, and generates winning counter-ad strategies for Corporate Cars Melbourne.
+Competitor ad creatives, keywords and budgets cannot be read programmatically,
+and this agent no longer pretends otherwise.
+
+  * Google's Ads Transparency Center has no public API. The page is a
+    JavaScript application; there is nothing to query.
+  * Meta's Ad Library API (`ads_archive`) returns only political and
+    social-issue ads outside the EU. An Australian chauffeur company's ads are
+    not in it.
+
+So this agent does three things it can actually do: it measures the
+competitor's live landing page, it hands over the two official links where a
+person can look the ads up themselves, and it reports what the operator's own
+Google Ads account pays for the keywords in question -- real CPCs from their
+own spend, rather than guesses at somebody else's.
+
+What stood here before made no HTTP request at all. Not one. It nonetheless
+reported `data_source` as "Google Ads Transparency Center (AU) & Live SERP
+Query" and "Meta Ad Library (Facebook & Instagram Australia Public Database)",
+and `model_used` as "live-transparency-crawler+ai-router". Everything in the
+report was written into the source file:
+
+  * Two Google ads and two Meta ads per competitor, with headlines, body copy,
+    sitelinks, callouts and ad ids generated from `hash(domain) % 1000` -- and
+    "started_running": "Active (Running 45+ days)", a factual claim about
+    another company's campaign.
+  * "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD" and four active
+    creatives.
+  * Six keywords with CPCs to the cent ($7.20, $8.10) and monthly search
+    volumes (2,400/mo), none of which came from any keyword tool.
+  * A list of the competitor's "vulnerabilities", describing ads nobody read.
+
+With `use_ai` on -- and it defaulted to on -- the prompt asked the model to
+"provide 2 realistic, high-converting Google Search Ads ... they run". An
+invented answer to that question is not intelligence about a competitor; it is
+a language model writing plausible advertising and the report calling it
+observed fact.
 """
 
 import json
-import os
-import re
 from datetime import datetime
-from pathlib import Path
 from typing import Any, Dict, List, Optional
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 from agents.base import AgentInterface
-from config.settings import LOGS_DIR, ROOT_DIR
+from config.settings import LOGS_DIR
 from core.ai_layer.base import LLMRequest, TaskComplexity
 from core.ai_layer.router import ModelRouter
 from core.logging.logger import get_agent_logger
@@ -47,262 +78,236 @@ def save_ad_spy_history(reports: List[Dict[str, Any]]) -> None:
         logger.error(f"Failed to save competitor ad spy history: {e}")
 
 
+def verification_links(domain: str) -> Dict[str, Any]:
+    """Where a person can actually see these ads. These links are the honest
+    deliverable: they work, and they lead to the real thing."""
+    return {
+        "meta_ad_library": (
+            "https://www.facebook.com/ads/library/?active_status=all&ad_type=all"
+            f"&country=AU&q={quote(domain)}&search_type=keyword_unordered&media_type=all"
+        ),
+        "google_ads_transparency": f"https://adstransparency.google.com/?region=AU&domain={quote(domain)}",
+        "note": (
+            "Open these to see the competitor's live ads. Neither platform offers an API "
+            "that returns them: Google's Transparency Center has none, and Meta's Ad "
+            "Library API covers only political and social-issue ads outside the EU. "
+            "Nothing on this page claims to have read their ads."
+        ),
+    }
+
+
+def measure_competitor_landing_page(url: str, keyword: str) -> Dict[str, Any]:
+    """Fetch and measure the page the competitor's ads point at.
+
+    This is the one part of a competitor's advertising that is genuinely
+    observable: where the money lands.
+    """
+    from agents.competitor_agent import fetch_page, measure_page
+
+    fetched = fetch_page(url)
+    if not fetched.get("reachable"):
+        return {
+            "measured": False,
+            "url": url,
+            "status_code": fetched.get("status_code"),
+            "error": fetched.get("error") or "The page could not be fetched.",
+        }
+
+    measured = measure_page(fetched["html"], fetched.get("final_url") or url, keyword)
+    return {
+        "measured": True,
+        "url": fetched.get("final_url") or url,
+        "status_code": fetched.get("status_code"),
+        "response_seconds": fetched.get("response_seconds"),
+        "page_bytes": fetched.get("page_bytes"),
+        **measured,
+    }
+
+
+def own_keyword_costs(router: ModelRouter, site_id: str) -> Dict[str, Any]:
+    """What this account actually pays, from its own Google Ads data.
+
+    The block this replaces listed six keywords with CPCs to the cent and
+    monthly search volumes, presented as the competitor's bidding. Those were
+    literals. An operator's own account is the one place where a real cost per
+    click for these terms exists.
+    """
+    from agents.google_ads_optimization_agent import GoogleAdsOptimizationAgent
+
+    try:
+        task = AgentTask(
+            task_id="adspy-own-costs",
+            agent_id="google-ads-optimization-agent",
+            task_type="recommend_optimizations",
+            input_data={"action": "recommend_optimizations", "site_id": site_id},
+            site_id=site_id,
+        )
+        out = GoogleAdsOptimizationAgent().run_task(task, router).get("output", {})
+    except Exception as e:
+        logger.warning(f"Could not read own Google Ads costs: {e}")
+        return {"measured": False, "error": str(e), "keywords": []}
+
+    if out.get("data_source") != "LIVE (Google Ads API)":
+        return {
+            "measured": False,
+            "error": out.get("live_error") or "No Google Ads account is connected for this site.",
+            "keywords": [],
+        }
+
+    keywords = []
+    for bucket in ("winning_keywords", "wasteful_keywords"):
+        for k in out.get(bucket) or []:
+            keywords.append({
+                "keyword": k.get("keyword"),
+                "match_type": k.get("match_type"),
+                "clicks": k.get("clicks"),
+                "spend": k.get("spend"),
+                "avg_cpc": k.get("avg_cpc"),
+                "conversions": k.get("conversions"),
+                "converting": bucket == "winning_keywords",
+            })
+
+    return {
+        "measured": True,
+        "source": "your own Google Ads account (last 30 days)",
+        "account_id": out.get("account_id"),
+        "keywords": keywords[:15],
+        "note": (
+            "These are the costs your account actually paid. What the competitor pays is "
+            "not published by either platform."
+        ),
+    }
+
+
 class CompetitorAdSpyAgent(AgentInterface):
     @property
     def metadata(self) -> AgentMetadata:
         return AgentMetadata(
             agent_id="competitor-ad-spy-agent",
             name="Competitor Ad Spy & Intelligence Agent",
-            description="Reverse-engineers competitor Google Ads and Meta Ads (FB/IG), extracting targeted bidding keywords, ad copies, headlines, descriptions, and counter-strategies.",
+            description="Measures a competitor's live landing page, links to the official ad libraries, and reports your own real keyword costs.",
             category="Competitor & Ad Intelligence",
             enabled=True,
             paused=False,
-            supported_actions=[
-                "spy_competitor_ads",
-                "analyze_google_ads",
-                "analyze_meta_ads",
-                "generate_counter_ads"
-            ],
-            version="1.0.0"
+            supported_actions=["spy_competitor_ads", "analyze_landing_page", "generate_counter_ads"],
+            version="2.0.0",
         )
 
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
         input_data = task.input_data or {}
         action = str(input_data.get("action", "spy_competitor_ads")).lower().strip()
-        raw_url = str(input_data.get("competitor_url", "https://chauffeurcarsmelbourne.com.au/")).strip()
-        location = str(input_data.get("location", "Melbourne, Victoria")).strip()
-        use_ai = bool(input_data.get("use_ai", True))
-        site_id = input_data.get("site_id") or input_data.get("site")
+        raw_url = str(input_data.get("competitor_url", "")).strip()
+        site_id = input_data.get("site_id") or input_data.get("site") or "ccm"
+        keyword = str(input_data.get("target_keyword", "chauffeur melbourne")).strip()
+        # This defaulted to True, so every run spent tokens writing fiction.
+        use_ai = bool(input_data.get("use_ai", False))
+
+        if not raw_url:
+            return {
+                "output": {
+                    "action": action,
+                    "error": "No competitor URL was given, so nothing was measured.",
+                    "measured_landing_page": {"measured": False},
+                },
+                "model_used": "none", "tokens_used": 0, "cost_usd": 0.0,
+            }
+
+        parsed = urlparse(raw_url if "://" in raw_url else f"https://{raw_url}")
+        clean_domain = (parsed.netloc or parsed.path).replace("www.", "")
+        page_url = parsed.geturl()
 
         from config.websites import WebsiteManager
-        site_mgr = WebsiteManager()
-        site_profile = site_mgr.get(site_id) if site_id else None
-        target_brand = site_profile.name if site_profile else "Corporate Cars Melbourne"
-        target_domain = site_profile.domain if site_profile else "https://corporatecarsmelbourne.com.au"
-        target_loc = site_profile.location if site_profile else location
 
-        parsed_url = urlparse(raw_url if "://" in raw_url else f"https://{raw_url}")
-        clean_domain = parsed_url.netloc or parsed_url.path
-        brand_name = clean_domain.replace("www.", "").split(".")[0].replace("-", " ").title()
+        profile = WebsiteManager().get(site_id)
+        target_brand = profile.name if profile else site_id
+        target_domain = profile.domain if profile else ""
+        target_loc = profile.location if profile else "Melbourne, VIC"
 
-        logger.info(f"Executing CompetitorAdSpyAgent: action={action}, competitor='{clean_domain}', brand='{target_brand}', location='{target_loc}'")
+        logger.info(
+            f"Executing CompetitorAdSpyAgent: action={action}, competitor='{clean_domain}', "
+            f"site='{site_id}', use_ai={use_ai}"
+        )
 
-        meta_library_url = f"https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q={clean_domain}&search_type=keyword_unordered&media_type=all"
-        google_transparency_url = f"https://adstransparency.google.com/?region=AU&domain={clean_domain}"
+        landing = measure_competitor_landing_page(page_url, keyword)
+        costs = own_keyword_costs(router, site_id)
 
-        # 1. Base Intelligence Templates with official live URLs
-        google_ads_data = self._generate_google_ads_intelligence(clean_domain, brand_name, target_loc, site_id=site_id or "ccm")
-        google_ads_data["official_transparency_url"] = google_transparency_url
-        google_ads_data["data_source"] = "Google Ads Transparency Center (AU) & Live SERP Query"
-
-        meta_ads_data = self._generate_meta_ads_intelligence(clean_domain, brand_name, target_loc)
-        meta_ads_data["official_ad_library_url"] = meta_library_url
-        meta_ads_data["data_source"] = "Meta Ad Library (Facebook & Instagram Australia Public Database)"
-
-        counter_strategy = self._generate_default_counter_strategy(clean_domain, brand_name, target_brand, target_domain, target_loc)
-
-        model_used = "live-transparency-crawler+ai-router"
-        tokens_used = 0
-        cost_usd = 0.0
-
-        # 2. Enhanced AI Synthesis with Model Router (Claude)
-        if use_ai:
-            try:
-                ai_prompt = f"""You are an elite Digital Ads Intelligence Analyst.
-Analyze this {target_loc} chauffeur competitor:
-Competitor Domain: {clean_domain}
-Brand Name: {brand_name}
-Target Market: {target_loc}
-
-1. Provide 2 realistic, high-converting Google Search Ads (Headlines 1-3, Descriptions 1-2, Display URL, Sitelinks) they run.
-2. List 6 targeted high-intent bidding keywords with match type, estimated CPC ($AUD), and intent.
-3. Provide 2 Meta Ads (Facebook & Instagram) with Primary Text, Hook, Headline, Creative Type, and CTA.
-4. Craft 1 WINNING Counter-Ad Strategy for our brand '{target_brand}' ({target_domain}) highlighting fixed transparent pricing, premium chauffeur fleet, 24/7 flight tracking, and punctuality guarantee in {target_loc}.
-
-Respond with valid JSON containing keys:
-"google_ads", "targeted_keywords", "meta_ads", "counter_strategy", "competitor_vulnerabilities"
-"""
-                llm_req = LLMRequest(
-                    user_prompt=ai_prompt,
-                    task_type=TaskComplexity.STANDARD,
-                    json_output=True
-                )
-                llm_resp = router.route_and_execute(llm_req)
-
-                if llm_resp.success and llm_resp.parsed_json:
-                    parsed = llm_resp.parsed_json
-                    if "google_ads" in parsed and parsed["google_ads"]:
-                        google_ads_data["ad_variations"] = parsed["google_ads"]
-                    if "targeted_keywords" in parsed and parsed["targeted_keywords"]:
-                        google_ads_data["targeted_keywords"] = parsed["targeted_keywords"]
-                    if "meta_ads" in parsed and parsed["meta_ads"]:
-                        meta_ads_data["active_ads"] = parsed["meta_ads"]
-                    if "counter_strategy" in parsed:
-                        counter_strategy = parsed["counter_strategy"]
-                    if "competitor_vulnerabilities" in parsed:
-                        counter_strategy["vulnerabilities"] = parsed["competitor_vulnerabilities"]
-
-                    model_used = llm_resp.model_used
-                    tokens_used = llm_resp.tokens_in + llm_resp.tokens_out
-                    cost_usd = llm_resp.cost_usd
-            except Exception as err:
-                logger.warning(f"AI synthesis fallback in CompetitorAdSpyAgent: {err}")
-
-        report_entry = {
-            "report_id": f"adspy-{datetime.now().strftime('%Y%m%d%H%M%S')}",
-            "competitor_url": raw_url,
+        report: Dict[str, Any] = {
+            "action": action,
             "competitor_domain": clean_domain,
-            "competitor_brand": brand_name,
+            "competitor_url": page_url,
             "target_brand": target_brand,
             "target_domain": target_domain,
-            "analyzed_at": datetime.now().isoformat(),
             "location": target_loc,
-            "official_verification_links": {
-                "meta_ad_library": meta_library_url,
-                "google_ads_transparency": google_transparency_url
-            },
-            "google_ads_intelligence": google_ads_data,
-            "meta_ads_intelligence": meta_ads_data,
-            "winning_counter_strategy": counter_strategy
+            "analyzed_at": datetime.now().isoformat(),
+            # Named for what it is. There is no crawler behind either ad platform.
+            "data_source": "competitor landing page (fetched) + your own Google Ads account",
+            "competitor_ads_readable": False,
+            "competitor_ads_note": (
+                "Their ad creatives, keywords and spend are not readable through any API. "
+                "Nothing here is an estimate of what they run or what they pay."
+            ),
+            "verification_links": verification_links(clean_domain),
+            "measured_landing_page": landing,
+            "your_keyword_costs": costs,
         }
 
-        # Persist report to history
+        tokens_used, cost_usd = 0, 0.0
+        model_used = "landing-page-measurement"
+
+        if use_ai and landing.get("measured"):
+            try:
+                winners = [k["keyword"] for k in costs.get("keywords", []) if k.get("converting")]
+                response = router.route_and_execute(LLMRequest(
+                    user_prompt=(
+                        f"Write draft Google Search ad copy for {target_brand} ({target_domain}).\n"
+                        f"These keywords converted on their own account: "
+                        f"{', '.join(winners) or 'none recorded'}.\n"
+                        f"A competitor's landing page at {clean_domain} has this title: "
+                        f"{landing.get('page_title', '')!r}, H1: {landing.get('h1_text', '')!r}, "
+                        f"{landing.get('word_count', 0)} words.\n\n"
+                        f"Rules: do NOT invent prices, guarantees, response times, fleet models, "
+                        f"awards or accreditations. Do NOT describe what the competitor advertises "
+                        f"-- their ads have not been read. Write only claims a chauffeur business "
+                        f"could make about itself without evidence. "
+                        f"Return JSON with 'headlines' (max 30 chars each) and 'descriptions' "
+                        f"(max 90 chars each)."
+                    ),
+                    task_type=TaskComplexity.STANDARD,
+                    json_output=True,
+                ))
+                model_used = response.model_used
+                tokens_used = response.tokens_in + response.tokens_out
+                cost_usd = response.cost_usd
+                if response.parsed_json:
+                    # Labelled as a draft for the operator's own ads, which is
+                    # what it is. The old counter-strategy asserted the
+                    # competitor's weaknesses and proposed copy promising
+                    # "Fixed Rates From $95" and a "100% On-Time Guarantee" --
+                    # commitments this business may not offer, in a market where
+                    # advertising them without basis is a consumer-law problem.
+                    report["draft_ad_copy"] = response.parsed_json
+                    report["draft_ad_copy_note"] = (
+                        f"Draft copy for your own ads, written by {model_used}. It is not based on "
+                        f"the competitor's ads, which were not read. Check every claim before "
+                        f"publishing it."
+                    )
+            except Exception as e:
+                logger.warning(f"Draft ad copy generation failed: {e}")
+                report["draft_ad_copy_error"] = str(e)
+
         history = load_ad_spy_history()
-        history.insert(0, report_entry)
+        history.insert(0, {
+            "report_id": f"adspy-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+            "competitor_domain": clean_domain,
+            "analyzed_at": report["analyzed_at"],
+            "landing_page_measured": bool(landing.get("measured")),
+            "data": report,
+        })
         save_ad_spy_history(history[:50])
 
         return {
-            "output": report_entry,
+            "output": report,
             "model_used": model_used,
             "tokens_used": tokens_used,
-            "cost_usd": cost_usd
-        }
-
-    def _generate_google_ads_intelligence(self, domain: str, brand: str, location: str, site_id: str = "ccm") -> Dict[str, Any]:
-        """Generates Google Search Ad copy and keyword bidding breakdown."""
-        if site_id == "opal":
-            targeted_kws = [
-                {"keyword": "chauffeur melbourne airport", "match_type": "[Exact]", "estimated_cpc": "$7.20 AUD", "intent": "High Transactional", "search_volume": "2,400/mo"},
-                {"keyword": "luxury chauffeur car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$5.90 AUD", "intent": "Commercial", "search_volume": "1,300/mo"},
-                {"keyword": "private airport transfer tullamarine", "match_type": "[Exact]", "estimated_cpc": "$8.10 AUD", "intent": "High Transactional", "search_volume": "1,600/mo"},
-                {"keyword": "executive private driver melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$6.40 AUD", "intent": "B2B Commercial", "search_volume": "1,100/mo"},
-                {"keyword": "wedding car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$4.50 AUD", "intent": "Event / High Ticket", "search_volume": "3,100/mo"},
-                {"keyword": "yarra valley winery tour chauffeur", "match_type": "Broad Modified", "estimated_cpc": "$5.80 AUD", "intent": "Leisure & VIP High Intent", "search_volume": "950/mo"}
-            ]
-        else:
-            targeted_kws = [
-                {"keyword": "chauffeur melbourne airport", "match_type": "[Exact]", "estimated_cpc": "$7.20 AUD", "intent": "High Transactional", "search_volume": "2,400/mo"},
-                {"keyword": "corporate cars melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$6.80 AUD", "intent": "B2B Commercial", "search_volume": "1,900/mo"},
-                {"keyword": "private airport transfer tullamarine", "match_type": "[Exact]", "estimated_cpc": "$8.10 AUD", "intent": "High Transactional", "search_volume": "1,600/mo"},
-                {"keyword": "luxury chauffeur car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$5.90 AUD", "intent": "Commercial", "search_volume": "1,300/mo"},
-                {"keyword": "wedding car hire melbourne", "match_type": "\"Phrase\"", "estimated_cpc": "$4.50 AUD", "intent": "Event / High Ticket", "search_volume": "3,100/mo"},
-                {"keyword": "executive transfer south yarra to airport", "match_type": "Broad Modified", "estimated_cpc": "$6.10 AUD", "intent": "Local Suburb High Intent", "search_volume": "720/mo"}
-            ]
-
-        return {
-            "platform": "Google Ads (Search & Performance Max)",
-            "estimated_monthly_ad_spend": "$3,200 - $5,500 AUD",
-            "ad_variations": [
-                {
-                    "ad_id": f"g-ad-{hash(domain) % 1000:03d}-1",
-                    "ad_type": "Responsive Search Ad (RSA)",
-                    "headline_1": f"Luxury Chauffeur Melbourne | {brand}",
-                    "headline_2": "Fixed Price Airport Transfers",
-                    "headline_3": "Mercedes S-Class & V-Class Fleet",
-                    "description_1": "Punctual, professional chauffeur car service across Melbourne CBD & Victoria. Book online in 60 seconds.",
-                    "description_2": "24/7 flight telemetry tracking. Free meet & greet with complimentary waiting time. Reserve your luxury ride now.",
-                    "display_path": f"{domain}/Airport-Transfers",
-                    "sitelinks": [
-                        {"title": "Airport Transfers", "url": f"https://{domain}/services/airport-transfers"},
-                        {"title": "Corporate Chauffeurs", "url": f"https://{domain}/services/corporate"},
-                        {"title": "Luxury Fleet", "url": f"https://{domain}/fleet"},
-                        {"title": "Get Instant Quote", "url": f"https://{domain}/quote"}
-                    ],
-                    "callouts": ["24/7 Available", "Flight Monitoring", "Fixed Fare Guarantee", "Immaculate European Fleet"],
-                    "landing_page": f"https://{domain}/services/airport-transfers"
-                },
-                {
-                    "ad_id": f"g-ad-{hash(domain) % 1000:03d}-2",
-                    "ad_type": "Corporate Account Search Ad",
-                    "headline_1": "Executive Corporate Car Hire | Melbourne",
-                    "headline_2": "Priority Business Travel",
-                    "headline_3": "Monthly Invoicing Available",
-                    "description_1": "Seamless corporate transfers for CEOs, executives & VIP clients. Discrete, licensed Victorian chauffeurs.",
-                    "description_2": "On-time arrival guarantee. Executive sedans, luxury SUVs & people movers for corporate events.",
-                    "display_path": f"{domain}/Corporate-Travel",
-                    "sitelinks": [
-                        {"title": "Corporate Accounts", "url": f"https://{domain}/corporate"},
-                        {"title": "Hourly Hire", "url": f"https://{domain}/hourly"}
-                    ],
-                    "callouts": ["B2B Billing", "VIP Airport Meet", "Leather Interior Luxury"],
-                    "landing_page": f"https://{domain}/corporate-hire"
-                }
-            ],
-            "targeted_keywords": targeted_kws
-        }
-
-    def _generate_meta_ads_intelligence(self, domain: str, brand: str, location: str) -> Dict[str, Any]:
-        """Generates Meta Ads (Facebook & Instagram) copy and creative breakdown."""
-        return {
-            "platform": "Meta Ads (Facebook & Instagram)",
-            "estimated_active_creatives_count": 4,
-            "active_ads": [
-                {
-                    "ad_id": f"meta-ad-{hash(domain) % 1000:03d}-1",
-                    "platforms": ["Instagram Feed & Stories", "Facebook Feed"],
-                    "format": "Single Video / Carousel (Mercedes Fleet Interior)",
-                    "hook": "Skip the Tullamarine rideshare queue. Travel in first-class Melbourne comfort.",
-                    "primary_text": "✈️ Arriving at Melbourne Airport? Step directly into a pristine European luxury sedan with zero waiting time.\n\n✨ Why Melbourne Executives Choose Us:\n✔️ 100% Fixed Rates — Zero surge pricing\n✔️ Flight tracking & complimentary 60-min wait time\n✔️ Immaculate Mercedes-Benz & BMW fleet\n\nBook your private airport transfer today.",
-                    "headline": "Fixed-Fare Luxury Chauffeur Melbourne",
-                    "description": "24/7 Punctual Airport & Corporate Transfers",
-                    "call_to_action": "Book Now",
-                    "landing_page": f"https://{domain}/airport-transfers",
-                    "started_running": "Active (Running 45+ days)"
-                },
-                {
-                    "ad_id": f"meta-ad-{hash(domain) % 1000:03d}-2",
-                    "platforms": ["Facebook Feed", "Instagram Reels"],
-                    "format": "Carousel (V-Class & Sedan Showcase)",
-                    "hook": "Group executive travel made effortless across Melbourne CBD.",
-                    "primary_text": "Heading to a corporate conference, Yarra Valley wine tour, or VIP dinner? Our 7-seater Mercedes V-Class delivers unmatched comfort with onboard Wi-Fi and leather captains chairs.\n\n💼 Open a Corporate Travel Account for streamlined monthly billing.",
-                    "headline": "Melbourne Mercedes V-Class Group Chauffeur",
-                    "description": "Luxury People Movers & Executive Sedans",
-                    "call_to_action": "Get Quote",
-                    "landing_page": f"https://{domain}/fleet",
-                    "started_running": "Active (Running 20+ days)"
-                }
-            ]
-        }
-
-    def _generate_default_counter_strategy(
-        self,
-        domain: str,
-        brand: str,
-        target_brand: str = "Corporate Cars Melbourne",
-        target_domain: str = "https://corporatecarsmelbourne.com.au",
-        target_loc: str = "Melbourne, Victoria"
-    ) -> Dict[str, Any]:
-        """Generates superior counter-ad copy customized for the active brand and website."""
-        clean_target_domain = target_domain.rstrip('/')
-        return {
-            "vulnerabilities_in_competitor_ads": [
-                f"{brand} does not highlight guaranteed on-time arrival refund policies.",
-                "Their Meta ad copy lacks a direct transparent starting price anchor (e.g. 'Airport transfers from $95').",
-                f"Their Google Ads lack deep localized sitelinks for affluent areas in {target_loc}."
-            ],
-            "recommended_counter_google_ad": {
-                "headline_1": f"{target_brand} | Fixed Rates From $95",
-                "headline_2": "100% On-Time Guarantee | No Surge Fares",
-                "headline_3": "Luxury Chauffeur Fleet 24/7",
-                "description_1": f"Why gamble with rideshares? {target_brand} provides fixed transparent fares, VIP flight tracking & European luxury.",
-                "description_2": f"Instant online quote in 30 seconds. Licensed accredited chauffeurs ready across {target_loc}.",
-                "target_url": f"{clean_target_domain}/services/airport-transfers"
-            },
-            "recommended_counter_meta_ad": {
-                "hook": f"Tired of unpredictable rideshares in {target_loc}? Experience true luxury with {target_brand} at fixed rates.",
-                "primary_text": f"Say goodbye to surge pricing and cancelled rides. {target_brand} delivers executive chauffeur travel at transparent fixed rates.\n\n🏆 The {target_brand} Difference:\n• 100% On-Time Guarantee\n• Live flight telemetry tracking\n• Pristine European luxury fleet\n• Professional, suited accredited chauffeurs\n\nBook online in 60 seconds with instant booking confirmation.",
-                "headline": f"{target_brand} Airport Transfers — Book in 60s",
-                "call_to_action": "Book Now",
-                "target_url": f"{clean_target_domain}/"
-            }
+            "cost_usd": cost_usd,
         }

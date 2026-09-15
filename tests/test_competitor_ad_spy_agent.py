@@ -48,26 +48,34 @@ class TestCompetitorAdSpyAgent(unittest.TestCase):
         self.assertIn("output", res)
         output = res["output"]
         self.assertEqual(output["competitor_domain"], "chauffeurcarsmelbourne.com.au")
-        self.assertIn("google_ads_intelligence", output)
-        self.assertIn("meta_ads_intelligence", output)
-        self.assertIn("winning_counter_strategy", output)
 
-        # Verify Google Ads Section
-        g_data = output["google_ads_intelligence"]
-        self.assertGreaterEqual(len(g_data["ad_variations"]), 1)
-        self.assertGreaterEqual(len(g_data["targeted_keywords"]), 1)
-        self.assertTrue(any("headline_1" in ad for ad in g_data["ad_variations"]))
+        # These used to require google_ads_intelligence with ad_variations and
+        # targeted_keywords, and meta_ads_intelligence with active_ads -- all of
+        # which passed only because the agent wrote a competitor's ad copy,
+        # sitelinks, CPCs and monthly spend into its own source and made no HTTP
+        # request at all. Neither platform exposes those ads through an API, so
+        # the contract now is that the agent says so.
+        self.assertFalse(output["competitor_ads_readable"])
+        self.assertNotIn("google_ads_intelligence", output)
+        self.assertNotIn("meta_ads_intelligence", output)
+        self.assertNotIn("winning_counter_strategy", output)
 
-        # Verify Meta Ads Section
-        m_data = output["meta_ads_intelligence"]
-        self.assertGreaterEqual(len(m_data["active_ads"]), 1)
-        self.assertTrue(any("primary_text" in ad for ad in m_data["active_ads"]))
+        blob = str(output)
+        for invented in ("estimated_monthly_ad_spend", "estimated_cpc", "search_volume",
+                         "started_running", "Running 45+ days"):
+            self.assertNotIn(invented, blob)
 
-        # Verify Official Transparency Verification Links
-        self.assertIn("official_verification_links", output)
-        links = output["official_verification_links"]
-        self.assertIn("meta_ad_library", links)
-        self.assertIn("google_ads_transparency", links)
+        # The landing page is the one thing that can be observed, so it is
+        # either measured or the reason it was not is given.
+        landing = output["measured_landing_page"]
+        if landing["measured"]:
+            self.assertIn("page_title", landing)
+            self.assertIn("word_count", landing)
+        else:
+            self.assertTrue(landing.get("error"))
+
+        # The verification links are the honest deliverable: they work.
+        links = output["verification_links"]
         self.assertIn("facebook.com/ads/library", links["meta_ad_library"])
         self.assertIn("adstransparency.google.com", links["google_ads_transparency"])
 
@@ -84,7 +92,7 @@ class TestCompetitorAdSpyAgent(unittest.TestCase):
         self.assertEqual(data["output"]["competitor_domain"], "melbournechauffeurcars.com.au")
 
     def test_api_ad_spy_history_endpoint(self):
-        resp = self.client.get("/api/agents/ad-spy/history")
+        resp = self.client.get("/api/agents/ad-spy/history", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")

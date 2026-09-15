@@ -5333,13 +5333,13 @@ async function submitCompetitorAdSpy(e) {
 
   const originalHtml = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Spying Google & Meta Ads...';
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Reading their landing page...';
 
   resultsContainer.innerHTML = `
     <div style="text-align:center; padding:50px; color:var(--text-muted);">
       <div style="font-size:24px; color:#ef4444; margin-bottom:12px;"><i class="fa-solid fa-radar fa-spin"></i></div>
-      <div style="font-size:14px; font-weight:700; color:var(--text-primary);">Scanning Ad Transparency & Meta Ad Library for ${url}...</div>
-      <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">Extracting Search Headlines, Targeted Keywords, Facebook/IG Creatives & AI Counter-Attack Strategy.</div>
+      <div style="font-size:14px; font-weight:700; color:var(--text-primary);">Fetching the competitor page...</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">Measuring their landing page and reading your own Google Ads keyword costs. Their ad creatives are not readable through any API.</div>
     </div>
   `;
 
@@ -5378,499 +5378,121 @@ async function submitCompetitorAdSpy(e) {
 
 function renderCompetitorAdSpyResults(report) {
   window.currentAdSpyReport = report;
-  const g = report.google_ads_intelligence || {};
-  const m = report.meta_ads_intelligence || {};
-  const c = report.winning_counter_strategy || {};
-  const gAds = g.ad_variations || [];
-  const mAds = m.active_ads || [];
-  const kwList = g.targeted_keywords || [];
-  const activeSite = allWebsitesList.find(s => s.site_id === currentSiteId);
-  const targetBrand = report.target_brand || (activeSite ? activeSite.name : 'Our Brand');
+  const container = document.getElementById('spy-results-container');
+  if (!container) return;
 
-  const html = `
-    <!-- Top Summary Banner with Official Live Verification Badges -->
-    <div style="background:linear-gradient(135deg, rgba(239,68,68,0.12), rgba(249,115,22,0.08)); border:1px solid rgba(239,68,68,0.3); padding:18px 22px; border-radius:14px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
-      <div>
-        <div style="font-size:16.5px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px;">
-          <i class="fa-solid fa-bullseye" style="color:#ef4444;"></i> Target Competitor: <span style="color:#38bdf8;">${report.competitor_brand}</span> (${report.competitor_domain})
-        </div>
-        <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
-          Market: <strong>${report.location}</strong> | Est. Monthly Ad Spend: <strong style="color:#10b581;">${g.estimated_monthly_ad_spend || '$3,500 AUD'}</strong>
-        </div>
+  const links = report.verification_links || {};
+  const page = report.measured_landing_page || {};
+  const costs = report.your_keyword_costs || {};
+  const draft = report.draft_ad_copy || null;
+
+  // This panel used to print two Google ads and two Meta ads per competitor,
+  // with headlines, body copy, sitelinks, ad ids, an estimated monthly spend of
+  // "$3,200 - $5,500 AUD" and "Running 45+ days". No request was ever made to
+  // either ad platform; all of it was written into the agent's source. Neither
+  // Google's Transparency Center nor Meta's Ad Library exposes these ads to an
+  // API, so the panel now shows what can be measured and links to the rest.
+  const fact = (label, value) => `
+    <div style="display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:12px;">
+      <span style="color:var(--text-muted);">${label}</span>
+      <span style="color:#fff; font-family:var(--font-mono); text-align:right;">${value}</span>
+    </div>`;
+
+  container.innerHTML = `
+    <div style="background:linear-gradient(135deg, rgba(56,189,248,0.12), rgba(15,23,42,0.9)); border:1px solid rgba(56,189,248,0.3); padding:18px 22px; border-radius:14px; margin-bottom:18px;">
+      <div style="font-size:11px; font-weight:800; color:#38bdf8; text-transform:uppercase; letter-spacing:0.5px;">Competitor</div>
+      <h3 style="font-size:19px; font-weight:800; color:#fff; margin:4px 0 2px;">${escapeHtml(report.competitor_domain || '')}</h3>
+      <div style="font-size:11.5px; color:var(--text-muted);">Market: ${escapeHtml(report.location || '')} &bull; analysed ${escapeHtml((report.analyzed_at || '').replace('T', ' ').slice(0, 16))}</div>
+    </div>
+
+    <div style="background:rgba(148,163,184,0.08); border:1px solid rgba(148,163,184,0.3); border-radius:12px; padding:16px; margin-bottom:18px;">
+      <div style="font-size:13px; font-weight:800; color:#cbd5e1; margin-bottom:6px;">
+        <i class="fa-solid fa-circle-info"></i> Unke ads yahan se padhe nahi ja sakte
       </div>
-      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-        <a href="${report.official_verification_links?.google_ads_transparency || `https://adstransparency.google.com/?region=AU&domain=${report.competitor_domain}`}" target="_blank" class="btn btn-secondary btn-sm" style="color:#38bdf8; border-color:rgba(56,189,248,0.5); text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:700;">
-          <i class="fa-brands fa-google"></i> Live Google Transparency <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i>
+      <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+        ${escapeHtml(links.note || report.competitor_ads_note || '')}
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+        <a href="${escapeHtml(links.google_ads_transparency || '#')}" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="color:#38bdf8; border-color:rgba(56,189,248,0.5); text-decoration:none; font-weight:700;">
+          <i class="fa-brands fa-google"></i> Google Ads Transparency
         </a>
-        <a href="${report.official_verification_links?.meta_ad_library || `https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AU&q=${report.competitor_domain}`}" target="_blank" class="btn btn-secondary btn-sm" style="color:#60a5fa; border-color:rgba(59,130,246,0.5); text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:700;">
-          <i class="fa-brands fa-facebook"></i> Live Meta Ad Library <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i>
+        <a href="${escapeHtml(links.meta_ad_library || '#')}" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="color:#60a5fa; border-color:rgba(59,130,246,0.5); text-decoration:none; font-weight:700;">
+          <i class="fa-brands fa-meta"></i> Meta Ad Library
         </a>
-        <span class="badge badge-danger" style="font-size:11.5px; padding:6px 12px;"><i class="fa-brands fa-google"></i> ${gAds.length} Google Search Ads</span>
-        <span class="badge badge-warning" style="font-size:11.5px; padding:6px 12px;"><i class="fa-brands fa-facebook"></i> ${mAds.length} Meta Ads</span>
       </div>
     </div>
 
-    <!-- Section 1: Google Ads Intelligence -->
-    <div style="margin-bottom:28px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--glass-border); padding-bottom:8px;">
-        <h3 style="font-size:15px; font-weight:800; color:#fff; margin:0; display:flex; align-items:center; gap:8px;">
-          <i class="fa-brands fa-google" style="color:#38bdf8;"></i> SECTION 1: Competitor Google Ads & Targeted Bidding Keywords
-        </h3>
-        <span style="font-size:11.5px; color:var(--accent-cyan); font-weight:700;"><i class="fa-solid fa-hand-pointer"></i> Click any ad to view full keyword & heading breakdown</span>
+    <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:18px;">
+      <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:10px;">
+        <i class="fa-solid fa-file-code" style="color:var(--accent-cyan);"></i> Their landing page, measured
       </div>
+      ${page.measured ? `
+        ${fact('URL', `<a href="${escapeHtml(page.url)}" target="_blank" rel="noopener" style="color:var(--accent-cyan);">${escapeHtml((page.url || '').slice(0, 52))}</a>`)}
+        ${fact('Title', escapeHtml(page.page_title || '(none)') + ` <span style="color:var(--text-muted);">${page.title_length || 0} chars</span>`)}
+        ${fact('Meta description', page.meta_description ? `${page.meta_description_length} chars` : '<span style="color:#f87171;">missing</span>')}
+        ${fact('H1', escapeHtml(page.h1_text || '(none)').slice(0, 60) + ` <span style="color:var(--text-muted);">${page.h1_count} on page</span>`)}
+        ${fact('H2 sections', page.h2_count)}
+        ${fact('Word count', (page.word_count || 0).toLocaleString())}
+        ${fact('Schema types', (page.schema_types || []).join(', ') || '<span style="color:#f87171;">none</span>')}
+        ${fact('Internal / external links', `${page.internal_links} / ${page.external_links}`)}
+        ${fact('Images missing alt', page.images_missing_alt + ' of ' + page.images_total)}
+        ${fact('Response time', (page.response_seconds ?? '—') + ' s')}
+      ` : `
+        <div style="font-size:12.5px; color:#fca5a5;">
+          Page nahi padhi ja saki: ${escapeHtml(page.error || 'unknown reason')}
+          ${page.status_code ? ` (HTTP ${page.status_code})` : ''}
+        </div>`}
+    </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;">
-        ${gAds.map((ad, idx) => `
-          <div onclick="inspectGoogleAd(${idx})" style="background:#090d16; border:1px solid rgba(56,189,248,0.25); padding:16px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.5); cursor:pointer; transition:all 0.25s ease;" onmouseover="this.style.borderColor='var(--accent-cyan)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(6,182,212,0.25)'" onmouseout="this.style.borderColor='rgba(56,189,248,0.25)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.5)'">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span style="font-size:10.5px; font-weight:800; background:#1e293b; color:#38bdf8; padding:3px 8px; border-radius:4px; text-transform:uppercase;">
-                ${ad.ad_type || 'Google Search Ad'}
-              </span>
-              <button class="btn btn-secondary btn-sm" style="font-size:10.5px; color:#38bdf8; border-color:rgba(56,189,248,0.4); padding:3px 8px;" onclick="event.stopPropagation(); inspectGoogleAd(${idx})">
-                <i class="fa-solid fa-expand"></i> Inspect Copy & Keywords
-              </button>
-            </div>
-
-            <!-- SERP Style Mockup -->
-            <div style="font-size:11px; color:#94a3b8; margin-bottom:4px; font-family:var(--font-mono);">
-              <span style="background:#22c55e; color:#000; font-weight:800; padding:1px 4px; border-radius:3px; font-size:9.5px; margin-right:5px;">Ad</span>
-              https://${ad.display_path || report.competitor_domain}
-            </div>
-            <div style="font-size:14.5px; font-weight:700; color:#60a5fa; line-height:1.3; margin-bottom:6px;">
-              ${ad.headline_1} | ${ad.headline_2} ${ad.headline_3 ? `| ${ad.headline_3}` : ''}
-            </div>
-            <div style="font-size:12.5px; color:#cbd5e1; line-height:1.4; margin-bottom:10px;">
-              ${ad.description_1} ${ad.description_2 ? ad.description_2 : ''}
-            </div>
-
-            <!-- Sitelinks -->
-            ${ad.sitelinks && ad.sitelinks.length ? `
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06);">
-                ${ad.sitelinks.map(s => `
-                  <div style="font-size:11px; color:#38bdf8; font-weight:600;"><i class="fa-solid fa-arrow-right" style="font-size:9px;"></i> ${s.title || s}</div>
-                `).join('')}
-              </div>
-            ` : ''}
-
-            <!-- Callout Badges -->
-            ${ad.callouts && ad.callouts.length ? `
-              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;">
-                ${ad.callouts.map(c => `<span style="font-size:10px; background:rgba(255,255,255,0.05); color:#94a3b8; padding:2px 6px; border-radius:4px;">${c}</span>`).join('')}
-              </div>
-            ` : ''}
-          </div>
-        `).join('')}
+    <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:18px;">
+      <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">
+        <i class="fa-solid fa-coins" style="color:#f59e0b;"></i> Aapke apne keyword costs
       </div>
-
-      <!-- Targeted Keywords Table -->
-      <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto;">
-        <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
-          <thead>
-            <tr style="background:rgba(15,23,42,0.9); color:var(--text-muted); text-transform:uppercase;">
-              <th style="padding:10px 14px;">Targeted Bidding Keyword</th>
-              <th style="padding:10px 14px;">Match Type</th>
-              <th style="padding:10px 14px;">Est. CPC ($AUD)</th>
-              <th style="padding:10px 14px;">Search Volume</th>
-              <th style="padding:10px 14px;">Search Intent</th>
-            </tr>
-          </thead>
+      <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:12px;">
+        ${escapeHtml(costs.measured ? (costs.note || '') : (costs.error || 'Not connected.'))}
+      </div>
+      ${costs.measured && (costs.keywords || []).length ? `
+      <div style="overflow-x:auto;">
+        <table class="table" style="width:100%; font-size:12px; margin:0;">
+          <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
+            <th style="padding:6px 8px; text-align:left;">Keyword</th>
+            <th style="padding:6px 8px;">Clicks</th>
+            <th style="padding:6px 8px;">Avg CPC</th>
+            <th style="padding:6px 8px;">Spend</th>
+            <th style="padding:6px 8px;">Conv</th>
+          </tr></thead>
           <tbody>
-            ${kwList.map(kw => `
+            ${costs.keywords.map(k => `
               <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                <td style="padding:10px 14px; font-weight:700; color:#fff; font-family:var(--font-mono);">${kw.keyword}</td>
-                <td style="padding:10px 14px;"><span class="action-chip" style="font-size:11px;">${kw.match_type}</span></td>
-                <td style="padding:10px 14px; font-weight:700; color:#10b581;">${kw.estimated_cpc}</td>
-                <td style="padding:10px 14px; color:var(--accent-cyan); font-family:var(--font-mono);">${kw.search_volume || '1,500/mo'}</td>
-                <td style="padding:10px 14px;"><span class="badge badge-warning" style="font-size:10px;">${kw.intent}</span></td>
-              </tr>
-            `).join('')}
+                <td style="padding:6px 8px; color:#fff; font-family:var(--font-mono);">${escapeHtml(k.keyword || '')}<div style="font-size:9.5px; color:var(--text-muted);">${escapeHtml(k.match_type || '')}</div></td>
+                <td style="padding:6px 8px; text-align:center;">${k.clicks}</td>
+                <td style="padding:6px 8px; text-align:center; font-family:var(--font-mono);">A$${Number(k.avg_cpc || 0).toFixed(2)}</td>
+                <td style="padding:6px 8px; text-align:center; font-family:var(--font-mono);">A$${Number(k.spend || 0).toFixed(2)}</td>
+                <td style="padding:6px 8px; text-align:center; color:${k.converting ? '#10b981' : 'var(--text-muted)'}; font-weight:800;">${k.conversions}</td>
+              </tr>`).join('')}
           </tbody>
         </table>
-      </div>
+      </div>` : ''}
     </div>
 
-    <!-- Section 2: Meta Ads Intelligence (Facebook & Instagram) -->
-    <div style="margin-bottom:28px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--glass-border); padding-bottom:8px;">
-        <h3 style="font-size:15px; font-weight:800; color:#fff; margin:0; display:flex; align-items:center; gap:8px;">
-          <i class="fa-brands fa-facebook" style="color:#3b82f6;"></i> SECTION 2: Competitor Meta Ads (Facebook & Instagram Creatives)
-        </h3>
-        <span style="font-size:11.5px; color:#60a5fa; font-weight:700;"><i class="fa-solid fa-hand-pointer"></i> Click any ad to view hook breakdown & creative details</span>
+    ${draft ? `
+    <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); border-radius:14px; padding:18px;">
+      <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">
+        <i class="fa-solid fa-pen-nib" style="color:var(--accent-purple);"></i> Draft ad copy for your own ads
       </div>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-        ${mAds.map((ad, idx) => `
-          <div onclick="inspectMetaAd(${idx})" style="background:#0f172a; border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.5); cursor:pointer; transition:all 0.25s ease;" onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(59,130,246,0.25)'" onmouseout="this.style.borderColor='rgba(59,130,246,0.3)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.5)'">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.06);">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#3b82f6,#ec4899); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:12px;">
-                  ${report.competitor_brand.substring(0,2)}
-                </div>
-                <div>
-                  <div style="font-weight:700; font-size:13px; color:#fff;">${report.competitor_brand}</div>
-                  <div style="font-size:10.5px; color:#94a3b8;">Sponsored · <i class="fa-solid fa-earth-americas"></i> ${ad.started_running || 'Active'}</div>
-                </div>
-              </div>
-              <button class="btn btn-secondary btn-sm" style="font-size:10.5px; color:#60a5fa; border-color:rgba(59,130,246,0.4); padding:3px 8px;" onclick="event.stopPropagation(); inspectMetaAd(${idx})">
-                <i class="fa-solid fa-expand"></i> Inspect Hook
-              </button>
-            </div>
-
-            <div style="font-size:12.5px; color:#e2e8f0; line-height:1.5; white-space:pre-wrap; margin-bottom:14px; background:rgba(30,41,59,0.5); padding:12px; border-radius:8px;">${ad.primary_text}</div>
-
-            <div style="background:#020617; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <div style="font-size:10.5px; color:#94a3b8; text-transform:uppercase; font-family:var(--font-mono);">${report.competitor_domain}</div>
-                <div style="font-weight:700; font-size:13px; color:#fff; margin-top:2px;">${ad.headline}</div>
-                <div style="font-size:11px; color:#64748b; margin-top:2px;">${ad.description || ''}</div>
-              </div>
-              <button class="btn btn-primary btn-sm" style="background:#3b82f6; font-weight:700; font-size:11.5px; padding:6px 14px; white-space:nowrap;">
-                ${ad.call_to_action || 'Book Now'}
-              </button>
-            </div>
-          </div>
-        `).join('')}
+      <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+        ${escapeHtml(report.draft_ad_copy_note || '')}
       </div>
-    </div>
-
-    <!-- Section 3: AI Counter-Attack Strategy -->
-    <div style="background:linear-gradient(135deg, rgba(168,85,247,0.12), rgba(6,182,212,0.08)); border:1px solid rgba(168,85,247,0.4); padding:20px; border-radius:14px;">
-      <h3 style="font-size:16px; font-weight:800; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-        <i class="fa-solid fa-shield-halved" style="color:var(--accent-purple);"></i> SECTION 3: Winning Counter-Attack Strategy for ${targetBrand}
-      </h3>
-
-      <!-- Vulnerabilities -->
-      <div style="margin-bottom:16px;">
-        <div style="font-size:12px; font-weight:800; color:#f87171; text-transform:uppercase; margin-bottom:6px;">Competitor Vulnerabilities Identified:</div>
-        ${(c.vulnerabilities_in_competitor_ads || c.vulnerabilities || []).map(v => `
-          <div style="font-size:12.5px; color:#cbd5e1; margin-bottom:4px;"><i class="fa-solid fa-triangle-exclamation" style="color:#f87171; font-size:11px;"></i> ${v}</div>
-        `).join('')}
-      </div>
-
-      <!-- Counter Google Ad -->
-      ${c.recommended_counter_google_ad ? `
-        <div style="background:#090d16; border:1px solid var(--accent-cyan); padding:16px; border-radius:10px; margin-bottom:14px;">
-          <div style="font-size:11px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:6px;">
-            <i class="fa-brands fa-google"></i> Recommended Winning Google Search Ad Copy (Ready to Deploy):
-          </div>
-          <div style="font-size:14px; font-weight:700; color:#38bdf8; margin-bottom:4px;">
-            ${c.recommended_counter_google_ad.headline_1} | ${c.recommended_counter_google_ad.headline_2} | ${c.recommended_counter_google_ad.headline_3}
-          </div>
-          <div style="font-size:12.5px; color:#e2e8f0; line-height:1.4;">
-            ${c.recommended_counter_google_ad.description_1} ${c.recommended_counter_google_ad.description_2 || ''}
-          </div>
-          <div style="font-size:11px; color:#94a3b8; margin-top:6px; font-family:var(--font-mono);">
-            Destination: <a href="${c.recommended_counter_google_ad.target_url}" target="_blank" style="color:var(--accent-purple);">${c.recommended_counter_google_ad.target_url}</a>
-          </div>
-        </div>
+      ${(draft.headlines || []).length ? `
+        <div style="font-size:11px; font-weight:800; color:#d8b4fe; text-transform:uppercase; margin-bottom:4px;">Headlines</div>
+        ${(draft.headlines || []).map(h => `<div style="font-size:12.5px; color:#fff; margin-bottom:3px;">&bull; ${escapeHtml(String(h))} <span style="color:var(--text-muted); font-size:10.5px;">(${String(h).length}/30)</span></div>`).join('')}
       ` : ''}
-
-      <!-- Counter Meta Ad -->
-      ${c.recommended_counter_meta_ad ? `
-        <div style="background:#090d16; border:1px solid var(--accent-purple); padding:16px; border-radius:10px;">
-          <div style="font-size:11px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:6px;">
-            <i class="fa-brands fa-facebook"></i> Recommended Winning Meta Ad Copy (Facebook & Instagram):
-          </div>
-          <div style="font-size:12px; color:#cbd5e1; font-weight:700; margin-bottom:6px; color:#fbbf24;">Hook: "${c.recommended_counter_meta_ad.hook}"</div>
-          <div style="font-size:12.5px; color:#e2e8f0; line-height:1.5; white-space:pre-wrap; background:rgba(30,41,59,0.5); padding:12px; border-radius:8px; margin-bottom:8px;">${c.recommended_counter_meta_ad.primary_text}</div>
-          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
-            <strong style="color:#fff;">Headline: ${c.recommended_counter_meta_ad.headline}</strong>
-            <span class="badge badge-info">CTA: ${c.recommended_counter_meta_ad.call_to_action || 'Book Now'}</span>
-          </div>
-        </div>
+      ${(draft.descriptions || []).length ? `
+        <div style="font-size:11px; font-weight:800; color:#d8b4fe; text-transform:uppercase; margin:10px 0 4px;">Descriptions</div>
+        ${(draft.descriptions || []).map(d => `<div style="font-size:12.5px; color:#fff; margin-bottom:3px;">&bull; ${escapeHtml(String(d))} <span style="color:var(--text-muted); font-size:10.5px;">(${String(d).length}/90)</span></div>`).join('')}
       ` : ''}
-    </div>
+    </div>` : ''}
   `;
-
-  document.getElementById('spy-results-container').innerHTML = html;
-}
-
-function inspectGoogleAd(idx) {
-  if (!window.currentAdSpyReport) return;
-  const report = window.currentAdSpyReport;
-  const g = report.google_ads_intelligence || {};
-  const ads = g.ad_variations || [];
-  const ad = ads[idx];
-  if (!ad) return;
-
-  const keywords = g.targeted_keywords || [];
-  const fullCopy = `--- HEADLINES ---
-Headline 1: ${ad.headline_1}
-Headline 2: ${ad.headline_2}
-Headline 3: ${ad.headline_3 || 'N/A'}
-
---- DESCRIPTIONS ---
-Description 1: ${ad.description_1}
-Description 2: ${ad.description_2 || 'N/A'}
-
---- SITELINKS ---
-${(ad.sitelinks || []).map(s => `• ${s.title || s}: ${s.url || ''}`).join('\n')}
-
---- TARGET LANDING PAGE ---
-${ad.landing_page || `https://${report.competitor_domain}`}
-`;
-
-  document.getElementById('inspector-modal-title').innerHTML = `
-    <i class="fa-brands fa-google" style="color:#38bdf8;"></i> Google Search Ad Inspector — ${ad.ad_type || 'Responsive Search Ad'}
-  `;
-  document.getElementById('inspector-modal-subtitle').innerHTML = `
-    Detailed breakdown of targeted bidding keywords, headings, descriptions, sitelinks, assets, and landing page for <strong>${report.competitor_brand}</strong>.
-  `;
-
-  const html = `
-    <!-- Top Action Bar -->
-    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(30,41,59,0.7); padding:12px 16px; border-radius:10px; margin-bottom:18px; border:1px solid var(--glass-border);">
-      <div style="font-size:12px; color:var(--text-muted);">
-        Competitor: <strong style="color:#fff;">${report.competitor_brand}</strong> (${report.competitor_domain})
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button id="btn-copy-g-ad" class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7);" onclick="copyToClipboard(\`${fullCopy.replace(/`/g, '\\`')}\`, 'btn-copy-g-ad')">
-          <i class="fa-solid fa-copy"></i> Copy Full Ad Copy
-        </button>
-        <a href="${ad.landing_page || `https://${report.competitor_domain}`}" target="_blank" class="btn btn-secondary btn-sm" style="color:var(--accent-cyan); border-color:rgba(6,182,212,0.4); text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Landing Page
-        </a>
-      </div>
-    </div>
-
-    <!-- 1. Live SERP Ad Preview Mockup -->
-    <div style="background:#030712; border:1px solid rgba(56,189,248,0.4); border-radius:14px; padding:20px; margin-bottom:20px; box-shadow:0 8px 30px rgba(0,0,0,0.7);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <span style="font-size:10.5px; font-weight:800; color:#38bdf8; background:rgba(56,189,248,0.12); padding:3px 8px; border-radius:4px; text-transform:uppercase;">
-          Live Google Search Mockup
-        </span>
-        <span style="font-size:11px; color:#94a3b8; font-family:var(--font-mono);">Position: Top of Page #1</span>
-      </div>
-
-      <div style="font-size:12px; color:#94a3b8; font-family:var(--font-mono); margin-bottom:5px;">
-        <span style="background:#22c55e; color:#000; font-weight:800; padding:1px 5px; border-radius:3px; font-size:10px; margin-right:6px;">Ad</span>
-        https://${ad.display_path || report.competitor_domain}
-      </div>
-      <div style="font-size:17px; font-weight:700; color:#60a5fa; line-height:1.3; margin-bottom:8px;">
-        ${ad.headline_1} | ${ad.headline_2} ${ad.headline_3 ? `| ${ad.headline_3}` : ''}
-      </div>
-      <div style="font-size:13.5px; color:#cbd5e1; line-height:1.5; margin-bottom:12px;">
-        ${ad.description_1} ${ad.description_2 ? ad.description_2 : ''}
-      </div>
-
-      <!-- Sitelinks in Mockup -->
-      ${ad.sitelinks && ad.sitelinks.length ? `
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.08);">
-          ${ad.sitelinks.map(s => `
-            <div style="font-size:12px; color:#38bdf8; font-weight:700;">
-              <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i> ${s.title || s}
-            </div>
-          `).join('')}
-        </div>
-      ` : ''}
-    </div>
-
-    <!-- 2. Detailed Headings & Descriptions Breakdown -->
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
-      <!-- Headings Panel -->
-      <div style="background:rgba(15,23,42,0.7); border:1px solid var(--glass-border); padding:16px; border-radius:12px;">
-        <h4 style="font-size:13px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
-          <i class="fa-solid fa-heading"></i> Search Ad Headlines
-        </h4>
-        <div style="margin-bottom:10px;">
-          <div style="font-size:11px; color:var(--text-muted);">Headline 1 (${ad.headline_1.length}/30 chars):</div>
-          <div style="font-size:13px; font-weight:700; color:#fff; background:#090d16; padding:8px 10px; border-radius:6px; margin-top:3px; border:1px solid rgba(255,255,255,0.06);">${ad.headline_1}</div>
-        </div>
-        <div style="margin-bottom:10px;">
-          <div style="font-size:11px; color:var(--text-muted);">Headline 2 (${ad.headline_2.length}/30 chars):</div>
-          <div style="font-size:13px; font-weight:700; color:#fff; background:#090d16; padding:8px 10px; border-radius:6px; margin-top:3px; border:1px solid rgba(255,255,255,0.06);">${ad.headline_2}</div>
-        </div>
-        ${ad.headline_3 ? `
-          <div>
-            <div style="font-size:11px; color:var(--text-muted);">Headline 3 (${ad.headline_3.length}/30 chars):</div>
-            <div style="font-size:13px; font-weight:700; color:#fff; background:#090d16; padding:8px 10px; border-radius:6px; margin-top:3px; border:1px solid rgba(255,255,255,0.06);">${ad.headline_3}</div>
-          </div>
-        ` : ''}
-      </div>
-
-      <!-- Descriptions Panel -->
-      <div style="background:rgba(15,23,42,0.7); border:1px solid var(--glass-border); padding:16px; border-radius:12px;">
-        <h4 style="font-size:13px; font-weight:800; color:#a855f7; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
-          <i class="fa-solid fa-align-left"></i> Ad Descriptions & Pitch
-        </h4>
-        <div style="margin-bottom:10px;">
-          <div style="font-size:11px; color:var(--text-muted);">Description 1 (${ad.description_1.length}/90 chars):</div>
-          <div style="font-size:12.5px; color:#cbd5e1; line-height:1.4; background:#090d16; padding:8px 10px; border-radius:6px; margin-top:3px; border:1px solid rgba(255,255,255,0.06);">${ad.description_1}</div>
-        </div>
-        ${ad.description_2 ? `
-          <div>
-            <div style="font-size:11px; color:var(--text-muted);">Description 2 (${ad.description_2.length}/90 chars):</div>
-            <div style="font-size:12.5px; color:#cbd5e1; line-height:1.4; background:#090d16; padding:8px 10px; border-radius:6px; margin-top:3px; border:1px solid rgba(255,255,255,0.06);">${ad.description_2}</div>
-          </div>
-        ` : ''}
-      </div>
-    </div>
-
-    <!-- 3. Targeted Keywords Table Specifically for this Ad Group -->
-    <div style="background:rgba(15,23,42,0.7); border:1px solid var(--glass-border); padding:16px; border-radius:12px; margin-bottom:20px;">
-      <h4 style="font-size:13px; font-weight:800; color:#10b581; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
-        <i class="fa-solid fa-key"></i> Targeted Bidding Keywords & Search Volume
-      </h4>
-      <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
-        <thead>
-          <tr style="background:rgba(2,6,23,0.8); color:var(--text-muted); text-transform:uppercase;">
-            <th style="padding:8px 12px;">Keyword</th>
-            <th style="padding:8px 12px;">Match Type</th>
-            <th style="padding:8px 12px;">Est. CPC ($AUD)</th>
-            <th style="padding:8px 12px;">Monthly Volume</th>
-            <th style="padding:8px 12px;">Intent</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${keywords.map(kw => `
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-              <td style="padding:8px 12px; font-weight:700; color:#fff; font-family:var(--font-mono);">${kw.keyword}</td>
-              <td style="padding:8px 12px;"><span class="action-chip" style="font-size:10.5px;">${kw.match_type}</span></td>
-              <td style="padding:8px 12px; font-weight:700; color:#10b581;">${kw.estimated_cpc}</td>
-              <td style="padding:8px 12px; color:var(--accent-cyan); font-family:var(--font-mono);">${kw.search_volume || '1,400/mo'}</td>
-              <td style="padding:8px 12px;"><span class="badge badge-warning" style="font-size:10px;">${kw.intent}</span></td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-
-    <!-- 4. Assets & Extensions Details -->
-    <div style="background:rgba(15,23,42,0.7); border:1px solid var(--glass-border); padding:16px; border-radius:12px;">
-      <h4 style="font-size:13px; font-weight:800; color:#f59e0b; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
-        <i class="fa-solid fa-puzzle-piece"></i> Ad Assets & Callout Extensions
-      </h4>
-      <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        ${(ad.callouts || ['24/7 Service', 'Fixed Price Guarantee', 'Flight Telemetry Tracking', 'European Fleet']).map(c => `
-          <span style="font-size:11px; background:rgba(245,158,11,0.12); color:#fbbf24; border:1px solid rgba(245,158,11,0.3); padding:4px 10px; border-radius:6px; font-weight:600;">
-            <i class="fa-solid fa-check"></i> ${c}
-          </span>
-        `).join('')}
-      </div>
-    </div>
-  `;
-
-  document.getElementById('ad-inspector-content').innerHTML = html;
-  openModal('ad-inspector-modal');
-}
-
-function inspectMetaAd(idx) {
-  if (!window.currentAdSpyReport) return;
-  const report = window.currentAdSpyReport;
-  const m = report.meta_ads_intelligence || {};
-  const ads = m.active_ads || [];
-  const ad = ads[idx];
-  if (!ad) return;
-
-  const fullCopy = `--- BRAND ---
-${report.competitor_brand} (${report.competitor_domain})
-
---- HOOK ---
-${ad.hook || ''}
-
---- PRIMARY TEXT ---
-${ad.primary_text}
-
---- HEADLINE & DESCRIPTION ---
-Headline: ${ad.headline}
-Description: ${ad.description || ''}
-Call To Action: ${ad.call_to_action || 'Book Now'}
-
---- LANDING PAGE ---
-${ad.landing_page || `https://${report.competitor_domain}`}
-`;
-
-  document.getElementById('inspector-modal-title').innerHTML = `
-    <i class="fa-brands fa-facebook" style="color:#3b82f6;"></i> Meta Ad Inspector (Facebook & Instagram)
-  `;
-  document.getElementById('inspector-modal-subtitle').innerHTML = `
-    Detailed breakdown of creative hook, primary copy, targeting angles, CTA, and engagement strategy for <strong>${report.competitor_brand}</strong>.
-  `;
-
-  const html = `
-    <!-- Top Action Bar -->
-    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(30,41,59,0.7); padding:12px 16px; border-radius:10px; margin-bottom:18px; border:1px solid var(--glass-border);">
-      <div style="font-size:12px; color:var(--text-muted);">
-        Competitor: <strong style="color:#fff;">${report.competitor_brand}</strong> | Format: <span class="badge badge-info">${ad.format || 'Single Video / Carousel'}</span>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button id="btn-copy-m-ad" class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, #3b82f6, #ec4899);" onclick="copyToClipboard(\`${fullCopy.replace(/`/g, '\\`')}\`, 'btn-copy-m-ad')">
-          <i class="fa-solid fa-copy"></i> Copy Meta Ad Copy
-        </button>
-        <a href="${ad.landing_page || `https://${report.competitor_domain}`}" target="_blank" class="btn btn-secondary btn-sm" style="color:#60a5fa; border-color:rgba(59,130,246,0.4); text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Landing Page
-        </a>
-      </div>
-    </div>
-
-    <!-- 1. Simulated Social Feed Mockup -->
-    <div style="background:#0f172a; border:1px solid rgba(59,130,246,0.4); border-radius:14px; padding:20px; margin-bottom:20px; box-shadow:0 8px 30px rgba(0,0,0,0.7);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.06);">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#3b82f6,#ec4899); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:13px;">
-            ${report.competitor_brand.substring(0,2)}
-          </div>
-          <div>
-            <div style="font-weight:700; font-size:14px; color:#fff;">${report.competitor_brand}</div>
-            <div style="font-size:11px; color:#94a3b8;">Sponsored · <i class="fa-solid fa-earth-americas"></i> Active (${ad.started_running || '45+ days'})</div>
-          </div>
-        </div>
-        <span class="action-chip" style="font-size:11px; color:#ec4899;">${(ad.platforms || ['Facebook', 'Instagram']).join(' & ')}</span>
-      </div>
-
-      <!-- Hook Box -->
-      ${ad.hook ? `
-        <div style="background:rgba(245,158,11,0.12); border-left:3px solid #f59e0b; padding:8px 12px; border-radius:4px; font-size:12px; color:#fbbf24; margin-bottom:12px; font-weight:600;">
-          <i class="fa-solid fa-lightbulb"></i> Scroll-Stopping Hook: "${ad.hook}"
-        </div>
-      ` : ''}
-
-      <!-- Primary Text -->
-      <div style="font-size:13px; color:#f1f5f9; line-height:1.6; white-space:pre-wrap; margin-bottom:16px; background:rgba(30,41,59,0.5); padding:14px; border-radius:10px;">${ad.primary_text}</div>
-
-      <!-- Feed Card Bottom -->
-      <div style="background:#020617; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div style="font-size:11px; color:#94a3b8; text-transform:uppercase; font-family:var(--font-mono);">${report.competitor_domain}</div>
-          <div style="font-weight:700; font-size:14px; color:#fff; margin-top:2px;">${ad.headline}</div>
-          <div style="font-size:12px; color:#64748b; margin-top:2px;">${ad.description || ''}</div>
-        </div>
-        <button class="btn btn-primary" style="background:#3b82f6; font-weight:700; font-size:12px; padding:8px 18px; white-space:nowrap;">
-          ${ad.call_to_action || 'Book Now'}
-        </button>
-      </div>
-    </div>
-
-    <!-- 2. Psychological Angle & Creative Analysis -->
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-      <div style="background:rgba(15,23,42,0.7); border:1px solid var(--glass-border); padding:16px; border-radius:12px;">
-        <h4 style="font-size:13px; font-weight:800; color:#ec4899; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
-          <i class="fa-solid fa-palette"></i> Creative Format & Placements
-        </h4>
-        <div style="font-size:12.5px; color:#cbd5e1; margin-bottom:6px;">
-          <strong>Format:</strong> ${ad.format || 'Single Video / Carousel (Fleet Interiors)'}
-        </div>
-        <div style="font-size:12.5px; color:#cbd5e1;">
-          <strong>Placements:</strong> ${(ad.platforms || ['Facebook Feed', 'Instagram Stories', 'Reels']).join(', ')}
-        </div>
-      </div>
-
-      <div style="background:rgba(15,23,42,0.7); border:1px solid var(--glass-border); padding:16px; border-radius:12px;">
-        <h4 style="font-size:13px; font-weight:800; color:#10b581; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
-          <i class="fa-solid fa-bullseye"></i> Call To Action & Offer
-        </h4>
-        <div style="font-size:12.5px; color:#cbd5e1; margin-bottom:6px;">
-          <strong>CTA Button:</strong> <span class="badge badge-info">${ad.call_to_action || 'Book Now'}</span>
-        </div>
-        <div style="font-size:12.5px; color:#cbd5e1;">
-          <strong>Landing Page:</strong> <a href="${ad.landing_page || `https://${report.competitor_domain}`}" target="_blank" style="color:var(--accent-cyan); font-family:var(--font-mono); font-size:11px;">${ad.landing_page || report.competitor_domain}</a>
-        </div>
-      </div>
-    </div>
-  `;
-
-  document.getElementById('ad-inspector-content').innerHTML = html;
-  openModal('ad-inspector-modal');
 }
 
 function copyToClipboard(text, btnId) {
@@ -6781,8 +6403,6 @@ window.submitCustomOutreach = submitCustomOutreach;
 window.runDailyBacklinkBatch = runDailyBacklinkBatch;
 window.openCompetitorAdSpyModal = openCompetitorAdSpyModal;
 window.submitCompetitorAdSpy = submitCompetitorAdSpy;
-window.inspectGoogleAd = inspectGoogleAd;
-window.inspectMetaAd = inspectMetaAd;
 window.openPageOptimizerModal = openPageOptimizerModal;
 window.setSamplePageUrl = setSamplePageUrl;
 window.submitPageOptimizerAudit = submitPageOptimizerAudit;
