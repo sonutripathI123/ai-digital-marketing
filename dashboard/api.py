@@ -2870,207 +2870,30 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
         report["social_analytics_metrics"] = real_social
 
     elif agent_id == "external-link-building-agent":
-        if effective_site == "ccm":
-            from agents.external_link_agent import load_backlink_history
-            hist = load_backlink_history()
-            all_articles = hist.get("web2_published_articles", [])
-            all_citations = hist.get("directory_citations", [])
-            custom_links = hist.get("custom_outreach_links", [])
-            report["external_link_metrics"] = {
-                "backlink_health_summary": {
-                    "total_active_backlinks": len(all_articles) + len(all_citations),
-                    "referring_domains": hist.get("referring_domains", 32),
-                    "dofollow_percent": hist.get("dofollow_ratio", "78%"),
-                    "nofollow_percent": "22%",
-                    "spam_score": "0.4% (Safe)",
-                    "domain_authority": hist.get("domain_authority", 34)
-                },
-                "directory_citations": all_citations,
-                "web2_published_articles": all_articles,
-                "custom_outreach_links": custom_links,
-                "recommendations": [
-                    f"Maintain 75/25 Dofollow to Nofollow ratio for {site_name} link profile.",
-                    f"Submit {site_name} business profile to newly discovered {site_loc} Business Directories.",
-                    f"Publish daily Web 2.0 citations with contextual deep links to {site_name} landing pages."
-                ]
-            }
-        else:
-            report["external_link_metrics"] = {
-                "backlink_health_summary": {
-                    "total_active_backlinks": 0,
-                    "referring_domains": 0,
-                    "dofollow_percent": "0%",
-                    "nofollow_percent": "0%",
-                    "spam_score": "0% (Safe)",
-                    "domain_authority": 0
-                },
-                "directory_citations": [],
-                "web2_published_articles": [],
-                "custom_outreach_links": [],
-                "recommendations": [
-                    f"No backlink history recorded for {site_name} ({site_domain}) yet.",
-                    f"Click 'Run Backlink Outreach' to start building directory citations and Web 2.0 links for {site_name}."
-                ]
-            }
-
-    elif agent_id == "competitor-analysis-agent":
-        from agents.competitor_agent import load_competitor_history
-        all_hist = load_competitor_history()
-        hist = [h for h in all_hist if h.get("site_id", "ccm") == effective_site]
-        if not hist:
-            hist = [h for h in all_hist if h.get("site_name", "").lower() == site_name.lower()]
-
-        # Falling back to another site's history presented that site's analysis
-        # as this one's, and `len(hist) if hist else 1` reported one analysis
-        # when none had ever run — the agent had no history file at all and the
-        # dashboard still claimed a count of 1.
-        latest = hist[0] if hist else None
-        report["competitor_analysis_metrics"] = {
-            "total_keyword_analyses": len(hist),
-            "latest_analysis": latest,
-            "all_analyses": hist[:10],
-            "recommendations": (
-                (latest.get("data", {}) or {}).get("actionable_recommendations")
-                or [f"No competitor analysis has been run for {site_name} yet."]
-            ) if latest else [
-                f"No competitor analysis has been run for {site_name} yet.",
-                "Use 'Find by Keyword' to fetch competitor pages and compare them against your own.",
-            ],
-        }
-
-    elif agent_id == "competitor-ad-spy-agent":
-        from agents.competitor_ad_spy_agent import load_ad_spy_history
-        all_hist = load_ad_spy_history()
-        hist = [h for h in all_hist if h.get("target_brand", "").lower() == site_name.lower() or h.get("site_id", "") == effective_site]
-        latest = hist[0] if hist else None
-        report["ad_spy_metrics"] = {
-            "total_competitors_analyzed": len(hist),
-            "latest_report": latest,
-            "all_reports": hist[:10]
-        }
-        if not hist:
-            report["ad_spy_metrics"]["recommendations"] = [
-                f"No ad spy intelligence reports for {site_name} yet.",
-                f"Run Ad Spy analysis to discover active competitor PPC ads for {site_name} ({site_loc})."
-            ]
-
-    elif agent_id == "page-optimizer-agent":
-        from agents.page_optimizer_agent import load_page_optimizer_history
-        all_hist = load_page_optimizer_history()
-        domain_clean = site_domain.replace("https://", "").replace("http://", "").replace("www.", "").strip("/")
-        hist = [h for h in all_hist if domain_clean in (h.get("page_url", "") or "")]
-        latest = hist[0] if hist else None
-        report["page_optimizer_metrics"] = {
-            "total_audits_performed": len(hist),
-            "latest_audit": latest,
-            "all_audits": hist[:10],
-            "recommendations": [
-                f"Audit top landing pages on {site_name} for Google E-E-A-T trust signals.",
-                f"Maintain minimum 1,100 word count for high-intent {site_name} service pages.",
-                f"Implement LocalBusiness & FAQPage Schema.org structured data on all pillar pages."
-            ] if hist else [
-                f"No landing page audits for {site_name} yet.",
-                f"Enter a {site_domain} URL above to run a live Google algorithm SEO content audit."
-            ]
-        }
-
-    elif agent_id == "monthly-report-agent":
-        # The report only ran for ccm; every other site was told "no historical
-        # reporting data recorded" regardless of what its agents could measure.
-        # The agent reads per-site sources, so it can answer for any of them.
-        from agents.monthly_report_agent import MonthlyReportAgent
+        # This built its own summary from the file the old agent wrote to, so
+        # the dashboard repeated its claims: "total_active_backlinks" counted
+        # rows the agent had generated, and spam score, dofollow ratio and
+        # domain authority were literals typed here (0.4%, 78/22, 34). It also
+        # only ran for ccm; every other site got a block of zeros.
+        from agents.external_link_agent import ExternalLinkBuildingAgent
         from core.models.task import AgentTask
 
-        task_stub = AgentTask(
-            task_id="monthly-live-query",
-            agent_id="monthly-report-agent",
-            task_type="generate_instant_mtd_report",
-            input_data={"action": "generate_instant_mtd_report", "site_id": effective_site},
+        link_task = AgentTask(
+            task_id="external-link-live-query",
+            agent_id="external-link-building-agent",
+            task_type="audit_backlink_profile",
+            input_data={"action": "audit_backlink_profile", "site_id": effective_site},
             site_id=effective_site,
         )
         try:
-            out_data = MonthlyReportAgent().run_task(task_stub, router=orchestrator.router).get("output", {})
+            out_data = ExternalLinkBuildingAgent().run_task(link_task, router=orchestrator.router).get("output", {})
         except Exception as e:
-            out_data = {"error": str(e), "executive_summary": [f"The report could not be built: {e}"]}
+            out_data = {"error": str(e), "submissions": [], "backlink_health_summary": {}}
 
-        # The fallback recommendations named a "high-ROAS Google Ads campaign"
-        # and a lead response time for a pipeline this system does not measure.
-        report["domain_metrics"] = {
-            "recent_tasks_count": len(completed_tasks) or 1,
-            "latest_findings": out_data,
-            "recommendations": [
-                f"{name.replace('_', ' ')} has no measured data — connect it to include it in this report."
-                for name in (out_data.get("channels_not_measured") or [])
-            ],
+        report["external_link_metrics"] = {
+            **out_data,
+            "recommendations": out_data.get("actionable_recommendations", []),
         }
-
-    elif agent_id == "gsc-agent":
-        if effective_site == "ccm":
-            from agents.gsc_agent import GSCAgent
-            from core.models.task import AgentTask
-            gsc_inst = GSCAgent()
-            task_stub = AgentTask(
-                task_id="gsc-live-query",
-                agent_id="gsc-agent",
-                task_type="fetch_performance",
-                input_data={"action": "fetch_performance", "site_id": effective_site, "site_url": site_domain},
-                site_id=effective_site
-            )
-            try:
-                task_res = gsc_inst.run_task(task_stub, router=orchestrator.router)
-                out_data = task_res.get("output", {})
-            except Exception as e:
-                out_data = {"error": str(e)}
-            report["domain_metrics"] = {
-                "recent_tasks_count": len(completed_tasks) or 1,
-                "latest_findings": out_data,
-                "recommendations": out_data.get("actionable_insights", [])
-            }
-        else:
-            report["domain_metrics"] = {
-                "recent_tasks_count": 0,
-                "latest_findings": {
-                    "status": "not_connected",
-                    "message": f"Google Search Console property for {site_name} ({site_domain}) is not connected yet."
-                },
-                "recommendations": [
-                    f"Add Google Search Console service account or domain verification for {site_domain}."
-                ]
-            }
-
-    elif agent_id == "ga4-reporting-agent":
-        if effective_site == "ccm":
-            from agents.ga4_reporting_agent import GA4ReportingAgent
-            from core.models.task import AgentTask
-            ga4_inst = GA4ReportingAgent()
-            task_stub = AgentTask(
-                task_id="ga4-live-query",
-                agent_id="ga4-reporting-agent",
-                task_type="fetch_overview",
-                input_data={"action": "fetch_overview", "site_id": effective_site},
-                site_id=effective_site
-            )
-            try:
-                task_res = ga4_inst.run_task(task_stub, router=orchestrator.router)
-                out_data = task_res.get("output", {})
-            except Exception as e:
-                out_data = {"error": str(e)}
-            report["domain_metrics"] = {
-                "recent_tasks_count": len(completed_tasks) or 1,
-                "latest_findings": out_data,
-                "recommendations": out_data.get("actionable_insights", [])
-            }
-        else:
-            report["domain_metrics"] = {
-                "recent_tasks_count": 0,
-                "latest_findings": {
-                    "status": "not_connected",
-                    "message": f"Google Analytics 4 property for {site_name} is not connected yet."
-                },
-                "recommendations": [
-                    f"Configure GA4 Measurement ID & Property ID for {site_name} in Settings."
-                ]
-            }
 
     elif agent_id == "meta-ads-monitoring-agent":
         # There was no block here at all, so this agent fell to the generic
@@ -5174,7 +4997,11 @@ def get_settings(_viewer: Dict[str, Any] = Depends(require_viewer)):
 
 @app.post("/api/agents/external-link/custom-outreach")
 def trigger_custom_outreach(request: CustomOutreachRequest, _admin: Dict[str, Any] = Depends(require_admin)):
-    """Triggers custom site outreach & creates contextual backlinks for user-specified websites (Admin Only)."""
+    """Registers listing URLs and checks whether each one links back (Admin Only).
+
+    It "created contextual backlinks" in name only: the previous agent wrote
+    rows to a local file and reported them as published.
+    """
     if not request.target_websites:
         raise HTTPException(status_code=400, detail="Please provide at least one target website URL.")
 
@@ -5182,7 +5009,8 @@ def trigger_custom_outreach(request: CustomOutreachRequest, _admin: Dict[str, An
         agent_id="external-link-building-agent",
         task_type="custom_site_outreach",
         input_data={
-            "action": "custom_site_outreach",
+            "action": "register_submission",
+            "urls": request.target_websites,
             "target_websites": request.target_websites,
             "landing_page_url": request.landing_page_url,
             "anchor_text": request.anchor_text,
@@ -5202,7 +5030,11 @@ def trigger_custom_outreach(request: CustomOutreachRequest, _admin: Dict[str, An
 
 @app.post("/api/agents/external-link/daily-batch")
 def trigger_daily_backlink_batch(batch_size: int = 7, site_id: Optional[str] = None, _admin: Dict[str, Any] = Depends(require_admin)):
-    """Triggers an automated batch of 5 to 10 high-quality directory and Web 2.0 backlinks (Admin Only)."""
+    """Re-checks every registered listing for a link back (Admin Only).
+
+    This used to append seven invented backlink rows per run and increment the
+    account's "active backlinks" and "referring domains" counters with them.
+    """
     task = orchestrator.create_task(
         agent_id="external-link-building-agent",
         task_type="daily_batch",

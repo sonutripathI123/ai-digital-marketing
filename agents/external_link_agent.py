@@ -1,19 +1,47 @@
 """
 Agent #17: External Link Building Agent (`external-link-building-agent`).
 
-Automates off-page SEO, local directory citations, Web 2.0 editorial links,
-custom site outreach, and daily 5-10 high-quality backlink generation for Corporate Cars Melbourne.
-Maintains persistent backlink history and direct clickable URLs.
+Keeps a register of the places this business has been submitted to, and checks
+whether each one actually links back. It builds no links: submitting to a
+directory means an account, a form and usually a CAPTCHA, none of which this
+system can do.
+
+The version this replaces claimed otherwise, and did so on a daily schedule.
+
+Every run of `daily_batch` appended seven rows to a local JSON file, each with
+a publication date of today, an anchor, a destination and a "content snippet",
+and answered "Daily batch complete: 7 high-quality backlinks staged across
+Australian directories & Web 2.0 platforms." Nothing was submitted anywhere.
+Each run also incremented `total_active_backlinks` and `referring_domains`, so
+the counters climbed by seven a day on their own. By the time this was read
+they stood at 44 and 44.
+
+Fetching the URLs behind those 44 settles it: of the first eight checked --
+Yellow Pages, TrueLocal, HotFrog, LocalSearch, Word of Mouth, Yelp and two
+invented Medium and LinkedIn article URLs -- not one page contains a link to
+corporatecarsmelbourne.com.au. Most were directory home pages rather than a
+listing at all.
+
+The rest was the same in kind: domain authority from `50 + hash(domain) % 45`,
+dofollow or nofollow decided by a row's position in a list, a fixed 78/22
+ratio, a "spam score 0.4% (Safe)" and a domain authority of 34. None of it was
+measured, and no backlink API is connected to measure it with.
+
+What this agent does now is the part that is real and was missing: it fetches
+each registered URL and reports whether the link is there. A link that was
+never placed shows as not found, which is the only honest thing to say about
+it.
 """
 
 import json
-import os
+import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, Tuple
+from urllib.parse import urlparse
 
 from agents.base import AgentInterface
-from config.settings import LOGS_DIR, ROOT_DIR
+from config.settings import LOGS_DIR
 from core.ai_layer.base import LLMRequest, TaskComplexity
 from core.ai_layer.router import ModelRouter
 from core.logging.logger import get_agent_logger
@@ -23,166 +51,208 @@ from core.orchestrator.registry import AgentMetadata
 logger = get_agent_logger("external-link-building-agent")
 
 HISTORY_FILE = LOGS_DIR / "external_links_history.json"
+ARCHIVE_FILE = LOGS_DIR / "external_links_history.pre-verification.json"
 
-DEFAULT_DIRECTORY_CITATIONS = [
-    {
-        "id": "cit-001",
-        "name": "Yellow Pages Australia",
-        "url": "https://www.yellowpages.com.au/",
-        "target_url": "https://corporatecarsmelbourne.com.au/",
-        "anchor_used": "Corporate Cars Melbourne",
-        "da": 84,
-        "category": "Local Directory",
-        "status": "VERIFIED PORTAL",
-        "link_type": "Dofollow",
-        "published_date": "2026-08-10"
-    },
-    {
-        "id": "cit-002",
-        "name": "TrueLocal Australia",
-        "url": "https://www.truelocal.com.au/",
-        "target_url": "https://corporatecarsmelbourne.com.au/",
-        "anchor_used": "Melbourne Chauffeur Service",
-        "da": 76,
-        "category": "Business Citation",
-        "status": "VERIFIED PORTAL",
-        "link_type": "Dofollow",
-        "published_date": "2026-08-11"
-    },
-    {
-        "id": "cit-003",
-        "name": "HotFrog Australia",
-        "url": "https://www.hotfrog.com.au/",
-        "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
-        "anchor_used": "Melbourne Airport Transfers",
-        "da": 68,
-        "category": "Directory Citation",
-        "status": "VERIFIED PORTAL",
-        "link_type": "Dofollow",
-        "published_date": "2026-08-12"
-    },
-    {
-        "id": "cit-004",
-        "name": "LocalSearch Australia",
-        "url": "https://www.localsearch.com.au/",
-        "target_url": "https://corporatecarsmelbourne.com.au/",
-        "anchor_used": "Corporate Cars Melbourne",
-        "da": 71,
-        "category": "Directory Citation",
-        "status": "VERIFIED PORTAL",
-        "link_type": "Dofollow",
-        "published_date": "2026-08-13"
-    },
-    {
-        "id": "cit-005",
-        "name": "WordOfMouth Australia",
-        "url": "https://www.wordofmouth.com.au/",
-        "target_url": "https://corporatecarsmelbourne.com.au/",
-        "anchor_used": "Luxury Chauffeur Melbourne",
-        "da": 65,
-        "category": "Reviews & Citation",
-        "status": "VERIFIED PORTAL",
-        "link_type": "Dofollow",
-        "published_date": "2026-08-14"
-    },
-    {
-        "id": "cit-006",
-        "name": "Yelp Australia",
-        "url": "https://www.yelp.com.au/",
-        "target_url": "https://corporatecarsmelbourne.com.au/",
-        "anchor_used": "https://corporatecarsmelbourne.com.au/",
-        "da": 92,
-        "category": "Business Listing",
-        "status": "VERIFIED PORTAL",
-        "link_type": "Nofollow",
-        "published_date": "2026-08-15"
-    }
-]
+FETCH_TIMEOUT_SECONDS = 15
+VERIFY_LIMIT = 40
 
-DEFAULT_EDITORIAL_ARTICLES = [
-    {
-        "id": "art-001",
-        "platform": "Medium",
-        "url": "https://medium.com/@corporatecars/why-executive-chauffeurs-outperform-rideshare-in-melbourne-cbd-82194b",
-        "target_url": "https://corporatecarsmelbourne.com.au/",
-        "article_title": "Why Executive Chauffeurs Outperform Rideshare in Melbourne CBD",
-        "published_date": "2026-08-11",
-        "anchor_used": "Corporate Cars Melbourne",
-        "da": 96,
-        "link_type": "Dofollow",
-        "content_snippet": "For executive business travel, punctuality is non-negotiable. Booking with Corporate Cars Melbourne guarantees seamless CBD transit."
-    },
-    {
-        "id": "art-002",
-        "platform": "LinkedIn Pulse",
-        "url": "https://www.linkedin.com/pulse/corporate-airport-transfer-management-executive-assistants-melbourne/",
-        "target_url": "https://corporatecarsmelbourne.com.au/",
-        "article_title": "Corporate Airport Transfer Management for Executive Assistants",
-        "published_date": "2026-08-12",
-        "anchor_used": "melbourne corporate cars",
-        "da": 98,
-        "link_type": "Nofollow",
-        "content_snippet": "Executive assistants trust melbourne corporate cars for flight-tracked pickups and immaculate European fleet management."
-    },
-    {
-        "id": "art-003",
-        "platform": "Substack",
-        "url": "https://corporatecars.substack.com/p/navigating-melbourne-airport-traffic-tullamarine-chauffeur-guide",
-        "target_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
-        "article_title": "Navigating Melbourne Airport Traffic: Tullamarine Chauffeur Guide",
-        "published_date": "2026-08-14",
-        "anchor_used": "corporate chauffeur melbourne",
-        "da": 88,
-        "link_type": "Dofollow",
-        "content_snippet": "Avoid Tullamarine freeway delays with a dedicated corporate chauffeur melbourne with real-time flight telemetry."
-    }
-]
-
-DAILY_BACKLINK_CANDIDATE_POOL = [
-    {"name": "Aussie Business Directory", "url": "https://aussiebusinessdirectory.com.au/listing/corporate-cars-melbourne", "da": 64, "type": "Directory Citation", "link_type": "Dofollow"},
-    {"name": "Melbourne Business Review (Substack)", "url": "https://melbournebiz.substack.com/p/luxury-transport-melbourne-executives", "da": 88, "type": "Web 2.0 Editorial", "link_type": "Dofollow"},
-    {"name": "Victoria Commerce Guide", "url": "https://viccommerce.com.au/directory/corporate-cars-melbourne", "da": 58, "type": "Directory Citation", "link_type": "Dofollow"},
-    {"name": "LinkedIn Executive Travel Hub", "url": "https://www.linkedin.com/pulse/melbourne-corporate-travel-logistics-guide-2026/", "da": 98, "type": "Web 2.0 Editorial", "link_type": "Nofollow"},
-    {"name": "Medium Travel & Tourism AU", "url": "https://medium.com/@aussietraveler/best-airport-chauffeur-services-in-melbourne-cbd-9921b", "da": 96, "type": "Web 2.0 Editorial", "link_type": "Dofollow"},
-    {"name": "Quora AU: Corporate Travel Q&A", "url": "https://www.quora.com/What-is-the-best-chauffeur-car-service-in-Melbourne/answer/Corporate-Cars-Melbourne", "da": 93, "type": "Q&A Citation", "link_type": "Nofollow"},
-    {"name": "Melbourne Wedding Services Directory", "url": "https://melbourneweddings.com.au/cars/corporate-cars-melbourne", "da": 52, "type": "Directory Citation", "link_type": "Dofollow"},
-    {"name": "Tumblr Executive Mobility Journal", "url": "https://corporatecarsmelbourne.tumblr.com/post/75892110291/yarra-valley-winery-tours-luxury-chauffeur", "da": 86, "type": "Web 2.0 Editorial", "link_type": "Dofollow"},
-    {"name": "Cylex Australia", "url": "https://www.cylex-australia.com/company/corporate-cars-melbourne-123456.html", "da": 70, "type": "Directory Citation", "link_type": "Dofollow"},
-    {"name": "Telegraph AU Corporate Lifestyle", "url": "https://telegra.ph/Why-Melbourne-Corporates-Choose-Fixed-Price-Chauffeurs-08-15", "da": 91, "type": "Web 2.0 Editorial", "link_type": "Dofollow"}
+# Directories worth submitting to for an Australian local business. These are
+# suggestions of where to go, not claims of having been there.
+SUGGESTED_DIRECTORIES = [
+    {"name": "Google Business Profile", "url": "https://business.google.com",
+     "note": "The one that feeds Maps and the local pack. Start here."},
+    {"name": "Yellow Pages Australia", "url": "https://www.yellowpages.com.au",
+     "note": "Free listing; paid tiers exist."},
+    {"name": "True Local", "url": "https://www.truelocal.com.au", "note": "Free listing."},
+    {"name": "Hotfrog Australia", "url": "https://www.hotfrog.com.au", "note": "Free listing."},
+    {"name": "Localsearch", "url": "https://www.localsearch.com.au", "note": "Free listing."},
+    {"name": "Word of Mouth", "url": "https://www.wordofmouth.com.au",
+     "note": "Review-led; useful alongside Google reviews."},
+    {"name": "Yelp Australia", "url": "https://www.yelp.com.au", "note": "Free listing."},
+    {"name": "Bing Places", "url": "https://www.bingplaces.com", "note": "Often skipped; cheap to do."},
+    {"name": "Apple Business Connect", "url": "https://businessconnect.apple.com",
+     "note": "Feeds Apple Maps, which chauffeur passengers use."},
 ]
 
 
-def load_backlink_history() -> Dict[str, Any]:
-    """Loads persistent backlink history from disk or initializes defaults."""
-    if HISTORY_FILE.exists():
+def load_register() -> Dict[str, Any]:
+    """The submission register, migrating the old fabricated file once.
+
+    The previous version's file is not repaired in place: every row in it was
+    generated rather than submitted, so keeping the rows would carry the claim
+    forward. It is archived, and the caller is told.
+    """
+    if not HISTORY_FILE.exists():
+        return {"submissions": [], "archived_previous": False}
+
+    try:
+        with open(HISTORY_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        logger.warning(f"Could not read the link register: {e}")
+        return {"submissions": [], "archived_previous": False}
+
+    # The old shape. Nothing in it was ever submitted anywhere.
+    if "web2_published_articles" in data or "directory_citations" in data:
         try:
-            with open(HISTORY_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
+            HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
+            with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+            count = len(data.get("web2_published_articles", [])) + len(data.get("directory_citations", []))
+            logger.warning(
+                "Archived %d generated backlink rows from the previous version to %s; "
+                "none of them were ever submitted.", count, ARCHIVE_FILE.name
+            )
         except Exception as e:
-            logger.warning(f"Failed to read backlink history: {e}. Reinitializing.")
+            logger.warning(f"Could not archive the previous register: {e}")
+            count = 0
+        fresh = {"submissions": [], "archived_previous": True, "archived_rows": count}
+        save_register(fresh)
+        return fresh
 
-    default_data = {
-        "directory_citations": DEFAULT_DIRECTORY_CITATIONS,
-        "web2_published_articles": DEFAULT_EDITORIAL_ARTICLES,
-        "custom_outreach_links": [],
-        "last_batch_run": datetime.utcnow().isoformat(),
-        "total_active_backlinks": len(DEFAULT_DIRECTORY_CITATIONS) + len(DEFAULT_EDITORIAL_ARTICLES),
-        "referring_domains": 9,
-        "domain_authority": 34,
-        "dofollow_ratio": "78%"
-    }
-    save_backlink_history(default_data)
-    return default_data
+    data.setdefault("submissions", [])
+    data.setdefault("archived_previous", False)
+    return data
 
 
-def save_backlink_history(data: Dict[str, Any]) -> None:
-    """Persists backlink history to disk."""
+def save_register(data: Dict[str, Any]) -> None:
     HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
     try:
         with open(HISTORY_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
     except Exception as e:
-        logger.error(f"Failed to save backlink history: {e}")
+        logger.error(f"Could not save the link register: {e}")
+
+
+def verify_backlink(page_url: str, target_domain: str) -> Dict[str, Any]:
+    """Fetch a page and report whether it links to the target domain.
+
+    This is the measurement the old agent never made. `found` is true only when
+    the domain appears inside an href on the page, so a mention in body text is
+    not counted as a link.
+    """
+    import requests
+
+    host = urlparse(target_domain if "://" in target_domain else f"https://{target_domain}").netloc
+    host = host.replace("www.", "").lower()
+
+    result: Dict[str, Any] = {
+        "url": page_url,
+        "checked_at": datetime.now().isoformat(timespec="seconds"),
+        "found": False,
+        "status_code": None,
+        "rel": None,
+        "anchor_text": None,
+        "error": None,
+    }
+
+    try:
+        res = requests.get(
+            page_url if "://" in page_url else f"https://{page_url}",
+            timeout=FETCH_TIMEOUT_SECONDS,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; AI-Marketing-Dashboard linkcheck)"},
+        )
+    except Exception as e:
+        result["error"] = f"Could not fetch the page: {e}"
+        return result
+
+    result["status_code"] = res.status_code
+    if res.status_code != 200:
+        result["error"] = f"The page answered HTTP {res.status_code}."
+        return result
+
+    try:
+        from bs4 import BeautifulSoup
+
+        soup = BeautifulSoup(res.text, "html.parser")
+        for anchor in soup.find_all("a", href=True):
+            if host in anchor["href"].lower():
+                rel = anchor.get("rel") or []
+                result["found"] = True
+                # rel="nofollow" is the only thing that decides follow status.
+                # The old agent decided it from a row's index in a list.
+                result["rel"] = " ".join(rel) if rel else "follow"
+                result["anchor_text"] = (anchor.get_text() or "").strip()[:80] or None
+                break
+    except Exception as e:
+        result["error"] = f"The page could not be parsed: {e}"
+    return result
+
+
+def summarise(submissions: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Counts over what was actually checked, with nothing inferred."""
+    checked = [s for s in submissions if s.get("last_check")]
+    found = [s for s in checked if s["last_check"].get("found")]
+    follow = [s for s in found if (s["last_check"].get("rel") or "") == "follow"]
+    unreachable = [s for s in checked if s["last_check"].get("error")]
+
+    return {
+        "registered": len(submissions),
+        "checked": len(checked),
+        "links_found": len(found),
+        "links_not_found": len(checked) - len(found) - len(unreachable),
+        "pages_unreachable": len(unreachable),
+        "dofollow": len(follow),
+        "nofollow": len(found) - len(follow),
+        # Deliberately absent: domain authority, spam score and a dofollow
+        # ratio. No backlink API is connected, and the figures that stood here
+        # (DA 34, spam 0.4%, 78/22) were written into the source.
+        "domain_authority": None,
+        "spam_score": None,
+        "note": (
+            "Counts cover the pages in this register that were fetched. There is no "
+            "backlink API connected, so this is not your whole backlink profile — it is "
+            "what these specific submissions did or did not produce."
+        ),
+    }
+
+
+def build_recommendations(submissions: List[Dict[str, Any]], summary: Dict[str, Any],
+                          archived: int) -> List[str]:
+    out: List[str] = []
+
+    if archived:
+        out.append(
+            f"{archived} backlinks recorded by the previous version were archived, not "
+            f"counted. They were generated by the agent itself and never submitted "
+            f"anywhere; spot-checking eight of them found no link on any page."
+        )
+
+    if not submissions:
+        out.append(
+            "The register is empty. Submit the business to a directory by hand, then add "
+            "the listing URL here so this agent can check the link actually appeared."
+        )
+        out.append(
+            "Start with Google Business Profile — it feeds Maps and the local pack, and "
+            "is worth more than the rest of this list combined."
+        )
+        return out
+
+    missing = [s for s in submissions
+               if s.get("last_check") and not s["last_check"].get("found")
+               and not s["last_check"].get("error")]
+    if missing:
+        out.append(
+            f"{len(missing)} registered page(s) load but carry no link back. Either the "
+            f"listing was never approved, or the link was removed."
+        )
+
+    unreachable = [s for s in submissions if s.get("last_check", {}).get("error")]
+    if unreachable:
+        out.append(f"{len(unreachable)} page(s) could not be fetched; see each row for the reason.")
+
+    nofollow = summary.get("nofollow") or 0
+    if nofollow:
+        out.append(
+            f"{nofollow} of the links found are nofollow. They still send visitors, but "
+            f"pass no ranking signal."
+        )
+
+    unchecked = summary["registered"] - summary["checked"]
+    if unchecked:
+        out.append(f"{unchecked} registered page(s) have never been checked. Run a verify.")
+    return out
 
 
 class ExternalLinkBuildingAgent(AgentInterface):
@@ -191,200 +261,181 @@ class ExternalLinkBuildingAgent(AgentInterface):
         return AgentMetadata(
             agent_id="external-link-building-agent",
             name="External Link Building Agent",
-            description="Automates off-page SEO, local directory citations, Web 2.0 editorial links, custom website outreach, and daily 5-10 high-quality backlink batches.",
+            description="Keeps a register of directory and outreach submissions and checks whether each one actually links back.",
             category="Off-Page SEO & Backlinks",
             enabled=True,
             paused=False,
             supported_actions=[
-                "discover_prospects",
-                "custom_site_outreach",
+                "audit_backlink_profile",
+                "verify_links",
+                "register_submission",
+                "draft_outreach",
                 "daily_batch",
-                "submit_directory_citation",
-                "create_web2_article",
-                "audit_backlink_profile"
             ],
-            version="1.1.0"
+            version="2.0.0",
         )
 
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
         input_data = task.input_data or {}
-        action = str(input_data.get("action", "discover_prospects")).lower().strip()
-        site_id = input_data.get("site_id") or input_data.get("site")
+        action = str(input_data.get("action", "audit_backlink_profile")).lower().strip()
+        site_id = input_data.get("site_id") or input_data.get("site") or "ccm"
 
         from config.websites import WebsiteManager
-        site_mgr = WebsiteManager()
-        site_profile = site_mgr.get(site_id) if site_id else None
 
-        default_domain = site_profile.domain if site_profile else "https://corporatecarsmelbourne.com.au/"
-        default_anchor = site_profile.name if site_profile else "Corporate Cars Melbourne"
-        default_loc = site_profile.location if site_profile else "Melbourne, Victoria"
-        default_topic = f"Luxury Chauffeur & Corporate Airport Transfers {default_loc}"
+        profile = WebsiteManager().get(site_id)
+        brand = profile.name if profile else "Corporate Cars Melbourne"
+        domain = (profile.domain if profile else "https://corporatecarsmelbourne.com.au").rstrip("/")
+        location = profile.location if profile else "Melbourne, VIC"
 
-        target_domain = str(input_data.get("target_domain", default_domain)).strip()
-        history = load_backlink_history()
+        register = load_register()
+        submissions: List[Dict[str, Any]] = register.get("submissions", [])
+        archived = register.get("archived_rows", 0) if register.get("archived_previous") else 0
 
-        logger.info(f"Executing ExternalLinkBuildingAgent task: action={action}, domain='{target_domain}', brand='{default_anchor}'")
+        logger.info(f"Executing ExternalLinkBuildingAgent: action={action}, site={site_id}")
 
-        # --- 1. Custom Website Outreach Action ---
-        if action == "custom_site_outreach":
-            custom_sites = input_data.get("target_websites", [])
-            if isinstance(custom_sites, str):
-                custom_sites = [s.strip() for s in custom_sites.replace(",", "\n").splitlines() if s.strip()]
+        # ---- Record a submission the operator actually made ----
+        if action == "register_submission":
+            urls = input_data.get("urls") or input_data.get("target_websites") or []
+            if isinstance(urls, str):
+                urls = [u.strip() for u in re.split(r"[\n,]+", urls) if u.strip()]
+            if not urls:
+                return {"output": {"action": action, "error": "No URLs were given, so nothing was registered."},
+                        "model_used": "none", "tokens_used": 0, "cost_usd": 0.0}
 
-            landing_page = str(input_data.get("landing_page_url", default_domain)).strip()
-            anchor_text = str(input_data.get("anchor_text", default_anchor)).strip()
-            topic = str(input_data.get("topic", default_topic)).strip()
-
-            new_links = []
-            for idx, site in enumerate(custom_sites):
-                clean_domain = site.replace("https://", "").replace("http://", "").split("/")[0]
-                da_estimate = 50 + ((hash(clean_domain) % 45))
-                link_type = "Dofollow" if (idx % 4 != 0) else "Nofollow"
-
-                article_title = f"{topic} - Guide on {clean_domain}"
-                snippet = f"For premium transportation across {default_loc}, {anchor_text} provides fixed-fare, accredited chauffeur travel with European fleet options."
-
-                # If live AI is requested, generate contextual snippet with AI
-                if input_data.get("use_ai", True):
-                    try:
-                        llm_req = LLMRequest(
-                            user_prompt=f"Write a 60-word high-authority guest post paragraph for '{clean_domain}' linking to '{landing_page}' with anchor text '{anchor_text}'. Topic: '{topic}'.",
-                            task_type=TaskComplexity.ROUTINE
-                        )
-                        llm_resp = router.route_and_execute(llm_req)
-                        if llm_resp.success and llm_resp.content:
-                            snippet = llm_resp.content.strip()
-                    except Exception as err:
-                        logger.warning(f"AI generation fallback on custom outreach: {err}")
-
-                item = {
-                    "id": f"custom-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{idx+1}",
-                    "platform": clean_domain,
-                    "url": site if site.startswith("http") else f"https://{site}",
-                    "target_url": landing_page,
-                    "article_title": article_title,
-                    "published_date": datetime.utcnow().strftime("%Y-%m-%d"),
-                    "anchor_used": anchor_text,
-                    "da": da_estimate,
-                    "link_type": link_type,
-                    "content_snippet": snippet,
-                    "category": "Custom Outreach"
+            added = []
+            known = {s["url"] for s in submissions}
+            for url in urls[:40]:
+                url = url if "://" in url else f"https://{url}"
+                if url in known:
+                    continue
+                entry = {
+                    "url": url,
+                    "platform": urlparse(url).netloc.replace("www.", ""),
+                    "registered_at": datetime.now().isoformat(timespec="seconds"),
+                    "target_url": input_data.get("landing_page_url") or f"{domain}/",
+                    "note": input_data.get("note") or "",
+                    # A page enters the register unverified. Nothing here says a
+                    # link exists until one has been found on the page.
+                    "last_check": None,
                 }
-                new_links.append(item)
+                entry["last_check"] = verify_backlink(url, domain)
+                submissions.append(entry)
+                added.append(entry)
 
-            history["web2_published_articles"].extend(new_links)
-            history["total_active_backlinks"] += len(new_links)
-            history["referring_domains"] += len(new_links)
-            save_backlink_history(history)
+            register["submissions"] = submissions
+            save_register(register)
+            found = [a for a in added if a["last_check"]["found"]]
+            return {
+                "output": {
+                    "action": action,
+                    "registered": len(added),
+                    "links_already_found": len(found),
+                    "entries": added,
+                    "message": (
+                        f"Registered {len(added)} page(s) and checked each one now. "
+                        f"{len(found)} already carry a link back."
+                    ),
+                },
+                "model_used": "link-verifier", "tokens_used": 0, "cost_usd": 0.0,
+            }
+
+        # ---- Draft an outreach email for a site, to send by hand ----
+        if action in ("draft_outreach", "custom_site_outreach"):
+            targets = input_data.get("target_websites") or input_data.get("urls") or []
+            if isinstance(targets, str):
+                targets = [t.strip() for t in re.split(r"[\n,]+", targets) if t.strip()]
+            if not targets:
+                return {"output": {"action": action, "error": "No target website was given."},
+                        "model_used": "none", "tokens_used": 0, "cost_usd": 0.0}
+
+            site = targets[0]
+            host = urlparse(site if "://" in site else f"https://{site}").netloc.replace("www.", "")
+            tokens_used, cost_usd, model_used = 0, 0.0, "template"
+            draft = None
+
+            try:
+                response = router.route_and_execute(LLMRequest(
+                    user_prompt=(
+                        f"Write a short outreach email to the editor of {host}, from {brand}, "
+                        f"a chauffeur company in {location} ({domain}). Propose one specific "
+                        f"article idea that would genuinely suit their readers and mention that "
+                        f"we would link to it. Do not invent statistics, awards, client names or "
+                        f"traffic figures. Under 140 words, plain text, no subject line fluff."
+                    ),
+                    task_type=TaskComplexity.ROUTINE, json_output=False,
+                ))
+                draft = (response.content or "").strip()
+                model_used = response.model_used
+                tokens_used = response.tokens_in + response.tokens_out
+                cost_usd = response.cost_usd
+            except Exception as e:
+                logger.warning(f"Outreach draft generation failed: {e}")
 
             return {
                 "output": {
                     "action": action,
-                    "processed_count": len(new_links),
-                    "created_links": new_links,
-                    "target_domain": target_domain,
-                    "message": f"Successfully processed outreach & generated {len(new_links)} contextual backlinks with live URLs."
+                    "target": host,
+                    "draft_email": draft,
+                    "draft_method": f"written by {model_used}" if draft else "no model ran",
+                    # The old action reported "Successfully processed outreach &
+                    # generated N contextual backlinks with live URLs" without
+                    # contacting anybody.
+                    "was_sent": False,
+                    "send_note": (
+                        "Nothing was sent and no link was created. Send this yourself, and if "
+                        "they publish, register the URL here so the link can be checked."
+                    ),
                 },
-                # This named a model that never ran -- and one Anthropic has
-                # since retired -- then multiplied a made-up 150 tokens and
-                # $0.0005 by the number of links, feeding invented spend into
-                # the dashboard's AI usage totals. Nothing here calls a model.
-                "model_used": "template-engine",
-                "tokens_used": 0,
-                "cost_usd": 0.0
+                "model_used": model_used, "tokens_used": tokens_used, "cost_usd": cost_usd,
             }
 
-        # --- 2. Daily Batch Generation (5 to 10 High Quality Backlinks) ---
-        elif action == "daily_batch":
-            batch_size = int(input_data.get("batch_size", 7))
-            batch_size = max(5, min(10, batch_size))
+        # ---- Verify everything in the register ----
+        if action in ("verify_links", "daily_batch"):
+            # daily_batch used to append seven invented rows per run. It now
+            # re-checks what is registered, which is the only thing a daily job
+            # here can honestly do.
+            changes = []
+            for entry in submissions[:VERIFY_LIMIT]:
+                before = (entry.get("last_check") or {}).get("found")
+                entry["last_check"] = verify_backlink(entry["url"], domain)
+                after = entry["last_check"]["found"]
+                if before is not None and before != after:
+                    changes.append({"url": entry["url"], "was_found": before, "now_found": after})
 
-            batch_candidates = DAILY_BACKLINK_CANDIDATE_POOL[:batch_size]
-            clean_dom = default_domain.rstrip('/')
-            anchors_pool = [
-                default_anchor,
-                f"{default_anchor} Chauffeur Service",
-                f"{default_anchor} Airport Transfers",
-                f"executive car hire {default_loc}",
-                f"{clean_dom}/",
-                f"{default_anchor} Luxury Fleet",
-                f"corporate chauffeur {default_loc}"
-            ]
-            destinations = [
-                f"{clean_dom}/",
-                f"{clean_dom}/services/airport-transfers",
-                f"{clean_dom}/services/corporate-transfers",
-                f"{clean_dom}/fleet"
-            ]
+            register["submissions"] = submissions
+            register["last_verified"] = datetime.now().isoformat(timespec="seconds")
+            save_register(register)
 
-            created_batch = []
-            today_str = datetime.utcnow().strftime("%Y-%m-%d")
-
-            for i, cand in enumerate(batch_candidates):
-                anchor = anchors_pool[i % len(anchors_pool)]
-                target = destinations[i % len(destinations)]
-                entry_id = f"batch-{datetime.utcnow().strftime('%Y%m%d')}-{i+1:02d}"
-
-                item = {
-                    "id": entry_id,
-                    "platform": cand["name"],
-                    "url": cand["url"],
-                    "target_url": target,
-                    "article_title": f"Executive {default_loc} Transportation & Logistics - {cand['name']}",
-                    "published_date": today_str,
-                    "anchor_used": anchor,
-                    "da": cand["da"],
-                    "link_type": cand["link_type"],
-                    "category": cand["type"],
-                    "content_snippet": f"For punctual {default_loc} transfers, {anchor} maintains accredited European vehicles and 24/7 flight monitoring."
-                }
-                created_batch.append(item)
-
-            history["web2_published_articles"].extend(created_batch)
-            history["total_active_backlinks"] += len(created_batch)
-            history["referring_domains"] += len(created_batch)
-            history["last_batch_run"] = datetime.utcnow().isoformat()
-            save_backlink_history(history)
-
+            summary = summarise(submissions)
             return {
                 "output": {
                     "action": action,
-                    "batch_count": len(created_batch),
-                    "created_links": created_batch,
-                    "message": f"Daily batch complete: {len(created_batch)} high-quality backlinks staged across Australian directories & Web 2.0 platforms."
+                    "checked": min(len(submissions), VERIFY_LIMIT),
+                    "changes_since_last_check": changes,
+                    "summary": summary,
+                    "submissions": submissions,
+                    "actionable_recommendations": build_recommendations(submissions, summary, archived),
                 },
-                "model_used": "model-router-batch",
-                "tokens_used": 200,
-                "cost_usd": 0.001
+                "model_used": "link-verifier", "tokens_used": 0, "cost_usd": 0.0,
             }
 
-        # --- 3. Default Discovery & Overview ---
-        all_articles = history.get("web2_published_articles", DEFAULT_EDITORIAL_ARTICLES)
-        all_citations = history.get("directory_citations", DEFAULT_DIRECTORY_CITATIONS)
-
-        result_payload = {
-            "action": action,
-            "target_domain": target_domain,
-            "backlink_health_summary": {
-                "total_active_backlinks": len(all_articles) + len(all_citations),
-                "referring_domains": history.get("referring_domains", 32),
-                "dofollow_percent": "78%",
-                "nofollow_percent": "22%",
-                "spam_score": "0.4% (Safe)",
-                "domain_authority": 34
-            },
-            "directory_citations": all_citations,
-            "web2_published_articles": all_articles,
-            "actionable_recommendations": [
-                "1. Maintain 75/25 Dofollow to Nofollow ratio to keep backlink profile 100% natural.",
-                "2. Submit citation profile to 2 newly discovered Melbourne Business Directories.",
-                "3. Publish daily 5-10 Web 2.0 & citation backlinks with contextual deep links to suburb landing pages."
-            ]
-        }
-
+        # ---- Default: the register as it stands ----
+        summary = summarise(submissions)
         return {
-            "output": result_payload,
-            "model_used": "rule-based-offpage-engine",
-            "tokens_used": 0,
-            "cost_usd": 0.0
+            "output": {
+                "action": action,
+                "target_domain": domain,
+                "creates_links": False,
+                "creates_links_note": (
+                    "This agent does not build backlinks. Submitting to a directory needs an "
+                    "account, a form and usually a CAPTCHA. It records what you submitted and "
+                    "checks whether the link appeared."
+                ),
+                "archived_previous_rows": archived,
+                "backlink_health_summary": summary,
+                "submissions": submissions,
+                "suggested_directories": SUGGESTED_DIRECTORIES,
+                "actionable_recommendations": build_recommendations(submissions, summary, archived),
+            },
+            "model_used": "link-verifier", "tokens_used": 0, "cost_usd": 0.0,
         }

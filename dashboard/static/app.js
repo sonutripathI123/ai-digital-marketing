@@ -2225,125 +2225,132 @@ async function viewAgentReport(agentId) {
     } else if (agentId === 'external-link-building-agent' && data.external_link_metrics) {
       const elm = data.external_link_metrics;
       const hs = elm.backlink_health_summary || {};
+      const subs = elm.submissions || [];
+      const dirs = elm.suggested_directories || [];
+
+      // This panel used to lead with "total_active_backlinks", a domain
+      // authority of 34, a spam score of 0.4% and a 78/22 dofollow ratio. None
+      // was measured: the count came from rows the agent generated for itself,
+      // and the other three were literals. Fetching eight of those rows found
+      // no link on any page.
+      const tile = (label, value, sub, colour) => `
+        <div style="background:rgba(${colour},0.1); border:1px solid rgba(${colour},0.3); padding:14px; border-radius:14px;">
+          <div style="font-size:10.5px; font-weight:800; color:rgb(${colour}); text-transform:uppercase;">${label}</div>
+          <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${value}</div>
+          <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${sub}</div>
+        </div>`;
+
       container.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(6,182,212,0.06); border:1px solid rgba(6,182,212,0.25); padding:14px 18px; border-radius:14px; margin-bottom:20px;">
-          <div>
-            <div style="font-size:13px; font-weight:800; color:var(--accent-cyan);"><i class="fa-solid fa-network-wired"></i> Autonomous External Backlink & Outreach Engine</div>
-            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Target: <strong>${data.site_domain}</strong> (${data.site_name})</div>
-          </div>
-          <div style="display:flex; gap:10px;">
-            <button class="btn btn-primary btn-sm" onclick="openCustomOutreachModal()" style="font-size:12px; padding:8px 16px; background:linear-gradient(135deg, var(--accent-cyan), #0284c7);">
-              <i class="fa-solid fa-plus"></i> + Custom Site Outreach / Link Builder
-            </button>
-            <button class="btn btn-secondary btn-sm" onclick="runDailyBacklinkBatch()" style="font-size:12px; padding:8px 16px; border-color:rgba(168,85,247,0.5); color:#fff;">
-              <i class="fa-solid fa-bolt" style="color:var(--accent-purple);"></i> ⚡ Run Daily 5-10 Links Batch
-            </button>
-          </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-bottom:20px;">
-          <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:11px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase;">Active Backlinks</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${hs.total_active_backlinks}</div>
-          </div>
-          <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:11px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Referring Domains</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${hs.referring_domains}</div>
-          </div>
-          <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:11px; font-weight:800; color:#10b581; text-transform:uppercase;">Domain Authority</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${hs.domain_authority}</div>
-          </div>
-          <div style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:11px; font-weight:800; color:#ec4899; text-transform:uppercase;">Dofollow Ratio</div>
-            <div style="font-size:26px; font-weight:800; color:#fff; font-family:var(--font-mono); margin-top:4px;">${hs.dofollow_percent}</div>
+        <div style="background:linear-gradient(135deg, rgba(6,182,212,0.12), rgba(15,23,42,0.85)); border:1px solid rgba(6,182,212,0.3); padding:18px 22px; border-radius:14px; margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div>
+              <div style="font-size:13px; font-weight:800; color:var(--accent-cyan);">
+                <i class="fa-solid fa-link"></i> Backlink register &amp; verifier
+              </div>
+              <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
+                Target: <strong>${escapeHtml(elm.target_domain || data.site_domain || '')}</strong>
+              </div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="openCustomOutreachModal()" style="font-size:12px; padding:8px 14px; color:#67e8f9; border-color:rgba(6,182,212,0.4);">
+                <i class="fa-solid fa-plus"></i> Register a listing
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="runDailyBacklinkBatch()" style="font-size:12px; padding:8px 16px; background:linear-gradient(135deg, var(--accent-cyan), #0284c7); border:none; font-weight:700;">
+                <i class="fa-solid fa-rotate"></i> Re-check all links
+              </button>
+            </div>
           </div>
         </div>
 
-        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-building-columns" style="color:var(--accent-cyan);"></i> Directory Citations (NAP Backlinks for ${data.site_name}):</h3>
-        <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; margin-bottom:20px;">
-          <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
-            <thead>
-              <tr style="background:rgba(15,23,42,0.8); color:var(--text-muted); text-transform:uppercase;">
-                <th style="padding:10px 14px;">Platform Name</th>
-                <th style="padding:10px 14px;">Domain Authority</th>
-                <th style="padding:10px 14px;">Live Link</th>
-                <th style="padding:10px 14px;">Target Destination</th>
-                <th style="padding:10px 14px;">Anchor Used</th>
-                <th style="padding:10px 14px;">Status</th>
-                <th style="padding:10px 14px;">Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${(elm.directory_citations || []).map(c => `
-                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                  <td style="padding:10px 14px; font-weight:700; color:var(--text-primary);">${c.name}</td>
-                  <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--accent-cyan);">DA ${c.da}</td>
-                  <td style="padding:10px 14px;">
-                    <a href="${c.url}" target="_blank" class="action-chip" style="color:var(--accent-cyan); text-decoration:none; font-weight:700;">
-                      <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Live Link
-                    </a>
-                  </td>
-                  <td style="padding:10px 14px;">
-                    <a href="${c.target_url}" target="_blank" style="color:var(--accent-purple); text-decoration:none; font-family:var(--font-mono); font-size:11px;">
-                      <i class="fa-solid fa-link"></i> ${c.target_url.replace(data.site_domain, '') || '/'}
-                    </a>
-                  </td>
-                  <td style="padding:10px 14px; font-weight:600; color:#38bdf8;">${c.anchor_used || data.site_name}</td>
-                  <td style="padding:10px 14px;"><span class="badge badge-success">${c.status}</span></td>
-                  <td style="padding:10px 14px; font-weight:700; color:var(--accent-purple);">${c.link_type}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+        <div style="background:rgba(148,163,184,0.08); border:1px solid rgba(148,163,184,0.3); border-radius:12px; padding:14px 16px; margin-bottom:18px; font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+          <i class="fa-solid fa-circle-info"></i> ${escapeHtml(elm.creates_links_note || '')}
         </div>
 
-        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-newspaper" style="color:var(--accent-purple);"></i> Published Web 2.0 Editorial & Custom Outreach Backlinks:</h3>
-        <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; margin-bottom:20px;">
-          <table style="width:100%; border-collapse:collapse; text-align:left; font-size:12px;">
-            <thead>
-              <tr style="background:rgba(15,23,42,0.8); color:var(--text-muted); text-transform:uppercase;">
-                <th style="padding:10px 14px;">Platform / Domain</th>
-                <th style="padding:10px 14px;">Article Title & Snippet</th>
-                <th style="padding:10px 14px;">Live Article Link</th>
-                <th style="padding:10px 14px;">Target Landing Page</th>
-                <th style="padding:10px 14px;">Anchor Used</th>
-                <th style="padding:10px 14px;">DA</th>
-                <th style="padding:10px 14px;">Type</th>
-                <th style="padding:10px 14px;">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${(elm.web2_published_articles || []).map(w => `
-                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                  <td style="padding:10px 14px;"><span class="action-chip">${w.platform}</span></td>
-                  <td style="padding:10px 14px;">
-                    <div style="font-weight:700; color:var(--text-primary); margin-bottom:3px;">${w.article_title}</div>
-                    ${w.content_snippet ? `<div style="font-size:11px; color:var(--text-muted); font-style:italic;">"${w.content_snippet.substring(0, 110)}..."</div>` : ''}
-                  </td>
-                  <td style="padding:10px 14px;">
-                    <a href="${w.url}" target="_blank" class="action-chip" style="color:var(--accent-cyan); text-decoration:none; font-weight:700;">
-                      <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Live Link
-                    </a>
-                  </td>
-                  <td style="padding:10px 14px;">
-                    <a href="${w.target_url}" target="_blank" style="color:var(--accent-purple); text-decoration:none; font-family:var(--font-mono); font-size:11px;">
-                      <i class="fa-solid fa-link"></i> ${w.target_url.replace(data.site_domain, '') || '/'}
-                    </a>
-                  </td>
-                  <td style="padding:10px 14px; color:#38bdf8; font-family:var(--font-mono); font-weight:700;">${w.anchor_used || data.site_name}</td>
-                  <td style="padding:10px 14px; font-family:var(--font-mono); color:var(--accent-cyan);">DA ${w.da}</td>
-                  <td style="padding:10px 14px; font-weight:700; color:var(--accent-purple);">${w.link_type}</td>
-                  <td style="padding:10px 14px; font-size:11px; font-family:var(--font-mono);">${w.published_date}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+        ${elm.archived_previous_rows ? `
+        <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.35); border-radius:12px; padding:14px 16px; margin-bottom:18px;">
+          <div style="font-size:13px; font-weight:800; color:#f59e0b; margin-bottom:5px;">
+            <i class="fa-solid fa-box-archive"></i> ${elm.archived_previous_rows} previous entries archived, not counted
+          </div>
+          <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+            They were generated by this agent rather than submitted anywhere. Spot-checking eight of them found
+            no link to your site on any page. The file is kept as <span style="font-family:var(--font-mono);">external_links_history.pre-verification.json</span>.
+          </div>
+        </div>` : ''}
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:20px;">
+          ${tile('Registered', hs.registered ?? 0, 'pages you told it about', '6,182,212')}
+          ${tile('Links found', hs.links_found ?? 0, `${hs.dofollow ?? 0} dofollow, ${hs.nofollow ?? 0} nofollow`, '16,185,129')}
+          ${tile('No link on page', hs.links_not_found ?? 0, 'loaded, but no link back', '245,158,11')}
+          ${tile('Unreachable', hs.pages_unreachable ?? 0, 'could not be fetched', '148,163,184')}
         </div>
+
+        ${subs.length ? `
+        <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:18px;">
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:12px;">
+            <i class="fa-solid fa-list-check" style="color:var(--accent-cyan);"></i> Registered pages (${subs.length})
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="table" style="width:100%; font-size:12px; margin:0;">
+              <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
+                <th style="padding:6px 8px; text-align:left;">Page</th>
+                <th style="padding:6px 8px;">Link back</th>
+                <th style="padding:6px 8px;">Type</th>
+                <th style="padding:6px 8px; text-align:left;">Anchor</th>
+                <th style="padding:6px 8px;">Checked</th>
+              </tr></thead>
+              <tbody>
+                ${subs.map(s => {
+                  const c = s.last_check || {};
+                  const state = c.error
+                    ? `<span class="badge" style="font-size:10px; font-weight:800; background:rgba(148,163,184,0.18); color:#cbd5e1; border:1px solid rgba(148,163,184,0.4);">unreachable</span>`
+                    : (c.found
+                      ? '<span class="badge badge-success" style="font-size:10px; font-weight:800;">found</span>'
+                      : '<span class="badge badge-warning" style="font-size:10px; font-weight:800;">not found</span>');
+                  return `
+                  <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <td style="padding:6px 8px; color:#fff;">
+                      <a href="${escapeHtml(s.url)}" target="_blank" rel="noopener" style="color:var(--accent-cyan);">${escapeHtml(s.platform || s.url)}</a>
+                      ${c.error ? `<div style="font-size:9.5px; color:var(--text-muted);">${escapeHtml(String(c.error).slice(0, 60))}</div>` : ''}
+                    </td>
+                    <td style="padding:6px 8px; text-align:center;">${state}</td>
+                    <td style="padding:6px 8px; text-align:center; color:${c.rel === 'follow' ? '#10b981' : 'var(--text-muted)'};">${escapeHtml(c.rel || '&mdash;')}</td>
+                    <td style="padding:6px 8px; color:var(--text-secondary);">${escapeHtml(c.anchor_text || '&mdash;')}</td>
+                    <td style="padding:6px 8px; text-align:center; color:var(--text-muted); font-family:var(--font-mono); font-size:10.5px;">${escapeHtml((c.checked_at || '').slice(0, 10) || '&mdash;')}</td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:12px; line-height:1.55;">${escapeHtml(hs.note || '')}</div>
+        </div>` : `
+        <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:18px; font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+          Nothing registered yet. Submit your business to a directory by hand, then press
+          <strong>Register a listing</strong> and paste the listing URL &mdash; this agent will check whether the link actually appeared, and keep checking.
+        </div>`}
+
+        ${dirs.length ? `
+        <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:18px;">
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">
+            <i class="fa-solid fa-signs-post" style="color:#10b981;"></i> Worth submitting to
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Places to go, not places you have been. Register the URL here after you submit.</div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px;">
+            ${dirs.map(d => `
+              <div style="border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 12px;">
+                <a href="${escapeHtml(d.url)}" target="_blank" rel="noopener" style="font-size:12.5px; font-weight:700; color:var(--accent-cyan); text-decoration:none;">${escapeHtml(d.name)}</a>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:3px; line-height:1.5;">${escapeHtml(d.note)}</div>
+              </div>`).join('')}
+          </div>
+        </div>` : ''}
 
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
-          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;"><i class="fa-solid fa-lightbulb"></i> Off-Page Backlink Strategy Recommendations for ${data.site_name}:</div>
-          ${(elm.recommendations || []).map(r => `<div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px;">-> ${r}</div>`).join('')}
+          <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">
+            <i class="fa-solid fa-lightbulb"></i> What to do about it:
+          </div>
+          ${(elm.recommendations || elm.actionable_recommendations || []).map(r => `
+            <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:5px; display:flex; align-items:flex-start; gap:8px; line-height:1.55;">
+              <i class="fa-solid fa-check" style="color:var(--accent-purple); margin-top:3px;"></i> <span>${escapeHtml(r)}</span>
+            </div>`).join('')}
         </div>
       `;
     } else if (agentId === 'page-optimizer-agent' && data.page_optimizer_metrics) {

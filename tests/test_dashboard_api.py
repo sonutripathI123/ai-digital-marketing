@@ -3,6 +3,7 @@ Unit tests for Dashboard API backend endpoints.
 """
 
 import unittest
+import uuid
 from fastapi.testclient import TestClient
 from dashboard.api import app
 
@@ -120,16 +121,32 @@ class TestDashboardAPI(unittest.TestCase):
         data = resp.json()
         self.assertIn("external_link_metrics", data)
         elm = data["external_link_metrics"]
-        self.assertIn("directory_citations", elm)
-        self.assertIn("web2_published_articles", elm)
-        # Verify direct URLs exist
-        citations = elm["directory_citations"]
-        self.assertTrue(any("yellowpages.com.au" in c["url"] for c in citations))
-        self.assertTrue(all("target_url" in c for c in citations))
+
+        # This asserted a Yellow Pages citation was present, and passed because
+        # the agent shipped that row in its own source. Fetching those pages
+        # found no link to the site on any of them. The report now carries a
+        # register of pages someone actually submitted, each with the result of
+        # a real fetch.
+        self.assertFalse(elm["creates_links"])
+        self.assertIn("submissions", elm)
+        self.assertNotIn("directory_citations", elm)
+        self.assertNotIn("web2_published_articles", elm)
+
+        summary = elm["backlink_health_summary"]
+        # No backlink API is connected, so these must stay unset rather than
+        # carrying the literals that used to sit here (DA 34, spam 0.4%).
+        self.assertIsNone(summary["domain_authority"])
+        self.assertIsNone(summary["spam_score"])
+        # A link is only counted once it was found on a fetched page.
+        self.assertLessEqual(summary["links_found"], summary["checked"])
+        for entry in elm["submissions"]:
+            self.assertIn("last_check", entry)
 
     def test_external_link_custom_outreach(self):
         resp = self.client.post("/api/agents/external-link/custom-outreach", json={
-            "target_websites": ["https://melbournetraveler.com/luxury-chauffeurs"],
+            # The register de-duplicates by URL and persists between runs, so a
+            # fixed URL registers once and reports 0 on every run after that.
+            "target_websites": [f"https://example.invalid/listing-{uuid.uuid4().hex[:8]}"],
             "landing_page_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
             "anchor_text": "Melbourne Airport Transfers",
             "topic": "Airport Travel Guide",
@@ -138,14 +155,28 @@ class TestDashboardAPI(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")
-        self.assertEqual(data["output"]["processed_count"], 1)
+        out = data["output"]
+        # "processed_count" counted backlinks the agent said it had created.
+        # Registering a page creates nothing; it records the URL and checks it.
+        self.assertEqual(out["registered"], 1)
+        self.assertIn("links_already_found", out)
+        entry = out["entries"][0]
+        self.assertIn("last_check", entry)
+        self.assertIn(entry["last_check"]["found"], (True, False))
 
     def test_external_link_daily_batch(self):
         resp = self.client.post("/api/agents/external-link/daily-batch?batch_size=7", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")
-        self.assertEqual(data["output"]["batch_count"], 7)
+        out = data["output"]
+        # This asserted seven backlinks were produced per run, and passed
+        # because the agent appended seven generated rows to a local file every
+        # time. The batch now re-checks what is registered and creates nothing.
+        self.assertNotIn("batch_count", out)
+        self.assertNotIn("created_links", out)
+        self.assertIn("checked", out)
+        self.assertIn("summary", out)
 
 
 if __name__ == "__main__":
