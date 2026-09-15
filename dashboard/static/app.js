@@ -3777,141 +3777,138 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
     } else if (agentId === 'lead-management-agent') {
       const dm = data.domain_metrics || {};
       const lf = dm.latest_findings || {};
-      const pipe = lf.pipeline_summary || {};
-      const leads = lf.recent_leads || [
-        {
-          lead_id: "lead-1001",
-          client_name: "James Thornton (BHP Group)",
-          email: "j.thornton@example.com",
-          phone: "+61 412 345 678",
-          service_type: "Corporate Account Booking",
-          route: "Melbourne CBD -> Tullamarine Airport (Weekly Recurring)",
-          estimated_value_usd: 1200.00,
-          lead_score: 95,
-          tier: "VIP_CORPORATE_ACCOUNT",
-          status: "DRAFT_QUOTE_READY"
-        },
-        {
-          lead_id: "lead-1002",
-          client_name: "Emma Watson",
-          email: "emma.w@example.com",
-          phone: "+61 498 765 432",
-          service_type: "Wedding Chauffeur",
-          route: "Yarra Valley Wineries",
-          estimated_value_usd: 650.00,
-          lead_score: 88,
-          tier: "HIGH_PRIORITY_HOT_LEAD",
-          status: "QUALIFIED"
-        }
-      ];
+      const ps = lf.pipeline_summary || {};
+      const leads = lf.recent_leads || [];
+      const leadsLive = lf.live_data_connected === true;
+
+      // The four cards here used to read Pipeline Value $1,850, Inbound Leads 2,
+      // VIP Corporate Tier and Avg Lead Score 91.5/100, over two invented
+      // people. None of those numbers had a source, and the monthly report read
+      // the pipeline figure as revenue.
+      if (!leadsLive) {
+        container.innerHTML = `
+          <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.35); padding:20px 22px; border-radius:14px;">
+            <div style="font-size:15px; font-weight:800; color:#fca5a5; margin-bottom:8px;">
+              <i class="fa-solid fa-inbox"></i> Form submissions padhi nahi ja sakin
+            </div>
+            <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+              ${escapeHtml(lf.live_error || 'No lead source is connected for this site.')}
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:12px;">
+              Koi lead, pipeline value ya score nahi dikhaya ja raha &mdash; kyunki kuch padha hi nahi gaya.
+            </div>
+          </div>`;
+        return;
+      }
+
+      const fields = ps.fields_captured || [];
+      const missing = ['name', 'phone', 'message', 'date'].filter(f => !fields.includes(f));
 
       container.innerHTML = `
-        <!-- Lead Management Status Banner -->
-        <div style="background:linear-gradient(135deg, rgba(14,165,233,0.15), rgba(15,23,42,0.8)); border:1px solid rgba(14,165,233,0.3); padding:18px 22px; border-radius:14px; margin-bottom:20px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:10px;">
+        <div style="background:linear-gradient(135deg, rgba(6,182,212,0.15), rgba(15,23,42,0.85)); border:1px solid rgba(6,182,212,0.3); padding:18px 22px; border-radius:14px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800; background:rgba(14,165,233,0.2); color:#38bdf8;">
-                  <i class="fa-solid fa-users" style="font-size:10px; margin-right:4px;"></i> INBOUND CRM & LEAD PIPELINE
-                </span>
-                <span style="font-size:12px; color:var(--text-muted);">Executive Lead Scoring & Qualification</span>
-              </div>
-              <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">High-Ticket Inbound Lead Pipeline (${data.site_name})</h3>
+              <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800; background:rgba(6,182,212,0.2); color:#67e8f9;">
+                <i class="fa-brands fa-wordpress" style="font-size:10px; margin-right:4px;"></i> Live from WordPress form submissions
+              </span>
+              <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">Website Enquiries (${escapeHtml(data.site_name)})</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
-                Captures web inquiries, qualifies corporate clients, assigns AI priority scores, and generates customized quote drafts.
+                ${escapeHtml(ps.first_submission || '')} &ndash; ${escapeHtml(ps.latest_submission || '')}
               </div>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="runAgentNow('lead-management-agent', 'lead_report')" style="background:linear-gradient(135deg, #0ea5e9, #0284c7); border:none; font-size:12px; font-weight:700; color:#fff;">
-              <i class="fa-solid fa-arrows-rotate"></i> Process & Refresh Leads
+            <button class="btn btn-primary btn-sm" onclick="runAgentNow('lead-management-agent', 'lead_report')" style="background:linear-gradient(135deg, #06b6d4, #0284c7); border:none; font-size:12px; font-weight:700; color:#fff;">
+              <i class="fa-solid fa-rotate"></i> Refresh
             </button>
           </div>
         </div>
 
-        <!-- 4 KPI Stat Cards -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-bottom:20px;">
-          <div style="background:rgba(14,165,233,0.1); border:1px solid rgba(14,165,233,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Pipeline Value</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${(pipe.total_pipeline_value_usd ?? 0).toLocaleString()}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Active Deal Flow (AUD)</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:20px;">
+          <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:14px; border-radius:14px;">
+            <div style="font-size:10.5px; font-weight:800; color:#67e8f9; text-transform:uppercase;">Total Enquiries</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ps.total_on_site ?? 0}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">received on the website</div>
           </div>
-          <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#3b82f6; text-transform:uppercase;">Inbound Leads</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${pipe.active_leads ?? 0}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Total Quotes / Month</div>
+          <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.35); padding:14px; border-radius:14px;">
+            <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Unread</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ps.unread ?? 0}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">nobody has opened these</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">VIP Corporate Tier</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${pipe.vip_tier_count ?? 0}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Recurring Accounts</div>
+            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Forms</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${Object.keys(ps.by_form || {}).length}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${escapeHtml(Object.keys(ps.by_form || {}).join(', ')).slice(0, 48)}</div>
           </div>
-          <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Avg Lead Score</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${pipe.avg_lead_score ?? 0}/100</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">High Booking Intent</div>
+          <div style="background:rgba(148,163,184,0.1); border:1px solid rgba(148,163,184,0.3); padding:14px; border-radius:14px;">
+            <div style="font-size:10.5px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Deal Value</div>
+            <div style="font-size:20px; font-weight:900; color:#94a3b8; font-family:var(--font-mono); margin-top:6px;">not measured</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">no booking system connected</div>
           </div>
         </div>
 
-        <!-- Leads Table & CRM Pipeline -->
-        <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
-          <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-            <i class="fa-solid fa-address-book" style="color:#38bdf8;"></i> High-Priority Active Leads & Quote Requests
+        ${missing.length ? `
+        <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.35); border-radius:12px; padding:16px; margin-bottom:20px;">
+          <div style="font-size:13px; font-weight:800; color:#f59e0b; margin-bottom:6px;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Your forms capture almost nothing
           </div>
-          <div style="overflow-x:auto;">
-            <table class="table" style="width:100%; font-size:12px; margin-bottom:0;">
-              <thead>
-                <tr style="border-bottom:1px solid var(--glass-border); color:var(--text-secondary); font-size:11px; text-transform:uppercase;">
-                  <th style="padding:8px 10px;">Lead ID</th>
-                  <th style="padding:8px 10px;">Client & Company</th>
-                  <th style="padding:8px 10px;">Service / Route</th>
-                  <th style="padding:8px 10px;">Est. Value</th>
-                  <th style="padding:8px 10px;">AI Score</th>
-                  <th style="padding:8px 10px;">Tier</th>
-                  <th style="padding:8px 10px;">Status</th>
-                </tr>
-              </thead>
+          <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+            Every submission recorded only: <strong style="color:#fff;">${escapeHtml(fields.join(', ') || 'nothing')}</strong>.
+            The forms do not collect <strong style="color:#fff;">${escapeHtml(missing.join(', '))}</strong> &mdash;
+            so there is no way to call these people back, or to know what they wanted.
+            Adding those fields in Elementor is worth more than anything this panel can do with the data as it stands.
+          </div>
+        </div>` : ''}
+
+        <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:12px;">
+            <i class="fa-solid fa-envelope-open-text" style="color:var(--accent-cyan);"></i> Submissions (${leads.length} shown of ${ps.total_on_site ?? leads.length})
+          </div>
+          <div style="overflow-x:auto; max-height:420px;">
+            <table class="table" style="width:100%; font-size:12px; margin:0;">
+              <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
+                <th style="padding:7px 9px; text-align:left;">Received</th>
+                <th style="padding:7px 9px; text-align:left;">Email</th>
+                <th style="padding:7px 9px; text-align:left;">Form</th>
+                <th style="padding:7px 9px; text-align:left;">Page</th>
+                <th style="padding:7px 9px;">Status</th>
+                <th style="padding:7px 9px;">Reply</th>
+              </tr></thead>
               <tbody>
-                ${leads.map(l => `
+                ${leads.map((l, i) => `
                   <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:var(--accent-cyan); font-weight:700;">${l.lead_id}</td>
-                    <td style="padding:8px 10px;">
-                      <div style="font-weight:700; color:#fff;">${l.client_name}</div>
-                      <div style="font-size:11px; color:var(--text-muted);">${l.email || ''} &bull; ${l.phone || ''}</div>
+                    <td style="padding:7px 9px; color:var(--text-secondary); font-family:var(--font-mono); white-space:nowrap;">${escapeHtml(l.submitted_at || '')}</td>
+                    <td style="padding:7px 9px; color:#fff;">
+                      ${l.email ? `<a href="mailto:${escapeHtml(l.email)}" style="color:var(--accent-cyan);">${escapeHtml(l.email)}</a>` : '<span style="color:var(--text-muted);">no email captured</span>'}
                     </td>
-                    <td style="padding:8px 10px; color:var(--text-secondary);">
-                      <strong>${l.service_type}</strong>
-                      <div style="font-size:11px; color:var(--text-muted);">${l.route || 'Melbourne Metro'}</div>
+                    <td style="padding:7px 9px; color:var(--text-secondary);">${escapeHtml(l.form_name || '')}</td>
+                    <td style="padding:7px 9px; color:var(--text-secondary);">${escapeHtml(l.page_title || '')}</td>
+                    <td style="padding:7px 9px; text-align:center;">
+                      ${l.is_read
+                        ? '<span class="badge" style="font-size:10px; font-weight:800; background:rgba(148,163,184,0.18); color:#cbd5e1; border:1px solid rgba(148,163,184,0.4);">read</span>'
+                        : '<span class="badge badge-warning" style="font-size:10px; font-weight:800;">unread</span>'}
                     </td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#10b981; font-weight:800;">$${l.estimated_value_usd} AUD</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); font-weight:800; color:#38bdf8;">${l.lead_score}/100</td>
-                    <td style="padding:8px 10px;">
-                      <span class="badge ${l.tier.includes('VIP') ? 'badge-success' : 'badge-info'}" style="font-size:10px;">
-                        ${l.tier.replace(/_/g, ' ')}
-                      </span>
+                    <td style="padding:7px 9px; text-align:center;">
+                      ${l.email ? `<button class="btn btn-sm" onclick="draftLeadReply(${i})" style="background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.4); color:#38bdf8; font-size:11px; font-weight:700;"><i class="fa-solid fa-pen"></i> Draft</button>` : '&mdash;'}
                     </td>
-                    <td style="padding:8px 10px;">
-                      <span class="badge ${l.status.includes('READY') ? 'badge-warning' : 'badge-primary'}" style="font-size:10px;">
-                        ${l.status.replace(/_/g, ' ')}
-                      </span>
-                    </td>
-                  </tr>
-                `).join('')}
+                  </tr>`).join('')}
               </tbody>
             </table>
           </div>
+          <div style="font-size:11.5px; color:var(--text-muted); margin-top:12px; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+            <i class="fa-solid fa-circle-info"></i> ${escapeHtml(lf.scoring_note || '')}
+          </div>
         </div>
 
-        <!-- Recommendations -->
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
           <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">
-            <i class="fa-solid fa-lightbulb"></i> Sales Conversion Recommendations for ${data.site_name}:
+            <i class="fa-solid fa-lightbulb"></i> What to do about it:
           </div>
           ${(lf.actionable_recommendations || dm.recommendations || []).map(r => `
-            <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:flex-start; gap:8px;">
-              <i class="fa-solid fa-check" style="color:var(--accent-purple); margin-top:3px;"></i> <span>${r}</span>
-            </div>
-          `).join('')}
+            <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:6px; display:flex; align-items:flex-start; gap:8px; line-height:1.55;">
+              <i class="fa-solid fa-check" style="color:var(--accent-purple); margin-top:3px;"></i> <span>${escapeHtml(r)}</span>
+            </div>`).join('')}
         </div>
       `;
+      window._leadRows = leads;
     } else if (agentId === 'monthly-report-agent') {
       const dm = data.domain_metrics || {};
       const lf = dm.latest_findings || {};
@@ -9257,6 +9254,71 @@ const AGENT_INTEGRATION_CONFIGS = {
 // Drafts a reply to one of the reviews Google actually returned. The reply is
 // never posted from here -- the Places API is read-only -- so the dialog says
 // so rather than implying the reply has gone live.
+// Drafts a first reply to one real website enquiry. Nothing is sent from here:
+// no mail transport is wired to this dashboard, and a button that claimed to
+// send would be the same lie as the pipeline figures this panel used to show.
+async function draftLeadReply(index) {
+  const rows = window._leadRows || [];
+  const lead = rows[index];
+  if (!lead || !lead.email) { alert('That enquiry has no email address on it.'); return; }
+
+  const btn = window.event ? (window.event.currentTarget || window.event.target) : null;
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; }
+
+  try {
+    const known = Object.entries(lead.fields || {})
+      .filter(function (pair) { return pair[0] !== 'email'; })
+      .map(function (pair) { return pair[0] + ': ' + pair[1]; })
+      .join(', ');
+
+    const createRes = await fetch('/api/tasks/create', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        agent_id: 'lead-management-agent',
+        task_type: 'draft_followup',
+        input_data: {
+          action: 'draft_followup',
+          site_id: currentSiteId,
+          use_ai: true,
+          email: lead.email,
+          context: known
+        },
+        site_id: currentSiteId,
+        requires_approval: false
+      })
+    });
+    const created = await createRes.json();
+    const taskId = created && created.task && created.task.task_id;
+    if (!createRes.ok || !taskId) throw new Error((created && created.detail) || 'Could not start the task.');
+
+    const execRes = await fetch('/api/tasks/execute/' + taskId, {
+      method: 'POST', headers: getAuthHeaders({ 'Content-Type': 'application/json' })
+    });
+    const done = await execRes.json();
+    const out = (done && done.task && done.task.output_data) || {};
+
+    if (!out.draft_email) {
+      alert('Koi draft nahi bana: ' + (out.error || 'the agent returned nothing.'));
+      return;
+    }
+
+    const NL = String.fromCharCode(10);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try { await navigator.clipboard.writeText(out.draft_email); } catch (e) { /* clipboard blocked */ }
+    }
+    alert('Reply draft for ' + lead.email + ':' + NL + NL +
+      out.draft_email + NL + NL +
+      '(' + (out.draft_method || 'draft') + ')' + NL + NL +
+      'Clipboard mein copy ho gaya. Yahan se koi email nahi jaata - apne mail se bhejein.');
+  } catch (err) {
+    alert('Draft nahi ban paya: ' + (err.message || err));
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = orig; }
+  }
+}
+
 async function draftReviewReply(index) {
   const reviews = window._reputationReviews || [];
   const review = reviews[index];

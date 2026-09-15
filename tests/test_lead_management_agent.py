@@ -48,8 +48,20 @@ class TestLeadManagementAgent(unittest.TestCase):
         res = self.agent.run_task(task, self.router)
         self.assertIn("output", res)
         output = res["output"]
-        self.assertEqual(output["processed_lead"]["client_name"], "Test Client")
-        self.assertGreater(output["processed_lead"]["lead_score"], 0)
+        # The agent no longer echoes a client name and a score back from the
+        # caller's own input. It reads the website's real form submissions, so
+        # the contract is that it either reports them or says it could not.
+        self.assertIn("live_data_connected", output)
+        self.assertIsInstance(output["recent_leads"], list)
+        # A score or deal value must never appear -- those literals were read
+        # by the monthly report and printed as revenue.
+        blob = str(output)
+        self.assertNotIn("lead_score", blob)
+        self.assertNotIn("estimated_value_usd", blob)
+        self.assertNotIn("total_pipeline_value_usd", blob)
+        if not output["live_data_connected"]:
+            self.assertEqual(output["recent_leads"], [])
+            self.assertTrue(output["live_error"])
 
     def test_run_task_draft_followup(self):
         task = AgentTask(
@@ -58,27 +70,34 @@ class TestLeadManagementAgent(unittest.TestCase):
             task_type="draft_followup",
             input_data={
                 "action": "draft_followup",
-                "client_name": "VIP Client",
-                "service_type": "Corporate Chauffeur",
-                "estimated_value_usd": 800.0,
+                "email": "someone@example.com",
                 "use_ai": False
             }
         )
         res = self.agent.run_task(task, self.router)
         output = res["output"]
-        self.assertTrue(output["approval_required"])
         self.assertIn("draft_email", output)
+        self.assertTrue(output["draft_email"])
+        # `approval_required` implied the draft could then be sent from here.
+        # No mail transport is wired to this dashboard, so it cannot be.
+        self.assertFalse(output["can_send_from_here"])
+        # The old template quoted a price for an enquiry nobody had read.
+        self.assertNotIn("$", output["draft_email"])
 
     def test_orchestrator_execution(self):
         task = self.orchestrator.create_task(
             agent_id="lead-management-agent",
             task_type="process_lead",
-            input_data={"client_name": "BHP Executive"},
+            input_data={"action": "lead_report"},
             requires_approval=False
         )
         completed_task = self.orchestrator.execute_task(task.task_id)
         self.assertEqual(completed_task.status, TaskStatus.COMPLETED)
-        self.assertIn("processed_lead", completed_task.output_data)
+        # `processed_lead` was the caller's own input echoed back with a score
+        # attached. The report now describes real submissions, or says it could
+        # not read them.
+        self.assertIn("pipeline_summary", completed_task.output_data)
+        self.assertIn("live_data_connected", completed_task.output_data)
 
     def test_fastapi_endpoints(self):
         resp_create = self.client.post("/api/tasks/create", json={

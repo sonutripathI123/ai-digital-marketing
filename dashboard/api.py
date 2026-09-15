@@ -3180,38 +3180,35 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
         }
 
     elif agent_id == "lead-management-agent":
-        if effective_site == "ccm":
-            from agents.lead_management_agent import LeadManagementAgent
-            from core.models.task import AgentTask
-            lead_agent = LeadManagementAgent()
-            task_stub = AgentTask(
-                task_id="lead-live-query",
-                agent_id="lead-management-agent",
-                task_type="lead_report",
-                input_data={"action": "lead_report", "site_id": effective_site},
-                site_id=effective_site
-            )
-            try:
-                task_res = lead_agent.run_task(task_stub, router=orchestrator.router)
-                out_data = task_res.get("output", {})
-            except Exception as e:
-                out_data = {"error": str(e)}
-            report["domain_metrics"] = {
-                "recent_tasks_count": len(completed_tasks) or 1,
-                "latest_findings": out_data,
-                "recommendations": out_data.get("actionable_recommendations", [])
+        # This ran only for ccm; any other site was told "no leads recorded"
+        # without anyone having looked. The agent reads each site's own
+        # WordPress, so it can answer for all of them.
+        from agents.lead_management_agent import LeadManagementAgent
+        from core.models.task import AgentTask
+
+        task_stub = AgentTask(
+            task_id="lead-live-query",
+            agent_id="lead-management-agent",
+            task_type="lead_report",
+            input_data={"action": "lead_report", "site_id": effective_site},
+            site_id=effective_site,
+        )
+        try:
+            out_data = LeadManagementAgent().run_task(task_stub, router=orchestrator.router).get("output", {})
+        except Exception as e:
+            out_data = {
+                "live_data_connected": False,
+                "data_source": "REQUEST FAILED",
+                "live_error": str(e),
+                "recent_leads": [],
+                "pipeline_summary": {},
             }
-        else:
-            report["domain_metrics"] = {
-                "recent_tasks_count": 0,
-                "latest_findings": {
-                    "status": "pending_leads",
-                    "message": f"No leads recorded for {site_name} ({site_domain}) yet."
-                },
-                "recommendations": [
-                    f"Integrate website quote form webhook for {site_name}."
-                ]
-            }
+
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("actionable_recommendations", []),
+        }
 
     elif agent_id == "seo-keyword-agent":
         loc_city = site_loc.split(',')[0].strip() if site_loc else "Melbourne"
