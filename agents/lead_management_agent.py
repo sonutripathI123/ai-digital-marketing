@@ -35,7 +35,9 @@ logger = get_agent_logger("lead-management-agent")
 
 SUBMISSIONS_PATH = "/wp-json/elementor/v1/form-submissions"
 FETCH_TIMEOUT_SECONDS = 25
-MAX_SUBMISSIONS = 100
+PAGE_SIZE = 10
+# A ceiling on pages, so a misbehaving endpoint cannot spin here forever.
+MAX_PAGES = 50
 
 
 def resolve_wordpress_credentials(site_id: str) -> Dict[str, str]:
@@ -82,33 +84,63 @@ def fetch_form_submissions(site_id: str) -> Tuple[List[Dict[str, Any]], Optional
             "so the form submissions cannot be read."
         )
 
-    try:
-        res = requests.get(
-            base + SUBMISSIONS_PATH,
-            params={"per_page": MAX_SUBMISSIONS, "order": "desc", "orderby": "created_at"},
-            auth=(user, password),
-            timeout=FETCH_TIMEOUT_SECONDS,
-            headers={"User-Agent": "Mozilla/5.0 (compatible; AI-Marketing-Dashboard)"},
-        )
-    except Exception as e:
-        return [], None, f"Could not reach WordPress: {e}"
+    # Fetched a page at a time rather than in one large request. The page size
+    # is deliberately small; the loop is what makes sure every submission is
+    # still read, so a smaller page never means fewer leads shown.
+    rows: List[Dict[str, Any]] = []
+    meta: Dict[str, Any] = {}
+    page = 1
 
-    if res.status_code == 401:
-        return [], None, "WordPress rejected the credentials (401). Check the application password."
-    if res.status_code == 404:
-        return [], None, (
-            "This WordPress site has no Elementor Pro form-submissions endpoint. "
-            "Submissions can only be read if Elementor Pro is active and storing them."
-        )
-    if res.status_code != 200:
-        return [], None, f"WordPress returned HTTP {res.status_code} for form submissions."
+    while page <= MAX_PAGES:
+        try:
+            res = requests.get(
+                base + SUBMISSIONS_PATH,
+                params={
+                    "per_page": PAGE_SIZE,
+                    "page": page,
+                    "order": "desc",
+                    "orderby": "created_at",
+                },
+                auth=(user, password),
+                timeout=FETCH_TIMEOUT_SECONDS,
+                headers={"User-Agent": "Mozilla/5.0 (compatible; AI-Marketing-Dashboard)"},
+            )
+        except Exception as e:
+            if rows:
+                break  # keep what was already read rather than losing the lot
+            return [], None, f"Could not reach WordPress: {e}"
 
-    try:
-        payload = res.json()
-    except Exception as e:
-        return [], None, f"WordPress returned a response that could not be read: {e}"
+        if res.status_code == 401:
+            return [], None, "WordPress rejected the credentials (401). Check the application password."
+        if res.status_code == 404:
+            return [], None, (
+                "This WordPress site has no Elementor Pro form-submissions endpoint. "
+                "Submissions can only be read if Elementor Pro is active and storing them."
+            )
+        if res.status_code != 200:
+            if rows:
+                break
+            return [], None, f"WordPress returned HTTP {res.status_code} for form submissions."
 
-    return payload.get("data") or [], payload.get("meta") or {}, None
+        try:
+            payload = res.json()
+        except Exception as e:
+            if rows:
+                break
+            return [], None, f"WordPress returned a response that could not be read: {e}"
+
+        batch = payload.get("data") or []
+        rows.extend(batch)
+        # The first page's meta carries the totals for the whole set.
+        if page == 1:
+            meta = payload.get("meta") or {}
+
+        last_page = ((payload.get("meta") or {}).get("pagination") or {}).get("last_page")
+        if len(batch) < PAGE_SIZE or (last_page and page >= last_page):
+            break
+        page += 1
+
+    return rows, meta, None
 
 
 def normalise_submission(row: Dict[str, Any]) -> Dict[str, Any]:
