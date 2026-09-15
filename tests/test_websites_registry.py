@@ -62,29 +62,29 @@ class TestWebsitesRegistry(unittest.TestCase):
         self.mgr.delete_website("test-sydney-transfers")
 
     def test_site_aware_overview(self):
-        resp_ccm = self.client.get("/api/overview?site_id=ccm")
+        resp_ccm = self.client.get("/api/overview?site_id=ccm", headers=self.auth_headers)
         self.assertEqual(resp_ccm.status_code, 200)
         data_ccm = resp_ccm.json()
         self.assertEqual(data_ccm["current_website"]["site_id"], "ccm")
 
-        resp_opal = self.client.get("/api/overview?site_id=opal")
+        resp_opal = self.client.get("/api/overview?site_id=opal", headers=self.auth_headers)
         self.assertEqual(resp_opal.status_code, 200)
         data_opal = resp_opal.json()
         self.assertEqual(data_opal["current_website"]["site_id"], "opal")
 
-        resp_all = self.client.get("/api/overview?site_id=all")
+        resp_all = self.client.get("/api/overview?site_id=all", headers=self.auth_headers)
         self.assertEqual(resp_all.status_code, 200)
         data_all = resp_all.json()
         self.assertEqual(data_all["current_website"]["site_id"], "all")
 
     def test_site_aware_blog_report(self):
-        resp_ccm = self.client.get("/api/agents/blog-agent/report?site_id=ccm")
+        resp_ccm = self.client.get("/api/agents/blog-agent/report?site_id=ccm", headers=self.auth_headers)
         self.assertEqual(resp_ccm.status_code, 200)
         data_ccm = resp_ccm.json()
         self.assertEqual(data_ccm["site_id"], "ccm")
         self.assertIn("blog_metrics", data_ccm)
 
-        resp_opal = self.client.get("/api/agents/blog-agent/report?site_id=opal")
+        resp_opal = self.client.get("/api/agents/blog-agent/report?site_id=opal", headers=self.auth_headers)
         self.assertEqual(resp_opal.status_code, 200)
         data_opal = resp_opal.json()
         self.assertEqual(data_opal["site_id"], "opal")

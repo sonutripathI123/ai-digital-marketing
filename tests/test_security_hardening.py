@@ -85,7 +85,12 @@ class TestSecurityHardening(unittest.TestCase):
         )
         res = agent.run_task(task, self.router)
         self.assertEqual(res["output"]["status"], "BLOCKED_BY_SAFETY_GUARD")
-        self.assertIn("Simulation Only", res["output"]["mode"])
+        # This asserted the mode was "Simulation Only", which described the
+        # invented campaign data the agent used to return rather than the guard
+        # itself. What matters is that the mutation is refused and no campaign
+        # payload comes back with it.
+        self.assertEqual(res["output"]["mode"], "read-only")
+        self.assertNotIn("campaign_performance", res["output"])
 
     def test_meta_ads_mutation_blocked_by_guard(self):
         agent = MetaAdsMonitoringAgent()
@@ -97,7 +102,11 @@ class TestSecurityHardening(unittest.TestCase):
         )
         res = agent.run_task(task, self.router)
         self.assertEqual(res["output"]["status"], "BLOCKED_BY_SAFETY_GUARD")
-        self.assertIn("Simulation Only", res["output"]["mode"])
+        # Was "Simulation Only", which named the invented campaign data rather
+        # than the guard. What matters is the refusal and that no ad data comes
+        # back with it.
+        self.assertEqual(res["output"]["mode"], "read-only")
+        self.assertNotIn("campaign_performance", res["output"])
 
     # 4. RBAC Authorization & Protected Actions
     def test_unauthorized_user_blocked_from_mutating_actions(self):
@@ -126,13 +135,21 @@ class TestSecurityHardening(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
 
     # 5. Frontend Secret Exposure Verification
+    def test_settings_requires_auth(self):
+        """/api/settings must not answer an unauthenticated caller at all."""
+        self.assertEqual(self.client.get("/api/settings").status_code, 401)
+
     def test_settings_and_providers_do_not_leak_raw_secrets(self):
-        resp_settings = self.client.get("/api/settings")
+        # This called /api/settings without credentials and asserted a 200. The
+        # endpoint is protected, so it returned 401 and the assertion failed --
+        # meaning the leak check underneath never ran at all. Authenticating
+        # first is what makes the rest of this test do its job.
+        resp_settings = self.client.get("/api/settings", headers=self.auth_headers)
         self.assertEqual(resp_settings.status_code, 200)
         settings_text = str(resp_settings.json())
         self.assertNotIn(ADMIN_PASSWORD, settings_text)
 
-        resp_session = self.client.get("/api/auth/session")
+        resp_session = self.client.get("/api/auth/session", headers=self.auth_headers)
         self.assertEqual(resp_session.status_code, 200)
         session_text = str(resp_session.json())
         self.assertNotIn(ADMIN_PASSWORD, session_text)

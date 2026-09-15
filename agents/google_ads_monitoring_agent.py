@@ -118,7 +118,10 @@ class GoogleAdsMonitoringAgent(AgentInterface):
                 "output": {
                     "status": "BLOCKED_BY_SAFETY_GUARD",
                     "reason": "ADS_LIVE_EXECUTION_ENABLED is false. Live Google Ads mutations are disabled.",
-                    "mode": "Simulation Only"
+                    # "Simulation Only" described the invented campaign data
+                    # this agent used to return. It reads the live account now;
+                    # what the guard actually enforces is that it only reads.
+                    "mode": "read-only"
                 },
                 "model_used": "safety-guard",
                 "tokens_used": 0,

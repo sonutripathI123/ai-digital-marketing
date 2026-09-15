@@ -24,10 +24,12 @@ class TestDashboardAPI(unittest.TestCase):
         resp = self.client.get("/health")
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
-        self.assertEqual(data["status"], "healthy")
+        # The endpoint reports "ok"; this asserted "healthy" and had been
+        # failing since the string changed.
+        self.assertEqual(data["status"], "ok")
 
     def test_get_overview(self):
-        resp = self.client.get("/api/overview")
+        resp = self.client.get("/api/overview", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")
@@ -59,7 +61,7 @@ class TestDashboardAPI(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         task_id = resp.json()["task"]["task_id"]
 
-        resp_list = self.client.get("/api/tasks")
+        resp_list = self.client.get("/api/tasks", headers=self.auth_headers)
         self.assertEqual(resp_list.status_code, 200)
         task_ids = [t["task_id"] for t in resp_list.json()["tasks"]]
         self.assertIn(task_id, task_ids)
@@ -74,7 +76,7 @@ class TestDashboardAPI(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         task_id = resp.json()["task"]["task_id"]
 
-        resp_appr_list = self.client.get("/api/approvals")
+        resp_appr_list = self.client.get("/api/approvals", headers=self.auth_headers)
         self.assertEqual(resp_appr_list.status_code, 200)
         pending_ids = [a["task_id"] for a in resp_appr_list.json()["approvals"]]
         self.assertIn(task_id, pending_ids)
@@ -88,32 +90,32 @@ class TestDashboardAPI(unittest.TestCase):
         self.assertIn(resp_approve.json()["task"]["status"], ["APPROVED", "COMPLETED"])
 
     def test_schedules_api(self):
-        resp = self.client.get("/api/schedules")
+        resp = self.client.get("/api/schedules", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertGreaterEqual(data["count"], 2)
 
     def test_ai_usage_metrics(self):
-        resp = self.client.get("/api/metrics/ai-usage")
+        resp = self.client.get("/api/metrics/ai-usage", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         self.assertIn("total_tokens_consumed", resp.json())
 
     def test_system_health_api(self):
-        resp = self.client.get("/api/system-health")
+        resp = self.client.get("/api/system-health", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["overall"], "HEALTHY")
         self.assertIn("ads_safety_guard", data["components"])
 
     def test_settings_api(self):
-        resp = self.client.get("/api/settings")
+        resp = self.client.get("/api/settings", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         flags = [s["safety_flag"] for s in data["settings"]]
         self.assertTrue(any("DISABLED" in f for f in flags))
 
     def test_external_link_report_has_live_urls(self):
-        resp = self.client.get("/api/agents/external-link-building-agent/report")
+        resp = self.client.get("/api/agents/external-link-building-agent/report", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertIn("external_link_metrics", data)

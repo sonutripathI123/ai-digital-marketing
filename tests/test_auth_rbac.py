@@ -20,7 +20,7 @@ class TestAuthRBAC(unittest.TestCase):
         payload = verify_token(token)
         self.assertIsNotNone(payload)
         self.assertEqual(payload["email"], ADMIN_EMAIL)
-        self.assertEqual(payload["role"], "admin")
+        self.assertEqual(payload["role"], "super_admin")
 
     def test_invalid_token_verification(self):
         self.assertIsNone(verify_token("invalid.token.structure"))
@@ -36,6 +36,8 @@ class TestAuthRBAC(unittest.TestCase):
         data = resp.json()
         self.assertEqual(data["status"], "success")
         self.assertIn("token", data)
+        # The login response reports "admin"; the token payload inside it
+        # carries "super_admin". They are deliberately different.
         self.assertEqual(data["role"], "admin")
 
     def test_login_failure_wrong_password(self):
@@ -66,25 +68,44 @@ class TestAuthRBAC(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertTrue(data["is_admin"])
-        self.assertEqual(data["role"], "admin")
+        self.assertEqual(data["role"], "super_admin")
 
-    def test_public_read_endpoints_accessible_without_auth(self):
-        # Visitors can view overview, telemetry, reports, tasks, websites
+    def test_read_endpoints_require_a_session(self):
+        # Everything carrying performance data, credentials or task history.
+        # Three endpoints answer without a session by design and are checked
+        # separately below: the agent catalogue, the website list (name, domain
+        # and location, all of it public already) and the health summary.
         endpoints = [
             "/api/overview",
-            "/api/agents",
             "/api/tasks",
             "/api/approvals",
-            "/api/websites",
             "/api/schedules",
-            "/api/system-health",
             "/api/settings",
             "/api/agents/blog-agent/report",
-            "/api/agents/corporate-cars-social-agent/report"
+            "/api/agents/corporate-cars-social-agent/report",
         ]
         for ep in endpoints:
             resp = self.client.get(ep)
-            self.assertEqual(resp.status_code, 200, f"Endpoint {ep} should be publicly viewable")
+            self.assertEqual(
+                resp.status_code, 401,
+                f"{ep} answered without a session; these endpoints carry site data "
+                f"and must not be readable anonymously",
+            )
+
+    def test_open_endpoints_carry_no_secrets(self):
+        """Three endpoints answer anonymously; none may carry a credential.
+
+        They are open deliberately -- the agent catalogue, the website list and
+        the health summary -- but "open" is only safe while nothing sensitive
+        rides along, so that is asserted rather than assumed.
+        """
+        for ep in ("/api/agents", "/api/websites", "/api/system-health"):
+            resp = self.client.get(ep)
+            self.assertEqual(resp.status_code, 200, ep)
+            body = str(resp.json()).lower()
+            for secret in ("password", "secret", "access_token", "api_key",
+                           "app_password", "refresh_token", "invite_token"):
+                self.assertNotIn(secret, body, f"{ep} exposes {secret} without a session")
 
     def test_protected_endpoints_blocked_without_auth(self):
         # Create task blocked

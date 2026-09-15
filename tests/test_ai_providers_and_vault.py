@@ -58,7 +58,7 @@ class TestAIProvidersAndVault(unittest.TestCase):
         self.assertEqual(self.router.primary_provider_name, "anthropic")
 
     def test_fastapi_get_providers_endpoint(self):
-        resp = self.client.get("/api/ai/providers")
+        resp = self.client.get("/api/ai/providers", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")

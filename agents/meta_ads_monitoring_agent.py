@@ -202,6 +202,10 @@ class MetaAdsMonitoringAgent(AgentInterface):
                 "output": {
                     "status": "BLOCKED_BY_SAFETY_GUARD",
                     "reason": "This agent is read-only. It cannot create or change Meta campaigns.",
+                    # Previously "Simulation Only", which described the invented
+                    # campaign data rather than the guard. Nothing is simulated
+                    # now; the agent reads or it reports nothing.
+                    "mode": "read-only",
                 },
                 "model_used": "safety-guard", "tokens_used": 0, "cost_usd": 0.0,
             }
