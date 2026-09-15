@@ -9480,8 +9480,11 @@ async function openAgentIntegrationModal(agentId, initialTab = 'settings') {
         ${f.type === 'textarea' ? `
         <textarea
           id="int-field-${f.key}"
-          name="int-${f.key}"
-          autocomplete="off"
+          name="int-${f.key}-${Math.random().toString(36).slice(2, 8)}"
+          autocomplete="new-password"
+          data-lpignore="true"
+          data-1p-ignore="true"
+          data-form-type="other"
           spellcheck="false"
           rows="4"
           placeholder="${escapeHtml(f.placeholder || '')}"
@@ -9493,8 +9496,11 @@ async function openAgentIntegrationModal(agentId, initialTab = 'settings') {
         <input 
           type="${f.type}" 
           id="int-field-${f.key}" 
-          name="int-${f.key}" 
-          autocomplete="off" 
+          name="int-${f.key}-${Math.random().toString(36).slice(2, 8)}" 
+          autocomplete="new-password" 
+          data-lpignore="true" 
+          data-1p-ignore="true" 
+          data-form-type="other" 
           autocorrect="off" 
           autocapitalize="off" 
           spellcheck="false" 

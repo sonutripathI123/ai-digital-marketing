@@ -2235,6 +2235,24 @@ def connect_site_agent(site_id: str, agent_id: str, req: SaveAgentCredentialsReq
     # stored password with its own display mask and broke publishing for good.
     clean_creds = {k: v for k, v in req.credentials.items() if v is not None and not is_masked(v)}
 
+    # Browsers autofill these boxes from the saved contact profile -- an email
+    # address reached the "Facebook Page ID" and "Google Place ID" fields more
+    # than once. Saving one breaks publishing quietly, so an id field that
+    # holds an address is refused here rather than written.
+    ID_FIELDS = ("facebook_page_id", "instagram_account_id", "customer_id",
+                 "place_id", "property_id", "ad_account_id")
+    for key in ID_FIELDS:
+        value = str(clean_creds.get(key) or "").strip()
+        if value and ("@" in value or " " in value):
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"'{value}' does not look like a {key.replace('_', ' ')} — that is most "
+                    f"likely something your browser filled in. Clear the field and enter the "
+                    f"id itself, or leave it empty to keep what is already saved."
+                ),
+            )
+
     websites_mgr.save_agent_credentials(site.site_id, agent_id, clean_creds)
 
     if agent_id == SOCIAL_AGENT_ID:
