@@ -5250,6 +5250,55 @@ def remove_auction_insights(site_id: str = "ccm", _admin: Dict[str, Any] = Depen
     }
 
 
+class MetaTokenUpdateRequest(BaseModel):
+    """A Meta access token pasted from Graph API Explorer."""
+    token: str
+
+
+@app.post("/api/social/meta-token")
+def update_meta_token(request: MetaTokenUpdateRequest, _admin: Dict[str, Any] = Depends(require_admin)):
+    """Exchanges and stores the Meta token the social publisher uses.
+
+    This exists because pasting a 282-character token into a terminal is the
+    part that breaks: Windows caps a hidden prompt's paste buffer, and
+    PowerShell reformats text piped into a native command -- both truncate
+    silently, and Meta then answers "Invalid application ID", which points at
+    the wrong problem. A browser paste has neither limit.
+    """
+    from integrations.meta_token import install_meta_token
+
+    result = install_meta_token(request.token, Path(ROOT_DIR) / "corporate-cars-social-agent")
+    if not result.get("ok"):
+        raise HTTPException(status_code=400, detail=result.get("error", "The token could not be stored."))
+    return {"status": "success", **result}
+
+
+@app.get("/api/social/meta-token/status")
+def meta_token_status(_admin: Dict[str, Any] = Depends(require_admin)):
+    """What the currently stored token can do, without revealing it."""
+    from dotenv import dotenv_values
+
+    from integrations.meta_token import describe_token
+
+    env_file = Path(ROOT_DIR) / "corporate-cars-social-agent" / ".env"
+    token = (dotenv_values(str(env_file)) or {}).get("META_USER_TOKEN", "")
+    if not token:
+        return {"status": "success", "configured": False,
+                "message": "No Meta token is stored for the social publisher."}
+
+    report = describe_token(token)
+    return {
+        "status": "success",
+        "configured": True,
+        # Never the value, only what it is and what it can do.
+        "token_length": len(token),
+        "granted": report["granted"],
+        "missing_required": report["missing_required"],
+        "missing_optional": report["missing_optional"],
+        "never_expires": report["never_expires"],
+    }
+
+
 @app.post("/api/agents/page-optimizer/audit")
 def audit_webpage(request: PageAuditRequest, _admin: Dict[str, Any] = Depends(require_admin)):
     """Conducts a comprehensive Google Algorithm SEO audit for any webpage URL (Admin Only)."""

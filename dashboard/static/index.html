@@ -668,6 +668,47 @@
        email address, so the panel used to show an enquiry as an address and
        nothing else; the name and the message were always on the per-submission
        endpoint. -->
+  <!-- Pasting a long token into a terminal is the part that breaks: Windows
+       caps a hidden prompt's paste buffer and PowerShell reformats text piped
+       into a native command, both silently. A browser paste has no such limit. -->
+  <div class="modal-overlay" id="meta-token-modal" style="z-index: 1130;">
+    <div class="modal-card" style="max-width: 660px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-brands fa-meta" style="color: #0866ff;"></i> Update Meta access token
+          </h2>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Paste the token from Graph API Explorer. It is exchanged for a long-lived one and checked before anything is saved.
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('meta-token-modal')">&times;</button>
+      </div>
+
+      <div id="meta-token-status" style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px 14px; margin-bottom:14px;"></div>
+
+      <label style="display:block; font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:5px;">Access token</label>
+      <textarea id="meta-token-input" rows="5" oninput="updateMetaTokenCount()" autocomplete="off" spellcheck="false"
+        placeholder="Paste here (Ctrl+V)"
+        style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:12px; font-family:var(--font-mono); word-break:break-all;"></textarea>
+      <div id="meta-token-count" style="font-size:11.5px; margin-top:5px; min-height:16px;"></div>
+
+      <div style="font-size:11.5px; color:var(--text-muted); margin:10px 0 14px; line-height:1.6;">
+        A Meta token runs past 150 characters. If the count above is smaller than the token you copied, the copy was cut short &mdash;
+        recopy it with the copy icon beside the Access Token box in Graph API Explorer.
+      </div>
+
+      <div style="display:flex; gap:8px; justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="closeModal('meta-token-modal')" style="font-size:12.5px;">Cancel</button>
+        <button class="btn btn-primary" id="meta-token-save-btn" onclick="submitMetaToken()" style="font-size:12.5px; font-weight:700; background:linear-gradient(135deg, #0866ff, #0653cc); border:none;">
+          <i class="fa-solid fa-key"></i> Exchange &amp; save
+        </button>
+      </div>
+
+      <div id="meta-token-result" style="margin-top:14px;"></div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="lead-detail-modal" style="z-index: 1120;">
     <div class="modal-card" style="max-width: 720px; width: 95%;">
       <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
@@ -1897,7 +1938,7 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=11.87.0"></script>
+  <script src="/static/app.js?v=11.88.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {

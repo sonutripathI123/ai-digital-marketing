@@ -1986,9 +1986,14 @@ async function viewAgentReport(agentId) {
             <div style="font-size:13.5px; font-weight:800; color:var(--accent-purple);"><i class="fa-solid fa-share-nodes"></i> Live Social Media Analytics & Multi-Platform Engine</div>
             <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Target: <strong>${data.site_name}</strong> &bull; Total Published: <strong>${sm.total_published_posts || (fb.published + ig.published + li.published)}</strong> &bull; Scheduled Queue: <strong>${sm.total_scheduled_queue || (fb.scheduled + ig.scheduled + li.scheduled)}</strong></div>
           </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="openMetaTokenModal()" style="font-size:12px; padding:8px 14px; font-weight:700; color:#60a5fa; border-color:rgba(59,130,246,0.4);" title="Paste a new Meta access token">
+              <i class="fa-brands fa-meta"></i> Meta token
+            </button>
           <button class="btn btn-primary btn-sm" onclick="openAddSocialCampaignModal('${currentSiteId}')" style="font-size:12px; padding:8px 16px; background:linear-gradient(135deg, var(--accent-purple), #ec4899); border:none; font-weight:700;">
             <i class="fa-solid fa-plus"></i> + Add Keywords & Auto-Generate
           </button>
+          </div>
         </div>
 
         <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px 18px; margin-bottom:20px;">
@@ -9075,6 +9080,115 @@ const AGENT_INTEGRATION_CONFIGS = {
 // message were on the per-submission endpoint all along.
 // Hides the rows the heuristic flagged. A filter, not a delete: the rows stay
 // in the table and the count above keeps reporting all of them.
+// Updating the Meta access token from the browser.
+//
+// The terminal is the fragile part of this job: a Windows console caps what can
+// be pasted into a hidden prompt, and PowerShell reformats text piped into a
+// native command - a 282 character token arrived as 112, and Meta then answered
+// "Invalid application ID", which points at the wrong problem entirely. A
+// browser paste has neither limit.
+function openMetaTokenModal() {
+  const box = document.getElementById('meta-token-input');
+  const result = document.getElementById('meta-token-result');
+  if (box) box.value = '';
+  if (result) result.innerHTML = '';
+  openModal('meta-token-modal');
+  loadMetaTokenStatus();
+  if (box) setTimeout(() => box.focus(), 120);
+}
+
+async function loadMetaTokenStatus() {
+  const el = document.getElementById('meta-token-status');
+  if (!el) return;
+  el.innerHTML = '<span style="color:var(--text-muted);">Checking the stored token...</span>';
+  try {
+    const res = await fetch('/api/social/meta-token/status', { headers: getAuthHeaders() });
+    const d = await res.json();
+    if (!res.ok) { el.innerHTML = `<span style="color:#fca5a5;">${escapeHtml(d.detail || 'Could not check.')}</span>`; return; }
+    if (!d.configured) {
+      el.innerHTML = '<span style="color:#fca5a5;">No Meta token is stored.</span>';
+      return;
+    }
+    const missingReq = d.missing_required || [];
+    const missingOpt = d.missing_optional || [];
+    el.innerHTML = `
+      <div style="font-size:12px; line-height:1.7;">
+        <div>Stored token: <strong style="color:#fff;">${d.token_length} characters</strong>
+          ${d.never_expires
+            ? '<span style="color:#10b981;">&bull; never expires</span>'
+            : '<span style="color:#f59e0b;">&bull; has an expiry</span>'}</div>
+        <div style="color:${missingReq.length ? '#fca5a5' : '#10b981'};">
+          ${missingReq.length
+            ? 'Missing permissions publishing needs: ' + escapeHtml(missingReq.join(', '))
+            : 'All publishing permissions present'}
+        </div>
+        ${missingOpt.length
+          ? `<div style="color:var(--text-muted);">Missing (optional, reading only): ${escapeHtml(missingOpt.join(', '))}</div>`
+          : ''}
+      </div>`;
+  } catch (err) {
+    el.innerHTML = `<span style="color:#fca5a5;">${escapeHtml(String(err.message || err))}</span>`;
+  }
+}
+
+function updateMetaTokenCount() {
+  const box = document.getElementById('meta-token-input');
+  const counter = document.getElementById('meta-token-count');
+  if (!box || !counter) return;
+  const n = (box.value || '').replace(/\s/g, '').length;
+  // The single most useful signal: a truncated paste is visible immediately
+  // instead of surfacing later as a misleading API error.
+  counter.textContent = n === 0 ? '' : `${n} characters pasted`;
+  counter.style.color = n === 0 ? 'var(--text-muted)' : (n < 150 ? '#fca5a5' : '#10b981');
+}
+
+async function submitMetaToken() {
+  const box = document.getElementById('meta-token-input');
+  const result = document.getElementById('meta-token-result');
+  const btn = document.getElementById('meta-token-save-btn');
+  const token = (box && box.value || '').trim();
+  if (!token) { alert('Paste the token first.'); return; }
+
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Exchanging and checking...'; }
+  if (result) result.innerHTML = '';
+
+  try {
+    const res = await fetch('/api/social/meta-token', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ token: token })
+    });
+    const d = await res.json();
+
+    if (!res.ok) {
+      result.innerHTML = `
+        <div style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); border-radius:10px; padding:12px 14px; font-size:12.5px; color:#fca5a5; line-height:1.6;">
+          <strong>Not saved.</strong><br>${escapeHtml(d.detail || 'Unknown error.')}
+        </div>`;
+      return;
+    }
+
+    if (box) box.value = '';
+    updateMetaTokenCount();
+    result.innerHTML = `
+      <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.4); border-radius:10px; padding:12px 14px; font-size:12.5px; color:#6ee7b7; line-height:1.7;">
+        <strong>Saved.</strong><br>
+        Pasted ${d.received_length} characters, exchanged for a long-lived token of ${d.stored_length}.<br>
+        ${d.never_expires ? 'It does not expire.' : 'Warning: Meta says it still has an expiry.'}<br>
+        ${(d.missing_optional || []).length
+          ? 'Still missing (optional): ' + escapeHtml(d.missing_optional.join(', '))
+          : 'Every permission present.'}<br>
+        <span style="color:var(--text-muted);">Previous .env kept as ${escapeHtml(d.backup || '')}</span>
+      </div>`;
+    loadMetaTokenStatus();
+  } catch (err) {
+    result.innerHTML = `<div style="color:#fca5a5; font-size:12.5px;">${escapeHtml(String(err.message || err))}</div>`;
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = orig; }
+  }
+}
+
 function toggleLeadSpam(hide) {
   document.querySelectorAll('.lead-row').forEach(function (row) {
     if (row.getAttribute('data-verdict') === 'likely_spam') {
