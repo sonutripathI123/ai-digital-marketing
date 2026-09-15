@@ -1239,14 +1239,25 @@ def get_super_admin_global_telemetry(_super: Dict[str, Any] = Depends(require_su
         # Leads for this site
         site_leads = len([l for l in leads_list if l.get("site_id") == sid or sid in str(l.get("source", "")).lower()])
 
-        # Tasks for this site
-        site_tasks = len([
+        # Tasks for this site. The count below was named `tasks_completed`
+        # and shown under "TOTAL AI TASKS EXECUTED", but it counted every task
+        # in the queue -- including the ones still waiting and the ones that
+        # failed. Split by status so the panel can say which is which.
+        site_task_list = [
             t for t in all_tasks
             if (t.input_data.get("site") == sid or
                 t.input_data.get("site_id") == sid or
                 site.domain in str(t.input_data.get("site_url", "")) or
                 site.domain in str(t.input_data.get("url", "")))
-        ])
+        ]
+
+        def _status(t) -> str:
+            return (t.status.value if hasattr(t.status, "value") else str(t.status)).upper()
+
+        site_tasks = len(site_task_list)
+        site_tasks_done = len([t for t in site_task_list if _status(t) == "COMPLETED"])
+        site_tasks_queued = len([t for t in site_task_list if _status(t) == "QUEUED"])
+        site_tasks_failed = len([t for t in site_task_list if _status(t) == "FAILED"])
 
         for c_email in site.assigned_client_emails:
             unique_clients.add(c_email)
@@ -1270,9 +1281,20 @@ def get_super_admin_global_telemetry(_super: Dict[str, Any] = Depends(require_su
                 "social_published": site_pub_social,
                 "social_scheduled": site_sched_social,
                 "leads_count": site_leads,
-                "tasks_completed": site_tasks
+                "tasks_total": site_tasks,
+                "tasks_completed": site_tasks_done,
+                "tasks_queued": site_tasks_queued,
+                "tasks_failed": site_tasks_failed,
             }
         })
+
+    def _task_status(t) -> str:
+        return (t.status.value if hasattr(t.status, "value") else str(t.status)).upper()
+
+    global_done = len([t for t in all_tasks if _task_status(t) == "COMPLETED"])
+    global_queued = len([t for t in all_tasks if _task_status(t) == "QUEUED"])
+    global_failed = len([t for t in all_tasks if _task_status(t) == "FAILED"])
+    attributed = sum(s["metrics"]["tasks_total"] for s in sites_summary)
 
     return {
         "status": "success",
@@ -1281,9 +1303,20 @@ def get_super_admin_global_telemetry(_super: Dict[str, Any] = Depends(require_su
             "total_registered_websites": len(all_sites),
             "total_assigned_clients": len(unique_clients),
             "total_global_tasks": len(all_tasks),
+            "total_global_tasks_completed": global_done,
+            "total_global_tasks_queued": global_queued,
+            "total_global_tasks_failed": global_failed,
+            # The per-site rows add up to less than the global figure, because
+            # some tasks carry no site. Saying so beats leaving the reader to
+            # notice the arithmetic does not close.
+            "tasks_without_a_site": len(all_tasks) - attributed,
             "total_global_published_blogs": total_published_blogs,
             "total_global_social_scheduled": total_social_scheduled,
             "total_global_social_published": total_social_published,
+            # This counts rows in the scheduler's campaign file. The publisher's
+            # own database holds more published posts than this file knows
+            # about, so the figure here is not the lifetime total.
+            "social_source": "scheduler campaign file (social_scheduled_campaigns.json)",
             "total_global_leads": len(leads_list),
             "active_agents_running": len(orchestrator.registry.list_all())
         },

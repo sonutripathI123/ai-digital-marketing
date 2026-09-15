@@ -411,12 +411,12 @@
       <div class="kpi-card">
         <div class="kpi-label" style="color: var(--purple);"><i class="fa-solid fa-share-nodes"></i> Global Social Posts</div>
         <div class="kpi-val" id="stat-total-social">0</div>
-        <div class="kpi-desc">Queued & Published (FB, Insta, LinkedIn)</div>
+        <div class="kpi-desc" id="stat-social-desc">From the scheduler campaign file</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label" style="color: var(--green);"><i class="fa-solid fa-bolt"></i> Total AI Tasks Executed</div>
+        <div class="kpi-label" style="color: var(--green);"><i class="fa-solid fa-bolt"></i> AI Tasks Completed</div>
         <div class="kpi-val" id="stat-total-tasks">0</div>
-        <div class="kpi-desc">Autonomous Tasks Across All Agents</div>
+        <div class="kpi-desc" id="stat-tasks-desc">Across all agents</div>
       </div>
     </div>
 
@@ -604,13 +604,11 @@
       showLoginGate();
     }
 
-    let LIVE_PRODUCTION_BASE_URL = 'https://ai-digital-marketing-gm68.onrender.com';
-
+    // This used to substitute https://ai-digital-marketing-gm68.onrender.com
+    // whenever the panel ran on localhost -- a host that has been suspended, so
+    // "Copy Live Client Link" would have handed a client a dead link. There is
+    // no second deployment now: a client link is simply this server's address.
     function getShareableBaseUrl() {
-      // If running on local laptop, automatically output the Live Public Render URL so clients can open it from anywhere
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        return LIVE_PRODUCTION_BASE_URL;
-      }
       return window.location.origin;
     }
 
@@ -631,8 +629,22 @@
 
         document.getElementById('stat-total-sites').textContent = glob.total_registered_websites || 0;
         document.getElementById('stat-total-blogs').textContent = glob.total_global_published_blogs || 0;
-        document.getElementById('stat-total-social').textContent = (glob.total_global_social_scheduled + glob.total_global_social_published) || 0;
-        document.getElementById('stat-total-tasks').textContent = glob.total_global_tasks || 0;
+        document.getElementById('stat-total-social').textContent = ((glob.total_global_social_published || 0) + (glob.total_global_social_scheduled || 0));
+        const socialDesc = document.getElementById('stat-social-desc');
+        if (socialDesc) {
+          socialDesc.textContent = `${glob.total_global_social_published || 0} published, ${glob.total_global_social_scheduled || 0} queued - counted from the scheduler file`;
+        }
+
+        // The headline figure was every task in the queue, shown as "executed".
+        document.getElementById('stat-total-tasks').textContent = glob.total_global_tasks_completed ?? glob.total_global_tasks ?? 0;
+        const tasksDesc = document.getElementById('stat-tasks-desc');
+        if (tasksDesc) {
+          const parts = [`${glob.total_global_tasks || 0} total`];
+          if (glob.total_global_tasks_queued) parts.push(`${glob.total_global_tasks_queued} still queued`);
+          if (glob.total_global_tasks_failed) parts.push(`${glob.total_global_tasks_failed} failed`);
+          if (glob.tasks_without_a_site) parts.push(`${glob.tasks_without_a_site} not tied to a site`);
+          tasksDesc.textContent = parts.join(' | ');
+        }
 
         const sites = data.sites_summary || [];
         if (sites.length === 0) {
@@ -677,7 +689,9 @@
               <td style="text-align:center; font-family:var(--font-mono); font-size:11px;">
                 <div style="color:var(--green);">Blogs: <strong>${metrics.published_blogs || 0}</strong></div>
                 <div style="color:var(--purple);">Social: <strong>${(metrics.social_published || 0) + (metrics.social_scheduled || 0)}</strong></div>
-                <div style="color:var(--cyan);">Tasks: <strong>${metrics.tasks_completed || 0}</strong></div>
+                <div style="color:var(--cyan);">Tasks done: <strong>${metrics.tasks_completed || 0}</strong></div>
+                ${metrics.tasks_queued ? `<div style="color:var(--text-muted);">Queued: ${metrics.tasks_queued}</div>` : ''}
+                ${metrics.tasks_failed ? `<div style="color:#f87171;">Failed: ${metrics.tasks_failed}</div>` : ''}
               </td>
               <td style="text-align:center;">
                 <button class="btn btn-gold btn-sm" onclick="copyClientMagicLink('${publicInviteUrl}')" style="font-size:11px; padding:5px 10px; width:100%; margin-bottom:4px;" title="Copy Live Public Link for client">
