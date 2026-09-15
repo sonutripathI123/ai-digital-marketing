@@ -226,6 +226,85 @@ def normalise_submission(row: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+# Phrases lifted from the submissions themselves. Every one of the flagged
+# enquiries on this site asks to join a mailing list; none of them mentions a
+# journey.
+NEWSLETTER_PHRASES = (
+    "mailing list", "email updates", "subscribe", "subscription", "newsletter",
+    "product news", "news about new content", "stay informed", "keep me posted",
+    "please confirm my", "receive emails", "hear more about email",
+)
+
+# What somebody booking a car actually writes about.
+SERVICE_TERMS = (
+    "airport", "transfer", "chauffeur", "pickup", "pick up", "drop off", "wedding",
+    "corporate", "hire", "booking", "book", "quote", "passenger", "flight", "tour",
+    "melbourne", "cbd", "tullamarine", "car", "van", "sprinter", "hourly", "trip",
+)
+
+LOCATION_FIELDS = ("pickuplocations", "pickup", "pickup_location",
+                   "dropofflocation", "dropoff", "drop_off_location")
+
+
+def classify_submission(lead: Dict[str, Any]) -> Dict[str, Any]:
+    """Judge whether an enquiry looks genuine, with the reasons shown.
+
+    A heuristic, and labelled as one. It never deletes or hides anything: a
+    wrongly flagged enquiry is a lost customer, so the operator sees every
+    submission and the reasoning behind each verdict.
+    """
+    reasons_spam: List[str] = []
+    reasons_genuine: List[str] = []
+    score = 0
+
+    message = (lead.get("message") or "").strip()
+    lower = message.lower()
+    fields = lead.get("fields") or {}
+    filled = {k: v for k, v in fields.items() if str(v or "").strip() and str(v).strip().lower() != "none"}
+
+    matched_newsletter = [p for p in NEWSLETTER_PHRASES if p in lower]
+    if matched_newsletter:
+        score += 3
+        reasons_spam.append(f"asks to join a mailing list ({matched_newsletter[0]!r})")
+
+    if message and not any(term in lower for term in SERVICE_TERMS):
+        score += 2
+        reasons_spam.append("the message mentions no journey, vehicle or booking")
+
+    locations = [v for k, v in filled.items() if k.lower() in LOCATION_FIELDS]
+    if locations:
+        score -= 4
+        reasons_genuine.append(f"gave a pickup or drop-off location ({locations[0][:40]})")
+
+    if len(filled) <= 5:
+        score += 1
+        reasons_spam.append(f"only {len(filled)} fields were filled in")
+    elif len(filled) >= 9:
+        score -= 2
+        reasons_genuine.append(f"filled in {len(filled)} fields")
+
+    name = (lead.get("name") or "").strip().lower()
+    email = (lead.get("email") or "").strip().lower()
+    if name and email and "@" in email and len(name) > 2 and name not in email.split("@")[0]:
+        score += 1
+        reasons_spam.append("the name does not appear anywhere in the email address")
+
+    if score >= 4:
+        verdict = "likely_spam"
+    elif score <= -2:
+        verdict = "likely_genuine"
+    else:
+        verdict = "unclear"
+
+    return {
+        "verdict": verdict,
+        "score": score,
+        "reasons_spam": reasons_spam,
+        "reasons_genuine": reasons_genuine,
+        "method": "heuristic on the message text and which fields were filled — not a spam service",
+    }
+
+
 def summarise(leads: List[Dict[str, Any]], meta: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     """Counts and coverage, all of it derived from the rows just read."""
     by_form: Dict[str, int] = {}
@@ -245,6 +324,16 @@ def summarise(leads: List[Dict[str, Any]], meta: Optional[Dict[str, Any]]) -> Di
 
     dates = sorted(lead["submitted_at"] for lead in leads if lead.get("submitted_at"))
 
+    verdicts: Dict[str, int] = {}
+    for lead in leads:
+        verdict = (lead.get("assessment") or {}).get("verdict", "unclear")
+        verdicts[verdict] = verdicts.get(verdict, 0) + 1
+    worth_reading = [
+        lead for lead in leads
+        if (lead.get("assessment") or {}).get("verdict") != "likely_spam"
+        and not lead.get("is_read")
+    ]
+
     return {
         "total_on_site": pagination.get("total", len(leads)),
         "returned_here": len(leads),
@@ -255,6 +344,12 @@ def summarise(leads: List[Dict[str, Any]], meta: Optional[Dict[str, Any]]) -> Di
         "by_form": by_form,
         "by_page": by_page,
         "fields_captured": sorted(captured_fields),
+        "by_verdict": verdicts,
+        "unread_worth_reading": len(worth_reading),
+        "verdict_note": (
+            "Spam is flagged by a heuristic on the message text and which fields were filled, "
+            "not by a spam service. Nothing is hidden or deleted; check anything marked unclear."
+        ),
     }
 
 
@@ -264,10 +359,25 @@ def build_recommendations(leads: List[Dict[str, Any]], summary: Dict[str, Any]) 
     if not leads:
         return ["No form submissions have been received yet."]
 
-    if summary["unread"]:
+    spam_count = summary.get("by_verdict", {}).get("likely_spam", 0)
+    if summary.get("unread_worth_reading"):
         out.append(
-            f"{summary['unread']} of {summary['total_on_site']} submissions are still marked unread "
-            f"in WordPress. The oldest unread one dates from {summary['first_submission']}."
+            f"{summary['unread_worth_reading']} unread enquiries do not look like spam. "
+            f"Those are the ones to read; {spam_count} of the {summary['total_on_site']} "
+            f"submissions are mailing-list spam."
+        )
+    elif summary["unread"]:
+        out.append(
+            f"All {summary['unread']} unread submissions look like mailing-list spam. "
+            f"Nothing here needs a reply."
+        )
+
+    if spam_count >= 5:
+        out.append(
+            f"{spam_count} spam submissions arrived through the website form. Turn on "
+            f"reCAPTCHA in Elementor (Elementor > Settings > Integrations) and add the "
+            f"reCAPTCHA field to each form -- the honeypot plugin on this site is not "
+            f"stopping them."
         )
 
     captured = summary["fields_captured"]
@@ -405,6 +515,8 @@ class LeadManagementAgent(AgentInterface):
             }
 
         leads = [normalise_submission(row) for row in rows]
+        for lead in leads:
+            lead["assessment"] = classify_submission(lead)
         summary = summarise(leads, meta)
 
         result_payload: Dict[str, Any] = {

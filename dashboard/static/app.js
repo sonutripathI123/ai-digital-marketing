@@ -3838,10 +3838,15 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
             <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${Object.keys(ps.by_form || {}).length}</div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${escapeHtml(Object.keys(ps.by_form || {}).join(', ')).slice(0, 48)}</div>
           </div>
+          <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
+            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Worth Reading</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${ps.unread_worth_reading ?? 0}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">unread and not flagged as spam</div>
+          </div>
           <div style="background:rgba(148,163,184,0.1); border:1px solid rgba(148,163,184,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Deal Value</div>
-            <div style="font-size:20px; font-weight:900; color:#94a3b8; font-family:var(--font-mono); margin-top:6px;">not measured</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">no booking system connected</div>
+            <div style="font-size:10.5px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Flagged Spam</div>
+            <div style="font-size:24px; font-weight:900; color:#94a3b8; font-family:var(--font-mono); margin-top:4px;">${(ps.by_verdict || {}).likely_spam ?? 0}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">nothing is hidden or deleted</div>
           </div>
         </div>
 
@@ -3858,9 +3863,16 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
         </div>` : ''}
 
         <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
-          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:12px;">
-            <i class="fa-solid fa-envelope-open-text" style="color:var(--accent-cyan);"></i> Submissions (${leads.length} shown of ${ps.total_on_site ?? leads.length})
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+            <div style="font-size:14px; font-weight:800; color:#fff;">
+              <i class="fa-solid fa-envelope-open-text" style="color:var(--accent-cyan);"></i> Submissions (${leads.length} shown of ${ps.total_on_site ?? leads.length})
+            </div>
+            <label style="font-size:11.5px; color:var(--text-secondary); display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" id="lead-hide-spam" onchange="toggleLeadSpam(this.checked)" style="cursor:pointer;" />
+              Hide the ${(ps.by_verdict || {}).likely_spam ?? 0} flagged as spam
+            </label>
           </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">${escapeHtml(ps.verdict_note || '')}</div>
           <div style="overflow-x:auto; max-height:420px;">
             <table class="table" style="width:100%; font-size:12px; margin:0;">
               <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
@@ -3873,9 +3885,16 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
               </tr></thead>
               <tbody>
                 ${leads.map((l, i) => `
-                  <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <tr class="lead-row" data-verdict="${(l.assessment || {}).verdict || 'unclear'}" style="border-bottom:1px solid rgba(255,255,255,0.05); ${(l.assessment || {}).verdict === 'likely_spam' ? 'opacity:0.55;' : ''}">
                     <td style="padding:7px 9px; color:var(--text-secondary); font-family:var(--font-mono); white-space:nowrap;">${escapeHtml(l.submitted_at || '')}</td>
-                    <td style="padding:7px 9px; color:#fff; font-weight:700;">${escapeHtml(l.name || '&mdash;')}</td>
+                    <td style="padding:7px 9px; color:#fff; font-weight:700;">
+                      ${escapeHtml(l.name || '&mdash;')}
+                      ${(l.assessment || {}).verdict === 'likely_spam'
+                        ? '<div style="font-size:9.5px; font-weight:800; color:#94a3b8; margin-top:2px;"><i class="fa-solid fa-filter-circle-xmark"></i> likely spam</div>'
+                        : ((l.assessment || {}).verdict === 'likely_genuine'
+                          ? '<div style="font-size:9.5px; font-weight:800; color:#10b981; margin-top:2px;"><i class="fa-solid fa-circle-check"></i> looks genuine</div>'
+                          : '')}
+                    </td>
                     <td style="padding:7px 9px;">
                       ${l.email ? `<a href="mailto:${escapeHtml(l.email)}" style="color:var(--accent-cyan);">${escapeHtml(l.email)}</a>` : '<span style="color:var(--text-muted);">&mdash;</span>'}
                     </td>
@@ -9027,6 +9046,16 @@ const AGENT_INTEGRATION_CONFIGS = {
 // form gave it. The list endpoint returns only the email address, so the panel
 // used to imply an enquiry was an address and nothing else - the name and the
 // message were on the per-submission endpoint all along.
+// Hides the rows the heuristic flagged. A filter, not a delete: the rows stay
+// in the table and the count above keeps reporting all of them.
+function toggleLeadSpam(hide) {
+  document.querySelectorAll('.lead-row').forEach(function (row) {
+    if (row.getAttribute('data-verdict') === 'likely_spam') {
+      row.hidden = !!hide;
+    }
+  });
+}
+
 function viewLeadMessage(index) {
   const rows = window._leadRows || [];
   const lead = rows[index];
@@ -9054,6 +9083,26 @@ function viewLeadMessage(index) {
   const unlabelledKeys = Object.keys(unlabelled);
 
   body.innerHTML = `
+    ${(lead.assessment && lead.assessment.verdict === 'likely_spam') ? `
+      <div style="background:rgba(148,163,184,0.1); border:1px solid rgba(148,163,184,0.35); border-radius:10px; padding:12px 14px; margin-bottom:14px;">
+        <div style="font-size:12px; font-weight:800; color:#cbd5e1; margin-bottom:5px;">
+          <i class="fa-solid fa-filter-circle-xmark"></i> Flagged as likely spam
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+          ${(lead.assessment.reasons_spam || []).map(r => '&bull; ' + escapeHtml(r)).join('<br>')}
+        </div>
+        <div style="font-size:10.5px; color:var(--text-muted); margin-top:7px;">${escapeHtml(lead.assessment.method || '')}</div>
+      </div>` : ''}
+    ${(lead.assessment && lead.assessment.verdict === 'likely_genuine') ? `
+      <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); border-radius:10px; padding:12px 14px; margin-bottom:14px;">
+        <div style="font-size:12px; font-weight:800; color:#10b981; margin-bottom:5px;">
+          <i class="fa-solid fa-circle-check"></i> Looks like a genuine enquiry
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+          ${(lead.assessment.reasons_genuine || []).map(r => '&bull; ' + escapeHtml(r)).join('<br>')}
+        </div>
+      </div>` : ''}
+
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
       ${lead.is_read
         ? '<span class="badge" style="font-size:10.5px; font-weight:800; background:rgba(148,163,184,0.18); color:#cbd5e1; border:1px solid rgba(148,163,184,0.4);">read</span>'
