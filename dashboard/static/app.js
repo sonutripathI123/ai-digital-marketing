@@ -3560,117 +3560,124 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
     } else if (agentId === 'meta-ads-monitoring-agent') {
       const dm = data.domain_metrics || {};
       const lf = dm.latest_findings || {};
-      const acc = lf.account_summary || {};
-      const placements = lf.placement_performance || [];
+      const sum = lf.account_summary || {};
+      const campaigns = lf.campaign_performance || [];
+      const adsLive = lf.live_data_connected === true;
+
+      // The four cards and the placement table used to render two campaigns
+      // written into the agent's source - $640 and $480, 50 conversions, a
+      // ROAS of 3.65 - for an account no request was ever made to.
+      if (!adsLive) {
+        container.innerHTML = `
+          <div style="background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.35); padding:20px 22px; border-radius:14px;">
+            <div style="font-size:15px; font-weight:800; color:#93c5fd; margin-bottom:8px;">
+              <i class="fa-brands fa-meta"></i> Meta Ads connect nahi hai
+            </div>
+            <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+              ${escapeHtml(lf.live_error || 'No Meta Ads data was read.')}
+            </div>
+            ${(lf.token_permissions || []).length ? `
+              <div style="font-size:11px; color:var(--text-muted); margin-top:10px; line-height:1.55;">
+                The stored Meta token currently carries: ${escapeHtml((lf.token_permissions || []).join(', '))}
+              </div>` : ''}
+            <div style="font-size:12px; color:var(--text-muted); margin-top:12px;">
+              Koi spend, reach ya conversion number nahi dikhaya ja raha &mdash; kyunki Meta se kuch padha hi nahi gaya.
+            </div>
+          </div>`;
+        return;
+      }
+
+      const money = (v) => (v === null || v === undefined) ? '&mdash;' : Number(v).toFixed(2);
+      const num = (v) => (v === null || v === undefined) ? '&mdash;' : Number(v).toLocaleString();
 
       container.innerHTML = `
-        <!-- Meta Ads Status Banner -->
-        <div style="background:linear-gradient(135deg, rgba(59,130,246,0.15), rgba(15,23,42,0.8)); border:1px solid rgba(59,130,246,0.3); padding:18px 22px; border-radius:14px; margin-bottom:20px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:10px;">
+        <div style="background:linear-gradient(135deg, rgba(37,99,235,0.15), rgba(15,23,42,0.85)); border:1px solid rgba(37,99,235,0.35); padding:18px 22px; border-radius:14px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800; background:rgba(59,130,246,0.2); color:#38bdf8;">
-                  <i class="fa-brands fa-meta" style="font-size:10px; margin-right:4px;"></i> META ADS MONITORING SENTINEL
-                </span>
-                <span style="font-size:12px; color:var(--text-muted);">Ad Account: <strong style="color:#38bdf8; font-family:var(--font-mono);">${lf.ad_account_id || 'act_987654321'}</strong></span>
-              </div>
-              <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">Facebook & Instagram Paid Ads Telemetry (${data.site_name})</h3>
+              <span class="badge badge-success" style="font-size:11px; padding:4px 10px; font-weight:800; background:rgba(37,99,235,0.2); color:#93c5fd;">
+                <i class="fa-brands fa-meta"></i> Live from the Meta Marketing API
+              </span>
+              <h3 style="font-size:17px; font-weight:800; color:#fff; margin-top:6px;">${escapeHtml(lf.ad_account_id || '')}</h3>
               <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
-                Monitors ad frequency, audience reach, CPM, CPC, lead conversions, and placement ROAS efficiency.
+                ${escapeHtml(lf.date_range || '')} &bull; ${lf.campaigns_returned ?? campaigns.length} campaigns &bull; read-only
               </div>
             </div>
             <button class="btn btn-primary btn-sm" onclick="runAgentNow('meta-ads-monitoring-agent', 'monitor_performance')" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; font-size:12px; font-weight:700; color:#fff;">
-              <i class="fa-solid fa-arrows-rotate"></i> Monitor Meta Ads Now
+              <i class="fa-solid fa-rotate"></i> Refresh
             </button>
           </div>
         </div>
 
-        <!-- 5 KPI Stat Cards -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-bottom:20px;">
-          <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Total Meta Spend</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">$${(acc.total_spend_usd ?? 0).toLocaleString()}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Last 30 Days</div>
-          </div>
-          <div style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#ec4899; text-transform:uppercase;">Audience Reach</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(acc.total_reach ?? 0).toLocaleString()}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Unique People</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:20px;">
+          <div style="background:rgba(37,99,235,0.1); border:1px solid rgba(37,99,235,0.3); padding:14px; border-radius:14px;">
+            <div style="font-size:10.5px; font-weight:800; color:#93c5fd; text-transform:uppercase;">Spend</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${money(sum.total_spend)}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${num(sum.total_clicks)} clicks</div>
           </div>
           <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Paid Clicks</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${(acc.total_clicks ?? 0).toLocaleString()}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CTR: ${acc.avg_ctr_percent ?? 0}%</div>
+            <div style="font-size:10.5px; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Reach</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${num(sum.total_reach)}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${num(sum.total_impressions)} impressions</div>
           </div>
           <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Ad Frequency</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${acc.avg_frequency ?? 0}x</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Safe &bull; No Ad Fatigue</div>
+            <div style="font-size:10.5px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Frequency</div>
+            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${sum.avg_frequency ?? '&mdash;'}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">times each person saw an ad</div>
           </div>
           <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:14px; border-radius:14px;">
-            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Conversions</div>
-            <div style="font-size:24px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${acc.total_conversions ?? 0}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Avg CPA: $${acc.avg_cpa_usd ?? 0}</div>
+            <div style="font-size:10.5px; font-weight:800; color:#10b981; text-transform:uppercase;">Leads</div>
+            <div style="font-size:24px; font-weight:900; color:${sum.total_leads == null ? '#94a3b8' : '#fff'}; font-family:var(--font-mono); margin-top:4px;">${sum.total_leads == null ? 'not tracked' : sum.total_leads}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${sum.cost_per_lead ? 'cost per lead ' + money(sum.cost_per_lead) : 'no lead action reported'}</div>
           </div>
         </div>
 
-        <!-- Placements Breakdown Table -->
-        <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
-          <div style="font-size:14px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-            <i class="fa-solid fa-table-cells-large" style="color:#ec4899;"></i> Meta Placements & Performance Breakdown
+        ${lf.ad_fatigue ? `
+        <div style="background:rgba(15,23,42,0.8); border:1px solid var(--glass-border); border-radius:12px; padding:14px 16px; margin-bottom:20px; font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
+          <i class="fa-solid fa-repeat" style="color:#f59e0b;"></i> ${escapeHtml(lf.ad_fatigue.note || '')}
+        </div>` : ''}
+
+        <div style="background:rgba(15,23,42,0.85); border:1px solid var(--glass-border); border-radius:14px; padding:18px; margin-bottom:20px;">
+          <div style="font-size:14px; font-weight:800; color:#fff; margin-bottom:12px;">
+            <i class="fa-solid fa-rectangle-ad" style="color:#2563eb;"></i> Campaigns (${campaigns.length})
           </div>
           <div style="overflow-x:auto;">
-            <table class="table" style="width:100%; font-size:12px; margin-bottom:0;">
-              <thead>
-                <tr style="border-bottom:1px solid var(--glass-border); color:var(--text-secondary); font-size:11px; text-transform:uppercase;">
-                  <th style="padding:8px 10px;">Platform / Placement</th>
-                  <th style="padding:8px 10px;">Campaign Name</th>
-                  <th style="padding:8px 10px;">Spend</th>
-                  <th style="padding:8px 10px;">Reach</th>
-                  <th style="padding:8px 10px;">Frequency</th>
-                  <th style="padding:8px 10px;">CPM</th>
-                  <th style="padding:8px 10px;">Clicks</th>
-                  <th style="padding:8px 10px;">CPC</th>
-                  <th style="padding:8px 10px;">Conversions</th>
-                  <th style="padding:8px 10px;">ROAS</th>
-                </tr>
-              </thead>
+            <table class="table" style="width:100%; font-size:12px; margin:0;">
+              <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
+                <th style="padding:6px 8px; text-align:left;">Campaign</th>
+                <th style="padding:6px 8px;">Spend</th>
+                <th style="padding:6px 8px;">Reach</th>
+                <th style="padding:6px 8px;">Freq</th>
+                <th style="padding:6px 8px;">Clicks</th>
+                <th style="padding:6px 8px;">CTR</th>
+                <th style="padding:6px 8px;">CPC</th>
+                <th style="padding:6px 8px;">Leads</th>
+              </tr></thead>
               <tbody>
-                ${placements.map(p => `
+                ${campaigns.map(c => `
                   <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                    <td style="padding:8px 10px; font-weight:700; color:#fff;">
-                      <i class="${p.platform.includes('Instagram') ? 'fa-brands fa-instagram' : 'fa-brands fa-facebook'}" style="color:${p.platform.includes('Instagram') ? '#ec4899' : '#3b82f6'}; margin-right:6px;"></i> ${p.platform}
-                    </td>
-                    <td style="padding:8px 10px; color:var(--text-primary);">${p.campaign_name}</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#fff; font-weight:700;">$${p.spend_usd}</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#38bdf8;">${p.reach.toLocaleString()}</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#f59e0b;">${p.frequency}x</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:var(--text-secondary);">$${p.cpm_usd}</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#38bdf8;">${p.clicks}</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#f59e0b;">$${p.cpc_usd}</td>
-                    <td style="padding:8px 10px; font-family:var(--font-mono); color:#10b981; font-weight:800;">${p.conversions}</td>
-                    <td style="padding:8px 10px;">
-                      <span class="badge badge-success" style="font-size:10.5px; font-family:var(--font-mono); font-weight:800;">
-                        ${p.roas_ratio}x ROAS
-                      </span>
-                    </td>
-                  </tr>
-                `).join('')}
+                    <td style="padding:6px 8px; color:#fff;">${escapeHtml(c.campaign_name || '')}</td>
+                    <td style="padding:6px 8px; text-align:center; font-family:var(--font-mono);">${money(c.spend)}</td>
+                    <td style="padding:6px 8px; text-align:center;">${num(c.reach)}</td>
+                    <td style="padding:6px 8px; text-align:center;">${c.frequency ?? '&mdash;'}</td>
+                    <td style="padding:6px 8px; text-align:center;">${num(c.clicks)}</td>
+                    <td style="padding:6px 8px; text-align:center;">${c.ctr_percent ?? '&mdash;'}%</td>
+                    <td style="padding:6px 8px; text-align:center; font-family:var(--font-mono);">${money(c.cpc)}</td>
+                    <td style="padding:6px 8px; text-align:center; color:${c.leads == null ? 'var(--text-muted)' : '#10b981'}; font-weight:800;">${c.leads == null ? 'none' : c.leads}</td>
+                  </tr>`).join('')}
               </tbody>
             </table>
           </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:12px;">${escapeHtml(lf.leads_note || '')}</div>
         </div>
 
-        <!-- Recommendations -->
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">
           <div style="font-size:12px; font-weight:800; color:var(--accent-purple); text-transform:uppercase; margin-bottom:8px;">
-            <i class="fa-solid fa-lightbulb"></i> Meta Social Advertising Action Plan for ${data.site_name}:
+            <i class="fa-solid fa-lightbulb"></i> What to do about it:
           </div>
           ${(lf.actionable_recommendations || dm.recommendations || []).map(r => `
-            <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:flex-start; gap:8px;">
-              <i class="fa-solid fa-check" style="color:var(--accent-purple); margin-top:3px;"></i> <span>${r}</span>
-            </div>
-          `).join('')}
+            <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:5px; display:flex; align-items:flex-start; gap:8px; line-height:1.55;">
+              <i class="fa-solid fa-check" style="color:var(--accent-purple); margin-top:3px;"></i> <span>${escapeHtml(r)}</span>
+            </div>`).join('')}
         </div>
       `;
     } else if (agentId === 'reputation-agent') {

@@ -46,10 +46,28 @@ class TestMetaAdsMonitoringAgent(unittest.TestCase):
         res = self.agent.run_task(task, self.router)
         self.assertIn("output", res)
         output = res["output"]
-        self.assertEqual(output["ad_account_id"], "act_987654321")
         self.assertIn("PROTECTED", output["safety_guard_status"])
-        self.assertGreater(output["account_summary"]["total_spend_usd"], 0)
-        self.assertGreater(len(output["placement_performance"]), 0)
+
+        # These used to require a spend above zero and at least one placement,
+        # and passed only because the agent carried two campaigns in its own
+        # source -- $640 and $480, 50 conversions, a ROAS of 3.65 and 3.90 --
+        # for an account it had never called. Whether this account runs ads is
+        # Meta's business; the contract is that nothing is reported unless Meta
+        # answered.
+        self.assertIn("live_data_connected", output)
+        self.assertIsInstance(output["campaign_performance"], list)
+        blob = str(output)
+        for invented in ("placement_performance", "roas_ratio", "Executive Chauffeur Branding",
+                         "Corporate Event Transport", "Frequency is healthy"):
+            self.assertNotIn(invented, blob)
+
+        if output["live_data_connected"]:
+            self.assertIn("total_spend", output["account_summary"])
+        else:
+            self.assertEqual(output["campaign_performance"], [])
+            self.assertEqual(output["account_summary"], {})
+            self.assertIsNone(output["ad_fatigue"])
+            self.assertTrue(output["live_error"])
 
     def test_safety_guard_blocks_mutation(self):
         task = AgentTask(

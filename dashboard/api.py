@@ -1863,7 +1863,13 @@ def get_site_agents_integrations(site_id: str, _viewer: Dict[str, Any] = Depends
             "category": "Paid Advertising",
             "icon": "fa-brands fa-meta",
             "color": "#0284c7",
-            "is_connected": "meta-ads-monitoring-agent" in agent_creds or bool(site.meta_ads_id),
+            # Having an ad account id saved is not the same as being able to
+            # read it; the token needs ads_read, which this one does not carry
+            # by default.
+            "is_connected": bool(
+                (agent_creds.get("meta-ads-monitoring-agent") or {}).get("ad_account_id")
+                or site.meta_ads_id
+            ),
             "fields": ["ad_account_id", "access_token"],
             "summary": "Monitors Meta ad sets, CPA, reach, and leads generated from Facebook & Instagram.",
             "last_updated": agent_creds.get("meta-ads-monitoring-agent", {}).get("updated_at")
@@ -2111,12 +2117,47 @@ def perform_agent_connection_test(agent_id: str, creds: Dict[str, Any], site: We
                     "message": f"⚠️ Customer ID '{cust_id}' saved, but live verification could not run: {e}"}
 
     elif agent_id == "meta-ads-monitoring-agent":
-        act_id = creds.get("ad_account_id") or site.meta_ads_id
+        act_id = (creds.get("ad_account_id") or site.meta_ads_id or "").strip()
         if not act_id:
             return {"success": False, "message": "Meta Ad Account ID (act_XXXX) is required."}
+
+        from agents.meta_ads_monitoring_agent import (
+            fetch_ad_insights,
+            resolve_meta_ads_credentials,
+            token_has_ads_read,
+        )
+
+        token = (creds.get("access_token")
+                 or resolve_meta_ads_credentials(site.site_id).get("access_token"))
+        if not token:
+            return {"success": False,
+                    "message": "No Meta access token is configured, so this account cannot be read."}
+
+        has_ads_read, granted = token_has_ads_read(token)
+        if not has_ads_read:
+            return {
+                "success": False,
+                "message": (
+                    "The stored Meta token does not carry the ads_read permission, so ad data "
+                    "cannot be read. Add ads_read in Graph API Explorer and save the token again."
+                ),
+                "details": {"token_permissions": granted},
+            }
+
+        campaigns, error = fetch_ad_insights(act_id, token, "last_30d")
+        if error:
+            return {"success": False, "message": error}
+
+        spend = round(sum(c["spend"] for c in campaigns), 2)
         return {
             "success": True,
-            "message": f"✅ Meta Ad Account '{act_id}' connected."
+            "message": (
+                f"Connected to {act_id} — {len(campaigns)} campaigns over the last 30 days, "
+                f"{spend} spent."
+                if campaigns else
+                f"Connected to {act_id}, but it reported no campaigns in the last 30 days."
+            ),
+            "details": {"campaigns": len(campaigns), "spend_last_30_days": spend},
         }
 
     elif agent_id == "reputation-agent":
@@ -3030,6 +3071,38 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
                     f"Configure GA4 Measurement ID & Property ID for {site_name} in Settings."
                 ]
             }
+
+    elif agent_id == "meta-ads-monitoring-agent":
+        # There was no block here at all, so this agent fell to the generic
+        # branch and the panel rendered whatever the last task happened to
+        # output -- which, before the rewrite, was two invented campaigns.
+        from agents.meta_ads_monitoring_agent import MetaAdsMonitoringAgent
+        from core.models.task import AgentTask
+
+        meta_task = AgentTask(
+            task_id="meta-ads-live-query",
+            agent_id="meta-ads-monitoring-agent",
+            task_type="monitor_performance",
+            input_data={"action": "monitor_performance", "site_id": effective_site},
+            site_id=effective_site,
+        )
+        try:
+            out_data = MetaAdsMonitoringAgent().run_task(meta_task, router=orchestrator.router).get("output", {})
+        except Exception as e:
+            out_data = {
+                "live_data_connected": False,
+                "data_source": "REQUEST FAILED",
+                "live_error": str(e),
+                "campaign_performance": [],
+                "account_summary": {},
+                "ad_fatigue": None,
+            }
+
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("actionable_recommendations", []),
+        }
 
     elif agent_id == "reputation-agent":
         from agents.reputation_agent import ReviewReputationAgent
