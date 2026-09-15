@@ -54,7 +54,11 @@ class TestWebsitesRegistry(unittest.TestCase):
         self.assertEqual(data["website"]["site_id"], "test-sydney-transfers")
 
         # Verify retrieval
-        detail_resp = self.client.get("/api/websites/test-sydney-transfers")
+        # A site profile is site data, so it needs a session that holds
+        # that site. This read used to go out anonymously.
+        detail_resp = self.client.get(
+            "/api/websites/test-sydney-transfers", headers=self.auth_headers
+        )
         self.assertEqual(detail_resp.status_code, 200)
         self.assertEqual(detail_resp.json()["website"]["name"], "Sydney Luxury Transfers")
 
