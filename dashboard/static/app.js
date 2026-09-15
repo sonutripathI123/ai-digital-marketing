@@ -217,7 +217,7 @@ async function checkAuthSession() {
     } else {
       currentUserRole = 'viewer';
       isSuperAdmin = false;
-      currentAllowedSites = ['*'];
+      currentAllowedSites = [];
       authToken = null;
       sessionStorage.removeItem('ccm_admin_token');
       localStorage.removeItem('ccm_admin_token');
@@ -913,7 +913,7 @@ async function initWebsiteSwitcher() {
     const res = await fetch('/api/websites', { headers: getAuthHeaders() });
     const data = await res.json();
     if (data.websites && data.websites.length > 0) {
-      if (currentUserRole === 'client') {
+      if (!isSuperAdmin && currentUserRole !== 'admin') {
         allWebsitesList = data.websites.filter(s => currentAllowedSites.includes(s.site_id));
         if (allWebsitesList.length === 0 && currentSiteId) {
           allWebsitesList = data.websites.filter(s => s.site_id === currentSiteId);
@@ -964,7 +964,8 @@ function renderWebsiteDropdown() {
   const addModalBtn = document.getElementById('open-add-website-modal-btn');
   if (!listEl) return;
 
-  const isClientLocked = currentUserRole === 'client' || (!isSuperAdmin && currentAllowedSites.length === 1 && !currentAllowedSites.includes('*'));
+  const canManageSites = isSuperAdmin || currentUserRole === 'admin' || currentAllowedSites.includes('*');
+  const isClientLocked = !canManageSites;
 
   if (isClientLocked) {
     // Hide Add Website button for client
@@ -1067,6 +1068,14 @@ function updateWebsiteHeaderUI() {
 }
 
 async function switchWebsite(siteId) {
+  const mayManageSites = isSuperAdmin || currentUserRole === 'admin' || currentAllowedSites.includes('*');
+  if (!mayManageSites && !currentAllowedSites.includes(siteId)) {
+    // A client link is issued for one website. The server refuses the data
+    // either way; stopping here keeps the header from showing a site the
+    // panels will never load.
+    showToast('This link only covers your own website.', 'error');
+    return;
+  }
   currentSiteId = siteId;
   sessionStorage.setItem('ccm_selected_site', siteId);
   localStorage.setItem('ccm_selected_site', siteId);
@@ -8026,6 +8035,27 @@ async function exportMonthlyPDFReport(siteId = 'ccm') {
   } catch (err) {
     alert(`Failed to generate monthly PDF report: ${err.message || err}`);
   }
+}
+
+function showToast(message, kind) {
+  let host = document.getElementById('app-toast-host');
+  if (!host) {
+    host = document.createElement('div');
+    host.id = 'app-toast-host';
+    host.style.cssText = 'position:fixed; bottom:24px; right:24px; z-index:20000; display:flex; flex-direction:column; gap:8px; max-width:360px;';
+    document.body.appendChild(host);
+  }
+  const tone = {
+    success: ['rgba(16,185,129,0.15)', 'rgba(16,185,129,0.5)', '#6ee7b7'],
+    error: ['rgba(239,68,68,0.15)', 'rgba(239,68,68,0.5)', '#fca5a5'],
+    info: ['rgba(6,182,212,0.15)', 'rgba(6,182,212,0.5)', '#67e8f9']
+  }[kind] || ['rgba(6,182,212,0.15)', 'rgba(6,182,212,0.5)', '#67e8f9'];
+
+  const el = document.createElement('div');
+  el.style.cssText = `background:${tone[0]}; border:1px solid ${tone[1]}; color:${tone[2]}; padding:12px 16px; border-radius:10px; font-size:12.5px; line-height:1.5; backdrop-filter:blur(8px); box-shadow:0 8px 24px rgba(0,0,0,0.35);`;
+  el.textContent = String(message == null ? '' : message);
+  host.appendChild(el);
+  setTimeout(() => el.remove(), kind === 'error' ? 7000 : 4000);
 }
 
 function escapeHtml(str) {

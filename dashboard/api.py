@@ -31,7 +31,7 @@ from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from fastapi import FastAPI, HTTPException, Depends, Header, Query, Request
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -861,18 +861,138 @@ def require_super_admin(
     return payload
 
 
+# Site ids that mean "no particular site" and so carry no data of their own.
+_SITE_ID_SENTINELS = {"", "none", "null", "undefined"}
+
+# "all" / "*" ask for every site at once. Only a session that actually holds
+# every site may use them.
+_SITE_ID_PORTFOLIO = {"all", "*", "portfolio"}
+
+# Prefixes under which the second path segment is a site id.
+_SITE_PATH_ROOTS = ("sites", "websites")
+
+# Request paths that must stay reachable without a site grant: the login and
+# invite flows are how a session gets one in the first place.
+_SITE_SCOPE_EXEMPT_PREFIXES = ("/api/auth/", "/api/portal/")
+
+
 def check_site_access_permission(site_id: str, payload: Optional[Dict[str, Any]]) -> bool:
-    """Verifies whether the current user has authorization to access the specified site_id."""
+    """Whether this session may touch this site's data.
+
+    Deny by default. An anonymous caller has no grant, and neither does an
+    email-gate visitor: both used to be waved through here, which is what let
+    any signed-in address read every client's leads.
+    """
+    site_id = (site_id or "").strip().lower()
+    if site_id in _SITE_ID_SENTINELS:
+        return True  # not a site request at all
+
     if not payload:
-        return True  # Public read-only viewer mode
-    if payload.get("is_super_admin"):
-        return True
-    if payload.get("role") == "visitor":
-        return True  # Read-only email-gate session: may view, never modify
-    allowed = payload.get("allowed_sites", [])
-    if "*" in allowed or site_id in allowed:
-        return True
-    return False
+        return False
+
+    allowed = [str(a).strip().lower() for a in (payload.get("allowed_sites") or [])]
+    has_everything = bool(payload.get("is_super_admin")) or "*" in allowed
+
+    if site_id in _SITE_ID_PORTFOLIO:
+        # Aggregate views span every site, so only an owner may ask for one.
+        return has_everything
+
+    return has_everything or site_id in allowed
+
+
+def site_ids_in_request(path: str, query_params, body: Any) -> set:
+    """Every site this request names, wherever it named it.
+
+    site_id arrives three ways -- in the path (/api/sites/<id>/...), in the
+    query string, and inside a JSON body (sometimes nested under input_data).
+    Missing any one of them would leave a way around the check.
+    """
+    found = set()
+
+    parts = [seg for seg in path.split("/") if seg]
+    if len(parts) >= 3 and parts[0] == "api" and parts[1] in _SITE_PATH_ROOTS:
+        found.add(parts[2])
+
+    if query_params is not None:
+        for key in ("site_id", "site", "website_id"):
+            try:
+                found.update(query_params.getlist(key))
+            except AttributeError:
+                value = query_params.get(key)
+                if value:
+                    found.add(value)
+
+    def walk(node: Any, depth: int = 0) -> None:
+        if depth > 6:
+            return
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if key in ("site_id", "site", "website_id") and isinstance(value, str):
+                    found.add(value)
+                elif key in ("site_ids", "sites") and isinstance(value, list):
+                    found.update(v for v in value if isinstance(v, str))
+                else:
+                    walk(value, depth + 1)
+        elif isinstance(node, list):
+            for item in node[:50]:
+                walk(item, depth + 1)
+
+    walk(body)
+
+    return {str(f).strip().lower() for f in found if str(f).strip()}
+
+
+@app.middleware("http")
+async def enforce_site_scope(request: Request, call_next):
+    """Refuse any API request that names a site the session was not granted.
+
+    One gate rather than a decorator on each of the ~90 site-scoped endpoints,
+    so a new endpoint is covered the day it is written instead of the day
+    somebody remembers to guard it.
+    """
+    path = request.url.path
+    if not path.startswith("/api/") or path.startswith(_SITE_SCOPE_EXEMPT_PREFIXES):
+        return await call_next(request)
+
+    body = None
+    if request.method in ("POST", "PUT", "PATCH", "DELETE"):
+        raw = await request.body()
+        if raw:
+            try:
+                body = json.loads(raw)
+            except Exception:
+                body = None
+
+    requested = site_ids_in_request(path, request.query_params, body)
+    if not requested:
+        return await call_next(request)
+
+    payload = verify_token(
+        _bearer_token(
+            request.headers.get("authorization"),
+            request.headers.get("x-admin-token"),
+        )
+    )
+
+    for site_id in sorted(requested):
+        if not check_site_access_permission(site_id, payload):
+            allowed = payload.get("allowed_sites") if payload else []
+            logger.warning(
+                "Blocked cross-site request: %s %s asked for '%s'; session holds %s",
+                request.method, path, site_id, allowed or "no sites",
+            )
+            return JSONResponse(
+                status_code=403,
+                content={
+                    "status": "error",
+                    "detail": (
+                        f"This access link is for a different website. "
+                        f"You do not have access to '{site_id}'."
+                    ),
+                },
+            )
+
+    return await call_next(request)
 
 
 
@@ -1038,7 +1158,9 @@ def get_auth_session(
         "is_super_admin": False,
         "email": None,
         "display_role": "Read-Only Viewer (Public)",
-        "allowed_sites": ["*"],
+        # This used to claim ["*"], which made the dashboard draw the site
+        # switcher and the Add Website button for a session holding nothing.
+        "allowed_sites": [],
         "can_manage_all": False
     }
 
