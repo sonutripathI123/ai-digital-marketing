@@ -99,6 +99,31 @@ def _dedupe_published_history(history: List[Dict[str, Any]]) -> List[Dict[str, A
     return deduped
 
 
+def _derive_page_token(user_token: str, page_id: str) -> Optional[str]:
+    """The Page access token that /me/accounts already carries.
+
+    Facebook rejects a user token for a Page's own posts, which is why the
+    engagement read failed with "Invalid OAuth 2.0 Access Token". The Page
+    token is not a separate thing to go and fetch by hand -- it is returned
+    alongside every page the user administers, and on a long-lived user token
+    it does not expire.
+    """
+    try:
+        res = requests.get(
+            "https://graph.facebook.com/v19.0/me/accounts",
+            params={"fields": "id,access_token", "access_token": user_token},
+            timeout=10,
+        )
+        if res.status_code != 200:
+            return None
+        for page in res.json().get("data") or []:
+            if str(page.get("id")) == str(page_id):
+                return page.get("access_token")
+    except Exception as e:
+        logger.warning(f"Could not derive a Facebook Page token: {e}")
+    return None
+
+
 def _build_social_recommendations(live_accounts, engagement, published_history,
                                   scheduled_queue, unavailable) -> List[str]:
     """Advice from what the accounts actually did, not written in advance."""
@@ -452,13 +477,46 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
             logger.warning(f"Meta FB live fetch failed: {e}")
             unavailable["facebook_account"] = str(e)
 
-        # Page post engagement needs a Page access token; the token configured
-        # here is a user token, so Facebook returns "Invalid OAuth 2.0 Access
-        # Token" for /posts. Say that rather than publishing a number.
-        unavailable["facebook_engagement"] = (
-            "Facebook post likes and comments need a Page access token. The token "
-            "configured here is a user token, which Facebook rejects for /posts."
-        )
+        # A Page token is required for the Page's own posts. It is already
+        # inside the user token's /me/accounts response, so it is taken from
+        # there rather than asked of the operator.
+        page_token = _derive_page_token(meta_token, meta_page_id)
+        if not page_token:
+            unavailable["facebook_engagement"] = (
+                "No Facebook Page access token could be derived from the configured user "
+                "token. The account may no longer administer this Page."
+            )
+        else:
+            try:
+                r_posts = requests.get(
+                    f"https://graph.facebook.com/v19.0/{meta_page_id}/posts",
+                    params={"fields": "id,created_time,reactions.summary(true),comments.summary(true)",
+                            "limit": 50, "access_token": page_token},
+                    timeout=12,
+                )
+                if r_posts.status_code == 200:
+                    posts = r_posts.json().get("data") or []
+                    engagement["facebook"]["posts_measured"] = len(posts)
+                    engagement["facebook"]["likes"] = sum(
+                        ((pp.get("reactions") or {}).get("summary") or {}).get("total_count", 0)
+                        for pp in posts
+                    )
+                    engagement["facebook"]["comments"] = sum(
+                        ((pp.get("comments") or {}).get("summary") or {}).get("total_count", 0)
+                        for pp in posts
+                    )
+                else:
+                    detail = ""
+                    try:
+                        detail = r_posts.json().get("error", {}).get("message", "")
+                    except Exception:
+                        detail = r_posts.text[:120]
+                    # Reactions and comments need pages_read_user_content on top
+                    # of the Page token.
+                    unavailable["facebook_engagement"] = detail or f"HTTP {r_posts.status_code}"
+            except Exception as e:
+                logger.warning(f"Facebook post engagement fetch failed: {e}")
+                unavailable["facebook_engagement"] = str(e)
 
     # Meta IG Business
     if meta_token and ig_id:
