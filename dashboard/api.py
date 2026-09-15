@@ -5168,6 +5168,88 @@ def get_competitor_ad_spy_history(_viewer: Dict[str, Any] = Depends(require_view
     }
 
 
+class AuctionInsightsUploadRequest(BaseModel):
+    """An Auction Insights CSV, pasted or read from the file the operator picked."""
+    site_id: str = "ccm"
+    filename: str = "auction-insights.csv"
+    csv_text: str
+
+
+@app.post("/api/agents/ad-spy/auction-insights")
+def import_auction_insights(
+    request: AuctionInsightsUploadRequest,
+    _admin: Dict[str, Any] = Depends(require_admin),
+):
+    """Imports a Google Ads Auction Insights export.
+
+    Auction Insights has no API -- Google serves it in the Ads UI only -- so the
+    report is exported by hand and parsed here. It is the one place a
+    competitor's position against these ads is reported by Google rather than
+    estimated by a third party.
+    """
+    from integrations.ads.auction_insights import parse_auction_insights, save_auction_insights
+
+    rows, meta, error = parse_auction_insights(request.csv_text or "")
+    if error:
+        raise HTTPException(status_code=400, detail=error)
+
+    site = websites_mgr.get(request.site_id) or websites_mgr.get("ccm")
+    site_id = site.site_id if site else "ccm"
+    stored = save_auction_insights(DATA_DIR, site_id, rows, meta, request.filename)
+
+    logger.info(
+        f"[Auction Insights] Imported {len(rows)} rows for {site_id} from {request.filename!r}"
+    )
+    return {
+        "status": "success",
+        "site_id": site_id,
+        "imported_at": stored["imported_at"],
+        "row_count": len(rows),
+        "date_range": meta.get("date_range"),
+        "message": (
+            f"Imported {len(rows)} domains"
+            + (f" for {meta['date_range']}" if meta.get("date_range") else "")
+            + ". This report carries no competitor click or spend figures; Google does not publish those."
+        ),
+    }
+
+
+@app.get("/api/agents/ad-spy/auction-insights")
+def get_auction_insights(site_id: str = "ccm", _viewer: Dict[str, Any] = Depends(require_viewer)):
+    """The stored Auction Insights import for a site, if there is one."""
+    from integrations.ads.auction_insights import load_auction_insights, summarise_rivals
+
+    stored = load_auction_insights(DATA_DIR, site_id)
+    if not stored:
+        return {
+            "status": "success",
+            "imported": False,
+            "message": "No Auction Insights report has been imported for this site yet.",
+        }
+    return {
+        "status": "success",
+        "imported": True,
+        "imported_at": stored.get("imported_at"),
+        "source_filename": stored.get("source_filename"),
+        "meta": stored.get("meta", {}),
+        "rows": stored.get("rows", []),
+        "summary": summarise_rivals(stored.get("rows", [])),
+    }
+
+
+@app.delete("/api/agents/ad-spy/auction-insights")
+def remove_auction_insights(site_id: str = "ccm", _admin: Dict[str, Any] = Depends(require_admin)):
+    """Deletes a site's stored Auction Insights import."""
+    from integrations.ads.auction_insights import delete_auction_insights
+
+    removed = delete_auction_insights(DATA_DIR, site_id)
+    return {
+        "status": "success",
+        "removed": removed,
+        "message": "Import removed." if removed else "There was nothing stored for this site.",
+    }
+
+
 @app.post("/api/agents/page-optimizer/audit")
 def audit_webpage(request: PageAuditRequest, _admin: Dict[str, Any] = Depends(require_admin)):
     """Conducts a comprehensive Google Algorithm SEO audit for any webpage URL (Admin Only)."""

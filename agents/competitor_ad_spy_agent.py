@@ -124,6 +124,43 @@ def measure_competitor_landing_page(url: str, keyword: str) -> Dict[str, Any]:
     }
 
 
+def imported_auction_insights(site_id: str) -> Dict[str, Any]:
+    """Google's own account of who competed in the same auctions.
+
+    Auction Insights has no API, so this reads whatever the operator last
+    exported from Google Ads and imported. It is the only source in this system
+    where a competitor's standing is reported by Google itself.
+    """
+    try:
+        from config.settings import DATA_DIR
+        from integrations.ads.auction_insights import load_auction_insights, summarise_rivals
+
+        stored = load_auction_insights(DATA_DIR, site_id)
+    except Exception as e:
+        logger.warning(f"Could not read imported auction insights: {e}")
+        return {"imported": False, "error": str(e)}
+
+    if not stored:
+        return {
+            "imported": False,
+            "how_to_get_it": (
+                "Google Ads > select a campaign or keyword > Insights > Auction insights > "
+                "Download. Import that file here. Google serves this report in the Ads UI "
+                "only, so it cannot be fetched automatically."
+            ),
+        }
+
+    rows = stored.get("rows", [])
+    return {
+        "imported": True,
+        "imported_at": stored.get("imported_at"),
+        "date_range": (stored.get("meta") or {}).get("date_range"),
+        "note": (stored.get("meta") or {}).get("note"),
+        "summary": summarise_rivals(rows),
+        "rows": rows,
+    }
+
+
 def own_keyword_costs(router: ModelRouter, site_id: str) -> Dict[str, Any]:
     """What this account actually pays, from its own Google Ads data.
 
@@ -267,6 +304,7 @@ class CompetitorAdSpyAgent(AgentInterface):
             "verification_links": verification_links(clean_domain),
             "measured_landing_page": landing,
             "your_keyword_costs": costs,
+            "auction_insights": imported_auction_insights(site_id),
         }
 
         tokens_used, cost_usd = 0, 0.0

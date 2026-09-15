@@ -5317,6 +5317,9 @@ function openCompetitorAdSpyModal(url) {
     document.getElementById('spy-competitor-url').value = url;
   }
   openModal('competitor-ad-spy-modal');
+  // Show any Auction Insights already imported for this site, so the panel
+  // opens on real Google data rather than an empty box.
+  if (typeof loadAuctionInsights === 'function') loadAuctionInsights();
 }
 
 async function submitCompetitorAdSpy(e) {
@@ -5373,6 +5376,146 @@ async function submitCompetitorAdSpy(e) {
   } finally {
     btn.disabled = false;
     btn.innerHTML = originalHtml;
+  }
+}
+
+// Google Ads Auction Insights import.
+//
+// Auction Insights is the only report where a competitor's standing against
+// these ads comes from Google rather than a third party's model. Google serves
+// it in the Ads UI only - there is no API - so the file is exported by hand.
+async function uploadAuctionInsights(inputEl) {
+  const file = inputEl && inputEl.files && inputEl.files[0];
+  if (!file) return;
+
+  const status = document.getElementById('auction-insights-status');
+  const setStatus = (text, colour) => {
+    if (status) { status.textContent = text; status.style.color = colour || 'var(--text-muted)'; }
+  };
+  setStatus('Reading ' + file.name + '...');
+
+  try {
+    const text = await file.text();
+    const res = await fetch('/api/agents/ad-spy/auction-insights', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        site_id: currentSiteId,
+        filename: file.name,
+        csv_text: text
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      setStatus(data.detail || 'Import failed.', '#fca5a5');
+      return;
+    }
+    setStatus(data.message || 'Imported.', '#6ee7b7');
+    loadAuctionInsights();
+  } catch (err) {
+    setStatus('Could not read the file: ' + (err.message || err), '#fca5a5');
+  } finally {
+    inputEl.value = '';
+  }
+}
+
+async function loadAuctionInsights() {
+  const container = document.getElementById('auction-insights-table');
+  if (!container) return;
+
+  try {
+    const res = await fetch('/api/agents/ad-spy/auction-insights?site_id=' + encodeURIComponent(currentSiteId), {
+      headers: getAuthHeaders()
+    });
+    const data = await res.json();
+
+    if (!data.imported) {
+      container.innerHTML = `
+        <div style="font-size:12.5px; color:var(--text-muted); line-height:1.6;">
+          Abhi tak koi Auction Insights report import nahi hui.<br>
+          Google Ads &rarr; campaign ya keyword select karein &rarr; <strong>Insights</strong> &rarr;
+          <strong>Auction insights</strong> &rarr; <strong>Download</strong>, phir wahi file yahan upload karein.
+        </div>`;
+      return;
+    }
+
+    const rows = data.rows || [];
+    const sum = data.summary || {};
+    const pct = (v, bounds, key) => {
+      if (v === null || v === undefined) return '<span style="color:var(--text-muted);">not reported</span>';
+      const b = bounds && bounds[key];
+      const prefix = b === 'less_than' ? '&lt; ' : (b === 'greater_than' ? '&gt; ' : '');
+      return prefix + v + '%';
+    };
+
+    container.innerHTML = `
+      <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:10px; line-height:1.55;">
+        Imported ${escapeHtml(data.imported_at || '')} from ${escapeHtml(data.source_filename || '')}
+        ${data.meta && data.meta.date_range ? ' &bull; covering ' + escapeHtml(data.meta.date_range) : ''}
+        <br>${escapeHtml((data.meta && data.meta.note) || '')}
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-bottom:14px;">
+        <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:12px; border-radius:12px;">
+          <div style="font-size:10px; font-weight:800; color:#10b981; text-transform:uppercase;">Your impression share</div>
+          <div style="font-size:20px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:3px;">${sum.your_impression_share ?? '&mdash;'}${sum.your_impression_share != null ? '%' : ''}</div>
+        </div>
+        <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:12px; border-radius:12px;">
+          <div style="font-size:10px; font-weight:800; color:#38bdf8; text-transform:uppercase;">Your top-of-page rate</div>
+          <div style="font-size:20px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:3px;">${sum.your_top_of_page_rate ?? '&mdash;'}${sum.your_top_of_page_rate != null ? '%' : ''}</div>
+        </div>
+        <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:12px; border-radius:12px;">
+          <div style="font-size:10px; font-weight:800; color:#f59e0b; text-transform:uppercase;">Rivals in these auctions</div>
+          <div style="font-size:20px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:3px;">${sum.rival_count ?? 0}</div>
+        </div>
+        <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:12px; border-radius:12px;">
+          <div style="font-size:10px; font-weight:800; color:#f87171; text-transform:uppercase;">Usually above you</div>
+          <div style="font-size:20px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:3px;">${(sum.rivals_usually_above_you || []).length}</div>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="table" style="width:100%; font-size:12px; margin:0;">
+          <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
+            <th style="padding:6px 8px; text-align:left;">Domain</th>
+            <th style="padding:6px 8px;">Impr. share</th>
+            <th style="padding:6px 8px;">Overlap</th>
+            <th style="padding:6px 8px;">Above you</th>
+            <th style="padding:6px 8px;">Top of page</th>
+          </tr></thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05); ${r.is_you ? 'background:rgba(6,182,212,0.08);' : ''}">
+                <td style="padding:6px 8px; color:#fff; font-family:var(--font-mono);">
+                  ${r.is_you ? '<strong style="color:var(--accent-cyan);">You</strong>' : escapeHtml(r.domain)}
+                </td>
+                <td style="padding:6px 8px; text-align:center;">${pct(r.metrics.impression_share, r.bounds, 'impression_share')}</td>
+                <td style="padding:6px 8px; text-align:center;">${pct(r.metrics.overlap_rate, r.bounds, 'overlap_rate')}</td>
+                <td style="padding:6px 8px; text-align:center;">${pct(r.metrics.position_above_rate, r.bounds, 'position_above_rate')}</td>
+                <td style="padding:6px 8px; text-align:center;">${pct(r.metrics.top_of_page_rate, r.bounds, 'top_of_page_rate')}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <button class="btn btn-secondary btn-sm" onclick="deleteAuctionInsights()" style="margin-top:12px; font-size:11px; color:#f87171; border-color:rgba(239,68,68,0.4);">
+        <i class="fa-solid fa-trash-can"></i> Remove this import
+      </button>
+    `;
+  } catch (err) {
+    container.innerHTML = `<div style="font-size:12.5px; color:#fca5a5;">Could not load: ${escapeHtml(String(err.message || err))}</div>`;
+  }
+}
+
+async function deleteAuctionInsights() {
+  if (!confirm('Remove the imported Auction Insights report for this site?')) return;
+  try {
+    await fetch('/api/agents/ad-spy/auction-insights?site_id=' + encodeURIComponent(currentSiteId), {
+      method: 'DELETE', headers: getAuthHeaders()
+    });
+    loadAuctionInsights();
+  } catch (err) {
+    alert('Could not remove: ' + (err.message || err));
   }
 }
 
