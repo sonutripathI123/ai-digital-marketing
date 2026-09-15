@@ -285,9 +285,13 @@ class ExternalLinkBuildingAgent(AgentInterface):
                     "target_domain": target_domain,
                     "message": f"Successfully processed outreach & generated {len(new_links)} contextual backlinks with live URLs."
                 },
-                "model_used": "claude-3-5-haiku-router" if input_data.get("use_ai", True) else "template-engine",
-                "tokens_used": 150 * len(new_links),
-                "cost_usd": 0.0005 * len(new_links)
+                # This named a model that never ran -- and one Anthropic has
+                # since retired -- then multiplied a made-up 150 tokens and
+                # $0.0005 by the number of links, feeding invented spend into
+                # the dashboard's AI usage totals. Nothing here calls a model.
+                "model_used": "template-engine",
+                "tokens_used": 0,
+                "cost_usd": 0.0
             }
 
         # --- 2. Daily Batch Generation (5 to 10 High Quality Backlinks) ---

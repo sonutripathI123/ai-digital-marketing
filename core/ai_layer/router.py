@@ -77,14 +77,15 @@ class ModelRouter:
                 "is_configured": bool(os.getenv("ANTHROPIC_API_KEY")),
                 "masked_key": self._mask_key(os.getenv("ANTHROPIC_API_KEY")),
                 "is_primary": self.primary_provider_name == "anthropic",
-                "default_model": "claude-3-5-sonnet-20241022",
+                "default_model": "claude-sonnet-5",
                 "supported_models": [
-                    "claude-3-5-sonnet-20241022",
-                    "claude-3-7-sonnet-20250219",
-                    "claude-3-5-haiku-20241022",
-                    "claude-3-opus-20240229"
+                    "claude-opus-5",
+                    "claude-sonnet-5",
+                    "claude-haiku-4-5",
+                    "claude-opus-4-8",
+                    "claude-sonnet-4-6",
                 ],
-                "badge": "Anthropic Claude 3.5 Sonnet",
+                "badge": "Anthropic Claude",
                 "icon": "fa-solid fa-brain"
             },
             {
@@ -190,8 +191,11 @@ class ModelRouter:
         config_entry = MODEL_CONFIG.get(task_type_str, MODEL_CONFIG["STANDARD"])
 
         provider_name = config_entry.get("provider", self.primary_provider_name)
-        primary_model = request.preferred_model or config_entry.get("primary_model", "claude-3-5-sonnet-20241022")
-        fallback_model = config_entry.get("fallback_model", "claude-3-7-sonnet-20250219")
+        # These last-resort defaults named models Anthropic has since retired, so
+        # a missing config entry produced a 404 on every call rather than an
+        # obvious failure.
+        primary_model = request.preferred_model or config_entry.get("primary_model", "claude-sonnet-5")
+        fallback_model = config_entry.get("fallback_model", "claude-sonnet-5")
 
         provider = self.get_provider(provider_name)
         logger.info(f"Routing request [{task_type_str}] -> Provider: {provider.provider_name}, Primary Model: {primary_model}")

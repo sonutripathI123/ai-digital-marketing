@@ -32,26 +32,39 @@ DEFAULT_PROVIDER: str = os.getenv("DEFAULT_AI_PROVIDER", "anthropic")
 
 # Models for task complexity routing
 MODEL_CONFIG: Dict[str, Dict[str, Any]] = {
+    # claude-sonnet-4-6 is the previous generation. claude-sonnet-5 costs less
+    # ($2/$10 per MTok against $3/$15) and is newer, so the routine and standard
+    # tiers move to it without trading anything away.
     "ROUTINE": {
         "provider": os.getenv("MODEL_ROUTINE_PROVIDER", "anthropic"),
-        "primary_model": os.getenv("MODEL_ROUTINE_PRIMARY", "claude-sonnet-4-6"),
-        "fallback_model": os.getenv("MODEL_ROUTINE_FALLBACK", "claude-sonnet-4-6"),
+        "primary_model": os.getenv("MODEL_ROUTINE_PRIMARY", "claude-sonnet-5"),
+        "fallback_model": os.getenv("MODEL_ROUTINE_FALLBACK", "claude-sonnet-5"),
     },
     "STANDARD": {
         "provider": os.getenv("MODEL_STANDARD_PROVIDER", "anthropic"),
-        "primary_model": os.getenv("MODEL_STANDARD_PRIMARY", "claude-sonnet-4-6"),
-        "fallback_model": os.getenv("MODEL_STANDARD_FALLBACK", "claude-sonnet-4-6"),
+        "primary_model": os.getenv("MODEL_STANDARD_PRIMARY", "claude-sonnet-5"),
+        "fallback_model": os.getenv("MODEL_STANDARD_FALLBACK", "claude-sonnet-5"),
     },
     "COMPLEX": {
         "provider": os.getenv("MODEL_COMPLEX_PROVIDER", "anthropic"),
-        "primary_model": os.getenv("MODEL_COMPLEX_PRIMARY", "claude-sonnet-4-6"),
-        "fallback_model": os.getenv("MODEL_COMPLEX_FALLBACK", "claude-sonnet-4-6"),
+        "primary_model": os.getenv("MODEL_COMPLEX_PRIMARY", "claude-opus-5"),
+        "fallback_model": os.getenv("MODEL_COMPLEX_FALLBACK", "claude-sonnet-5"),
     },
 }
 
 # Estimated Token Cost Table per 1,000 tokens (USD)
 TOKEN_PRICING: Dict[str, Dict[str, float]] = {
-    # Anthropic
+    # Anthropic. A model missing from this table is priced at a silent default
+    # in calculate_cost(), so every model actually in use needs a row here or
+    # the cost figures reported on the dashboard are for a different model.
+    "claude-opus-5": {"input": 0.0050, "output": 0.0250},
+    "claude-sonnet-5": {"input": 0.0020, "output": 0.0100},
+    "claude-haiku-4-5": {"input": 0.0010, "output": 0.0050},
+    "claude-opus-4-8": {"input": 0.0050, "output": 0.0250},
+    "claude-opus-4-7": {"input": 0.0050, "output": 0.0250},
+    "claude-opus-4-6": {"input": 0.0050, "output": 0.0250},
+    "claude-sonnet-4-6": {"input": 0.0030, "output": 0.0150},
+    # Retired; kept so historical task records still price correctly.
     "claude-3-5-haiku-20241022": {"input": 0.0008, "output": 0.0040},
     "claude-3-5-sonnet-20241022": {"input": 0.0030, "output": 0.0150},
     "claude-3-7-sonnet-20250219": {"input": 0.0030, "output": 0.0150},

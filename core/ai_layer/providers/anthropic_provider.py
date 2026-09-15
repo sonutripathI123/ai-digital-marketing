@@ -6,6 +6,7 @@ token usage tracking, and cost calculation.
 """
 
 import json
+import logging
 import os
 import time
 from typing import Optional
@@ -17,9 +18,19 @@ except ImportError:
 from config import TOKEN_PRICING
 from core.ai_layer.base import BaseAIProvider, LLMRequest, LLMResponse
 
+logger = logging.getLogger("anthropic_provider")
+
 
 def calculate_cost(model: str, tokens_in: int, tokens_out: int) -> float:
-    pricing = TOKEN_PRICING.get(model, {"input": 0.003, "output": 0.015})
+    pricing = TOKEN_PRICING.get(model)
+    if pricing is None:
+        # Silently pricing an unknown model at Sonnet 3.5's old rate meant every
+        # cost figure on the dashboard was for a model that did not run.
+        logger.warning(
+            "No price listed for model %s; cost is estimated at Sonnet rates. "
+            "Add it to TOKEN_PRICING.", model
+        )
+        pricing = {"input": 0.002, "output": 0.010}
     cost_in = (tokens_in / 1000.0) * pricing["input"]
     cost_out = (tokens_out / 1000.0) * pricing["output"]
     return round(cost_in + cost_out, 6)
@@ -50,7 +61,7 @@ class AnthropicProvider(BaseAIProvider):
         if not anthropic:
             return LLMResponse(
                 content="",
-                model_used=model_override or "claude-3-5-sonnet-20241022",
+                model_used=model_override or "claude-sonnet-5",
                 provider=self.provider_name,
                 success=False,
                 error_message="anthropic package is not installed."
@@ -58,14 +69,14 @@ class AnthropicProvider(BaseAIProvider):
         if not self._api_key or self._api_key.startswith("your_"):
             return LLMResponse(
                 content="",
-                model_used=model_override or "claude-3-5-sonnet-20241022",
+                model_used=model_override or "claude-sonnet-5",
                 provider=self.provider_name,
                 success=False,
                 error_message="ANTHROPIC_API_KEY missing or placeholder in environment."
             )
 
         client = anthropic.Anthropic(api_key=self._api_key)
-        model_name = model_override or request.preferred_model or "claude-3-5-sonnet-20241022"
+        model_name = model_override or request.preferred_model or "claude-sonnet-5"
 
         kwargs = {
             "model": model_name,

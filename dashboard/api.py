@@ -4752,20 +4752,23 @@ def get_ai_usage_metrics(_viewer: Dict[str, Any] = Depends(require_viewer)):
         if t.model_used:
             model_counts[t.model_used] = model_counts.get(t.model_used, 0) + 1
 
+    # Every model was priced at 0.003 per 1k regardless of which model it was,
+    # so the per-model cost column said the same thing for Haiku and Opus alike.
+    from config.settings import TOKEN_PRICING
+
     models_data = {
         model: {
             "calls": count,
-            "cost_per_1k_tokens": 0.003
+            "cost_per_1k_input": (TOKEN_PRICING.get(model) or {}).get("input"),
+            "cost_per_1k_output": (TOKEN_PRICING.get(model) or {}).get("output"),
+            "priced": model in TOKEN_PRICING,
         }
         for model, count in model_counts.items()
     }
     if not models_data:
-        models_data = {
-            "claude-3-5-sonnet-20241022 (Primary Anthropic)": {"calls": 0, "cost_per_1k_tokens": 0.003},
-            "claude-3-5-haiku-20241022 (Fast Anthropic)": {"calls": 0, "cost_per_1k_tokens": 0.0008},
-            "gemini-2.5-flash (Google Fallback)": {"calls": 0, "cost_per_1k_tokens": 0.00015},
-            "rule-based-engines (Deterministic)": {"calls": len(all_tasks), "cost_per_1k_tokens": 0.0}
-        }
+        # The placeholder rows named two retired models and claimed every task
+        # had run on a rule-based engine. An empty list is the honest answer.
+        models_data = {}
 
     return {
         "status": "success",
