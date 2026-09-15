@@ -3802,7 +3802,7 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
       }
 
       const fields = ps.fields_captured || [];
-      const missing = ['name', 'phone', 'message', 'date'].filter(f => !fields.includes(f));
+      const missing = ['phone', 'date'].filter(f => !fields.includes(f));
 
       container.innerHTML = `
         <div style="background:linear-gradient(135deg, rgba(6,182,212,0.15), rgba(15,23,42,0.85)); border:1px solid rgba(6,182,212,0.3); padding:18px 22px; border-radius:14px; margin-bottom:20px;">
@@ -3848,13 +3848,12 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
         ${missing.length ? `
         <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.35); border-radius:12px; padding:16px; margin-bottom:20px;">
           <div style="font-size:13px; font-weight:800; color:#f59e0b; margin-bottom:6px;">
-            <i class="fa-solid fa-triangle-exclamation"></i> Your forms capture almost nothing
+            <i class="fa-solid fa-circle-info"></i> Worth adding to your forms
           </div>
           <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;">
-            Every submission recorded only: <strong style="color:#fff;">${escapeHtml(fields.join(', ') || 'nothing')}</strong>.
-            The forms do not collect <strong style="color:#fff;">${escapeHtml(missing.join(', '))}</strong> &mdash;
-            so there is no way to call these people back, or to know what they wanted.
-            Adding those fields in Elementor is worth more than anything this panel can do with the data as it stands.
+            Your forms capture <strong style="color:#fff;">${escapeHtml(fields.join(', ') || 'nothing')}</strong>,
+            but not <strong style="color:#fff;">${escapeHtml(missing.join(', '))}</strong>.
+            Adding a phone field in Elementor would let you call back rather than waiting on email.
           </div>
         </div>` : ''}
 
@@ -3866,28 +3865,32 @@ Affluent Suburbs: Toorak, South Yarra, Brighton, Hawthorn, Kew</textarea>
             <table class="table" style="width:100%; font-size:12px; margin:0;">
               <thead><tr style="color:var(--text-secondary); font-size:10.5px; text-transform:uppercase;">
                 <th style="padding:7px 9px; text-align:left;">Received</th>
+                <th style="padding:7px 9px; text-align:left;">Name</th>
                 <th style="padding:7px 9px; text-align:left;">Email</th>
-                <th style="padding:7px 9px; text-align:left;">Form</th>
-                <th style="padding:7px 9px; text-align:left;">Page</th>
+                <th style="padding:7px 9px; text-align:left;">What they wrote</th>
                 <th style="padding:7px 9px;">Status</th>
-                <th style="padding:7px 9px;">Reply</th>
+                <th style="padding:7px 9px;">Open</th>
               </tr></thead>
               <tbody>
                 ${leads.map((l, i) => `
                   <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
                     <td style="padding:7px 9px; color:var(--text-secondary); font-family:var(--font-mono); white-space:nowrap;">${escapeHtml(l.submitted_at || '')}</td>
-                    <td style="padding:7px 9px; color:#fff;">
-                      ${l.email ? `<a href="mailto:${escapeHtml(l.email)}" style="color:var(--accent-cyan);">${escapeHtml(l.email)}</a>` : '<span style="color:var(--text-muted);">no email captured</span>'}
+                    <td style="padding:7px 9px; color:#fff; font-weight:700;">${escapeHtml(l.name || '&mdash;')}</td>
+                    <td style="padding:7px 9px;">
+                      ${l.email ? `<a href="mailto:${escapeHtml(l.email)}" style="color:var(--accent-cyan);">${escapeHtml(l.email)}</a>` : '<span style="color:var(--text-muted);">&mdash;</span>'}
                     </td>
-                    <td style="padding:7px 9px; color:var(--text-secondary);">${escapeHtml(l.form_name || '')}</td>
-                    <td style="padding:7px 9px; color:var(--text-secondary);">${escapeHtml(l.page_title || '')}</td>
+                    <td style="padding:7px 9px; color:var(--text-secondary); max-width:280px;">
+                      ${l.message
+                        ? escapeHtml(l.message.length > 90 ? l.message.slice(0, 90) + '...' : l.message)
+                        : `<span style="color:var(--text-muted);">no message &bull; ${escapeHtml(l.page_title || '')}</span>`}
+                    </td>
                     <td style="padding:7px 9px; text-align:center;">
                       ${l.is_read
                         ? '<span class="badge" style="font-size:10px; font-weight:800; background:rgba(148,163,184,0.18); color:#cbd5e1; border:1px solid rgba(148,163,184,0.4);">read</span>'
                         : '<span class="badge badge-warning" style="font-size:10px; font-weight:800;">unread</span>'}
                     </td>
                     <td style="padding:7px 9px; text-align:center;">
-                      ${l.email ? `<button class="btn btn-sm" onclick="draftLeadReply(${i})" style="background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.4); color:#38bdf8; font-size:11px; font-weight:700;"><i class="fa-solid fa-pen"></i> Draft</button>` : '&mdash;'}
+                      <button class="btn btn-sm" onclick="viewLeadMessage(${i})" style="background:rgba(6,182,212,0.15); border:1px solid rgba(6,182,212,0.4); color:#67e8f9; font-size:11px; font-weight:700;"><i class="fa-solid fa-envelope-open-text"></i> View</button>
                     </td>
                   </tr>`).join('')}
               </tbody>
@@ -9020,6 +9023,76 @@ const AGENT_INTEGRATION_CONFIGS = {
 // Drafts a first reply to one real website enquiry. Nothing is sent from here:
 // no mail transport is wired to this dashboard, and a button that claimed to
 // send would be the same lie as the pipeline figures this panel used to show.
+// Shows one enquiry in full: every field the form captured, under the name the
+// form gave it. The list endpoint returns only the email address, so the panel
+// used to imply an enquiry was an address and nothing else - the name and the
+// message were on the per-submission endpoint all along.
+function viewLeadMessage(index) {
+  const rows = window._leadRows || [];
+  const lead = rows[index];
+  if (!lead) { alert('That enquiry is no longer on screen. Refresh and try again.'); return; }
+
+  const modal = document.getElementById('lead-detail-modal');
+  const body = document.getElementById('lead-detail-body');
+  const subtitle = document.getElementById('lead-detail-subtitle');
+  if (!modal || !body) { alert(lead.message || 'No message was recorded on this enquiry.'); return; }
+
+  if (subtitle) {
+    subtitle.textContent = (lead.form_name || 'Form') + ' • ' + (lead.page_title || '') +
+      ' • ' + (lead.submitted_at || '');
+  }
+
+  const named = lead.named_fields || {};
+  const unlabelled = lead.unlabelled_fields || {};
+  const rowFor = (label, value, highlight) => `
+    <div style="display:flex; gap:14px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div style="width:120px; flex-shrink:0; font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">${escapeHtml(label)}</div>
+      <div style="flex:1; font-size:13px; color:${highlight ? '#fff' : '#cbd5e1'}; line-height:1.6; white-space:pre-wrap; word-break:break-word;">${escapeHtml(String(value))}</div>
+    </div>`;
+
+  const namedKeys = Object.keys(named).filter(k => String(named[k] || '').trim());
+  const unlabelledKeys = Object.keys(unlabelled);
+
+  body.innerHTML = `
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+      ${lead.is_read
+        ? '<span class="badge" style="font-size:10.5px; font-weight:800; background:rgba(148,163,184,0.18); color:#cbd5e1; border:1px solid rgba(148,163,184,0.4);">read</span>'
+        : '<span class="badge badge-warning" style="font-size:10.5px; font-weight:800;">unread</span>'}
+      ${lead.email ? `<a href="mailto:${escapeHtml(lead.email)}" class="badge" style="font-size:10.5px; font-weight:800; background:rgba(6,182,212,0.18); color:#67e8f9; border:1px solid rgba(6,182,212,0.4); text-decoration:none;"><i class="fa-solid fa-envelope"></i> Email them</a>` : ''}
+      ${lead.phone ? `<a href="tel:${escapeHtml(lead.phone)}" class="badge" style="font-size:10.5px; font-weight:800; background:rgba(16,185,129,0.18); color:#6ee7b7; border:1px solid rgba(16,185,129,0.4); text-decoration:none;"><i class="fa-solid fa-phone"></i> ${escapeHtml(lead.phone)}</a>` : ''}
+      ${lead.page_url ? `<a href="${escapeHtml(lead.page_url)}" target="_blank" rel="noopener" class="badge" style="font-size:10.5px; font-weight:800; background:rgba(148,163,184,0.15); color:#cbd5e1; border:1px solid rgba(148,163,184,0.35); text-decoration:none;"><i class="fa-solid fa-arrow-up-right-from-square"></i> The page they used</a>` : ''}
+    </div>
+
+    ${lead.message ? `
+      <div style="background:rgba(6,182,212,0.07); border:1px solid rgba(6,182,212,0.3); border-radius:10px; padding:14px 16px; margin-bottom:16px;">
+        <div style="font-size:11px; font-weight:800; color:#67e8f9; text-transform:uppercase; margin-bottom:6px;">What they wrote</div>
+        <div style="font-size:13.5px; color:#fff; line-height:1.65; white-space:pre-wrap;">${escapeHtml(lead.message)}</div>
+      </div>` : `
+      <div style="background:rgba(148,163,184,0.08); border:1px solid rgba(148,163,184,0.3); border-radius:10px; padding:14px 16px; margin-bottom:16px; font-size:12.5px; color:var(--text-muted);">
+        This enquiry has no message field filled in. Everything the form did capture is below.
+      </div>`}
+
+    <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:6px 16px;">
+      ${namedKeys.map(k => rowFor(k.replace(/_/g, ' '), named[k], k === 'message' || k === 'name')).join('')}
+      ${unlabelledKeys.length ? `
+        <div style="padding:10px 0 4px; font-size:10.5px; color:var(--text-muted);">
+          These fields were never given a label in Elementor, so only the answer is known:
+        </div>
+        ${unlabelledKeys.map(k => rowFor('unnamed field', unlabelled[k], false)).join('')}
+      ` : ''}
+    </div>
+
+    <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="draftLeadReply(${index})" style="background:linear-gradient(135deg, #06b6d4, #0284c7); border:none; font-size:12px; font-weight:700; color:#fff;">
+        <i class="fa-solid fa-pen"></i> Draft a reply
+      </button>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('lead-detail-modal')" style="font-size:12px;">Close</button>
+    </div>
+  `;
+
+  openModal('lead-detail-modal');
+}
+
 async function draftLeadReply(index) {
   const rows = window._leadRows || [];
   const lead = rows[index];

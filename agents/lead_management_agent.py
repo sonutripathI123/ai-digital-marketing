@@ -34,6 +34,12 @@ from core.orchestrator.registry import AgentMetadata
 logger = get_agent_logger("lead-management-agent")
 
 SUBMISSIONS_PATH = "/wp-json/elementor/v1/form-submissions"
+# The list endpoint returns only each submission's "main" field -- the email
+# address -- so reading it alone made every enquiry look like an address and
+# nothing else. The name, the message and the rest are on the per-submission
+# endpoint, and they were there the whole time.
+DETAIL_PATH = "/wp-json/elementor/v1/form-submissions/{submission_id}"
+DETAIL_LIMIT = 60
 FETCH_TIMEOUT_SECONDS = 25
 PAGE_SIZE = 10
 # A ceiling on pages, so a misbehaving endpoint cannot spin here forever.
@@ -140,7 +146,39 @@ def fetch_form_submissions(site_id: str) -> Tuple[List[Dict[str, Any]], Optional
             break
         page += 1
 
+    _enrich_with_details(base, (user, password), rows)
     return rows, meta, None
+
+
+def _enrich_with_details(base: str, auth: Tuple[str, str], rows: List[Dict[str, Any]]) -> None:
+    """Replace each row's single-field `values` with everything it captured.
+
+    Done in place, and best-effort: a submission whose detail cannot be read
+    keeps the one field the list gave, rather than the whole report failing.
+    """
+    import requests
+
+    for row in rows[:DETAIL_LIMIT]:
+        submission_id = row.get("id")
+        if not submission_id:
+            continue
+        try:
+            res = requests.get(
+                base + DETAIL_PATH.format(submission_id=submission_id),
+                auth=auth,
+                timeout=FETCH_TIMEOUT_SECONDS,
+                headers={"User-Agent": "Mozilla/5.0 (compatible; AI-Marketing-Dashboard)"},
+            )
+            if res.status_code != 200:
+                continue
+            payload = res.json()
+            detail = payload.get("data") if isinstance(payload, dict) else None
+            detail = detail if isinstance(detail, dict) else payload
+            values = (detail or {}).get("values")
+            if values:
+                row["values"] = values
+        except Exception as e:
+            logger.warning(f"Could not read submission {submission_id}: {e}")
 
 
 def normalise_submission(row: Dict[str, Any]) -> Dict[str, Any]:
@@ -151,6 +189,20 @@ def normalise_submission(row: Dict[str, Any]) -> Dict[str, Any]:
         if v.get("key")
     }
     form = row.get("form") or {}
+
+    def first(*names: str) -> Optional[str]:
+        for name in names:
+            value = fields.get(name)
+            if value and str(value).strip():
+                return str(value).strip()
+        return None
+
+    # Elementor names a field the operator never labelled "field_<hash>". Those
+    # carry real answers -- a surname, a confirmed email -- so they are kept,
+    # but they are not guessed at.
+    named = {k: v for k, v in fields.items() if not k.startswith("field_")}
+    unlabelled = {k: v for k, v in fields.items() if k.startswith("field_") and str(v or "").strip()}
+
     return {
         "id": row.get("id"),
         "submitted_at": row.get("created_at"),
@@ -165,7 +217,12 @@ def normalise_submission(row: Dict[str, Any]) -> Dict[str, Any]:
         # and tier for every lead; this form captures an email address and
         # nothing else, so those keys would have had to be filled in.
         "fields": fields,
-        "email": fields.get("email") or fields.get("Email"),
+        "named_fields": named,
+        "unlabelled_fields": unlabelled,
+        "email": first("email", "Email", "your-email"),
+        "name": first("name", "Name", "your-name", "full_name", "first_name"),
+        "phone": first("phone", "Phone", "tel", "telephone", "mobile", "your-phone"),
+        "message": first("message", "Message", "your-message", "comments", "enquiry", "details"),
     }
 
 
@@ -214,13 +271,19 @@ def build_recommendations(leads: List[Dict[str, Any]], summary: Dict[str, Any]) 
         )
 
     captured = summary["fields_captured"]
-    missing = [f for f in ("name", "phone", "message", "date") if f not in captured]
+    missing = [f for f in ("phone", "date") if f not in captured]
     if missing:
         out.append(
-            f"Every submission captured only: {', '.join(captured) or 'nothing'}. "
-            f"The forms do not collect {', '.join(missing)}, so there is no way to call "
-            f"these people back or know what they wanted. Adding those fields is worth "
-            f"more than anything this agent can do with the data as it stands."
+            f"The forms capture {', '.join(captured) or 'nothing'} but not "
+            f"{', '.join(missing)}. Adding a phone field in Elementor would let you call "
+            f"back rather than waiting on email."
+        )
+
+    with_message = [lead for lead in leads if lead.get("message")]
+    if with_message:
+        out.append(
+            f"{len(with_message)} of {len(leads)} enquiries wrote a message explaining what "
+            f"they wanted. Read those first -- they say more than the email address does."
         )
 
     if len(summary["by_form"]) > 1:

@@ -664,6 +664,25 @@
   </div>
 
   <!-- Competitor Ad Spy & Intelligence Modal -->
+  <!-- One website enquiry in full. Elementor's list endpoint returns only the
+       email address, so the panel used to show an enquiry as an address and
+       nothing else; the name and the message were always on the per-submission
+       endpoint. -->
+  <div class="modal-overlay" id="lead-detail-modal" style="z-index: 1120;">
+    <div class="modal-card" style="max-width: 720px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-envelope-open-text" style="color: var(--accent-cyan);"></i> Website enquiry
+          </h2>
+          <div id="lead-detail-subtitle" style="font-size: 12px; color: var(--text-muted); margin-top: 4px;"></div>
+        </div>
+        <button class="close-btn" onclick="closeModal('lead-detail-modal')">&times;</button>
+      </div>
+      <div id="lead-detail-body" style="max-height: 70vh; overflow-y: auto; padding-right: 6px;"></div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="competitor-ad-spy-modal">
     <div class="modal-card" style="max-width: 1050px; width: 95%;">
       <div class="modal-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; margin-bottom: 16px;">
@@ -672,7 +691,7 @@
             <i class="fa-solid fa-crosshairs" style="color: #ef4444;"></i> Competitor Ad Spy & Intelligence Engine
           </h2>
           <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
-            Paste any Melbourne chauffeur competitor URL to extract their live Google Ads, Meta Ads (FB & IG), targeted keywords, and AI counter-strategies.
+            Measures a competitor's landing page and links to their live ads in Google's and Meta's own libraries. Neither platform exposes competitor ad copy, keywords or spend through an API, so nothing here is estimated.
           </div>
         </div>
         <button class="close-btn" onclick="closeModal('competitor-ad-spy-modal')">&times;</button>
@@ -1878,7 +1897,7 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=11.84.0"></script>
+  <script src="/static/app.js?v=11.85.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
