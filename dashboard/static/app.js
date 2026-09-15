@@ -1823,7 +1823,7 @@ async function viewAgentReport(agentId) {
             <button class="btn btn-sm" onclick="autoQueueHighVolumeKeywords()" style="background:linear-gradient(135deg, #ec4899, #8b5cf6); color:#fff; font-weight:700; font-size:11.5px; padding:7px 14px; border-radius:8px; border:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="Pulls winning high-search-volume keywords with zero duplicate overlap into the blog schedule">
               <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Queue High-Volume Keywords
             </button>
-            <button class="btn btn-sm" onclick="openAgentReportModal('blog-agent')" style="background:rgba(6,182,212,0.15); border:1px solid rgba(6,182,212,0.4); color:var(--accent-cyan); font-weight:700; font-size:11.5px; padding:7px 14px; border-radius:8px; cursor:pointer;" title="Refresh live blog data">
+            <button class="btn btn-sm" onclick="viewAgentReport('blog-agent')" style="background:rgba(6,182,212,0.15); border:1px solid rgba(6,182,212,0.4); color:var(--accent-cyan); font-weight:700; font-size:11.5px; padding:7px 14px; border-radius:8px; cursor:pointer;" title="Refresh live blog data">
               <i class="fa-solid fa-rotate"></i> Refresh Status
             </button>
             <button class="btn btn-primary btn-sm" onclick="openAddBlogTopicsModal('${currentSiteId}')" style="font-size:12px; padding:8px 16px; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); border:none; font-weight:700;">
@@ -6666,7 +6666,7 @@ async function autoQueueHighVolumeKeywords() {
     const data = await res.json();
     if (data.status === 'success') {
       showToast(data.message || 'Keywords successfully queued!', 'success');
-      openAgentReportModal('blog-agent');
+      viewAgentReport('blog-agent');
     } else {
       showToast(data.detail || 'Failed to auto-queue keywords', 'error');
     }
@@ -8646,7 +8646,7 @@ async function loadSuperAdminTelemetry() {
               <button type="button" onclick="copyClientInviteLink('${inviteUrl}')" class="btn btn-sm" style="background:linear-gradient(135deg, #eab308, #f97316); color:#000; font-weight:800; font-size:10.5px; padding:4px 8px; border-radius:6px; width:100%;">
                 <i class="fa-solid fa-link"></i> Copy Invite Link
               </button>
-              <button type="button" onclick="switchActiveSite('${site.site_id}'); closeSuperAdminHubModal();" class="btn btn-secondary btn-sm" style="font-size:10px; padding:3px 8px; width:100%;">
+              <button type="button" onclick="switchWebsite('${site.site_id}'); closeSuperAdminHubModal();" class="btn btn-secondary btn-sm" style="font-size:10px; padding:3px 8px; width:100%;">
                 <i class="fa-solid fa-eye"></i> View Dashboard
               </button>
             </div>
