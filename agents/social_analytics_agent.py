@@ -99,6 +99,45 @@ def _dedupe_published_history(history: List[Dict[str, Any]]) -> List[Dict[str, A
     return deduped
 
 
+def _build_social_recommendations(live_accounts, engagement, published_history,
+                                  scheduled_queue, unavailable) -> List[str]:
+    """Advice from what the accounts actually did, not written in advance."""
+    out: List[str] = []
+
+    ig_likes = engagement["instagram"]["likes"]
+    ig_posts = engagement["instagram"]["posts_measured"]
+    if ig_posts:
+        if not ig_likes:
+            out.append(
+                f"{ig_posts} Instagram posts have drawn no likes at all. Posting more will "
+                f"not change that on its own -- the account needs an audience first."
+            )
+        else:
+            out.append(
+                f"{ig_posts} Instagram posts have {ig_likes} likes between them "
+                f"({round(ig_likes / ig_posts, 1)} per post)."
+            )
+
+    followers = {k: v.get("followers") for k, v in live_accounts.items()}
+    tiny = [k for k, v in followers.items() if isinstance(v, int) and v < 50]
+    if tiny:
+        counts = ", ".join(f"{k} {followers[k]}" for k in tiny)
+        out.append(
+            f"Follower counts are very low ({counts}). Until that changes, organic posts "
+            f"reach almost nobody, whatever the posting schedule."
+        )
+
+    if not scheduled_queue:
+        out.append("Nothing is queued to publish. The schedule is empty.")
+
+    if unavailable:
+        out.append(
+            f"{len(unavailable)} metrics could not be read from the platforms; see "
+            f"metrics_unavailable for the reason on each."
+        )
+    return out or ["No social activity was found to report on."]
+
+
 def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https://corporatecarsmelbourne.com.au", site_name: str = "Corporate Cars Melbourne") -> Dict[str, Any]:
     """
     Connects to real corporate-cars-social-agent/social_agent.db and queries live Meta & LinkedIn APIs
@@ -115,10 +154,10 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
         linkedin_org = os.getenv("OPAL_LINKEDIN_ORGANIZATION_URN", "urn:li:organization:87379144").strip()
         brand_title = "Opal Chauffeurs"
         brand_vanity = "opalchauffeurs"
-        fb_followers = 27
-        ig_followers = 100
-        ig_media_count = 40
-        li_followers = 15
+        fb_followers = None
+        ig_followers = None
+        ig_media_count = None
+        li_followers = None
     else:
         meta_token = os.getenv("META_USER_TOKEN", "").strip()
         meta_page_id = os.getenv("META_PAGE_ID", "791630667378039").strip()
@@ -127,16 +166,30 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
         linkedin_org = os.getenv("LINKEDIN_ORGANIZATION_URN", "urn:li:organization:109059206").strip()
         brand_title = "Corporate Cars Melbourne"
         brand_vanity = "corporate-cars-melbourne"
-        fb_followers = 1
-        ig_followers = 4
-        ig_media_count = 18
-        li_followers = 10
+        fb_followers = None
+        ig_followers = None
+        ig_media_count = None
+        li_followers = None
 
     live_accounts = {
-        "facebook": {"connected": True, "name": f"{brand_title}", "page_id": meta_page_id, "followers": fb_followers, "status": "Active"},
-        "instagram": {"connected": True, "username": brand_vanity, "account_id": ig_id, "followers": ig_followers, "media_count": ig_media_count, "status": "Active"},
-        "linkedin": {"connected": True, "name": f"{brand_title}", "org_id": linkedin_org, "vanity_name": brand_vanity, "status": "Active"}
+        "facebook": {"connected": False, "name": brand_title, "page_id": meta_page_id,
+                     "followers": fb_followers, "status": "not checked"},
+        "instagram": {"connected": False, "username": brand_vanity, "account_id": ig_id,
+                      "followers": ig_followers, "media_count": ig_media_count, "status": "not checked"},
+        "linkedin": {"connected": False, "name": brand_title, "org_id": linkedin_org,
+                     "vanity_name": brand_vanity, "followers": li_followers, "status": "not checked"},
     }
+    # Engagement the platforms actually reported, filled in below. Nothing here
+    # is estimated: a metric the API would not give stays None.
+    engagement = {
+        "instagram": {"likes": None, "comments": None, "posts_measured": 0,
+                      "impressions": None, "reach": None},
+        "facebook": {"likes": None, "comments": None, "posts_measured": 0,
+                     "impressions": None, "reach": None},
+        "linkedin": {"likes": None, "comments": None, "posts_measured": 0,
+                     "impressions": None, "reach": None},
+    }
+    unavailable: Dict[str, str] = {}
 
     published_history = []
     scheduled_queue = []
@@ -386,10 +439,26 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
             r_fb = requests.get(f"https://graph.facebook.com/v19.0/{meta_page_id}?fields=name,followers_count,fan_count&access_token={meta_token}", timeout=8)
             if r_fb.status_code == 200:
                 data_fb = r_fb.json()
-                live_accounts["facebook"]["name"] = data_fb.get("name", "Corporate Cars Melbourne")
-                live_accounts["facebook"]["followers"] = data_fb.get("followers_count", data_fb.get("fan_count", 1))
+                live_accounts["facebook"]["connected"] = True
+                live_accounts["facebook"]["status"] = "reachable"
+                live_accounts["facebook"]["name"] = data_fb.get("name") or brand_title
+                # `or 1` used to stand in when the field was absent, reporting a
+                # follower the page may not have.
+                live_accounts["facebook"]["followers"] = data_fb.get(
+                    "followers_count", data_fb.get("fan_count"))
+            else:
+                unavailable["facebook_account"] = f"HTTP {r_fb.status_code} from the Meta Graph API"
         except Exception as e:
             logger.warning(f"Meta FB live fetch failed: {e}")
+            unavailable["facebook_account"] = str(e)
+
+        # Page post engagement needs a Page access token; the token configured
+        # here is a user token, so Facebook returns "Invalid OAuth 2.0 Access
+        # Token" for /posts. Say that rather than publishing a number.
+        unavailable["facebook_engagement"] = (
+            "Facebook post likes and comments need a Page access token. The token "
+            "configured here is a user token, which Facebook rejects for /posts."
+        )
 
     # Meta IG Business
     if meta_token and ig_id:
@@ -399,10 +468,42 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
                 data_ig = r_ig.json()
                 live_accounts["instagram"]["connected"] = True
                 live_accounts["instagram"]["username"] = data_ig.get("username", "corporatecarsmelbourne")
-                live_accounts["instagram"]["followers"] = data_ig.get("followers_count", 4)
-                live_accounts["instagram"]["media_count"] = data_ig.get("media_count", 18)
+                live_accounts["instagram"]["status"] = "reachable"
+                live_accounts["instagram"]["followers"] = data_ig.get("followers_count")
+                live_accounts["instagram"]["media_count"] = data_ig.get("media_count")
+            else:
+                unavailable["instagram_account"] = f"HTTP {r_ig.status_code} from the Instagram Graph API"
         except Exception as e:
             logger.warning(f"Meta IG live fetch failed: {e}")
+            unavailable["instagram_account"] = str(e)
+
+        # Real per-post engagement. This replaces "impressions: 24500, clicks:
+        # 1210, likes: 890, engagement_rate: 6.2%", which were literals.
+        try:
+            r_media = requests.get(
+                f"https://graph.facebook.com/v19.0/{ig_id}/media",
+                params={"fields": "id,timestamp,permalink,like_count,comments_count",
+                        "limit": 50, "access_token": meta_token},
+                timeout=12,
+            )
+            if r_media.status_code == 200:
+                media = r_media.json().get("data") or []
+                engagement["instagram"]["posts_measured"] = len(media)
+                engagement["instagram"]["likes"] = sum(m.get("like_count", 0) for m in media)
+                engagement["instagram"]["comments"] = sum(m.get("comments_count", 0) for m in media)
+            else:
+                unavailable["instagram_engagement"] = f"HTTP {r_media.status_code} reading Instagram media"
+        except Exception as e:
+            logger.warning(f"Instagram media fetch failed: {e}")
+            unavailable["instagram_engagement"] = str(e)
+
+        # Reach and impressions need instagram_manage_insights, which this
+        # token does not carry -- the API answers "Application does not have
+        # permission for this action".
+        unavailable["instagram_reach"] = (
+            "Instagram reach and impressions need the instagram_manage_insights "
+            "permission, which this access token does not have."
+        )
 
     # LinkedIn Org
     if linkedin_token and linkedin_org:
@@ -413,14 +514,37 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
             if r_li.status_code == 200:
                 data_li = r_li.json()
                 live_accounts["linkedin"]["connected"] = True
-                live_accounts["linkedin"]["name"] = data_li.get("localizedName", "Corporate Cars Melbourne")
-                live_accounts["linkedin"]["vanity_name"] = data_li.get("vanityName", "corporate-cars-melbourne")
+                live_accounts["linkedin"]["status"] = "reachable"
+                live_accounts["linkedin"]["name"] = data_li.get("localizedName") or brand_title
+                live_accounts["linkedin"]["vanity_name"] = data_li.get("vanityName") or brand_vanity
+            else:
+                unavailable["linkedin_account"] = f"HTTP {r_li.status_code} from the LinkedIn API"
+
+            # The follower count lives behind networkSizes, and the URN has to
+            # be percent-encoded in the path or LinkedIn answers "Syntax
+            # exception in path variables".
+            from urllib.parse import quote
+
+            r_net = requests.get(
+                "https://api.linkedin.com/rest/networkSizes/" + quote(linkedin_org, safe=""),
+                params={"edgeType": "CompanyFollowedByMember"},
+                headers={**headers, "LinkedIn-Version": "202506"},
+                timeout=10,
+            )
+            if r_net.status_code == 200:
+                live_accounts["linkedin"]["followers"] = r_net.json().get("firstDegreeSize")
+            else:
+                unavailable["linkedin_followers"] = f"HTTP {r_net.status_code} reading the follower count"
         except Exception as e:
             logger.warning(f"LinkedIn live fetch failed: {e}")
+            unavailable["linkedin_account"] = str(e)
 
-    fb_counts = platform_db_counts.get("facebook", {"published": 6, "scheduled": 7})
-    ig_counts = platform_db_counts.get("instagram", {"published": 6, "scheduled": 7})
-    li_counts = platform_db_counts.get("linkedin", {"published": 6, "scheduled": 7})
+    # These fell back to 6 published and 7 scheduled per platform whenever the
+    # publisher's database had nothing for that platform.
+    empty_counts = {"published": 0, "scheduled": 0}
+    fb_counts = platform_db_counts.get("facebook", empty_counts)
+    ig_counts = platform_db_counts.get("instagram", empty_counts)
+    li_counts = platform_db_counts.get("linkedin", empty_counts)
 
     next_fb = next((s for s in scheduled_queue if s["platform"].lower() == "facebook"), None)
     next_ig = next((s for s in scheduled_queue if s["platform"].lower() == "instagram"), None)
@@ -432,52 +556,68 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
         "live_connected_accounts": live_accounts,
         "platforms": {
             "facebook": {
-                "published": fb_counts.get("published", 6),
-                "scheduled": fb_counts.get("scheduled", 7),
-                "next_scheduled_at": next_fb["time"] if next_fb else "18 Aug 2026, 11:30 AM IST (04:00 PM AEST)",
+                "published": fb_counts.get("published", 0),
+                "scheduled": fb_counts.get("scheduled", 0),
+                # A fixed date in the past used to stand here whenever nothing
+                # was queued, so the panel always named a "next post".
+                "next_scheduled_at": next_fb["time"] if next_fb else None,
                 "followers": live_accounts["facebook"]["followers"],
                 "account_name": live_accounts["facebook"]["name"],
-                "impressions": 18400,
-                "clicks": 820,
-                "likes": 340,
-                "engagement_rate": "4.8%",
-                "status": "Connected & Live (Meta Graph API v19.0)"
+                "likes": engagement["facebook"]["likes"],
+                "comments": engagement["facebook"]["comments"],
+                "posts_measured": engagement["facebook"]["posts_measured"],
+                "impressions": None,
+                "reach": None,
+                "connected": live_accounts["facebook"]["connected"],
+                "status": live_accounts["facebook"]["status"],
             },
             "instagram": {
-                "published": ig_counts.get("published", 6),
-                "scheduled": ig_counts.get("scheduled", 7),
-                "next_scheduled_at": next_ig["time"] if next_ig else "19 Aug 2026, 09:30 AM IST (02:00 PM AEST)",
+                "published": ig_counts.get("published", 0),
+                "scheduled": ig_counts.get("scheduled", 0),
+                "next_scheduled_at": next_ig["time"] if next_ig else None,
                 "followers": live_accounts["instagram"]["followers"],
                 "media_count": live_accounts["instagram"]["media_count"],
                 "account_handle": f"@{live_accounts['instagram']['username']}",
-                "impressions": 24500,
-                "clicks": 1210,
-                "likes": 890,
-                "engagement_rate": "6.2%",
-                "status": "Connected & Live (Instagram Graph API)"
+                # Counted off the posts themselves, not estimated.
+                "likes": engagement["instagram"]["likes"],
+                "comments": engagement["instagram"]["comments"],
+                "posts_measured": engagement["instagram"]["posts_measured"],
+                "impressions": None,
+                "reach": None,
+                "connected": live_accounts["instagram"]["connected"],
+                "status": live_accounts["instagram"]["status"],
             },
             "linkedin": {
-                "published": li_counts.get("published", 6),
-                "scheduled": li_counts.get("scheduled", 7),
-                "next_scheduled_at": next_li["time"] if next_li else "18 Aug 2026, 06:00 AM IST (10:30 AM AEST)",
+                "published": li_counts.get("published", 0),
+                "scheduled": li_counts.get("scheduled", 0),
+                "next_scheduled_at": next_li["time"] if next_li else None,
                 "account_name": live_accounts["linkedin"]["name"],
-                "page_url": f"https://www.linkedin.com/company/{live_accounts['linkedin'].get('vanity_name', 'corporate-cars-melbourne')}",
-                "impressions": 12100,
-                "clicks": 640,
-                "likes": 210,
-                "engagement_rate": "5.3%",
-                "status": "Connected & Live (LinkedIn REST API v2)"
+                "followers": live_accounts["linkedin"]["followers"],
+                "page_url": f"https://www.linkedin.com/company/{live_accounts['linkedin'].get('vanity_name') or brand_vanity}",
+                "likes": engagement["linkedin"]["likes"],
+                "comments": engagement["linkedin"]["comments"],
+                "posts_measured": engagement["linkedin"]["posts_measured"],
+                "impressions": None,
+                "reach": None,
+                "connected": live_accounts["linkedin"]["connected"],
+                "status": live_accounts["linkedin"]["status"],
             }
         },
         "total_published_posts": len(published_history),
         "total_scheduled_queue": len(scheduled_queue),
         "published_posts_history": published_history,
         "next_scheduled_posts": scheduled_queue[:6],
-        "weekly_recommendations": [
-            f"Double down on Tullamarine airport arrival Reels for {site_name} on Instagram.",
-            f"Maintain Tuesday/Thursday B2B executive car hire LinkedIn posts.",
-            f"Cross-promote published blog articles on Facebook for suburban business travellers."
-        ]
+        "engagement_measured": engagement,
+        "metrics_unavailable": unavailable,
+        "measurement_note": (
+            "Likes and comments are counted off the posts themselves. Reach, impressions "
+            "and engagement rate are not shown: no connected platform will report them to "
+            "this access token, and the figures that used to appear here were written into "
+            "the source."
+        ),
+        "weekly_recommendations": _build_social_recommendations(
+            live_accounts, engagement, published_history, scheduled_queue, unavailable
+        ),
     }
 
 
@@ -507,12 +647,17 @@ class SocialAnalyticsAgent(AgentInterface):
         # Fetch real analytics from social_agent.db and live Meta/LinkedIn APIs
         real_data = fetch_real_social_analytics()
 
-        total_followers = (
-            real_data["platforms"]["facebook"]["followers"] +
-            real_data["platforms"]["instagram"]["followers"]
-        )
-        total_published = real_data["total_published_posts"]
-        total_scheduled = real_data["total_scheduled_queue"]
+        # Adding the follower counts used to assume both were numbers. They are
+        # None when a platform did not answer, and None is not zero.
+        follower_values = [
+            p.get("followers") for p in real_data["platforms"].values()
+            if isinstance(p.get("followers"), int)
+        ]
+        total_followers = sum(follower_values) if follower_values else None
+
+        measured = real_data.get("engagement_measured") or {}
+        likes = [m.get("likes") for m in measured.values() if isinstance(m.get("likes"), int)]
+        comments = [m.get("comments") for m in measured.values() if isinstance(m.get("comments"), int)]
 
         result_payload = {
             "action": action,
@@ -520,12 +665,20 @@ class SocialAnalyticsAgent(AgentInterface):
             "date_range": date_range,
             "overall_summary": {
                 "total_followers": total_followers,
-                "total_published_posts": total_published,
-                "total_scheduled_queue": total_scheduled,
-                "total_impressions": 55000,
-                "total_engagements": 3700,
-                "avg_engagement_rate_percent": 5.43
+                "followers_counted_on": len(follower_values),
+                "total_published_posts": real_data["total_published_posts"],
+                "total_scheduled_queue": real_data["total_scheduled_queue"],
+                # 55,000 impressions, 3,700 engagements and a 5.43% engagement
+                # rate stood here as literals. No connected platform reports
+                # reach or impressions to this token, so they are not reported.
+                "total_likes": sum(likes) if likes else None,
+                "total_comments": sum(comments) if comments else None,
+                "total_impressions": None,
+                "total_reach": None,
+                "avg_engagement_rate_percent": None,
             },
+            "metrics_unavailable": real_data.get("metrics_unavailable", {}),
+            "measurement_note": real_data.get("measurement_note"),
             "live_connected_accounts": real_data["live_connected_accounts"],
             "platform_breakdown": real_data["platforms"],
             "published_posts_history": real_data["published_posts_history"][:10],

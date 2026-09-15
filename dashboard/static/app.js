@@ -2041,6 +2041,33 @@ async function viewAgentReport(agentId) {
           </div>
         </div>
 
+        <!-- Engagement, counted off the posts themselves. This panel used to
+             carry 55,000 impressions and a 5.43% engagement rate; both were
+             literals, and no connected platform reports reach to this token. -->
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px 18px; margin-top:20px;">
+          <div style="font-size:11.5px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:10px;">
+            <i class="fa-solid fa-heart"></i> Engagement the platforms reported
+          </div>
+          <div class="responsive-grid-3" style="gap:12px;">
+            ${[['Instagram', ig, '#ec4899'], ['Facebook', fb, '#3b82f6'], ['LinkedIn', li, '#0ea5e9']].map(row => `
+              <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:12px; border-radius:10px;">
+                <div style="font-size:10.5px; font-weight:800; color:${row[2]}; text-transform:uppercase;">${row[0]}</div>
+                ${(row[1].likes === null || row[1].likes === undefined)
+                  ? '<div style="font-size:14px; font-weight:800; color:#94a3b8; margin-top:6px;">not measured</div>'
+                  : `<div style="font-size:22px; font-weight:900; color:#fff; font-family:var(--font-mono); margin-top:4px;">${row[1].likes} <span style="font-size:11px; color:var(--text-muted);">likes</span></div>
+                     <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${row[1].comments ?? 0} comments across ${row[1].posts_measured ?? 0} posts</div>`}
+                <div style="font-size:10px; color:var(--text-muted); margin-top:6px;">followers: ${row[1].followers ?? '&mdash;'}</div>
+              </div>`).join('')}
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:12px; line-height:1.55;">
+            ${escapeHtml(sm.measurement_note || '')}
+          </div>
+          ${Object.keys(sm.metrics_unavailable || {}).length ? `
+            <div style="font-size:11px; color:var(--text-muted); margin-top:8px; line-height:1.6; border-top:1px solid rgba(255,255,255,0.06); padding-top:8px;">
+              ${Object.entries(sm.metrics_unavailable).map(e => `<div>&bull; <strong style="color:#cbd5e1;">${escapeHtml(e[0].replace(/_/g, ' '))}</strong>: ${escapeHtml(String(e[1]))}</div>`).join('')}
+            </div>` : ''}
+        </div>
+
         <!-- Scheduled Social Posts Queue Table -->
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; margin-top:24px; flex-wrap:wrap; gap:10px;">
           <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin:0;">
