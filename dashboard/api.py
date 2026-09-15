@@ -1228,7 +1228,7 @@ def client_login(req: ClientLoginRequest):
 @app.post("/api/portal/onboard-register")
 def client_self_onboard_register(
     req: RegisterClientSiteRequest,
-    _admin: Dict[str, Any] = Depends(require_admin),
+    _super: Dict[str, Any] = Depends(require_super_admin),
 ):
     """Register a client website and mint that client's access token.
 
@@ -1721,8 +1721,16 @@ def list_websites(payload: Optional[Dict[str, Any]] = Depends(optional_session))
 
 
 @app.post("/api/websites")
-def add_website(request: CreateWebsiteRequest, _admin: Dict[str, Any] = Depends(require_admin)):
-    """Register a new website profile in the Command Center (Admin Only)."""
+def add_website(
+    request: CreateWebsiteRequest,
+    _super: Dict[str, Any] = Depends(require_super_admin),
+):
+    """Register a new website profile in the Command Center.
+
+    require_admin was not enough here: it admits the "client" role, so a
+    magic-link holder could register further websites and grant itself access
+    to them.
+    """
     existing = websites_mgr.get(request.site_id)
     if existing:
         raise HTTPException(status_code=400, detail=f"Website with site_id '{request.site_id}' already exists.")
