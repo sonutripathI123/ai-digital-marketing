@@ -333,38 +333,15 @@ def _looks_like_place_id(value: Any) -> bool:
 def _google_ads_account_for_site(site_id: str, site_profile: Any = None) -> Dict[str, Any]:
     """Which Google Ads account, if any, belongs to this site.
 
-    Credentials fall back to environment variables when a site has none of its
-    own, so every site resolves to whichever account the server was configured
-    with. That is fine for the site that owns it and wrong for every other one:
-    the second site's panel showed the first site's spend, campaigns and
-    conversions under its own name.
-
-    Returns the resolved account, the account the site claims, and whether they
-    are the same account.
+    The rule lives with the Ads client so there is one definition of it: two
+    copies drift, and the consequence of drift here is one business's spend
+    shown under another's name.
     """
-    from integrations.ads.google_ads_client import GoogleAdsLiveClient
+    from integrations.ads.google_ads_client import GoogleAdsLiveClient, account_belongs_to_site
 
-    def digits(v: Any) -> str:
-        return "".join(c for c in str(v or "") if c.isdigit())
-
+    account = account_belongs_to_site(site_id, site_profile)
     status = GoogleAdsLiveClient(credentials={}, site_id=site_id).status()
-    resolved = digits(status.get("customer_id"))
-
-    saved = (websites_mgr.get_agent_credentials(site_id, "google-ads-monitoring-agent") or {})
-    if not saved.get("customer_id"):
-        saved = (websites_mgr.get_agent_credentials(site_id, "google-ads-optimization-agent") or {})
-    declared_raw = saved.get("customer_id") or getattr(site_profile, "google_ads_id", None)
-    declared = digits(declared_raw)
-
-    return {
-        "resolved": resolved,
-        "declared": declared_raw,
-        "ready": bool(status.get("ready")),
-        # A declared id of "opal-gads-104" has no digits to match on, so it is
-        # a placeholder rather than an account, and owns nothing.
-        "owns_account": bool(resolved) and len(declared) >= 8 and declared == resolved,
-        "reason": status.get("reason"),
-    }
+    return {**account, "ready": bool(status.get("ready")), "reason": status.get("reason")}
 
 
 def _cron_run_daily_google_ads_check():

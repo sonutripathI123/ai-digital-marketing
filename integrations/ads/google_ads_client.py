@@ -72,6 +72,45 @@ def _date_token(date_range: str) -> str:
     return _DATE_PRESETS.get(str(date_range or "").lower().strip(), "LAST_30_DAYS")
 
 
+def account_belongs_to_site(site_id: str, site_profile: Any = None) -> Dict[str, Any]:
+    """Whether the Google Ads account these credentials reach is this site's own.
+
+    Credentials fall back to environment variables when a site has none of its
+    own, so every site resolves to whichever account the server was configured
+    with. That is correct for the site that owns it and wrong for every other
+    one, which would otherwise be shown a different business's spend, keywords
+    and conversions under its own name.
+
+    Returns the resolved account, the account the site claims, and whether they
+    are the same. A claimed id with fewer than eight digits -- "opal-gads-104",
+    say -- is a placeholder, not an account, and owns nothing.
+    """
+    resolved = _digits_only(resolve_credentials(None, site_id).get("customer_id"))
+
+    declared_raw = None
+    try:
+        from config.websites import WebsiteManager
+
+        manager = WebsiteManager()
+        for agent_id in ("google-ads-monitoring-agent", "google-ads-optimization-agent"):
+            saved = manager.get_agent_credentials(site_id, agent_id) or {}
+            if saved.get("customer_id"):
+                declared_raw = saved["customer_id"]
+                break
+        if not declared_raw:
+            profile = site_profile or manager.get(site_id)
+            declared_raw = getattr(profile, "google_ads_id", None)
+    except Exception as e:
+        logger.warning("Could not read the declared Google Ads id for %s: %s", site_id, e)
+
+    declared = _digits_only(declared_raw)
+    return {
+        "resolved": resolved,
+        "declared": declared_raw,
+        "owns_account": bool(resolved) and len(declared) >= 8 and declared == resolved,
+    }
+
+
 def resolve_credentials(
     explicit: Optional[Dict[str, Any]] = None,
     site_id: Optional[str] = None,

@@ -133,6 +133,24 @@ def own_keyword_costs(router: ModelRouter, site_id: str) -> Dict[str, Any]:
     click for these terms exists.
     """
     from agents.google_ads_optimization_agent import GoogleAdsOptimizationAgent
+    from integrations.ads.google_ads_client import account_belongs_to_site
+
+    # Credentials fall back to environment variables, so a site with no Google
+    # Ads account of its own resolves to whichever account the server holds.
+    # Without this check, the second site's panel showed the first site's
+    # keyword costs as its own.
+    account = account_belongs_to_site(site_id)
+    if not account["owns_account"]:
+        return {
+            "measured": False,
+            "error": (
+                f"This site has no Google Ads account of its own (it declares "
+                f"{account['declared']!r}). The credentials on this server belong to account "
+                f"{account['resolved'] or 'none'}, so showing those costs here would report "
+                f"another business's spend as this one's."
+            ),
+            "keywords": [],
+        }
 
     try:
         task = AgentTask(
