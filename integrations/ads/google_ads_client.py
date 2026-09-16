@@ -72,6 +72,28 @@ def _date_token(date_range: str) -> str:
     return _DATE_PRESETS.get(str(date_range or "").lower().strip(), "LAST_30_DAYS")
 
 
+def declared_account_for_site(site_id: str, site_profile: Any = None) -> Optional[str]:
+    """The Google Ads account this site says is its own, as configured.
+
+    Looked up first in the site's saved agent credentials, then on the website
+    profile itself. Returns the raw value -- it may well be a placeholder like
+    "opal-gads-104" rather than an account number.
+    """
+    try:
+        from config.websites import WebsiteManager
+
+        manager = WebsiteManager()
+        for agent_id in ("google-ads-monitoring-agent", "google-ads-optimization-agent"):
+            saved = manager.get_agent_credentials(site_id, agent_id) or {}
+            if saved.get("customer_id"):
+                return saved["customer_id"]
+        profile = site_profile or manager.get(site_id)
+        return getattr(profile, "google_ads_id", None)
+    except Exception as e:
+        logger.warning("Could not read the declared Google Ads id for %s: %s", site_id, e)
+        return None
+
+
 def account_belongs_to_site(site_id: str, site_profile: Any = None) -> Dict[str, Any]:
     """Whether the Google Ads account these credentials reach is this site's own.
 
@@ -86,23 +108,7 @@ def account_belongs_to_site(site_id: str, site_profile: Any = None) -> Dict[str,
     say -- is a placeholder, not an account, and owns nothing.
     """
     resolved = _digits_only(resolve_credentials(None, site_id).get("customer_id"))
-
-    declared_raw = None
-    try:
-        from config.websites import WebsiteManager
-
-        manager = WebsiteManager()
-        for agent_id in ("google-ads-monitoring-agent", "google-ads-optimization-agent"):
-            saved = manager.get_agent_credentials(site_id, agent_id) or {}
-            if saved.get("customer_id"):
-                declared_raw = saved["customer_id"]
-                break
-        if not declared_raw:
-            profile = site_profile or manager.get(site_id)
-            declared_raw = getattr(profile, "google_ads_id", None)
-    except Exception as e:
-        logger.warning("Could not read the declared Google Ads id for %s: %s", site_id, e)
-
+    declared_raw = declared_account_for_site(site_id, site_profile)
     declared = _digits_only(declared_raw)
     return {
         "resolved": resolved,
@@ -157,12 +163,36 @@ class GoogleAdsLiveClient:
         self,
         credentials: Optional[Dict[str, Any]] = None,
         site_id: Optional[str] = None,
+        site_profile: Any = None,
     ):
         self.site_id = site_id
+        self.site_profile = site_profile
         self.credentials = resolve_credentials(credentials, site_id)
         self.customer_id = _digits_only(self.credentials.get("customer_id"))
         self.login_customer_id = _digits_only(self.credentials.get("login_customer_id"))
         self._client = None  # lazily built GoogleAdsClient
+        self._owns = None
+
+    def owns_account(self) -> bool:
+        """Whether the account this client would query is the site's own.
+
+        Credentials fall back to environment variables, so a site with none of
+        its own still resolves to whichever account the server holds. That is
+        right for the site that owns it and wrong for every other one, which
+        would otherwise see a different business's spend under its own name.
+
+        With no site_id there is no site to check against, and the caller is
+        responsible for the account it asked for.
+        """
+        if not self.site_id:
+            return True
+        if self._owns is None:
+            declared = _digits_only(
+                declared_account_for_site(self.site_id, self.site_profile)
+            )
+            # Fewer than eight digits is a placeholder, not an account number.
+            self._owns = len(declared) >= 8 and declared == self.customer_id
+        return self._owns
 
     # ------------------------------------------------------------------ #
     # Readiness / diagnostics
@@ -180,14 +210,28 @@ class GoogleAdsLiveClient:
             return False
 
     def is_configured(self) -> bool:
-        """True only if the library is importable AND all required creds exist."""
-        return self.library_available() and not self.missing_keys()
+        """Library importable, credentials complete, and the account is ours."""
+        return (
+            self.library_available()
+            and not self.missing_keys()
+            and self.owns_account()
+        )
 
     def status(self) -> Dict[str, Any]:
         """Human-readable readiness report (never raises)."""
         missing = self.missing_keys()
         lib = self.library_available()
-        if lib and not missing:
+        owns = self.owns_account()
+        if lib and not missing and not owns:
+            declared = declared_account_for_site(self.site_id, self.site_profile)
+            reason = (
+                f"This website has no Google Ads account of its own. The server's "
+                f"credentials reach account {self.customer_id}, which belongs to a "
+                f"different website; '{declared}' is not an account number. "
+                f"Connect this site's own account to see its data."
+            )
+            code = "ACCOUNT_NOT_LINKED"
+        elif lib and not missing:
             reason = "READY — all credentials present and library installed."
             code = "READY"
         elif not lib and missing:
@@ -201,7 +245,8 @@ class GoogleAdsLiveClient:
             code = "CREDENTIALS_MISSING"
         return {
             "code": code,
-            "ready": bool(lib and not missing),
+            "ready": bool(lib and not missing and owns),
+            "owns_account": owns,
             "library_installed": lib,
             "missing_credentials": missing,
             "customer_id": self.customer_id or None,
@@ -231,6 +276,11 @@ class GoogleAdsLiveClient:
 
     def _search(self, query: str) -> List[Any]:
         """Run a GAQL query and return the streamed rows."""
+        if not self.owns_account():
+            raise PermissionError(
+                f"Site '{self.site_id}' does not own Google Ads account "
+                f"{self.customer_id}; refusing to read it."
+            )
         client = self._build_client()
         service = client.get_service("GoogleAdsService")
         rows: List[Any] = []
