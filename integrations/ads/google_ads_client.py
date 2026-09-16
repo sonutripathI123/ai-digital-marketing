@@ -224,11 +224,14 @@ class GoogleAdsLiveClient:
         owns = self.owns_account()
         if lib and not missing and not owns:
             declared = declared_account_for_site(self.site_id, self.site_profile)
+            # Naming the account the credentials do reach would hand this site
+            # the other business's account number, which is the disclosure the
+            # check exists to prevent.
             reason = (
-                f"This website has no Google Ads account of its own. The server's "
-                f"credentials reach account {self.customer_id}, which belongs to a "
-                f"different website; '{declared}' is not an account number. "
-                f"Connect this site's own account to see its data."
+                f"This website has no Google Ads account of its own "
+                f"(\"{declared}\" is not an account number), and the server's "
+                f"credentials belong to a different website. Connect this "
+                f"site's own Google Ads account to see its data."
             )
             code = "ACCOUNT_NOT_LINKED"
         elif lib and not missing:
@@ -249,8 +252,8 @@ class GoogleAdsLiveClient:
             "owns_account": owns,
             "library_installed": lib,
             "missing_credentials": missing,
-            "customer_id": self.customer_id or None,
-            "login_customer_id": self.login_customer_id or None,
+            "customer_id": (self.customer_id or None) if owns else None,
+            "login_customer_id": (self.login_customer_id or None) if owns else None,
             "reason": reason,
         }
 
