@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="/static/styles.css?v=11.25.0">
+  <link rel="stylesheet" href="/static/styles.css?v=11.96.0">
 </head>
 <body>
   <!-- Full-Screen Ambient Luxury Background Overlay -->
@@ -138,22 +138,22 @@
 
           <!-- Super Admin Master Hub Button -->
           <a href="/super-admin" target="_blank" class="btn" id="super-admin-btn" style="display:none; text-decoration:none; background:linear-gradient(135deg, rgba(234,179,8,0.2), rgba(249,115,22,0.2)); border:1px solid #eab308; color:#facc15; font-weight:800; box-shadow:0 4px 12px rgba(234,179,8,0.25);">
-            <i class="fa-solid fa-crown" style="color:#facc15;"></i> Super Admin Hub
+            <i class="fa-solid fa-crown" style="color:#facc15;"></i><span>Super Admin Hub</span>
           </a>
 
           <!-- PWA Install App Button -->
           <button id="pwa-install-header-btn" class="btn btn-primary" onclick="triggerPwaInstall()" style="background:linear-gradient(135deg, #06b6d4, #10b981); color:#fff; border:none; font-weight:800; display:inline-flex; align-items:center; gap:6px; box-shadow:0 0 14px rgba(6,182,212,0.4); cursor:pointer;">
-            <i class="fa-solid fa-mobile-screen-button"></i> <span>📲 Install App</span>
+            <i class="fa-solid fa-mobile-screen-button"></i><span>Install App</span>
           </button>
 
           <a href="/api/docs/download-master-handbook" target="_blank" download="AI_Digital_Marketing_Master_Handbook.pdf" class="btn btn-secondary" style="border-color:rgba(168,85,247,0.5); background:linear-gradient(135deg, rgba(168,85,247,0.15), rgba(6,182,212,0.15)); color:#c084fc; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px; box-shadow: 0 4px 12px rgba(168,85,247,0.25);">
-            <i class="fa-solid fa-book-open" style="color:#c084fc;"></i> ⬇ Master Handbook (PDF)
+            <i class="fa-solid fa-book-open" style="color:#c084fc;"></i><span>Handbook (PDF)</span>
           </a>
           <button class="btn btn-secondary" onclick="openVisitorAuditModal()" style="border-color:rgba(168,85,247,0.5); color:#c084fc; font-weight:700;">
-            <i class="fa-solid fa-users-viewfinder"></i> User Logs
+            <i class="fa-solid fa-users-viewfinder"></i><span>User Logs</span>
           </button>
           <button class="btn btn-secondary" onclick="openPageOptimizerModal()" style="border-color:rgba(16,185,129,0.4); color:#10b981; font-weight:700;">
-            <i class="fa-solid fa-stethoscope"></i> Page Doctor
+            <i class="fa-solid fa-stethoscope"></i><span>Page Doctor</span>
           </button>
           <button class="btn btn-secondary" id="refresh-btn">
             <i class="fa-solid fa-arrows-rotate"></i> Refresh
@@ -1938,7 +1938,7 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=11.95.0"></script>
+  <script src="/static/app.js?v=11.96.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {

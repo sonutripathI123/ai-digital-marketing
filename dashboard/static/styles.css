@@ -284,7 +284,17 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+  row-gap: 10px;
+}
+
+/* An icon keeps its own size and never shrinks into the label beside it. */
+.btn > i,
+.auth-pill > i {
+  font-size: 13px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .live-time-badge {
@@ -365,7 +375,13 @@ body {
   border: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  /* Without this a crowded header broke labels across two lines -- "Master
+     Handbook" above "(PDF)" -- and the icon floated between them. The row of
+     buttons wraps instead; the text inside one never does. */
+  white-space: nowrap;
+  line-height: 1.2;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }

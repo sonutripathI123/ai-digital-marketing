@@ -276,7 +276,7 @@ function renderAuthHeaderUI() {
         <span>Public Visitor Mode</span>
       </div>
       <button class="btn btn-sm btn-admin-login" onclick="openAdminLoginModal()" title="Unlock admin access" style="font-size:11.5px; padding:6px 14px;">
-        <i class="fa-solid fa-lock"></i> Admin Login
+        <i class="fa-solid fa-lock"></i><span>Admin Login</span>
       </button>
     `;
   }
