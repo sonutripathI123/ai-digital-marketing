@@ -490,6 +490,30 @@ function checkVisitorAccess() {
   }
 }
 
+function applySiteDefaultsToForms() {
+  // These inputs used to ship with one website's address as their value, so
+  // every other client found somebody else's site filled in and ready to
+  // submit. They are filled from whichever site is open, and only while the
+  // field is still untouched.
+  const site = allWebsitesList.find(w => w.site_id === currentSiteId);
+  if (!site) return;
+  const domain = (site.domain || '').replace(/\/$/, '');
+  const name = site.name || currentSiteId;
+
+  [['page-opt-view-url', domain + '/'],
+   ['internal-link-target-url', domain + '/'],
+   ['seo-audit-target-url', domain]].forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (el && !el.value.trim()) el.value = value;
+  });
+
+  const anchor = document.getElementById('outreach-anchor-text');
+  if (anchor && !anchor.value.trim()) anchor.value = name;
+
+  document.querySelectorAll('.brand-site-name').forEach(el => { el.textContent = name; });
+  document.title = `AI Digital Marketing Command Center \u2014 ${name}`;
+}
+
 function applyClientRestrictions() {
   // A client was handed one website. Anything that belongs to running the
   // platform itself -- other sites, who else has logged in, the owner's hub --
@@ -1032,6 +1056,7 @@ async function initWebsiteSwitcher() {
 
   renderWebsiteDropdown();
   updateWebsiteHeaderUI();
+  applySiteDefaultsToForms();
 
   // Toggle dropdown on button click
   const dropdownWrap = document.getElementById('website-switcher-wrap');
@@ -1189,6 +1214,7 @@ async function switchWebsite(siteId) {
 
   renderWebsiteDropdown();
   updateWebsiteHeaderUI();
+  applySiteDefaultsToForms();
 
   // If the social campaign modal is open, follow the switch to the new site's
   // own cadence instead of leaving the previous site's values on screen.
@@ -5150,7 +5176,10 @@ function updateDynamicAgentCounters(totalAgents, activeAgents) {
 
   const heroDesc = document.getElementById('cyber-hero-desc');
   if (heroDesc) {
-    heroDesc.textContent = `Autonomous ${totalAgents}-Agent Marketing Operating System controlling SEO, Google Ads, Meta Ads, Social Media, Reviews, and Corporate Lead Pipeline for Corporate Cars Melbourne.`;
+    const brand = (allWebsitesList.find(w => w.site_id === currentSiteId) || {}).name
+      || document.getElementById('active-site-name')?.textContent
+      || 'this website';
+    heroDesc.textContent = `Autonomous ${totalAgents}-Agent Marketing Operating System controlling SEO, Google Ads, Meta Ads, Social Media, Reviews, and the lead pipeline for ${brand}.`;
   }
 }
 
