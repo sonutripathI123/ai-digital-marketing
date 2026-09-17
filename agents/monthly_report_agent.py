@@ -256,7 +256,11 @@ def collect_lead_metrics(site_id: str) -> Dict[str, Any]:
         return _section("website contact forms — not connected", False,
                         leads=None, note=error)
 
-    leads = [classify_submission(normalise_submission(r)) for r in rows]
+    # classify_submission returns the verdict, not the lead -- it is attached
+    # to the lead, the way the lead agent itself does it.
+    leads = [normalise_submission(row) for row in rows]
+    for lead in leads:
+        lead["assessment"] = classify_submission(lead)
     summary = summarise(leads, meta)
     genuine = sum(
         count for verdict, count in (summary.get("by_verdict") or {}).items()
@@ -363,13 +367,23 @@ class MonthlyReportAgent(AgentInterface):
 
         logger.info(f"Executing MonthlyReportAgent: action={action}, site={site_id}, period='{period}'")
 
-        blogs = collect_blog_metrics(site_id)
-        search = collect_search_metrics(router, site_id)
-        analytics = collect_analytics_metrics(router, site_id)
-        paid = collect_paid_metrics(router, site_id)
-        social = collect_social_metrics(site_id)
-        reputation = collect_reputation_metrics(router, site_id)
-        leads = collect_lead_metrics(site_id)
+        # One channel raising must not blank the whole report: a KeyError in
+        # the lead collector once took out organic, analytics, ads and social
+        # along with it, and the panel showed "not measured" for everything.
+        def _collect(name, fn, *args):
+            try:
+                return fn(*args)
+            except Exception as e:
+                logger.warning(f"Monthly report: {name} could not be collected: {e}")
+                return _section(f"{name} — could not be read", False, error=str(e))
+
+        blogs = _collect("blog queue", collect_blog_metrics, site_id)
+        search = _collect("Search Console", collect_search_metrics, router, site_id)
+        analytics = _collect("GA4", collect_analytics_metrics, router, site_id)
+        paid = _collect("Google Ads", collect_paid_metrics, router, site_id)
+        social = _collect("social publisher", collect_social_metrics, site_id)
+        reputation = _collect("Google reviews", collect_reputation_metrics, router, site_id)
+        leads = _collect("website forms", collect_lead_metrics, site_id)
 
         channels = {
             "seo_and_content": {**search, "blogs": blogs},
