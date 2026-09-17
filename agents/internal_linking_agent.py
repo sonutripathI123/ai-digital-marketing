@@ -30,6 +30,19 @@ logger = get_agent_logger("internal-linking-agent")
 BLOG_AGENT_DIR = Path(ROOT_DIR) / "blog-agent"
 
 
+def _registry_domain(site_key: str) -> str:
+    """This site's own domain, or empty. Never another site's."""
+    from config.site_context import site_identity
+
+    return site_identity(site_key)["domain"]
+
+
+def _registry_name(site_key: str) -> str:
+    from config.site_context import site_identity
+
+    return site_identity(site_key)["name"]
+
+
 def get_wp_client(site_key: str = "ccm") -> tuple[str, tuple[str, str], Dict[str, Any]]:
     """Returns base API url, auth tuple, and site config for WordPress REST API."""
     env_path = BLOG_AGENT_DIR / ".env"
@@ -51,10 +64,14 @@ def get_wp_client(site_key: str = "ccm") -> tuple[str, tuple[str, str], Dict[str
         "ccm": "https://corporatecarsmelbourne.com.au",
         "opal": "https://www.opalchauffeurs.com.au"
     }
-    base_url = site_urls.get(site_key, "https://corporatecarsmelbourne.com.au")
+    # Unknown sites used to land on Corporate Cars Melbourne's WordPress,
+
+    # so an internal-linking run for another client read CCM's posts.
+
+    base_url = site_urls.get(site_key) or _registry_domain(site_key)
     api_url = base_url.rstrip("/") + "/wp-json/wp/v2"
 
-    return api_url, (user, pw), {"name": "Corporate Cars Melbourne", "base_url": base_url}
+    return api_url, (user, pw), {"name": _registry_name(site_key) or site_key, "base_url": base_url}
 
 
 def load_candidate_internal_pages(site_key: str = "ccm") -> List[Dict[str, str]]:
@@ -524,7 +541,9 @@ class InternalLinkingAgent(AgentInterface):
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
         input_data = task.input_data or {}
         action = str(input_data.get("action", "audit_page")).lower().strip()
-        source_url = str(input_data.get("source_url") or input_data.get("url") or "https://corporatecarsmelbourne.com.au/dandenong-early-morning-flight-plan/").strip()
+        # The default was a specific Corporate Cars Melbourne blog post, so a
+        # task that named no URL analysed that post whichever site it was for.
+        source_url = str(input_data.get("source_url") or input_data.get("url") or "").strip()
         site_key = str(input_data.get("site_key", "ccm")).strip()
 
         logger.info(f"Executing InternalLinkingAgent task: action={action}, source_url='{source_url}'")

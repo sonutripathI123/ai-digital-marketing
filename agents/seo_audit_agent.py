@@ -764,11 +764,28 @@ class SEOAuditAgent(AgentInterface):
         )
 
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
+        from config.site_context import not_configured, site_identity
+
         input_data = task.input_data or {}
         action = str(input_data.get("action", "audit_page")).lower().strip()
-        url = str(input_data.get("url") or input_data.get("source_url") or "https://corporatecarsmelbourne.com.au").strip()
         audit_mode = str(input_data.get("audit_mode", "single_page")).lower().strip()
-        site_key = str(input_data.get("site_key", "ccm")).strip()
+
+        # site_key defaulted to "ccm" and url to CCM's homepage, so a task for
+        # any other site audited Corporate Cars Melbourne and filed the score
+        # under that site's name.
+        site_key = str(
+            input_data.get("site_key") or input_data.get("site_id")
+            or getattr(task, "site_id", None) or ""
+        ).strip()
+        url = str(input_data.get("url") or input_data.get("source_url") or "").strip()
+        if not url:
+            identity = site_identity(site_key)
+            if not identity["known"] or not identity["domain"]:
+                return {"status": "success", "output": not_configured(
+                    site_key, "A website address",
+                    "Add this website's domain in the admin panel, or pass a "
+                    "URL to audit.")}
+            url = identity["domain"]
 
         logger.info(f"Executing SEOAuditAgent task: action={action}, mode={audit_mode}, url='{url}'")
 

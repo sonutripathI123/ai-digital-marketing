@@ -75,11 +75,32 @@ class GSCAgent(AgentInterface):
         )
 
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
+        from config.site_context import not_configured, resolve_site
+
         input_data = task.input_data or {}
         action = str(input_data.get("action", "fetch_performance")).lower().strip()
-        site_url = str(input_data.get("site_url", "https://corporatecarsmelbourne.com.au")).strip()
         date_range = str(input_data.get("date_range", "last_28_days")).strip()
         use_ai = bool(input_data.get("use_ai", False))
+
+        # This used to default to corporatecarsmelbourne.com.au, so a task for
+        # any other site was answered with CCM's Search Console data under that
+        # site's name. The property now comes from the site being asked about,
+        # and a site that has not connected one is told so.
+        site_id = input_data.get("site_id") or getattr(task, "site_id", None)
+        site_url = str(input_data.get("site_url") or "").strip()
+        if not site_url:
+            profile = resolve_site(site_id)
+            if not profile:
+                return {"status": "success", "output": not_configured(
+                    site_id, "A Search Console property",
+                    "Open this agent's Connect form and add the site's verified "
+                    "Search Console URL.")}
+            site_url = (getattr(profile, "gsc_site_url", None) or profile.domain or "").strip()
+            if not site_url:
+                return {"status": "success", "output": not_configured(
+                    site_id, "A Search Console property",
+                    "Open this agent's Connect form and add the site's verified "
+                    "Search Console URL.")}
 
         logger.info(f"Executing GSCAgent task: action={action}, site_url='{site_url}', date_range='{date_range}'")
 

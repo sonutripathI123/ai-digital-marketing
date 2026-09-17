@@ -6,6 +6,7 @@ Threads, and Pinterest using live Meta Graph API, LinkedIn API, and local social
 """
 
 import os
+import re
 import json
 import sqlite3
 import requests
@@ -163,7 +164,11 @@ def _build_social_recommendations(live_accounts, engagement, published_history,
     return out or ["No social activity was found to report on."]
 
 
-def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https://corporatecarsmelbourne.com.au", site_name: str = "Corporate Cars Melbourne") -> Dict[str, Any]:
+def fetch_real_social_analytics(
+    site_id: str = "",
+    site_domain: str = "",
+    site_name: str = "",
+) -> Dict[str, Any]:
     """
     Connects to real corporate-cars-social-agent/social_agent.db and queries live Meta & LinkedIn APIs
     to return 100% accurate real analytics with live post interactions (likes, comments, permalinks).
@@ -183,7 +188,7 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
         ig_followers = None
         ig_media_count = None
         li_followers = None
-    else:
+    elif site_id == "ccm":
         meta_token = os.getenv("META_USER_TOKEN", "").strip()
         meta_page_id = os.getenv("META_PAGE_ID", "791630667378039").strip()
         ig_id = os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID", "17841477866530528").strip()
@@ -191,6 +196,24 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
         linkedin_org = os.getenv("LINKEDIN_ORGANIZATION_URN", "urn:li:organization:109059206").strip()
         brand_title = "Corporate Cars Melbourne"
         brand_vanity = "corporate-cars-melbourne"
+        fb_followers = None
+        ig_followers = None
+        ig_media_count = None
+        li_followers = None
+    else:
+        # This branch used to be the "else", holding Corporate Cars Melbourne's
+        # page ids and brand -- so every site that was not Opal, including any
+        # newly added one, was reported as CCM with CCM's Facebook page and
+        # Instagram account. A site with no social accounts of its own now gets
+        # nothing rather than somebody else's.
+        prefix = re.sub(r"[^A-Z0-9]+", "_", (site_id or "").upper()).strip("_")
+        meta_token = os.getenv(f"{prefix}_META_ACCESS_TOKEN", "").strip() if prefix else ""
+        meta_page_id = os.getenv(f"{prefix}_META_PAGE_ID", "").strip() if prefix else ""
+        ig_id = os.getenv(f"{prefix}_INSTAGRAM_BUSINESS_ACCOUNT_ID", "").strip() if prefix else ""
+        linkedin_token = os.getenv(f"{prefix}_LINKEDIN_ACCESS_TOKEN", "").strip() if prefix else ""
+        linkedin_org = os.getenv(f"{prefix}_LINKEDIN_ORGANIZATION_URN", "").strip() if prefix else ""
+        brand_title = site_name or site_id or "this website"
+        brand_vanity = ""
         fb_followers = None
         ig_followers = None
         ig_media_count = None
@@ -405,7 +428,7 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
 
                 # Construct platform-specific live permalink URL
                 if plat == "instagram":
-                    post_url = f"https://www.instagram.com/p/{pid}/" if (pid.startswith("18") or pid.startswith("Dc")) else "https://www.instagram.com/corporatecarsmelbourne/"
+                    post_url = f"https://www.instagram.com/p/{pid}/" if (pid.startswith("18") or pid.startswith("Dc")) else ""
                 elif plat == "facebook":
                     if "_" in pid:
                         page_id, post_fbid = pid.split("_", 1)
@@ -525,7 +548,7 @@ def fetch_real_social_analytics(site_id: str = "ccm", site_domain: str = "https:
             if r_ig.status_code == 200:
                 data_ig = r_ig.json()
                 live_accounts["instagram"]["connected"] = True
-                live_accounts["instagram"]["username"] = data_ig.get("username", "corporatecarsmelbourne")
+                live_accounts["instagram"]["username"] = data_ig.get("username", "")
                 live_accounts["instagram"]["status"] = "reachable"
                 live_accounts["instagram"]["followers"] = data_ig.get("followers_count")
                 live_accounts["instagram"]["media_count"] = data_ig.get("media_count")
@@ -702,8 +725,20 @@ class SocialAnalyticsAgent(AgentInterface):
 
         logger.info(f"Executing SocialAnalyticsAgent task: action={action}, platform='{platform}', date_range='{date_range}'")
 
-        # Fetch real analytics from social_agent.db and live Meta/LinkedIn APIs
-        real_data = fetch_real_social_analytics()
+        from config.site_context import site_identity
+
+        site_id = str(
+            input_data.get("site_id") or getattr(task, "site_id", None) or ""
+        ).strip().lower()
+        identity = site_identity(site_id)
+
+        # This was called with no arguments, so every run reported the default
+        # site's accounts whatever site the task named.
+        real_data = fetch_real_social_analytics(
+            site_id=site_id,
+            site_domain=identity["domain"],
+            site_name=identity["name"],
+        )
 
         # Adding the follower counts used to assume both were numbers. They are
         # None when a platform did not answer, and None is not zero.

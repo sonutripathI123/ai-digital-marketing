@@ -596,8 +596,20 @@ class SEOContentBriefAgent(AgentInterface):
         target_keyword = str(input_data.get("target_keyword") or input_data.get("keyword") or "corporate chauffeur melbourne").strip()
         location = str(input_data.get("location", "Melbourne")).strip()
         suburb = str(input_data.get("suburb", "")).strip()
-        site_name = str(input_data.get("site_name", "Corporate Cars Melbourne")).strip()
-        site_domain = str(input_data.get("site_domain", "https://corporatecarsmelbourne.com.au")).strip()
+        # Both defaulted to Corporate Cars Melbourne, so a brief written for
+        # another client carried CCM's name and linked to CCM's pages.
+        from config.site_context import not_configured, site_identity
+
+        _identity = site_identity(
+            input_data.get("site_id") or getattr(task, "site_id", None)
+        )
+        site_name = str(input_data.get("site_name") or _identity["name"]).strip()
+        site_domain = str(input_data.get("site_domain") or _identity["domain"]).strip()
+        if not site_name or not site_domain:
+            return {"status": "success", "output": not_configured(
+                _identity["site_id"], "A website name and domain",
+                "Add this website in the admin panel before generating a "
+                "content brief for it.")}
         page_url = str(input_data.get("url", "")).strip()
         use_ai = bool(input_data.get("use_ai", False))
 

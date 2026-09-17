@@ -185,20 +185,39 @@ class PageOptimizerAgent(AgentInterface):
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
         input_data = task.input_data or {}
         action = str(input_data.get("action", "audit_page")).lower().strip()
-        page_url = str(input_data.get("url") or input_data.get("page_url", "https://corporatecarsmelbourne.com.au/")).strip()
+        page_url = str(input_data.get("url") or input_data.get("page_url") or "").strip()
         focus_kw_raw = str(input_data.get("focus_keyword", "")).strip()
         location = str(input_data.get("location", "Melbourne")).strip()
-        site_id = str(input_data.get("site_id") or input_data.get("site", "ccm")).strip()
+        site_id = str(
+            input_data.get("site_id") or input_data.get("site")
+            or getattr(task, "site_id", None) or ""
+        ).strip()
         use_ai = bool(input_data.get("use_ai", False))
 
         # Clean focus keyword (remove leading colons or quotes)
         focus_kw = re.sub(r"^[:\s\"']+|[:\s\"']+$", "", focus_kw_raw).strip()
 
-        wm = WebsiteManager()
-        profile = wm.get(site_id) or wm.get("ccm")
-        brand_name = profile.name if profile else "Corporate Cars Melbourne"
-        brand_domain = profile.domain if profile else "https://corporatecarsmelbourne.com.au"
-        brand_loc = profile.location if profile else "Melbourne, VIC"
+        # This fell back to the ccm profile, and then to CCM's brand and domain
+        # as literals, so an unknown or unconfigured site was optimised as if it
+        # were Corporate Cars Melbourne.
+        from config.site_context import not_configured, resolve_site
+
+        profile = resolve_site(site_id)
+        if not profile:
+            return {"status": "success", "output": not_configured(
+                site_id, "A website",
+                "Add this website in the admin panel before running the page "
+                "optimizer for it.")}
+        brand_name = profile.name or site_id
+        brand_domain = (profile.domain or "").rstrip("/")
+        brand_loc = getattr(profile, "location", "") or ""
+        if not page_url:
+            if not brand_domain:
+                return {"status": "success", "output": not_configured(
+                    site_id, "A website address",
+                    "Add this website's domain in the admin panel, or pass the "
+                    "page URL to optimise.")}
+            page_url = brand_domain + "/"
 
         logger.info(f"Executing PageOptimizerAgent: action={action}, url='{page_url}', focus_kw='{focus_kw}', site='{site_id}'")
 

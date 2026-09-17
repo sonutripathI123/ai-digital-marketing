@@ -169,7 +169,7 @@ class GoogleAdsMonitoringAgent(AgentInterface):
             campaigns = [
                 {
                     "campaign_name": "Corporate Chauffeur & Cars",
-                    "campaign_group": "16Aug_Ads_Campaign",
+                    "campaign_group": None,
                     "status": "ELIGIBLE",
                     "ad_group_type": "Standard",
                     "daily_budget_usd": 55.00,
@@ -185,7 +185,7 @@ class GoogleAdsMonitoringAgent(AgentInterface):
                 },
                 {
                     "campaign_name": "Corporate Airport Transfers",
-                    "campaign_group": "16Aug_Ads_Campaign",
+                    "campaign_group": None,
                     "status": "ELIGIBLE",
                     "ad_group_type": "Standard",
                     "daily_budget_usd": 55.00,
@@ -214,7 +214,7 @@ class GoogleAdsMonitoringAgent(AgentInterface):
             campaigns = [
                 {
                     "campaign_name": "Corporate Chauffeur & Cars",
-                    "campaign_group": "16Aug_Ads_Campaign",
+                    "campaign_group": None,
                     "status": "ELIGIBLE",
                     "ad_group_type": "Standard",
                     "daily_budget_usd": 55.00,
@@ -230,7 +230,7 @@ class GoogleAdsMonitoringAgent(AgentInterface):
                 },
                 {
                     "campaign_name": "Corporate Airport Transfers",
-                    "campaign_group": "16Aug_Ads_Campaign",
+                    "campaign_group": None,
                     "status": "ELIGIBLE",
                     "ad_group_type": "Standard",
                     "daily_budget_usd": 55.00,
@@ -277,7 +277,7 @@ class GoogleAdsMonitoringAgent(AgentInterface):
             "live_status": live_status,
             "notice": ("This is illustrative benchmark data, not your real account. "
                        f"To go live: {live_status.get('reason', 'add OAuth credentials')}"),
-            "campaign_name": "16Aug_Ads_Campaign",
+            "campaign_name": None,
             "campaign_status": "ELIGIBLE",
             "campaign_type": "Search",
             "daily_budget_usd": 55.00,

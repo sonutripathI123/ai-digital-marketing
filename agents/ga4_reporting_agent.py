@@ -18,9 +18,53 @@ from config.settings import ROOT_DIR
 
 logger = get_agent_logger("ga4-reporting-agent")
 
-GA4_PROPERTY_ID = "550393874"
-GA4_MEASUREMENT_ID = "G-2CM2BW6QKN"
-GA4_ACCOUNT_ID = "402540807"
+# These were module constants naming Corporate Cars Melbourne's property, and
+# every run used them whatever site it was asked about -- so a second client
+# saw CCM's sessions, channels and landing pages as its own. They are kept only
+# as the fallback for CCM itself, and resolved per site below.
+CCM_GA4_PROPERTY_ID = "550393874"
+CCM_GA4_MEASUREMENT_ID = "G-2CM2BW6QKN"
+CCM_GA4_ACCOUNT_ID = "402540807"
+
+
+def resolve_ga4_property(site_id):
+    """The GA4 property for this site: saved credentials first, then profile.
+
+    Returns (property_id, measurement_id, account_id, site_name). A site with
+    no property of its own gets an empty property_id and nothing is reported
+    for it -- never another site's numbers.
+    """
+    from config.site_context import resolve_site
+
+    profile = resolve_site(site_id)
+    if not profile:
+        return "", "", "", ""
+
+    prop = measurement = account = ""
+    try:
+        from config.websites import WebsiteManager
+
+        saved = WebsiteManager().get_agent_credentials(profile.site_id, "ga4-reporting-agent") or {}
+        prop = str(saved.get("property_id") or "").strip()
+        measurement = str(saved.get("measurement_id") or "").strip()
+        account = str(saved.get("account_id") or "").strip()
+    except Exception as e:  # pragma: no cover - defensive
+        logger.warning(f"Could not read saved GA4 credentials for {site_id}: {e}")
+
+    if not prop:
+        prop = str(getattr(profile, "ga4_property_id", "") or "").strip()
+
+    # A property id is numeric; "opal-chauffeurs-ga4" is a placeholder someone
+    # typed into the registry, not a property, and must not be queried.
+    if prop and not prop.isdigit():
+        prop = ""
+
+    if profile.site_id == "ccm":
+        prop = prop or CCM_GA4_PROPERTY_ID
+        measurement = measurement or CCM_GA4_MEASUREMENT_ID
+        account = account or CCM_GA4_ACCOUNT_ID
+
+    return prop, measurement, account, profile.name or profile.site_id
 
 
 class GA4ReportingAgent(AgentInterface):
@@ -38,11 +82,24 @@ class GA4ReportingAgent(AgentInterface):
         )
 
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
+        from config.site_context import not_configured
+
         input_data = task.input_data or {}
         action = str(input_data.get("action", "fetch_overview")).lower().strip()
-        property_name = str(input_data.get("property_name", f"Corporate Cars Melbourne GA4 ({GA4_MEASUREMENT_ID})")).strip()
         date_range = str(input_data.get("date_range", "last_28_days")).strip()
         use_ai = bool(input_data.get("use_ai", False))
+
+        site_id = input_data.get("site_id") or getattr(task, "site_id", None)
+        prop_id, measurement_id, account_id, site_name = resolve_ga4_property(site_id)
+        if not prop_id:
+            return {"status": "success", "output": not_configured(
+                site_id, "A GA4 property",
+                "Open this agent's Connect form and add the site's GA4 property "
+                "ID (the numeric one, from Admin > Property details).")}
+
+        property_name = str(
+            input_data.get("property_name") or f"{site_name} GA4 ({measurement_id or prop_id})"
+        ).strip()
 
         logger.info(f"Executing GA4ReportingAgent task: action={action}, property='{property_name}', date_range='{date_range}'")
 
@@ -78,7 +135,7 @@ class GA4ReportingAgent(AgentInterface):
                         {"name": "conversions"}
                     ]
                 }
-                c_res = data_service.properties().runReport(property=f'properties/{GA4_PROPERTY_ID}', body=channel_req).execute()
+                c_res = data_service.properties().runReport(property=f'properties/{prop_id}', body=channel_req).execute()
                 for row in c_res.get('rows', []):
                     c_name = row['dimensionValues'][0]['value']
                     c_users = int(row['metricValues'][0]['value'])
@@ -104,7 +161,7 @@ class GA4ReportingAgent(AgentInterface):
                     ],
                     "limit": 10
                 }
-                p_res = data_service.properties().runReport(property=f'properties/{GA4_PROPERTY_ID}', body=page_req).execute()
+                p_res = data_service.properties().runReport(property=f'properties/{prop_id}', body=page_req).execute()
                 for row in p_res.get('rows', []):
                     p_path = row['dimensionValues'][0]['value']
                     p_sessions = int(row['metricValues'][0]['value'])
@@ -125,15 +182,15 @@ class GA4ReportingAgent(AgentInterface):
                 # indistinguishable from a property that is genuinely quiet.
                 if channel_breakdown:
                     live_fetched = True
-                    logger.info(f"Live GA4 data returned for property {GA4_PROPERTY_ID}")
+                    logger.info(f"Live GA4 data returned for property {prop_id}")
                 else:
                     live_error = (
-                        f"The GA4 API answered for property {GA4_PROPERTY_ID} but returned no rows. "
+                        f"The GA4 API answered for property {prop_id} but returned no rows. "
                         f"The service account has access and the property exists, so the property is "
-                        f"receiving no traffic — check that a GA4 tag for {GA4_MEASUREMENT_ID} is "
+                        f"receiving no traffic — check that a GA4 tag for {measurement_id} is "
                         f"firing on the site, and that this is the property it reports to."
                     )
-                    logger.warning(f"GA4 property {GA4_PROPERTY_ID} returned no rows.")
+                    logger.warning(f"GA4 property {prop_id} returned no rows.")
             except Exception as e:
                 live_error = f"GA4 Data API call failed: {e}"
                 logger.warning(f"GA4 Data API fetch notice: {e}")
@@ -149,9 +206,9 @@ class GA4ReportingAgent(AgentInterface):
             result_payload = {
                 "action": action,
                 "property_name": property_name,
-                "property_id": GA4_PROPERTY_ID,
-                "measurement_id": GA4_MEASUREMENT_ID,
-                "account_id": GA4_ACCOUNT_ID,
+                "property_id": prop_id,
+                "measurement_id": measurement_id,
+                "account_id": account_id,
                 "live_data_connected": True,
                 "live_error": None,
                 "data_source": "100% LIVE GOOGLE ANALYTICS 4 API",
@@ -167,8 +224,8 @@ class GA4ReportingAgent(AgentInterface):
                 "acquisition_channel_breakdown": channel_breakdown,
                 "top_landing_pages": top_landing_pages,
                 "actionable_insights": [
-                    f"1. 🟢 Live Google Analytics 4 API successfully connected to Property ID '{GA4_PROPERTY_ID}' (Measurement ID: {GA4_MEASUREMENT_ID}).",
-                    "2. Stream is active and listening for live visitors on corporatecarsmelbourne.com.au.",
+                    f"1. 🟢 Live Google Analytics 4 API successfully connected to Property ID '{prop_id}' (Measurement ID: {measurement_id}).",
+                    "2. Stream is active and listening for live visitors on this site.",
                     "3. Ensure the Measurement Tag 'G-2CM2BW6QKN' is placed on your WordPress website so visitor hits are recorded."
                 ]
             }
@@ -177,9 +234,9 @@ class GA4ReportingAgent(AgentInterface):
             result_payload = {
                 "action": action,
                 "property_name": property_name,
-                "property_id": GA4_PROPERTY_ID,
-                "measurement_id": GA4_MEASUREMENT_ID,
-                "account_id": GA4_ACCOUNT_ID,
+                "property_id": prop_id,
+                "measurement_id": measurement_id,
+                "account_id": account_id,
                 "live_data_connected": False,
                 "live_error": live_error,
                 # Distinguish "we could not reach GA4" from "GA4 answered and
