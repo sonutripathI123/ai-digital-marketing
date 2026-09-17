@@ -331,8 +331,29 @@ def build_executive_summary(period: str, search: Dict[str, Any], analytics: Dict
     else:
         lines.append("Reviews: no Google Business Profile is connected for this site.")
 
-    lines.append(f"Leads and revenue: {leads['note']}")
+    if leads.get("measured"):
+        parts = [f"{leads.get('leads') or 0} received through the website's forms"]
+        if leads.get("unread"):
+            parts.append(f"{leads['unread']} still unread")
+        if leads.get("likely_spam"):
+            parts.append(f"{leads['likely_spam']} look like spam")
+        lines.append(
+            "Enquiries: " + ", ".join(parts) + ". Pipeline and revenue are not "
+            "reported: no CRM or booking system is connected."
+        )
+    else:
+        lines.append(f"Leads: {leads.get('note') or leads.get('error') or 'not measured'}")
     return lines
+
+
+def _safe_summary(*args: Any) -> List[str]:
+    """The executive summary, or a line saying why it could not be written."""
+    try:
+        return build_executive_summary(*args)
+    except Exception as e:
+        logger.warning(f"Monthly report: executive summary could not be written: {e}")
+        return [f"Executive summary — {args[0] if args else ''}",
+                f"The summary could not be written ({e}); the channel figures below still stand."]
 
 
 class MonthlyReportAgent(AgentInterface):
@@ -409,7 +430,10 @@ class MonthlyReportAgent(AgentInterface):
             "channels_measured": measured,
             "channels_not_measured": unmeasured,
             "coverage": f"{len(measured)} of {len(channels)} channels have measured data",
-            "executive_summary": build_executive_summary(
+            # The summary reads a key from every channel block, so one missing
+            # key used to cost the whole report -- the measured figures were
+            # collected, then thrown away on the way out.
+            "executive_summary": _safe_summary(
                 period, search, analytics, paid, social, reputation, blogs, leads),
             "channel_performance": channels,
             "published_blogs_inventory": blogs.get("published_inventory", []),
