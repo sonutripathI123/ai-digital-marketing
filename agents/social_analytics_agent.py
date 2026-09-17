@@ -373,6 +373,10 @@ def fetch_real_social_analytics(
                             "scheduled_for": (cp.get("scheduled_for") or "").replace(
                                 " (Melbourne Time)", ""),
                             "scheduled_for_iso": sortable_timestamp(cp.get("scheduled_for")),
+                            # "time" is the key the rest of this module reads a
+                            # queue entry's slot from; the database rows use it.
+                            "time": (cp.get("scheduled_for") or "").replace(
+                                " (Melbourne Time)", ""),
                             "source": "campaign",
                         })
                     if cp.get("site") == site_id and cp.get("status") == "expired":
@@ -620,7 +624,8 @@ def fetch_real_social_analytics(
                     "id": f"s{r[0]:04d}",
                     "platform": r[1].capitalize(),
                     "title": first_line,
-                    "time": format_utc_to_display(r[3])
+                    "time": format_utc_to_display(r[3]),
+                    "scheduled_for_iso": sortable_timestamp(r[3]),
                 })
 
             conn.close()
@@ -785,7 +790,7 @@ def fetch_real_social_analytics(
     # The publisher's database and the campaign file each hold part of the
     # queue; the panel needs both, in one order.
     scheduled_queue = scheduled_queue + campaign_queue
-    scheduled_queue.sort(key=lambda q: q.get("scheduled_for_iso") or q.get("publish_at") or "")
+    scheduled_queue.sort(key=lambda q: q.get("scheduled_for_iso") or "9999")
 
     next_fb = next((s for s in scheduled_queue if s["platform"].lower() == "facebook"), None)
     next_ig = next((s for s in scheduled_queue if s["platform"].lower() == "instagram"), None)
