@@ -350,6 +350,7 @@ def fetch_real_social_analytics(
     # Posts the publisher gave up on. Reported rather than dropped: a post that
     # never went out is a thing the operator needs to see, not a silent gap.
     retired_posts: List[Dict[str, Any]] = []
+    campaign_queue: List[Dict[str, Any]] = []
     platform_db_counts = {}
     cached_map = {}
 
@@ -360,6 +361,20 @@ def fetch_real_social_analytics(
             with open(sched_file, "r", encoding="utf-8") as sfp:
                 camp_posts = json.load(sfp)
                 for cp in camp_posts:
+                    if cp.get("site") == site_id and cp.get("status") == "scheduled":
+                        # Campaigns created from the dashboard live here, not in
+                        # the publisher's database, so reading only that
+                        # database showed an empty queue while thirty posts
+                        # were waiting.
+                        campaign_queue.append({
+                            "id": cp.get("id"),
+                            "platform": (cp.get("platform") or "").capitalize(),
+                            "title": (cp.get("caption") or "").split("\n")[0][:80],
+                            "scheduled_for": (cp.get("scheduled_for") or "").replace(
+                                " (Melbourne Time)", ""),
+                            "scheduled_for_iso": sortable_timestamp(cp.get("scheduled_for")),
+                            "source": "campaign",
+                        })
                     if cp.get("site") == site_id and cp.get("status") == "expired":
                         retired_posts.append({
                             "id": cp.get("id"),
@@ -767,6 +782,11 @@ def fetch_real_social_analytics(
     ig_counts = platform_db_counts.get("instagram", empty_counts)
     li_counts = platform_db_counts.get("linkedin", empty_counts)
 
+    # The publisher's database and the campaign file each hold part of the
+    # queue; the panel needs both, in one order.
+    scheduled_queue = scheduled_queue + campaign_queue
+    scheduled_queue.sort(key=lambda q: q.get("scheduled_for_iso") or q.get("publish_at") or "")
+
     next_fb = next((s for s in scheduled_queue if s["platform"].lower() == "facebook"), None)
     next_ig = next((s for s in scheduled_queue if s["platform"].lower() == "instagram"), None)
     next_li = next((s for s in scheduled_queue if s["platform"].lower() == "linkedin"), None)
@@ -830,7 +850,7 @@ def fetch_real_social_analytics(
         "total_published_posts": len(published_history),
         "total_scheduled_queue": len(scheduled_queue),
         "published_posts_history": published_history,
-        "next_scheduled_posts": scheduled_queue[:6],
+        "next_scheduled_posts": scheduled_queue[:15],
         "retired_posts": retired_posts,
         "retired_posts_note": (
             "These were scheduled but never published: each missed its slot by "
@@ -926,6 +946,11 @@ class SocialAnalyticsAgent(AgentInterface):
             "platform_breakdown": real_data["platforms"],
             "published_posts_history": real_data["published_posts_history"][:10],
             "next_scheduled_posts": real_data["next_scheduled_posts"],
+            # run_task rebuilds the output field by field, so anything the
+            # fetch adds has to be listed here or the panel never sees it.
+            "retired_posts": real_data.get("retired_posts", []),
+            "retired_posts_note": real_data.get("retired_posts_note", ""),
+            "total_scheduled_queue": real_data.get("total_scheduled_queue"),
             "actionable_recommendations": real_data["weekly_recommendations"]
         }
 
