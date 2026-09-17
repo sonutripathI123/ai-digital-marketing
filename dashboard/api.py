@@ -1678,9 +1678,20 @@ def super_admin_delete_site(req: DeleteWebsiteRequest, _super: Dict[str, Any] = 
     if not deleted:
         raise HTTPException(status_code=500, detail="Failed to delete website.")
 
+    # The message already claimed access was revoked; the logins outlived the
+    # website and would still authenticate, holding a grant to a site that no
+    # longer exists.
+    from config.client_accounts import client_accounts
+
+    removed = client_accounts.delete_for_site(req.site_id)
+
     return {
         "status": "success",
-        "message": f"Website '{site.name}' ({req.site_id}) deleted successfully and all client portal access revoked permanently."
+        "logins_removed": removed,
+        "message": (
+            f"Website '{site.name}' ({req.site_id}) deleted, along with "
+            f"{removed} client login{'' if removed == 1 else 's'}."
+        ),
     }
 
 
