@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="/static/styles.css?v=11.96.0">
+  <link rel="stylesheet" href="/static/styles.css?v=11.97.0">
 </head>
 <body>
   <!-- Full-Screen Ambient Luxury Background Overlay -->
@@ -1749,24 +1749,65 @@
       <h2 style="font-size: 22px; font-weight: 800; color: #fff; margin: 0 0 6px 0; letter-spacing: -0.02em;">
         AI Digital Marketer
       </h2>
-      <p style="font-size: 12.5px; color: var(--text-secondary); margin: 0 0 22px 0; line-height: 1.5;">
-        Autonomous Multi-Agent Marketing Operating System. Enter your email address to access the command center.
+      <p id="gate-subtitle" style="font-size: 12.5px; color: var(--text-secondary); margin: 0 0 22px 0; line-height: 1.5;">
+        Sign in to your marketing command center.
       </p>
 
       <div id="visitor-gate-alert" style="display: none; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 12px; font-weight: 600; text-align: left;"></div>
 
-      <form id="form-visitor-gate" onsubmit="handleVisitorGateLogin(event)">
+      <!-- Returning client: email + the password they set -->
+      <form id="form-client-signin" onsubmit="handleClientSignIn(event)">
+        <div style="margin-bottom: 14px; text-align: left;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+            <i class="fa-solid fa-envelope" style="color: var(--accent-cyan); margin-right: 4px;"></i>Email address
+          </label>
+          <input type="email" id="client-signin-email" required placeholder="you@yourbusiness.com" class="form-control" autocomplete="username"
+                 style="width: 100%; font-size: 14px; padding: 12px 14px; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff;" />
+        </div>
         <div style="margin-bottom: 18px; text-align: left;">
           <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
-            <i class="fa-solid fa-envelope" style="color: var(--accent-cyan); margin-right: 4px;"></i> Work or Personal Email Address
+            <i class="fa-solid fa-lock" style="color: var(--accent-cyan); margin-right: 4px;"></i>Password
           </label>
-          <input type="email" id="visitor-gate-email" required placeholder="name@company.com" class="form-control" style="width: 100%; font-size: 14px; padding: 12px 14px; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff;" autofocus />
+          <input type="password" id="client-signin-password" required placeholder="Your password" class="form-control" autocomplete="current-password"
+                 style="width: 100%; font-size: 14px; padding: 12px 14px; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff;" />
         </div>
-
-        <button type="submit" id="btn-submit-visitor-gate" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 800; border-radius: 10px; background: linear-gradient(135deg, var(--accent-cyan), #3b82f6); border: none; box-shadow: 0 8px 20px rgba(6, 182, 212, 0.35); display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <span>Enter AI Dashboard</span>
+        <button type="submit" id="btn-client-signin" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 800; border-radius: 10px; background: linear-gradient(135deg, var(--accent-cyan), #3b82f6); border: none; box-shadow: 0 8px 20px rgba(6, 182, 212, 0.35);">
+          <span>Sign in</span>
           <i class="fa-solid fa-arrow-right"></i>
         </button>
+      </form>
+
+      <!-- First visit from an invite link: choose a password -->
+      <form id="form-client-setup" onsubmit="handleClientAccountSetup(event)" style="display: none;">
+        <div id="gate-site-banner" style="background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.3); border-radius: 10px; padding: 10px 12px; margin-bottom: 16px; font-size: 12px; color: var(--text-secondary); text-align: left; line-height: 1.5;"></div>
+        <div style="margin-bottom: 14px; text-align: left;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+            <i class="fa-solid fa-envelope" style="color: var(--accent-cyan); margin-right: 4px;"></i>Your email address
+          </label>
+          <input type="email" id="client-setup-email" required placeholder="you@yourbusiness.com" class="form-control" autocomplete="username"
+                 style="width: 100%; font-size: 14px; padding: 12px 14px; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff;" />
+        </div>
+        <div style="margin-bottom: 14px; text-align: left;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+            <i class="fa-solid fa-key" style="color: var(--accent-cyan); margin-right: 4px;"></i>Choose a password
+          </label>
+          <input type="password" id="client-setup-password" required minlength="8" placeholder="At least 8 characters" class="form-control" autocomplete="new-password"
+                 style="width: 100%; font-size: 14px; padding: 12px 14px; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff;" />
+        </div>
+        <div style="margin-bottom: 18px; text-align: left;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+            <i class="fa-solid fa-key" style="color: var(--accent-cyan); margin-right: 4px;"></i>Confirm password
+          </label>
+          <input type="password" id="client-setup-password2" required minlength="8" placeholder="Type it again" class="form-control" autocomplete="new-password"
+                 style="width: 100%; font-size: 14px; padding: 12px 14px; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff;" />
+        </div>
+        <button type="submit" id="btn-client-setup" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 800; border-radius: 10px; background: linear-gradient(135deg, #10b981, var(--accent-cyan)); border: none; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);">
+          <span>Create my login</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 10px; line-height: 1.5;">
+          This link works once. After this you sign in with the email and password above.
+        </div>
       </form>
 
       <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--text-muted);">
@@ -1938,7 +1979,7 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=11.96.0"></script>
+  <script src="/static/app.js?v=11.97.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {

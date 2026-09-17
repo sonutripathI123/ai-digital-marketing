@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const initialView = hashView || savedView || 'overview';
 
   // Read endpoints require a session. With no session yet the email gate is
-  // showing, so skip the initial data load — handleVisitorGateLogin() runs it
+  // showing, so skip the initial data load — signing in runs it
   // once the session exists, instead of firing requests that must 401.
   const hasSession = authToken
     || localStorage.getItem('ai_visitor_session')
@@ -226,11 +226,14 @@ async function checkAuthSession() {
     if (currentUserRole !== 'client') {
       currentUserRole = 'viewer';
       isSuperAdmin = false;
-      currentAllowedSites = ['*'];
+      currentAllowedSites = [];
       authToken = null;
     }
   }
   renderAuthHeaderUI();
+  // A returning client arrives with a stored token rather than through the
+  // sign-in form, so the restrictions have to be applied here too.
+  applyClientRestrictions();
 }
 
 function renderAuthHeaderUI() {
@@ -498,70 +501,188 @@ function checkVisitorAccess() {
     gate.style.display = 'none';
   } else {
     gate.style.display = 'flex';
-    const emailInput = document.getElementById('visitor-gate-email');
-    if (emailInput) setTimeout(() => emailInput.focus(), 200);
+    // An invite in the URL means "choose a password"; anything else means
+    // "sign in with the one you chose".
+    prepareGateForms();
   }
 }
 
-async function handleVisitorGateLogin(e) {
-  if (e) e.preventDefault();
-  const emailInput = document.getElementById('visitor-gate-email');
-  const alertBox = document.getElementById('visitor-gate-alert');
-  const btn = document.getElementById('btn-submit-visitor-gate');
+function applyClientRestrictions() {
+  // A client was handed one website. Anything that belongs to running the
+  // platform itself -- other sites, who else has logged in, the owner's hub --
+  // is removed from their page rather than merely styled away, so it is not
+  // there to be found in the markup either.
+  const isClient = currentUserRole === 'client'
+    || (!isSuperAdmin && currentUserRole !== 'admin' && !currentAllowedSites.includes('*'));
+  if (!isClient) return;
 
-  const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
-  if (!email || !email.includes('@') || !email.includes('.')) {
-    if (alertBox) {
-      alertBox.innerHTML = '<div style="color:#ef4444;"><i class="fa-solid fa-circle-exclamation"></i> Please enter a valid email address.</div>';
-      alertBox.style.display = 'block';
+  const adminOnly = [
+    document.getElementById('super-admin-btn'),
+    document.getElementById('open-add-website-modal-btn'),
+    document.querySelector('button[onclick="openVisitorAuditModal()"]'),
+    document.querySelector('button[onclick="openAdminLoginFromGate()"]'),
+  ];
+  adminOnly.forEach(el => { if (el) el.remove(); });
+
+  // The site name stays, the switcher does not: there is nothing to switch to.
+  const dropdownBtn = document.getElementById('website-dropdown-btn');
+  if (dropdownBtn) {
+    dropdownBtn.onclick = null;
+    dropdownBtn.style.cursor = 'default';
+    const caret = dropdownBtn.querySelector('.fa-chevron-down, .fa-caret-down');
+    if (caret) caret.remove();
+  }
+}
+
+function gateAlert(message, kind) {
+  const box = document.getElementById('visitor-gate-alert');
+  if (!box) return;
+  const colour = kind === 'success' ? '#10b981' : '#ef4444';
+  const icon = kind === 'success' ? 'circle-check' : 'circle-exclamation';
+  box.innerHTML = `<div style="color:${colour};"><i class="fa-solid fa-${icon}"></i> ${escapeHtml(message)}</div>`;
+  box.style.display = 'block';
+}
+
+function inviteTokenFromUrl() {
+  // The link can arrive as ?invite=, ?token= or in the hash, depending on
+  // which of the portal routes sent the client here.
+  const search = new URLSearchParams(window.location.search);
+  const hash = new URLSearchParams((window.location.hash || '').replace(/^#/, ''));
+  return (search.get('invite') || search.get('token')
+          || hash.get('invite') || hash.get('token') || '').trim();
+}
+
+async function prepareGateForms() {
+  const signIn = document.getElementById('form-client-signin');
+  const setup = document.getElementById('form-client-setup');
+  const subtitle = document.getElementById('gate-subtitle');
+  const invite = inviteTokenFromUrl();
+  if (!signIn || !setup) return;
+
+  if (!invite) {
+    signIn.style.display = 'block';
+    setup.style.display = 'none';
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/portal/invite-status?token=${encodeURIComponent(invite)}`);
+    const data = await res.json();
+    if (!res.ok) {
+      // A spent or wrong link should not look like a broken dashboard: the
+      // client most likely already has a login.
+      signIn.style.display = 'block';
+      setup.style.display = 'none';
+      gateAlert(data.detail || 'That access link is no longer valid. Sign in below, or ask for a new link.', 'error');
+      return;
     }
+    signIn.style.display = 'none';
+    setup.style.display = 'block';
+    if (subtitle) subtitle.textContent = `Set up your login for ${data.site_name}.`;
+    const banner = document.getElementById('gate-site-banner');
+    if (banner) {
+      banner.innerHTML = `<strong style="color:#fff;">${escapeHtml(data.site_name)}</strong><br>${escapeHtml(data.site_domain || '')}`;
+    }
+    const emailBox = document.getElementById('client-setup-email');
+    if (emailBox) setTimeout(() => emailBox.focus(), 200);
+  } catch (err) {
+    signIn.style.display = 'block';
+    setup.style.display = 'none';
+  }
+}
+
+async function handleClientAccountSetup(e) {
+  if (e) e.preventDefault();
+  const email = (document.getElementById('client-setup-email') || {}).value || '';
+  const pass = (document.getElementById('client-setup-password') || {}).value || '';
+  const pass2 = (document.getElementById('client-setup-password2') || {}).value || '';
+  const btn = document.getElementById('btn-client-setup');
+
+  if (pass !== pass2) {
+    gateAlert('The two passwords do not match.', 'error');
     return;
   }
 
   btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Launching AI Dashboard...';
-
+  const original = btn.innerHTML;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating your login...';
   try {
-    const res = await fetch('/api/auth/visitor-login', {
+    const res = await fetch('/api/portal/account/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
+      body: JSON.stringify({ invite_token: inviteTokenFromUrl(), email: email.trim(), password: pass })
     });
     const data = await res.json();
-
-    if (!res.ok || data.status !== 'success') {
+    if (!res.ok) {
       btn.disabled = false;
-      btn.innerHTML = '<span>Enter AI Dashboard</span> <i class="fa-solid fa-arrow-right"></i>';
-      if (alertBox) {
-        alertBox.innerHTML = `<div style="color:#ef4444;"><i class="fa-solid fa-circle-exclamation"></i> ${data.detail || data.message || 'Access failed.'}</div>`;
-        alertBox.style.display = 'block';
-      }
+      btn.innerHTML = original;
+      gateAlert(data.detail || 'Could not create the login.', 'error');
       return;
     }
-
-    // Success: save visitor session
-    localStorage.setItem('ai_visitor_session', data.session_token);
-    localStorage.setItem('ai_visitor_email', data.email);
-
-    const gate = document.getElementById('visitor-login-gate');
-    if (gate) {
-      gate.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-      gate.style.opacity = '0';
-      gate.style.pointerEvents = 'none';
-      setTimeout(() => { gate.style.display = 'none'; }, 400);
-    }
-
-    // The initial data load was deferred until a session existed. Run it now.
-    await initWebsiteSwitcher();
-    switchToView(activeView || 'overview');
+    adoptClientSession(data);
   } catch (err) {
     btn.disabled = false;
-    btn.innerHTML = '<span>Enter AI Dashboard</span> <i class="fa-solid fa-arrow-right"></i>';
-    if (alertBox) {
-      alertBox.innerHTML = `<div style="color:#ef4444;">Network connection error: ${err.message}</div>`;
-      alertBox.style.display = 'block';
-    }
+    btn.innerHTML = original;
+    gateAlert(`Connection error: ${err.message}`, 'error');
   }
+}
+
+async function handleClientSignIn(e) {
+  if (e) e.preventDefault();
+  const email = (document.getElementById('client-signin-email') || {}).value || '';
+  const pass = (document.getElementById('client-signin-password') || {}).value || '';
+  const btn = document.getElementById('btn-client-signin');
+
+  btn.disabled = true;
+  const original = btn.innerHTML;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
+  try {
+    const res = await fetch('/api/portal/account/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.trim(), password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      btn.disabled = false;
+      btn.innerHTML = original;
+      gateAlert(data.detail || 'Incorrect email or password.', 'error');
+      return;
+    }
+    adoptClientSession(data);
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = original;
+    gateAlert(`Connection error: ${err.message}`, 'error');
+  }
+}
+
+async function adoptClientSession(data) {
+  authToken = data.token;
+  currentUserRole = 'client';
+  isSuperAdmin = false;
+  currentAllowedSites = data.allowed_sites || [data.site_id];
+  clientPrimarySite = data.site_id;
+  currentSiteId = data.site_id;
+
+  localStorage.setItem('ccm_admin_token', data.token);
+  sessionStorage.setItem('ccm_admin_token', data.token);
+  localStorage.setItem('ccm_client_site', data.site_id);
+  localStorage.setItem('ai_visitor_session', 'client_' + data.site_id);
+
+  // Drop the invite out of the address bar: it is spent, and leaving it there
+  // means a refresh shows the set-up form again over a live session.
+  if (inviteTokenFromUrl()) {
+    history.replaceState(null, '', window.location.pathname + '#overview');
+  }
+
+  const gate = document.getElementById('visitor-login-gate');
+  if (gate) gate.style.display = 'none';
+
+  renderAuthHeaderUI();
+  applyClientRestrictions();
+  await initWebsiteSwitcher();
+  await loadCurrentView(activeView || 'overview');
 }
 
 function openAdminLoginFromGate() {
