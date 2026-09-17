@@ -727,10 +727,12 @@ body {
 }
 
 .agent-title-box h3 {
-  font-size: 16px;
+  /* 16px made a longer name -- "SEO Content Brief & Optimization Agent" --
+     wrap to two lines and sit heavier than the card around it. */
+  font-size: 14px;
   font-weight: 800;
   color: var(--text-primary);
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .agent-category {
