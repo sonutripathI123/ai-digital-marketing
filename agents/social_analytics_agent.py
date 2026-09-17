@@ -680,7 +680,9 @@ def fetch_real_social_analytics(
             r_net, used_version = linkedin_get(
                 "https://api.linkedin.com/rest/networkSizes/" + quote(linkedin_org, safe=""),
                 headers,
-                {"edgeType": "CompanyFollowedByMember"},
+                # LinkedIn renamed this enum to SCREAMING_SNAKE_CASE; the old
+                # spelling now answers 400 "is not an enum symbol".
+                {"edgeType": "COMPANY_FOLLOWED_BY_MEMBER"},
             )
             if r_net is not None and r_net.status_code == 200:
                 live_accounts["linkedin"]["followers"] = r_net.json().get("firstDegreeSize")
