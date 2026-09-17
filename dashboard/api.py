@@ -892,6 +892,27 @@ _SITE_PATH_ROOTS = ("sites", "websites")
 _SITE_SCOPE_EXEMPT_PREFIXES = ("/api/auth/", "/api/portal/")
 
 
+def session_site(payload: Optional[Dict[str, Any]], site_id: Optional[str] = None) -> Optional[str]:
+    """Which site this request is really about.
+
+    A named site wins. Otherwise a session holding exactly one site means that
+    one -- without this, a request that named no site fell through to the
+    primary site, or to an all-sites aggregate, and a client got figures from
+    websites they were never given.
+
+    Returns None for an owner session that named nothing, which legitimately
+    means "all of them".
+    """
+    if site_id:
+        return site_id
+    if not payload or payload.get("is_super_admin"):
+        return None
+    allowed = [a for a in (payload.get("allowed_sites") or []) if a and a != "*"]
+    if "*" in (payload.get("allowed_sites") or []):
+        return None
+    return allowed[0] if len(allowed) == 1 else None
+
+
 def resolve_existing_site(site_id: Optional[str]):
     """The website, or a 404 saying it is gone.
 
@@ -1959,7 +1980,9 @@ def get_overview_data(site_id: Optional[str] = None, payload: Dict[str, Any] = D
     events = orchestrator.audit.get_history(limit=10)
     all_sites = websites_mgr.list_all()
 
-    # Filter tasks if site_id is provided and not "all"
+    # An unnamed request used to aggregate every website, so a client who
+    # simply loaded the page saw totals spanning sites they had no access to.
+    site_id = session_site(payload, site_id)
     target_site = websites_mgr.get(site_id) if (site_id and site_id != "all") else None
 
     if target_site:
@@ -2030,7 +2053,9 @@ def list_agents(site_id: Optional[str] = None):
             "agents": [agent.model_dump() for agent in raw_agents]
         }
 
-    site_profile = resolve_existing_site(site_id)
+    # Defaulting this to "ccm" handed the primary site's report to anyone who
+    # left it out.
+    site_profile = resolve_existing_site(session_site(_viewer, site_id) or "ccm")
     if not site_profile:
         return {
             "status": "success",
@@ -2946,7 +2971,7 @@ def _seo_keyword_metrics_from_gsc(site_id: str, site_name: str, loc_city: str) -
 
 
 @app.get("/api/agents/{agent_id}/report")
-def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", _viewer: Dict[str, Any] = Depends(require_viewer)):
+def get_agent_performance_report(agent_id: str, site_id: Optional[str] = None, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Generates a comprehensive live performance report for a specific sub-agent tailored to site_id."""
     agent = orchestrator.registry.get(agent_id)
     if not agent:
@@ -4451,7 +4476,7 @@ def get_social_keyword_pool(_viewer: Dict[str, Any] = Depends(require_viewer)):
 
 
 @app.get("/api/seo/keywords/high-volume-pool")
-def get_high_volume_keywords_pool(site_id: str = "ccm", _viewer: Dict[str, Any] = Depends(require_viewer)):
+def get_high_volume_keywords_pool(site_id: Optional[str] = None, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Returns prioritized high-search-volume keywords with monthly volume and usage status."""
     from agents.seo_keyword_agent import HIGH_VOLUME_KEYWORD_CATALOG, normalize_kw_string
 
