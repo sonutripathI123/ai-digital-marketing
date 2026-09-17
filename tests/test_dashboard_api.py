@@ -150,6 +150,7 @@ class TestDashboardAPI(unittest.TestCase):
             "landing_page_url": "https://corporatecarsmelbourne.com.au/services/airport-transfers",
             "anchor_text": "Melbourne Airport Transfers",
             "topic": "Airport Travel Guide",
+            "site_id": "ccm",
             "use_ai": False
         }, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
@@ -165,7 +166,7 @@ class TestDashboardAPI(unittest.TestCase):
         self.assertIn(entry["last_check"]["found"], (True, False))
 
     def test_external_link_daily_batch(self):
-        resp = self.client.post("/api/agents/external-link/daily-batch?batch_size=7", headers=self.auth_headers)
+        resp = self.client.post("/api/agents/external-link/daily-batch?batch_size=7&site_id=ccm", headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "success")

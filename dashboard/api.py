@@ -5179,6 +5179,11 @@ def trigger_custom_outreach(request: CustomOutreachRequest, _admin: Dict[str, An
     """
     if not request.target_websites:
         raise HTTPException(status_code=400, detail="Please provide at least one target website URL.")
+    # An empty site_id used to fall through to Corporate Cars Melbourne inside
+    # the agent, and an empty one names no site for the access check to test
+    # either, so a client session could reach the primary site's register.
+    if not (request.site_id or "").strip():
+        raise HTTPException(status_code=400, detail="Which website is this for? site_id is required.")
 
     task = orchestrator.create_task(
         agent_id="external-link-building-agent",
@@ -5210,6 +5215,9 @@ def trigger_daily_backlink_batch(batch_size: int = 7, site_id: Optional[str] = N
     This used to append seven invented backlink rows per run and increment the
     account's "active backlinks" and "referring domains" counters with them.
     """
+    if not (site_id or "").strip():
+        raise HTTPException(status_code=400, detail="Which website is this for? site_id is required.")
+
     task = orchestrator.create_task(
         agent_id="external-link-building-agent",
         task_type="daily_batch",

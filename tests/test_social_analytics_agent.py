@@ -39,6 +39,7 @@ class TestSocialAnalyticsAgent(unittest.TestCase):
             task_type="fetch_analytics",
             input_data={
                 "action": "fetch_analytics",
+                "site_id": "ccm",
                 "platform": "all",
                 "use_ai": False
             }
@@ -53,7 +54,7 @@ class TestSocialAnalyticsAgent(unittest.TestCase):
         task = self.orchestrator.create_task(
             agent_id="social-analytics-agent",
             task_type="fetch_analytics",
-            input_data={"platform": "instagram"},
+            input_data={"platform": "instagram", "site_id": "ccm"},
             requires_approval=False
         )
         completed_task = self.orchestrator.execute_task(task.task_id)
@@ -64,7 +65,7 @@ class TestSocialAnalyticsAgent(unittest.TestCase):
         resp_create = self.client.post("/api/tasks/create", json={
             "agent_id": "social-analytics-agent",
             "task_type": "fetch_analytics",
-            "input_data": {"platform": "linkedin"},
+            "input_data": {"platform": "linkedin", "site_id": "ccm"},
             "requires_approval": False
         }, headers=self.auth_headers)
         self.assertEqual(resp_create.status_code, 200)

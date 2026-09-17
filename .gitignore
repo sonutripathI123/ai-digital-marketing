@@ -45,3 +45,12 @@ data/user_access_logs.json
 
 # Docker bind mount for runtime state on the VPS (campaign statuses, telemetry)
 runtime-data/
+
+# Live operational state. These are written by the running system on the
+# server, and they were tracked here: every deploy did `git reset --hard`,
+# which restored the committed copy over them. That is how a batch of
+# scheduled social posts was lost, and how the posts database lost a column
+# the deployed code required. Git must not own these files.
+data/social_scheduled_campaigns.json
+blog-agent/topics.csv
+*.db

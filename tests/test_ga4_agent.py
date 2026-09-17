@@ -40,6 +40,7 @@ class TestGA4ReportingAgent(unittest.TestCase):
             input_data={
                 "action": "fetch_overview",
                 "property_name": "Corporate Cars Melbourne GA4",
+                "site_id": "ccm",
                 "date_range": "last_28_days",
                 "use_ai": False
             }
@@ -67,7 +68,7 @@ class TestGA4ReportingAgent(unittest.TestCase):
         task = self.orchestrator.create_task(
             agent_id="ga4-reporting-agent",
             task_type="fetch_overview",
-            input_data={"property_name": "Corporate Cars Melbourne GA4"},
+            input_data={"property_name": "Corporate Cars Melbourne GA4", "site_id": "ccm"},
             requires_approval=False
         )
         completed_task = self.orchestrator.execute_task(task.task_id)
@@ -78,7 +79,7 @@ class TestGA4ReportingAgent(unittest.TestCase):
         resp_create = self.client.post("/api/tasks/create", json={
             "agent_id": "ga4-reporting-agent",
             "task_type": "fetch_overview",
-            "input_data": {"property_name": "Corporate Cars Melbourne GA4"},
+            "input_data": {"property_name": "Corporate Cars Melbourne GA4", "site_id": "ccm"},
             "requires_approval": False
         }, headers=self.auth_headers)
         self.assertEqual(resp_create.status_code, 200)

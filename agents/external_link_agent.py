@@ -179,6 +179,30 @@ def verify_backlink(page_url: str, target_domain: str) -> Dict[str, Any]:
     return result
 
 
+def submissions_for_site(submissions: List[Dict[str, Any]], site_id: str,
+                         site_domain: str) -> List[Dict[str, Any]]:
+    """Only the pages registered for this website.
+
+    The register began as one flat list for a single site, so older rows carry
+    no site_id. Those are matched on the landing page they point at, which is
+    the site they were registered for; a row that matches neither belongs to
+    somebody else and is left out. Without this, a new client saw CCM's
+    directory submissions listed as its own backlinks.
+    """
+    host = urlparse(site_domain).netloc.replace("www.", "").lower()
+    mine = []
+    for entry in submissions:
+        stamped = (entry.get("site_id") or "").strip().lower()
+        if stamped:
+            if stamped == site_id:
+                mine.append(entry)
+            continue
+        target = (entry.get("target_url") or "").lower()
+        if host and host in target:
+            mine.append(entry)
+    return mine
+
+
 def summarise(submissions: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Counts over what was actually checked, with nothing inferred."""
     checked = [s for s in submissions if s.get("last_check")]
@@ -278,17 +302,31 @@ class ExternalLinkBuildingAgent(AgentInterface):
     def run_task(self, task: AgentTask, router: ModelRouter) -> Dict[str, Any]:
         input_data = task.input_data or {}
         action = str(input_data.get("action", "audit_backlink_profile")).lower().strip()
-        site_id = input_data.get("site_id") or input_data.get("site") or "ccm"
+        # site_id defaulted to "ccm", and the brand and domain below fell back
+        # to Corporate Cars Melbourne's, so a task naming no site -- or an
+        # unknown one -- built outreach in CCM's name.
+        from config.site_context import not_configured, resolve_site
 
-        from config.websites import WebsiteManager
+        site_id = str(
+            input_data.get("site_id") or input_data.get("site")
+            or getattr(task, "site_id", None) or ""
+        ).strip().lower()
+        profile = resolve_site(site_id)
+        if not profile:
+            return {"output": not_configured(
+                site_id, "A website",
+                "Add this website in the admin panel before running link "
+                "building for it."),
+                "model_used": "none", "tokens_used": 0, "cost_usd": 0.0}
 
-        profile = WebsiteManager().get(site_id)
-        brand = profile.name if profile else "Corporate Cars Melbourne"
-        domain = (profile.domain if profile else "https://corporatecarsmelbourne.com.au").rstrip("/")
-        location = profile.location if profile else "Melbourne, VIC"
+        brand = profile.name or site_id
+        domain = (profile.domain or "").rstrip("/")
+        location = getattr(profile, "location", "") or ""
 
         register = load_register()
-        submissions: List[Dict[str, Any]] = register.get("submissions", [])
+        all_submissions: List[Dict[str, Any]] = register.get("submissions", [])
+        submissions: List[Dict[str, Any]] = submissions_for_site(
+            all_submissions, site_id, domain)
         archived = register.get("archived_rows", 0) if register.get("archived_previous") else 0
 
         logger.info(f"Executing ExternalLinkBuildingAgent: action={action}, site={site_id}")
@@ -312,6 +350,7 @@ class ExternalLinkBuildingAgent(AgentInterface):
                     "url": url,
                     "platform": urlparse(url).netloc.replace("www.", ""),
                     "registered_at": datetime.now().isoformat(timespec="seconds"),
+                    "site_id": site_id,
                     "target_url": input_data.get("landing_page_url") or f"{domain}/",
                     "note": input_data.get("note") or "",
                     # A page enters the register unverified. Nothing here says a
@@ -322,7 +361,8 @@ class ExternalLinkBuildingAgent(AgentInterface):
                 submissions.append(entry)
                 added.append(entry)
 
-            register["submissions"] = submissions
+            all_submissions.extend(added)
+            register["submissions"] = all_submissions
             save_register(register)
             found = [a for a in added if a["last_check"]["found"]]
             return {
@@ -402,7 +442,10 @@ class ExternalLinkBuildingAgent(AgentInterface):
                 if before is not None and before != after:
                     changes.append({"url": entry["url"], "was_found": before, "now_found": after})
 
-            register["submissions"] = submissions
+            # The entries above are the same objects held in all_submissions,
+            # so the re-checks are already recorded. Writing back the site's
+            # slice instead would delete every other site's rows.
+            register["submissions"] = all_submissions
             register["last_verified"] = datetime.now().isoformat(timespec="seconds")
             save_register(register)
 

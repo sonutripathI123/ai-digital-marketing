@@ -40,6 +40,7 @@ class TestSEOContentBriefAgent(unittest.TestCase):
             input_data={
                 "action": "create_brief",
                 "target_keyword": "executive car hire melbourne",
+                "site_id": "ccm",
                 "location": "Melbourne CBD",
                 "use_ai": False
             }
@@ -55,7 +56,7 @@ class TestSEOContentBriefAgent(unittest.TestCase):
         task = self.orchestrator.create_task(
             agent_id="seo-content-brief-agent",
             task_type="create_brief",
-            input_data={"target_keyword": "corporate chauffeur melbourne"},
+            input_data={"target_keyword": "corporate chauffeur melbourne", "site_id": "ccm"},
             requires_approval=False
         )
         completed_task = self.orchestrator.execute_task(task.task_id)
@@ -66,7 +67,7 @@ class TestSEOContentBriefAgent(unittest.TestCase):
         resp_create = self.client.post("/api/tasks/create", json={
             "agent_id": "seo-content-brief-agent",
             "task_type": "create_brief",
-            "input_data": {"target_keyword": "airport transfer south yarra"},
+            "input_data": {"target_keyword": "airport transfer south yarra", "site_id": "ccm"},
             "requires_approval": False
         }, headers=self.auth_headers)
         self.assertEqual(resp_create.status_code, 200)
