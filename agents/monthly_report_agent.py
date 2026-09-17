@@ -226,20 +226,56 @@ def collect_reputation_metrics(router: ModelRouter, site_id: str) -> Dict[str, A
                     ))
 
 
-def collect_lead_metrics() -> Dict[str, Any]:
-    """There is no lead or revenue source wired into this system.
+def collect_lead_metrics(site_id: str) -> Dict[str, Any]:
+    """Enquiries from the site's own contact forms.
 
-    The report claimed $12,800 of closed revenue, a $18,400 pipeline, 42 leads
-    and 18 corporate accounts. The lead-management agent those came from builds
-    its numbers from a list called `sample_leads` written into the file. Nothing
-    reads a CRM, a booking system or a form handler, so there is nothing here to
-    report -- and inventing revenue in a document headed "Executive Report" is
-    the worst place in this system to do it.
+    This once claimed $12,800 of closed revenue and a $18,400 pipeline, both
+    read off a `sample_leads` list written into the source. It was then changed
+    to report nothing, which was correct at the time: no lead source was wired
+    in. The lead-management agent now reads the website's real Elementor form
+    submissions, so the enquiry counts here are counted rows.
+
+    Revenue and pipeline stay unreported. A contact form records an enquiry,
+    not a booking or a payment, and no CRM or booking system is connected --
+    so any revenue figure here would be invented, which is the one thing an
+    executive report must not do.
     """
-    return _section("no CRM or booking system is connected", False,
-                    leads=None, pipeline_value=None, closed_revenue=None,
-                    note=("No lead or revenue source is connected to this dashboard. "
-                          "Connect a CRM or the website's booking form to report these."))
+    try:
+        from agents.lead_management_agent import fetch_form_submissions, normalise_submission, classify_submission, summarise
+    except Exception as e:
+        return _section("lead source unavailable", False, leads=None,
+                        note=f"Could not load the lead reader: {e}")
+
+    try:
+        rows, meta, error = fetch_form_submissions(site_id)
+    except Exception as e:
+        return _section("website contact forms — request failed", False,
+                        leads=None, note=f"Could not read form submissions: {e}")
+
+    if error:
+        return _section("website contact forms — not connected", False,
+                        leads=None, note=error)
+
+    leads = [classify_submission(normalise_submission(r)) for r in rows]
+    summary = summarise(leads, meta)
+    genuine = sum(
+        count for verdict, count in (summary.get("by_verdict") or {}).items()
+        if verdict != "likely_spam"
+    )
+
+    return _section("website contact forms (Elementor)", True,
+                    leads=summary.get("total_on_site"),
+                    enquiries_read=summary.get("returned_here"),
+                    unread=summary.get("unread"),
+                    likely_spam=(summary.get("by_verdict") or {}).get("likely_spam", 0),
+                    genuine_enquiries=genuine,
+                    first_enquiry=summary.get("first_submission"),
+                    latest_enquiry=summary.get("latest_submission"),
+                    pipeline_value=None,
+                    closed_revenue=None,
+                    revenue_note=("Enquiry counts are read from the website's forms. "
+                                  "Pipeline and revenue need a CRM or booking system, "
+                                  "which is not connected, so they are not reported."))
 
 
 def build_executive_summary(period: str, search: Dict[str, Any], analytics: Dict[str, Any],
@@ -333,7 +369,7 @@ class MonthlyReportAgent(AgentInterface):
         paid = collect_paid_metrics(router, site_id)
         social = collect_social_metrics(site_id)
         reputation = collect_reputation_metrics(router, site_id)
-        leads = collect_lead_metrics()
+        leads = collect_lead_metrics(site_id)
 
         channels = {
             "seo_and_content": {**search, "blogs": blogs},

@@ -2086,6 +2086,42 @@ def get_site_agent_credentials(site_id: str, agent_id: str, _viewer: Dict[str, A
     elif agent_id == "google-ads-monitoring-agent":
         if "customer_id" not in creds and site.google_ads_id:
             creds["customer_id"] = site.google_ads_id
+    elif agent_id == "monthly-report-agent":
+        # There was no branch here, so this agent fell to the generic one and
+        # the panel rendered whichever stored task happened to be last. That
+        # task predated the rewrite and had none of the channel keys the panel
+        # reads, so every tile showed "not measured" while a live run was
+        # reporting real organic, analytics and ad-spend figures.
+        from agents.monthly_report_agent import MonthlyReportAgent
+        from core.models.task import AgentTask
+
+        report_task = AgentTask(
+            task_id="monthly-report-live-query",
+            agent_id="monthly-report-agent",
+            task_type="generate_report",
+            input_data={"action": "generate_report", "site_id": effective_site},
+            site_id=effective_site,
+        )
+        try:
+            out_data = MonthlyReportAgent().run_task(
+                report_task, router=orchestrator.router
+            ).get("output", {})
+        except Exception as e:
+            logger.warning("Monthly report live build failed for %s: %s", effective_site, e)
+            out_data = {
+                "channel_performance": {},
+                "channels_measured": [],
+                "channels_not_measured": [],
+                "executive_summary": [f"The report could not be built: {e}"],
+                "coverage": "0 of 0 channels have measured data",
+            }
+
+        report["domain_metrics"] = {
+            "recent_tasks_count": len(completed_tasks) or 1,
+            "latest_findings": out_data,
+            "recommendations": out_data.get("actionable_recommendations", []),
+        }
+
     elif agent_id == "meta-ads-monitoring-agent":
         if "ad_account_id" not in creds and site.meta_ads_id:
             creds["ad_account_id"] = site.meta_ads_id
