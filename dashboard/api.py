@@ -1979,6 +1979,12 @@ def get_overview_data(site_id: Optional[str] = None, payload: Dict[str, Any] = D
     all_tasks = orchestrator.queue.list_all()
     events = orchestrator.audit.get_history(limit=10)
     all_sites = websites_mgr.list_all()
+    # A scoped session sees only its own site here. This listed every
+    # registered website -- name, domain, niche, location -- to whoever asked,
+    # so a client read the rest of the portfolio from their first request.
+    _scope = session_site(payload)
+    if _scope:
+        all_sites = [w for w in all_sites if w.site_id == _scope]
 
     # An unnamed request used to aggregate every website, so a client who
     # simply loaded the page saw totals spanning sites they had no access to.
