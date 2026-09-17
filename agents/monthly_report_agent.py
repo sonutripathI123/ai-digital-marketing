@@ -244,17 +244,20 @@ def collect_lead_metrics(site_id: str) -> Dict[str, Any]:
         from agents.lead_management_agent import fetch_form_submissions, normalise_submission, classify_submission, summarise
     except Exception as e:
         return _section("lead source unavailable", False, leads=None,
+                        pipeline_value=None, closed_revenue=None,
                         note=f"Could not load the lead reader: {e}")
 
     try:
         rows, meta, error = fetch_form_submissions(site_id)
     except Exception as e:
         return _section("website contact forms — request failed", False,
-                        leads=None, note=f"Could not read form submissions: {e}")
+                        leads=None, pipeline_value=None, closed_revenue=None,
+                        note=f"Could not read form submissions: {e}")
 
     if error:
         return _section("website contact forms — not connected", False,
-                        leads=None, note=error)
+                        leads=None, pipeline_value=None, closed_revenue=None,
+                        note=error)
 
     # classify_submission returns the verdict, not the lead -- it is attached
     # to the lead, the way the lead agent itself does it.

@@ -61,8 +61,11 @@ class TestMonthlyReportAgent(unittest.TestCase):
             self.assertIn("measured", block, name)
         # Leads and revenue have no connected source, so they must never carry
         # a figure.
+        # Enquiry counts are read from the website's forms when they are
+        # connected, so "measured" may be either. Revenue is the invariant:
+        # no CRM or booking system is connected, so it must stay empty
+        # whichever way this ran.
         leads = output["channel_performance"]["sales_and_leads"]
-        self.assertFalse(leads["measured"])
         self.assertIsNone(leads["closed_revenue"])
         self.assertIsNone(leads["pipeline_value"])
 
