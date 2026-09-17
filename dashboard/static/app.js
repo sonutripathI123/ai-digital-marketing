@@ -49,47 +49,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   const targetSiteParam = urlParams.get('site') || hashParams.get('site');
 
   if (inviteToken) {
+    // An invite names the website; it does not open it. The gate takes over
+    // from here and asks the client to choose a password, and only the account
+    // that creates issues a session. This used to log straight in -- inventing
+    // an email address when the site had none on file -- so anyone the link
+    // reached was already inside.
     try {
-      const validateRes = await fetch(`/api/portal/validate-invite?token=${encodeURIComponent(inviteToken)}`);
-      if (validateRes.ok) {
-        const inviteData = await validateRes.json();
-        currentSiteId = inviteData.site_id;
-        
-        // Clear any old super-admin credentials to strictly isolate this client
-        localStorage.removeItem('ccm_admin_token');
-        sessionStorage.removeItem('ccm_admin_token');
-
+      const res = await fetch(`/api/portal/invite-status?token=${encodeURIComponent(inviteToken)}`);
+      if (res.ok) {
+        const info = await res.json();
+        currentSiteId = info.site_id;
         sessionStorage.setItem('ccm_selected_site', currentSiteId);
-        localStorage.setItem('ccm_selected_site', currentSiteId);
-        sessionStorage.setItem('ccm_client_invite_token', inviteToken);
-        localStorage.setItem('ccm_client_invite_token', inviteToken);
-        localStorage.setItem('ccm_client_site', currentSiteId);
-        localStorage.setItem('ccm_user_role', 'client');
-        localStorage.setItem('ai_visitor_session', 'client_portal_' + currentSiteId);
-
-        // Auto authenticate client session with isolated client execution rights
-        const clientEmail = (inviteData.assigned_client_emails && inviteData.assigned_client_emails[0]) || `client@${currentSiteId}.portal`;
-        const loginRes = await fetch('/api/auth/client-login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: clientEmail, invite_token: inviteToken })
-        });
-
-        if (loginRes.ok) {
-          const loginData = await loginRes.json();
-          authToken = loginData.token;
-          sessionStorage.setItem('ccm_admin_token', authToken);
-          localStorage.setItem('ccm_admin_token', authToken);
-        }
-
-        currentUserRole = 'client';
-        isSuperAdmin = false;
-        currentAllowedSites = [inviteData.site_id];
-        clientPrimarySite = inviteData.site_id;
       }
     } catch (e) {
-      console.warn('Invite validation notice:', e);
+      console.warn('Invite lookup failed:', e);
     }
+    // Any session already in this browser belongs to somebody else.
+    localStorage.removeItem('ccm_admin_token');
+    sessionStorage.removeItem('ccm_admin_token');
+    localStorage.removeItem('ai_visitor_session');
+    sessionStorage.removeItem('ai_visitor_session');
   } else if (targetSiteParam) {
     currentSiteId = targetSiteParam;
     sessionStorage.setItem('ccm_selected_site', currentSiteId);
@@ -98,7 +77,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Check if persistent client session exists in localStorage
     const savedUserRole = localStorage.getItem('ccm_user_role');
     const savedClientSite = localStorage.getItem('ccm_client_site');
-    if (savedUserRole === 'client' && savedClientSite) {
+    const savedToken = localStorage.getItem('ccm_admin_token')
+      || sessionStorage.getItem('ccm_admin_token');
+    // Only a stored token counts. The role alone used to be enough, so
+    // clearing the token left the page acting as a client with none.
+    if (savedUserRole === 'client' && savedClientSite && savedToken) {
       currentSiteId = savedClientSite;
       currentUserRole = 'client';
       isSuperAdmin = false;

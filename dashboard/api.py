@@ -1207,38 +1207,20 @@ def validate_invite(token: str):
 
 @app.post("/api/auth/client-login")
 def client_login(req: ClientLoginRequest):
-    """Logs in a client user via assigned email or active invite token."""
-    email_clean = req.email.strip().lower()
-    if not email_clean or "@" not in email_clean:
-        raise HTTPException(status_code=400, detail="Valid email address is required.")
+    """Retired: this issued a session for any email that came with an invite.
 
-    # 1. If invite token provided, associate email with that site
-    target_site = None
-    if req.invite_token and req.invite_token.strip():
-        target_site = websites_mgr.get_by_invite_token(req.invite_token.strip())
-        if target_site:
-            websites_mgr.allot_client(target_site.site_id, email_clean)
-
-    # 2. Check all sites accessible by this email
-    user_sites = websites_mgr.get_sites_for_user(email_clean, is_super_admin=False)
-    if not user_sites:
-        raise HTTPException(
-            status_code=403,
-            detail=f"No website access found for '{email_clean}'. Please use a valid client invite link from your administrator."
-        )
-
-    allowed_site_ids = [s.site_id for s in user_sites]
-    token = generate_auth_token(email=email_clean, role="client", allowed_sites=allowed_site_ids)
-
-    return {
-        "status": "success",
-        "message": f"Client authenticated for {len(allowed_site_ids)} website(s).",
-        "role": "client",
-        "token": token,
-        "email": email_clean,
-        "allowed_sites": allowed_site_ids,
-        "primary_site": allowed_site_ids[0]
-    }
+    No password was involved, so the link was the whole credential and a
+    forwarded one handed over the website. Clients now create a password from
+    the invite (POST /api/portal/account/create) and sign in with it
+    (POST /api/portal/account/login).
+    """
+    raise HTTPException(
+        status_code=410,
+        detail=(
+            "This sign-in method has been replaced. Open your access link to "
+            "create a password, then sign in with your email and password."
+        ),
+    )
 
 
 @app.get("/api/portal/invite-status")
