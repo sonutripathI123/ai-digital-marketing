@@ -725,6 +725,22 @@ class TestAgentConnectionRequest(BaseModel):
     credentials: Optional[Dict[str, Any]] = None
 
 
+class CreateClientAccountRequest(BaseModel):
+    invite_token: str
+    email: str
+    password: str
+
+
+class ClientPasswordLoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class ChangeClientPasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+
 # --- Authentication & Multi-Tenant Authorization Core ---
 def generate_auth_token(email: str, role: str = "super_admin", allowed_sites: Optional[List[str]] = None) -> str:
     payload = {
@@ -1222,6 +1238,144 @@ def client_login(req: ClientLoginRequest):
         "email": email_clean,
         "allowed_sites": allowed_site_ids,
         "primary_site": allowed_site_ids[0]
+    }
+
+
+@app.get("/api/portal/invite-status")
+def invite_status(token: str):
+    """What the invite is for, and whether it has been claimed already.
+
+    Answers before any password is typed, so the portal knows whether to show
+    "create your login" or "sign in".
+    """
+    from config.client_accounts import client_accounts
+
+    site = websites_mgr.get_by_invite_token((token or "").strip())
+    if not site:
+        raise HTTPException(
+            status_code=404,
+            detail="This access link is not valid. Ask your administrator for a new one.",
+        )
+    return {
+        "status": "success",
+        "site_id": site.site_id,
+        "site_name": site.name,
+        "site_domain": site.domain,
+        "color_accent": site.color_accent,
+        "already_claimed": bool(client_accounts.accounts_for_site(site.site_id)),
+    }
+
+
+@app.post("/api/portal/account/create")
+def create_client_account(req: CreateClientAccountRequest, request: Request):
+    """Turn an invite into a login the client owns.
+
+    The invite is rotated immediately afterwards, so a forwarded link cannot be
+    used a second time to create another account on the same website.
+    """
+    from config.client_accounts import client_accounts
+
+    site = websites_mgr.get_by_invite_token((req.invite_token or "").strip())
+    if not site:
+        raise HTTPException(
+            status_code=404,
+            detail="This access link is not valid or has already been used.",
+        )
+
+    email = (req.email or "").strip().lower()
+    if "@" not in email or "." not in email.split("@")[-1]:
+        raise HTTPException(status_code=400, detail="Please enter a valid email address.")
+
+    try:
+        client_accounts.create(email=email, password=req.password, site_id=site.site_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    # The email is now a client of this site, and the link that introduced them
+    # is spent.
+    websites_mgr.allot_client(site.site_id, email)
+    websites_mgr.generate_invite_token(site.site_id)
+
+    token = generate_auth_token(email=email, role="client", allowed_sites=[site.site_id])
+    logger.info("Client account created for %s on %s from %s",
+                email, site.site_id, request.client.host if request.client else "?")
+    return {
+        "status": "success",
+        "message": f"Your login for {site.name} is ready.",
+        "token": token,
+        "role": "client",
+        "email": email,
+        "site_id": site.site_id,
+        "site_name": site.name,
+        "allowed_sites": [site.site_id],
+    }
+
+
+@app.post("/api/portal/account/login")
+def client_password_login(req: ClientPasswordLoginRequest):
+    """Sign in with the email and password the client set."""
+    from config.client_accounts import client_accounts
+
+    account = client_accounts.authenticate(
+        (req.email or "").strip().lower(), req.password or ""
+    )
+    if not account:
+        # One message for a wrong password and for an address with no account,
+        # so this cannot be used to discover who has one.
+        raise HTTPException(status_code=401, detail="Incorrect email or password.")
+
+    site = websites_mgr.get(account["site_id"])
+    if not site or not site.is_active:
+        raise HTTPException(
+            status_code=403,
+            detail="The website linked to this login is no longer available. "
+                   "Please contact your administrator.",
+        )
+
+    token = generate_auth_token(
+        email=account["email"], role="client", allowed_sites=[site.site_id]
+    )
+    return {
+        "status": "success",
+        "message": f"Welcome back to {site.name}.",
+        "token": token,
+        "role": "client",
+        "email": account["email"],
+        "site_id": site.site_id,
+        "site_name": site.name,
+        "allowed_sites": [site.site_id],
+    }
+
+
+@app.post("/api/portal/account/password")
+def change_client_password(
+    req: ChangeClientPasswordRequest,
+    session: Dict[str, Any] = Depends(require_admin),
+):
+    """Let a signed-in client change their own password."""
+    from config.client_accounts import client_accounts
+
+    email = (session.get("email") or "").strip().lower()
+    if not client_accounts.exists(email):
+        raise HTTPException(status_code=404, detail="No password login exists for this session.")
+    try:
+        changed = client_accounts.set_password(email, req.current_password, req.new_password)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    if not changed:
+        raise HTTPException(status_code=401, detail="Your current password is incorrect.")
+    return {"status": "success", "message": "Password updated."}
+
+
+@app.get("/api/admin/super/sites/{site_id}/accounts")
+def list_site_accounts(site_id: str, _super: Dict[str, Any] = Depends(require_super_admin)):
+    """Who can sign in to this website. Never returns password material."""
+    from config.client_accounts import client_accounts
+
+    return {
+        "status": "success",
+        "site_id": site_id,
+        "accounts": client_accounts.accounts_for_site(site_id),
     }
 
 
