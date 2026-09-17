@@ -151,7 +151,7 @@ def _enforce_limit(content: dict, platform: str) -> dict:
 
 
 def generate_post(session: Session, keyword: Keyword, platform: Platform,
-                  use_ai: bool = True) -> Post:
+                  use_ai: bool = True, site_id: str = "") -> Post:
     """Generate one draft post for one platform and persist it."""
     pname = platform.value
     content = _generate_with_claude(keyword, pname) if use_ai else _generate_template(keyword, pname)
@@ -169,6 +169,7 @@ def generate_post(session: Session, keyword: Keyword, platform: Platform,
         hashtags=content["hashtags"],
         cta=content["cta"],
         status=PostStatus.draft,
+        site_id=(site_id or "").strip().lower() or None,
     )
     keyword.last_used_at = datetime.utcnow()
     session.add(post)

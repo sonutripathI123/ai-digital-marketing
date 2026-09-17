@@ -164,6 +164,26 @@ def _build_social_recommendations(live_accounts, engagement, published_history,
     return out or ["No social activity was found to report on."]
 
 
+def _posts_site_filter(cur, site_id: str, alias: str = "p"):
+    """SQL fragment and parameters restricting posts to one website.
+
+    The posts table gained site_id late; every row written before that belongs
+    to Corporate Cars Melbourne, because this was a single-brand database. So
+    a NULL counts as ccm and as nothing else -- without this, a new client saw
+    CCM's captions listed as its own published posts.
+    """
+    try:
+        columns = [r[1] for r in cur.execute("PRAGMA table_info(posts)")]
+    except Exception:
+        columns = []
+    if "site_id" not in columns:
+        # Pre-migration database: all of it is the primary site's.
+        return ("1=1" if site_id == "ccm" else "1=0"), []
+    if site_id == "ccm":
+        return f"({alias}.site_id = ? OR {alias}.site_id IS NULL)", [site_id]
+    return f"{alias}.site_id = ?", [site_id]
+
+
 def fetch_real_social_analytics(
     site_id: str = "",
     site_domain: str = "",
@@ -387,7 +407,12 @@ def fetch_real_social_analytics(
             cur = conn.cursor()
 
             # Breakdown counts
-            cur.execute("SELECT platform, status, count(*) FROM posts GROUP BY platform, status")
+            # The aggregate query names the table; the two below alias it "p".
+            _where_t, _params = _posts_site_filter(cur, site_id, "posts")
+            _where, _ = _posts_site_filter(cur, site_id, "p")
+            cur.execute(
+                f"SELECT platform, status, count(*) FROM posts WHERE {_where_t} "
+                "GROUP BY platform, status", _params)
             for plat, stat, count in cur.fetchall():
                 plat = plat.lower()
                 if plat not in platform_db_counts:
@@ -400,9 +425,9 @@ def fetch_real_social_analytics(
                 SELECT p.id, p.platform, p.caption, p.hashtags, p.platform_post_id, s.publish_at, p.created_at
                 FROM posts p
                 LEFT JOIN schedule s ON s.post_id = p.id
-                WHERE p.status = 'published'
+                WHERE p.status = 'published' AND """ + _where + """
                 ORDER BY COALESCE(s.publish_at, p.created_at) DESC
-            """)
+            """, _params)
             existing_ids = {str(p.get("platform_post_id")) for p in published_history if p.get("platform_post_id")}
             existing_titles = {str(p.get("title", ""))[:35].lower() for p in published_history if p.get("title")}
             for r in cur.fetchall():
@@ -462,9 +487,10 @@ def fetch_real_social_analytics(
                 SELECT p.id, p.platform, p.caption, s.publish_at
                 FROM posts p
                 LEFT JOIN schedule s ON s.post_id = p.id
-                WHERE p.status = 'scheduled' OR (s.published = 0 AND s.publish_at IS NOT NULL)
+                WHERE (p.status = 'scheduled' OR (s.published = 0 AND s.publish_at IS NOT NULL))
+                  AND """ + _where + """
                 ORDER BY s.publish_at ASC
-            """)
+            """, _params)
             for r in cur.fetchall():
                 caption_clean = r[2].strip() if r[2] else ""
                 first_line = caption_clean.split("\n")[0] if caption_clean else f"Post #{r[0]}"

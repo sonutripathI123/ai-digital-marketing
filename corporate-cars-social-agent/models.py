@@ -75,6 +75,10 @@ class Post(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True)
+    # Which website published this. Rows written before this column existed are
+    # all Corporate Cars Melbourne's -- this was a single-brand database -- and
+    # are backfilled to "ccm" by ensure_site_column() in db.py.
+    site_id = Column(String(64), nullable=True, index=True)
     platform = Column(Enum(Platform), nullable=False)
     keyword_id = Column(Integer, ForeignKey("keywords.id"), nullable=True)
     image_id = Column(Integer, ForeignKey("images.id"), nullable=True)

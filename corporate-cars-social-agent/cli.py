@@ -75,6 +75,8 @@ def generate(
     category: str = typer.Option(None, help="category applied to new keywords"),
     no_ai: bool = typer.Option(False, "--no-ai",
                                help="use offline template content (no Claude API call)"),
+    site: str = typer.Option("", "--site",
+                             help="website id these posts belong to (e.g. ccm, opal)"),
 ):
     """Generate draft posts (status=draft) for keyword × platform."""
     from content_generator import GenerationError, generate_post, get_or_create_keyword
@@ -87,7 +89,8 @@ def generate(
     for kw in kws:
         for p in platforms:
             try:
-                post = generate_post(session, kw, p, use_ai=not no_ai)
+                post = generate_post(session, kw, p, use_ai=not no_ai,
+                                     site_id=site.strip())
             except GenerationError as e:
                 typer.secho(f"  [FAILED] {p.value} / {kw.keyword}: {e}", fg=typer.colors.RED)
                 continue
