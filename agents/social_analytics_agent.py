@@ -347,6 +347,9 @@ def fetch_real_social_analytics(
 
     published_history = []
     scheduled_queue = []
+    # Posts the publisher gave up on. Reported rather than dropped: a post that
+    # never went out is a thing the operator needs to see, not a silent gap.
+    retired_posts: List[Dict[str, Any]] = []
     platform_db_counts = {}
     cached_map = {}
 
@@ -357,6 +360,17 @@ def fetch_real_social_analytics(
             with open(sched_file, "r", encoding="utf-8") as sfp:
                 camp_posts = json.load(sfp)
                 for cp in camp_posts:
+                    if cp.get("site") == site_id and cp.get("status") == "expired":
+                        retired_posts.append({
+                            "id": cp.get("id"),
+                            "platform": (cp.get("platform") or "").capitalize(),
+                            "scheduled_for": (cp.get("scheduled_for") or "").replace(
+                                " (Melbourne Time)", ""),
+                            "retired_at": (cp.get("expired_at") or "").replace(
+                                " (Melbourne Time)", ""),
+                            "reason": cp.get("expired_reason") or "Missed its slot.",
+                            "title": (cp.get("caption") or "").split("\n")[0][:80],
+                        })
                     if cp.get("site") == site_id and cp.get("status") == "published":
                         # The publisher records the id as "platform_post_id";
                         # only campaigns from the retired engine use "post_id".
@@ -817,6 +831,13 @@ def fetch_real_social_analytics(
         "total_scheduled_queue": len(scheduled_queue),
         "published_posts_history": published_history,
         "next_scheduled_posts": scheduled_queue[:6],
+        "retired_posts": retired_posts,
+        "retired_posts_note": (
+            "These were scheduled but never published: each missed its slot by "
+            "more than this website's allowance, so the publisher retired it "
+            "rather than posting it at the wrong hour. Re-schedule anything "
+            "here that still matters."
+        ),
         "engagement_measured": engagement,
         "metrics_unavailable": unavailable,
         "measurement_note": (

@@ -2154,6 +2154,36 @@ async function viewAgentReport(agentId) {
           </table>
         </div>
 
+        ${(sm.retired_posts || []).length ? `
+        <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.35); border-radius:12px; padding:14px 16px; margin-bottom:18px;">
+          <div style="font-size:13px; font-weight:800; color:#f59e0b; margin-bottom:5px;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            ${sm.retired_posts.length} scheduled post${sm.retired_posts.length === 1 ? '' : 's'} never went out
+          </div>
+          <div style="font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">
+            ${escapeHtml(sm.retired_posts_note || '')}
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="table" style="width:100%; font-size:11.5px; margin:0;">
+              <thead><tr style="color:var(--text-secondary); font-size:10px; text-transform:uppercase;">
+                <th style="padding:6px 8px; text-align:left;">Platform</th>
+                <th style="padding:6px 8px; text-align:left;">Was due</th>
+                <th style="padding:6px 8px; text-align:left;">Post</th>
+                <th style="padding:6px 8px; text-align:left;">Why it did not go out</th>
+              </tr></thead>
+              <tbody>
+                ${sm.retired_posts.map(r => `
+                  <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <td style="padding:6px 8px; color:#fff; font-weight:700; white-space:nowrap;">${escapeHtml(r.platform || '')}</td>
+                    <td style="padding:6px 8px; font-family:var(--font-mono); color:var(--text-muted); white-space:nowrap;">${escapeHtml(r.scheduled_for || '')}</td>
+                    <td style="padding:6px 8px; color:var(--text-secondary);">${escapeHtml(r.title || '')}</td>
+                    <td style="padding:6px 8px; color:var(--text-secondary);">${escapeHtml(r.reason || '')}</td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>` : ''}
+
         <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;">
           <i class="fa-solid fa-square-check" style="color:var(--status-success);"></i>
           Published Posts &mdash; newest first, by platform (${data.site_name}):
