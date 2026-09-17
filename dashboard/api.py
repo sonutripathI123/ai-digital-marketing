@@ -2059,9 +2059,7 @@ def list_agents(site_id: Optional[str] = None):
             "agents": [agent.model_dump() for agent in raw_agents]
         }
 
-    # Defaulting this to "ccm" handed the primary site's report to anyone who
-    # left it out.
-    site_profile = resolve_existing_site(session_site(_viewer, site_id) or "ccm")
+    site_profile = resolve_existing_site(site_id)
     if not site_profile:
         return {
             "status": "success",
@@ -2983,7 +2981,9 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = None, _
     if not agent:
         raise HTTPException(status_code=404, detail=f"Agent {agent_id} not found.")
 
-    site_profile = resolve_existing_site(site_id)
+    # This defaulted to "ccm", so leaving the parameter out handed over the
+    # primary site's report.
+    site_profile = resolve_existing_site(session_site(_viewer, site_id) or "ccm")
     effective_site = site_profile.site_id
     site_domain = site_profile.domain
     site_name = site_profile.name
