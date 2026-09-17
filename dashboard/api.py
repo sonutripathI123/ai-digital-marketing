@@ -892,6 +892,26 @@ _SITE_PATH_ROOTS = ("sites", "websites")
 _SITE_SCOPE_EXEMPT_PREFIXES = ("/api/auth/", "/api/portal/")
 
 
+def resolve_existing_site(site_id: Optional[str]):
+    """The website, or a 404 saying it is gone.
+
+    Never substitutes another site. This used to fall back to the primary one,
+    so deleting a website left its client's dashboard live and showing
+    somebody else's figures.
+    """
+    site = websites_mgr.get((site_id or "").strip().lower()) if site_id else None
+    if site:
+        return site
+    raise HTTPException(
+        status_code=404,
+        detail=(
+            f"The website '{site_id}' no longer exists. If you reached this "
+            f"page from an access link, that link is no longer valid — please "
+            f"ask your administrator for a new one."
+        ),
+    )
+
+
 def check_site_access_permission(site_id: str, payload: Optional[Dict[str, Any]]) -> bool:
     """Whether this session may touch this site's data.
 
@@ -991,6 +1011,23 @@ async def enforce_site_scope(request: Request, call_next):
     )
 
     for site_id in sorted(requested):
+        # A token outlives the website it was issued for. Without this, a
+        # client whose site was deleted kept a valid session naming a site id
+        # that resolves to nothing.
+        if (site_id not in _SITE_ID_PORTFOLIO and payload
+                and not payload.get("is_super_admin")
+                and not websites_mgr.get(site_id)):
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "status": "error",
+                    "detail": (
+                        f"The website '{site_id}' no longer exists. Your access "
+                        f"link is no longer valid — please ask your "
+                        f"administrator for a new one."
+                    ),
+                },
+            )
         if not check_site_access_permission(site_id, payload):
             allowed = payload.get("allowed_sites") if payload else []
             logger.warning(
@@ -1993,7 +2030,7 @@ def list_agents(site_id: Optional[str] = None):
             "agents": [agent.model_dump() for agent in raw_agents]
         }
 
-    site_profile = websites_mgr.get(site_id) or websites_mgr.get("ccm")
+    site_profile = resolve_existing_site(site_id)
     if not site_profile:
         return {
             "status": "success",
@@ -2061,7 +2098,7 @@ def list_agents(site_id: Optional[str] = None):
 @app.get("/api/sites/{site_id}/agents/integrations")
 def get_site_agents_integrations(site_id: str, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Returns integration and connection status for all agents for a specific website."""
-    site = websites_mgr.get(site_id) or websites_mgr.get("ccm")
+    site = resolve_existing_site(site_id)
     if not site:
         raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
 
@@ -2213,7 +2250,7 @@ def get_site_agents_integrations(site_id: str, _viewer: Dict[str, Any] = Depends
 @app.get("/api/sites/{site_id}/agents/{agent_id}/credentials")
 def get_site_agent_credentials(site_id: str, agent_id: str, _viewer: Dict[str, Any] = Depends(require_viewer)):
     """Fetches saved credentials for an agent on a specific website with sensitive values masked."""
-    site = websites_mgr.get(site_id) or websites_mgr.get("ccm")
+    site = resolve_existing_site(site_id)
     if not site:
         raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
 
@@ -2603,7 +2640,7 @@ def connect_site_agent(site_id: str, agent_id: str, req: SaveAgentCredentialsReq
 @app.post("/api/sites/{site_id}/agents/{agent_id}/test-connection")
 def test_site_agent_connection(site_id: str, agent_id: str, req: TestAgentConnectionRequest):
     """Executes live validation test on provided or saved credentials."""
-    site = websites_mgr.get(site_id) or websites_mgr.get("ccm")
+    site = resolve_existing_site(site_id)
     if not site:
         raise HTTPException(status_code=404, detail=f"Website '{site_id}' not found.")
 
@@ -2732,8 +2769,8 @@ def publish_google_ads_live(req: GoogleAdsPublishRequest):
     wire up quietly, so this endpoint now does honestly what it always did:
     stores the blueprint so it can be copied into Google Ads by hand.
     """
-    site = websites_mgr.get(req.site_id) or websites_mgr.get("ccm")
-    effective_site = site.site_id if site else "ccm"
+    site = resolve_existing_site(req.site_id)
+    effective_site = site.site_id
 
     creds = websites_mgr.get_agent_credentials(effective_site, "google-ads-monitoring-agent")
     cust_id = req.customer_id or creds.get("customer_id") or "194-940-8641"
@@ -2915,11 +2952,11 @@ def get_agent_performance_report(agent_id: str, site_id: Optional[str] = "ccm", 
     if not agent:
         raise HTTPException(status_code=404, detail=f"Agent {agent_id} not found.")
 
-    site_profile = websites_mgr.get(site_id) or websites_mgr.get("ccm")
-    effective_site = site_profile.site_id if site_profile else "ccm"
-    site_domain = site_profile.domain if site_profile else "https://corporatecarsmelbourne.com.au"
-    site_name = site_profile.name if site_profile else "Corporate Cars Melbourne"
-    site_loc = site_profile.location if site_profile else "Melbourne, VIC"
+    site_profile = resolve_existing_site(site_id)
+    effective_site = site_profile.site_id
+    site_domain = site_profile.domain
+    site_name = site_profile.name
+    site_loc = site_profile.location
 
     agent_tasks = orchestrator.queue.list_all(agent_id=agent_id)
     site_tasks = [t for t in agent_tasks if (t.input_data or {}).get("site_id", "ccm") == effective_site or (t.input_data or {}).get("site", "ccm") == effective_site]
@@ -5446,7 +5483,7 @@ def import_auction_insights(
     if error:
         raise HTTPException(status_code=400, detail=error)
 
-    site = websites_mgr.get(request.site_id) or websites_mgr.get("ccm")
+    site = resolve_existing_site(request.site_id)
     site_id = site.site_id if site else "ccm"
     stored = save_auction_insights(DATA_DIR, site_id, rows, meta, request.filename)
 

@@ -32,7 +32,20 @@ let authToken = localStorage.getItem('ccm_admin_token') || sessionStorage.getIte
           headers.set('Authorization', `Bearer ${token}`);
         }
         opts.headers = headers;
-        return nativeFetch(resource, opts);
+        return nativeFetch(resource, opts).then(res => {
+          // The server answers 404 when the site a session was issued for has
+          // been deleted. Before it did that, the call quietly returned the
+          // primary site's data and the dashboard carried on as if nothing had
+          // changed -- under the wrong business's name.
+          if (res.status === 404 && typeof window.handleDeletedSite === 'function') {
+            res.clone().json().then(body => {
+              if (body && /no longer exists/i.test(body.detail || '')) {
+                window.handleDeletedSite(body.detail);
+              }
+            }).catch(() => {});
+          }
+          return res;
+        });
       }
     } catch (e) {
       // Never let header plumbing break a request.
@@ -540,6 +553,32 @@ function applyClientRestrictions() {
     if (caret) caret.remove();
   }
 }
+
+window.handleDeletedSite = function (message) {
+  // Once is enough: several panels load at the same time and would each
+  // trigger this.
+  if (window.__siteGoneHandled) return;
+  window.__siteGoneHandled = true;
+
+  ['ccm_admin_token', 'ccm_client_site', 'ccm_user_role', 'ai_visitor_session',
+   'ccm_selected_site', 'ccm_client_invite_token'].forEach(k => {
+    localStorage.removeItem(k);
+    sessionStorage.removeItem(k);
+  });
+  authToken = null;
+  currentUserRole = 'viewer';
+  currentAllowedSites = [];
+
+  const gate = document.getElementById('visitor-login-gate');
+  if (gate) {
+    gate.style.display = 'flex';
+    const signIn = document.getElementById('form-client-signin');
+    const setup = document.getElementById('form-client-setup');
+    if (signIn) signIn.style.display = 'block';
+    if (setup) setup.style.display = 'none';
+    gateAlert(message || 'This website is no longer available.', 'error');
+  }
+};
 
 function gateAlert(message, kind) {
   const box = document.getElementById('visitor-gate-alert');
