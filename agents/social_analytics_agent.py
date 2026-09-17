@@ -6,6 +6,7 @@ Threads, and Pinterest using live Meta Graph API, LinkedIn API, and local social
 """
 
 import os
+from datetime import datetime
 import re
 import json
 import sqlite3
@@ -182,6 +183,50 @@ def _posts_site_filter(cur, site_id: str, alias: str = "p"):
     if site_id == "ccm":
         return f"({alias}.site_id = ? OR {alias}.site_id IS NULL)", [site_id]
     return f"{alias}.site_id = ?", [site_id]
+
+
+def linkedin_api_versions(count: int = 6) -> List[str]:
+    """Recent LinkedIn-Version values, newest first.
+
+    LinkedIn versions are months (YYYYMM) and only a rolling window is valid,
+    so a hardcoded one expires. The current month is not always released yet,
+    so this starts at last month and walks back.
+
+    LINKEDIN_API_VERSION overrides it when a specific month is needed.
+    """
+    pinned = os.getenv("LINKEDIN_API_VERSION", "").strip()
+    if pinned:
+        return [pinned]
+
+    now = datetime.now()
+    year, month = now.year, now.month
+    out: List[str] = []
+    for _ in range(count):
+        month -= 1
+        if month == 0:
+            month, year = 12, year - 1
+        out.append(f"{year}{month:02d}")
+    return out
+
+
+def linkedin_get(url: str, headers: Dict[str, str], params: Dict[str, Any],
+                 timeout: int = 10):
+    """GET a versioned LinkedIn endpoint, trying recent versions in turn.
+
+    Returns the first response that is not a version rejection, so a genuine
+    error (a bad token, a missing permission) is still reported rather than
+    retried six times.
+    """
+    import requests
+
+    last = None
+    for version in linkedin_api_versions():
+        last = requests.get(url, params=params, timeout=timeout,
+                            headers={**headers, "LinkedIn-Version": version})
+        if last.status_code != 426:
+            return last, version
+        logger.info("LinkedIn rejected version %s; trying an older one.", version)
+    return last, None
 
 
 def fetch_real_social_analytics(
@@ -632,16 +677,23 @@ def fetch_real_social_analytics(
             # exception in path variables".
             from urllib.parse import quote
 
-            r_net = requests.get(
+            r_net, used_version = linkedin_get(
                 "https://api.linkedin.com/rest/networkSizes/" + quote(linkedin_org, safe=""),
-                params={"edgeType": "CompanyFollowedByMember"},
-                headers={**headers, "LinkedIn-Version": "202506"},
-                timeout=10,
+                headers,
+                {"edgeType": "CompanyFollowedByMember"},
             )
-            if r_net.status_code == 200:
+            if r_net is not None and r_net.status_code == 200:
                 live_accounts["linkedin"]["followers"] = r_net.json().get("firstDegreeSize")
+                live_accounts["linkedin"]["api_version"] = used_version
+            elif r_net is not None and r_net.status_code == 426:
+                unavailable["linkedin_followers"] = (
+                    "LinkedIn rejected every recent API version it was offered "
+                    f"({', '.join(linkedin_api_versions())}). Set "
+                    "LINKEDIN_API_VERSION to a month LinkedIn currently accepts."
+                )
             else:
-                unavailable["linkedin_followers"] = f"HTTP {r_net.status_code} reading the follower count"
+                code = r_net.status_code if r_net is not None else "no response"
+                unavailable["linkedin_followers"] = f"HTTP {code} reading the follower count"
         except Exception as e:
             logger.warning(f"LinkedIn live fetch failed: {e}")
             unavailable["linkedin_account"] = str(e)
