@@ -54,3 +54,4 @@ runtime-data/
 data/social_scheduled_campaigns.json
 blog-agent/topics.csv
 *.db
+scratch/
