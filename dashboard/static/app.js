@@ -2154,76 +2154,58 @@ async function viewAgentReport(agentId) {
           </table>
         </div>
 
-        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;"><i class="fa-solid fa-square-check" style="color:var(--status-success);"></i> Date-Wise Published Social Posts History (${data.site_name}):</h3>
-        <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-radius:12px; overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:20px; width:100%; box-sizing:border-box;">
-          <table style="width:100%; min-width:680px; border-collapse:collapse; text-align:left; font-size:12px;">
-            <thead>
-              <tr style="background:rgba(15,23,42,0.8); color:var(--text-muted); text-transform:uppercase;">
-                <th style="padding:10px 12px; width:65px; white-space:nowrap;">ID</th>
-                <th style="padding:10px 12px; width:95px; white-space:nowrap;">Platform</th>
-                <th style="padding:10px 12px; width:170px; white-space:nowrap;">Published Date & Time</th>
-                <th style="padding:10px 12px; min-width:200px;">Content Title / Topic</th>
-                <th style="padding:10px 12px; width:140px; white-space:nowrap;">Live Interactions</th>
-                <th style="padding:10px 12px; width:120px; text-align:center; white-space:nowrap;">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${pubHistory.length > 0 ? pubHistory.map(p => {
-                const plat = (p.platform || '').toLowerCase();
-                let iconClass = 'fa-solid fa-arrow-up-right-from-square';
-                let btnColor = 'var(--accent-cyan)';
-                let btnLabel = 'Open Post';
-                let targetUrl = p.url || '';
+        <h3 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:10px;">
+          <i class="fa-solid fa-square-check" style="color:var(--status-success);"></i>
+          Published Posts &mdash; newest first, by platform (${data.site_name}):
+        </h3>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:14px; margin-bottom:20px;">
+          ${[
+            { key: 'insta', label: 'Instagram', icon: 'fa-brands fa-instagram', colour: '#ec4899',
+              fallback: acc.instagram?.url || '' },
+            { key: 'face', label: 'Facebook', icon: 'fa-brands fa-facebook', colour: '#3b82f6',
+              fallback: acc.facebook?.url || '' },
+            { key: 'link', label: 'LinkedIn', icon: 'fa-brands fa-linkedin', colour: '#0ea5e9',
+              fallback: acc.linkedin?.url || '' }
+          ].map(col => {
+            // The agent sorts newest first and stamps published_at_iso; this
+            // sorts again so the order holds even against an older payload
+            // that has no timestamp on it.
+            const posts = pubHistory
+              .filter(p => (p.platform || '').toLowerCase().includes(col.key))
+              .slice()
+              .sort((a, b) => String(b.published_at_iso || '').localeCompare(String(a.published_at_iso || '')));
 
-                if (plat.includes('insta')) {
-                  iconClass = 'fa-brands fa-instagram';
-                  btnColor = '#ec4899';
-                  btnLabel = 'View on Instagram';
-                  if (!targetUrl) {
-                    targetUrl = acc.instagram?.url || 'https://www.instagram.com/corporatecarsmelbourne/';
-                  }
-                } else if (plat.includes('face')) {
-                  iconClass = 'fa-brands fa-facebook';
-                  btnColor = '#3b82f6';
-                  btnLabel = 'View on Facebook';
-                  if (!targetUrl) {
-                    targetUrl = acc.facebook?.url || 'https://www.facebook.com/profile.php?id=791630667378039';
-                  }
-                } else if (plat.includes('link')) {
-                  iconClass = 'fa-brands fa-linkedin';
-                  btnColor = '#0ea5e9';
-                  btnLabel = 'View on LinkedIn';
-                  if (!targetUrl) {
-                    targetUrl = acc.linkedin?.url || 'https://www.linkedin.com/company/corporate-cars-melbourne/';
-                  }
-                }
+            return `
+            <div style="background:rgba(30,41,59,0.7); border:1px solid var(--glass-border); border-top:3px solid ${col.colour}; border-radius:12px; padding:14px; min-width:0;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px;">
+                <div style="font-size:13px; font-weight:800; color:${col.colour};">
+                  <i class="${col.icon}"></i> ${col.label}
+                </div>
+                <span class="badge" style="font-size:10px; font-weight:800; background:rgba(148,163,184,0.15); color:#cbd5e1; border:1px solid rgba(148,163,184,0.35);">
+                  ${posts.length} published
+                </span>
+              </div>
 
-                return `
-                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                  <td style="padding:10px 12px; font-family:var(--font-mono); color:var(--accent-cyan); font-weight:700; white-space:nowrap;">${p.id}</td>
-                  <td style="padding:10px 12px; white-space:nowrap;"><span class="action-chip">${p.platform}</span></td>
-                  <td style="padding:10px 12px; font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--text-secondary);">${p.published_at}</td>
-                  <td style="padding:10px 12px; font-weight:600; color:#fff; line-height:1.4;">${escapeHtml(p.title || p.topic || '')}</td>
-                  <td style="padding:10px 12px; white-space:nowrap;">
-                    <span class="badge badge-success" style="font-weight:700; margin-right:4px;">${p.likes || 0} Likes</span>
-                    <span class="badge badge-info" style="font-weight:700;">${p.comments || 0} Comments</span>
-                  </td>
-                  <td style="padding:10px 12px; text-align:center; white-space:nowrap;">
-                    ${targetUrl ? `<a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="action-chip" style="color:${btnColor}; border-color:${btnColor}; text-decoration:none; font-weight:700;"><i class="${iconClass}"></i> ${btnLabel}</a>` : '<span style="color:var(--text-muted);">-</span>'}
-                  </td>
-                </tr>
-                `;
-              }).join('') : `
-                <tr>
-                  <td colspan="6" style="padding:28px 14px; text-align:center; color:var(--text-muted);">
-                    <i class="fa-solid fa-share-nodes" style="font-size:24px; margin-bottom:8px; display:block; color:var(--accent-purple); opacity:0.6;"></i>
-                    No social media posts published for <strong>${escapeHtml(data.site_name)}</strong> yet.
-                    <div style="font-size:11px; margin-top:4px; color:var(--text-secondary);">Click the <strong>+ Add Keywords & Auto-Generate</strong> button above to queue initial campaigns for this website.</div>
-                  </td>
-                </tr>
-              `}
-            </tbody>
-          </table>
+              ${posts.length ? posts.map((p, i) => `
+                <div style="border-bottom:1px solid rgba(255,255,255,0.06); padding:10px 0; ${i === 0 ? 'background:rgba(255,255,255,0.03); margin:0 -14px 4px; padding:10px 14px; border-radius:8px;' : ''}">
+                  <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px; flex-wrap:wrap;">
+                    ${i === 0 ? `<span class="badge" style="font-size:9px; font-weight:800; background:${col.colour}22; color:${col.colour}; border:1px solid ${col.colour}55;">LATEST</span>` : ''}
+                    <span style="font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted);">${escapeHtml(String(p.published_at || '').replace(' (Melbourne Time)', ''))}</span>
+                  </div>
+                  <div style="font-size:12.5px; font-weight:600; color:#fff; line-height:1.45; margin-bottom:6px; overflow-wrap:anywhere;">
+                    ${escapeHtml(p.title || p.topic || '')}
+                  </div>
+                  <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    <span class="badge badge-success" style="font-size:10px; font-weight:700;">${p.likes || 0} likes</span>
+                    <span class="badge badge-info" style="font-size:10px; font-weight:700;">${p.comments || 0} comments</span>
+                    ${(p.url || col.fallback) ? `<a href="${p.url || col.fallback}" target="_blank" rel="noopener noreferrer" style="font-size:10.5px; color:${col.colour}; text-decoration:none; font-weight:700;">open <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:9px;"></i></a>` : ''}
+                  </div>
+                </div>`).join('') : `
+                <div style="padding:22px 6px; text-align:center; color:var(--text-muted); font-size:12px; line-height:1.55;">
+                  Nothing published to ${col.label} yet for <strong>${escapeHtml(data.site_name)}</strong>.
+                </div>`}
+            </div>`;
+          }).join('')}
         </div>
 
         <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:16px; border-radius:12px;">

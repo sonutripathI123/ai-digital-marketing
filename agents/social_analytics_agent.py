@@ -32,6 +32,47 @@ if SOCIAL_ENV_FILE.exists():
     load_dotenv(SOCIAL_ENV_FILE)
 
 
+def sortable_timestamp(value: Optional[str]) -> str:
+    """An ISO timestamp for ordering, from any of the shapes posts arrive in.
+
+    Returns "" when nothing can be read, and the caller sorts those last rather
+    than guessing a date for them.
+    """
+    if not value:
+        return ""
+    raw = str(value).strip()
+
+    # 1. Graph API / database: 2026-08-28T06:56:00+0000 or with a space.
+    try:
+        cleaned = raw.split("+")[0].replace("Z", "").replace("T", " ").split(".")[0].strip()
+        return datetime.strptime(cleaned, "%Y-%m-%d %H:%M:%S").isoformat()
+    except Exception:
+        pass
+
+    # 2. Campaign file: "Fri 28 Aug 2026 at 06:56 AM (Melbourne Time)"
+    m = re.search(r"(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4}).*?(\d{1,2}):(\d{2})\s*([AaPp][Mm])", raw)
+    if m:
+        try:
+            day, mon, year, hour, minute, meridiem = m.groups()
+            hour = int(hour) % 12 + (12 if meridiem.lower() == "pm" else 0)
+            return datetime.strptime(
+                f"{year}-{mon}-{int(day):02d} {hour:02d}:{minute}", "%Y-%b-%d %H:%M"
+            ).isoformat()
+        except Exception:
+            pass
+
+    # 3. Date only.
+    m = re.search(r"(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})", raw)
+    if m:
+        try:
+            day, mon, year = m.groups()
+            return datetime.strptime(f"{year}-{mon}-{int(day):02d}", "%Y-%b-%d").isoformat()
+        except Exception:
+            pass
+
+    return ""
+
+
 def format_utc_to_display(utc_str: Optional[str]) -> str:
     if not utc_str:
         return "Recent"
@@ -345,6 +386,8 @@ def fetch_real_social_analytics(
                             "hashtags": cp.get("hashtags", ""),
                             "platform_post_id": pid,
                             "published_at": cp.get("published_at", "Today"),
+                            "published_at_iso": sortable_timestamp(
+                                cp.get("published_at_utc") or cp.get("published_at")),
                             "likes": 1,
                             "comments": 0,
                             "url": post_url,
@@ -402,6 +445,7 @@ def fetch_real_social_analytics(
                             "hashtags": "",
                             "platform_post_id": m.get("id"),
                             "published_at": format_utc_to_display(m.get("timestamp")),
+                            "published_at_iso": sortable_timestamp(m.get("timestamp")),
                             "likes": m.get("like_count", 0),
                             "comments": m.get("comments_count", 0),
                             "url": m.get("permalink", f"https://www.instagram.com/p/{m.get('id')}/"),
@@ -435,6 +479,7 @@ def fetch_real_social_analytics(
                             "hashtags": "",
                             "platform_post_id": f.get("id"),
                             "published_at": format_utc_to_display(f.get("created_time")),
+                            "published_at_iso": sortable_timestamp(f.get("created_time")),
                             "likes": likes_cnt,
                             "comments": comments_cnt,
                             "url": f.get("permalink_url", f"https://facebook.com/{f.get('id')}"),
@@ -521,6 +566,7 @@ def fetch_real_social_analytics(
                     "hashtags": r[3] or "",
                     "platform_post_id": pid or "Live Verified",
                     "published_at": format_utc_to_display(r[5] or r[6]),
+                    "published_at_iso": sortable_timestamp(r[5] or r[6]),
                     "likes": post_likes,
                     "comments": post_comments,
                     "url": post_url,
@@ -712,6 +758,9 @@ def fetch_real_social_analytics(
     next_li = next((s for s in scheduled_queue if s["platform"].lower() == "linkedin"), None)
 
     published_history = _dedupe_published_history(published_history)
+    # Newest first. Rows whose date could not be read sort last rather than
+    # landing at the top on an empty string.
+    published_history.sort(key=lambda p: p.get("published_at_iso") or "", reverse=True)
 
     return {
         "live_connected_accounts": live_accounts,
