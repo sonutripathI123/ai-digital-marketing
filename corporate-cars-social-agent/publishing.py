@@ -350,12 +350,51 @@ def _get_week_counts(campaigns: list, now_mel: datetime) -> dict:
 
 
 def _resolve_local_image(campaign: dict) -> Path | None:
-    """Local file for a campaign's image — LinkedIn uploads binary, not a URL."""
-    img_rel = campaign.get("image_path") or ("images/" + campaign.get("image_name", ""))
-    img_rel = img_rel.replace("\\", "/").strip()
+    """Local file for a campaign's image — LinkedIn uploads binary, not a URL.
+
+    A campaign's picture can now come from three places: the site's own
+    uploaded gallery ("site-gallery/<site>/<file>"), its WordPress media
+    library (an http URL, fetched to a temporary file because LinkedIn and
+    Facebook photo posts want the bytes), or the built-in folder beside this
+    module.
+    """
+    img_rel = (campaign.get("image_path") or "").replace("\\", "/").strip()
+    if not img_rel and campaign.get("image_name"):
+        img_rel = "images/" + campaign["image_name"]
     if not img_rel:
         return None
+
     base = Path(__file__).resolve().parent
+
+    # 1. The site's own gallery, stored outside this folder.
+    if img_rel.startswith("site-gallery/"):
+        parts = img_rel.split("/")
+        if len(parts) >= 3:
+            from config.settings import LOGS_DIR
+
+            candidate = LOGS_DIR / "site_images" / parts[1] / Path(parts[2]).name
+            return candidate if candidate.exists() else None
+        return None
+
+    # 2. An image on the site's own website.
+    if img_rel.startswith("http://") or img_rel.startswith("https://"):
+        try:
+            import requests, tempfile
+
+            res = requests.get(img_rel, timeout=25)
+            if res.status_code != 200 or not res.content:
+                log.warning("Could not fetch %s: HTTP %s", img_rel, res.status_code)
+                return None
+            suffix = Path(img_rel.split("?")[0]).suffix or ".jpg"
+            tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
+            tmp.write(res.content)
+            tmp.close()
+            return Path(tmp.name)
+        except Exception as e:
+            log.warning("Could not fetch %s: %s", img_rel, e)
+            return None
+
+    # 3. The folder beside this module.
     stripped = img_rel[len("images/"):] if img_rel.startswith("images/") else img_rel
     for candidate in (base / img_rel, base / "images" / stripped):
         if candidate.exists():
@@ -569,8 +608,16 @@ def _publish_due_json_campaigns(
         # occurrence, mangling any path with a folder of that name deeper in it.
         if img_clean.startswith("images/"):
             img_clean = img_clean[len("images/"):]
-        encoded_img_path = "/".join(urllib.parse.quote(part) for part in img_clean.split("/"))
-        full_img_url = f"{cloud_base}/social-images/{encoded_img_path}" if cloud_base else ""
+        if img_rel.startswith("http://") or img_rel.startswith("https://"):
+            # Already on the client's own website, and already public.
+            full_img_url = img_rel
+        elif img_clean.startswith("site-gallery/"):
+            # The site's own uploaded gallery, served at its public path.
+            rest = "/".join(urllib.parse.quote(p) for p in img_clean.split("/")[1:])
+            full_img_url = f"{cloud_base}/social-gallery/{rest}" if cloud_base else ""
+        else:
+            encoded_img_path = "/".join(urllib.parse.quote(part) for part in img_clean.split("/"))
+            full_img_url = f"{cloud_base}/social-images/{encoded_img_path}" if cloud_base else ""
 
         # Instagram cannot be handed a local file, so an unreachable image URL
         # stops it before Meta turns it into an opaque error code.

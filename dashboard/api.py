@@ -913,6 +913,46 @@ def session_site(payload: Optional[Dict[str, Any]], site_id: Optional[str] = Non
     return allowed[0] if len(allowed) == 1 else None
 
 
+def fetch_wordpress_media(site_id: str, count: int) -> List[Dict[str, Any]]:
+    """Images from this site's own WordPress media library.
+
+    Used when the site has uploaded no gallery of its own but has connected its
+    website through the blog agent -- the pictures on their own site are theirs,
+    which the built-in fleet folder is not.
+    """
+    if count <= 0:
+        return []
+    creds = websites_mgr.get_agent_credentials(site_id, "blog-agent") or {}
+    base = (creds.get("wp_url") or "").rstrip("/")
+    user = creds.get("wp_username")
+    app_password = creds.get("wp_app_password")
+    if not (base and user and app_password):
+        return []
+
+    try:
+        import requests
+
+        res = requests.get(
+            f"{base}/wp-json/wp/v2/media",
+            params={"per_page": min(max(count, 10), 100), "media_type": "image",
+                    "orderby": "date", "order": "desc"},
+            auth=(user, app_password),
+            timeout=20,
+        )
+        if res.status_code != 200:
+            logger.warning("WordPress media for %s answered HTTP %s", site_id, res.status_code)
+            return []
+        out = []
+        for item in res.json():
+            url = (item.get("source_url") or "").strip()
+            if url:
+                out.append({"url": url, "name": item.get("slug") or str(item.get("id"))})
+        return out
+    except Exception as e:
+        logger.warning("Could not read WordPress media for %s: %s", site_id, e)
+        return []
+
+
 def resolve_existing_site(site_id: Optional[str]):
     """The website, or a 404 saying it is gone.
 
@@ -1355,6 +1395,23 @@ def serve_site_gallery_image(
     if not path:
         raise HTTPException(status_code=404, detail="Image not found.")
     return FileResponse(str(path))
+
+
+@app.get("/social-gallery/{site_id}/{image_id}")
+def serve_public_gallery_image(site_id: str, image_id: str):
+    """The same image, without a session.
+
+    Instagram and Facebook fetch the picture from a URL themselves and cannot
+    present one. The file name carries 16 bytes of randomness and the image is
+    about to be posted publicly regardless, so this path is unguessable rather
+    than protected -- which is the honest description of it.
+    """
+    from config.site_image_gallery import image_path
+
+    path = image_path(site_id, image_id)
+    if not path:
+        raise HTTPException(status_code=404, detail="Image not found.")
+    return FileResponse(str(path), headers={"Cache-Control": "public, max-age=86400"})
 
 
 @app.get("/api/portal/invite-status")
@@ -4136,13 +4193,31 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
             sched_time_str, week_num = slot_for(platform_index, occurrence)
             raw_posts.append((kw, platform.capitalize(), sched_time_str, week_num))
 
-    # Retrieve rotating images from luxury fleet image library (29 high-res fleet photos)
+    # Pictures for this campaign, in order of what actually belongs to the site.
     img_dir = Path(ROOT_DIR) / "corporate-cars-social-agent" / "images"
-    all_imgs = sorted(list(img_dir.rglob("*.jpg"))) if img_dir.exists() else []
+    gallery_images = []
+    wordpress_images = []
+    try:
+        from config.site_image_gallery import next_images
 
-    # Deterministic per-site starting point in the image library, so different
-    # websites don't open with the same photo. Works for any site id.
-    site_img_offset = sum(ord(ch) * (i + 1) for i, ch in enumerate(site)) if all_imgs else 0
+        gallery_images = next_images(site, len(raw_posts))
+    except Exception as e:
+        logger.warning("Could not read the image gallery for %s: %s", site, e)
+
+    if not gallery_images:
+        wordpress_images = fetch_wordpress_media(site, len(raw_posts))
+
+    # The fleet folder is Corporate Cars Melbourne's own photography. Offsetting
+    # into it per site only changed which of that business's cars another
+    # client's posts carried, so it is now used for that site alone.
+    all_imgs = (sorted(img_dir.rglob("*.jpg"))
+                if (img_dir.exists() and site == "ccm" and not gallery_images
+                    and not wordpress_images)
+                else [])
+    site_img_offset = 0
+    image_source = ("gallery" if gallery_images else
+                    "wordpress" if wordpress_images else
+                    "fleet-library" if all_imgs else "none")
 
     # Read existing campaigns to determine ID offset
     sched_file = DATA_DIR / "social_scheduled_campaigns.json"
@@ -4232,9 +4307,23 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
     }
 
     for idx, (kw, platform, sched_time_str, week_num) in enumerate(raw_posts):
-        assigned_img = all_imgs[(idx + site_img_offset) % len(all_imgs)] if all_imgs else None
-        img_rel = str(assigned_img.relative_to(img_dir.parent)).replace("\\", "/") if assigned_img else ""
-        img_name = assigned_img.name if assigned_img else "luxury-fleet.jpg"
+        if gallery_images:
+            picked = gallery_images[idx % len(gallery_images)]
+            img_rel = f"site-gallery/{site}/{picked['id']}"
+            img_name = picked.get("original_name") or picked["id"]
+        elif wordpress_images:
+            picked = wordpress_images[idx % len(wordpress_images)]
+            img_rel = picked["url"]
+            img_name = picked.get("name") or "website-image"
+        elif all_imgs:
+            assigned_img = all_imgs[(idx + site_img_offset) % len(all_imgs)]
+            img_rel = str(assigned_img.relative_to(img_dir.parent)).replace("\\", "/")
+            img_name = assigned_img.name
+        else:
+            # No picture rather than someone else's. The publisher posts the
+            # caption alone, and the panel says the gallery is empty.
+            img_rel = ""
+            img_name = ""
 
         kw_lower = kw.lower()
         plat_lower = platform.lower()

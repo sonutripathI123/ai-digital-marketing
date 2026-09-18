@@ -111,7 +111,11 @@ def add_image(site_id: str, filename: str, content: bytes, content_type: str,
             f"Remove some before adding more."
         )
 
-    stored_name = f"{datetime.now().strftime('%Y%m%d')}-{secrets.token_hex(4)}{extension}"
+    # Instagram fetches the picture itself and cannot present a session, so
+    # these files are also reachable at an unguessable public path. The name
+    # carries the entropy: 16 bytes, not the 4 a local-only name would need.
+    # The image is about to be published publicly in any case.
+    stored_name = f"{datetime.now().strftime('%Y%m%d')}-{secrets.token_hex(16)}{extension}"
     target = site_dir(site) / stored_name
     target.parent.mkdir(parents=True, exist_ok=True)
     with open(target, "wb") as f:
