@@ -1,4 +1,6 @@
 fastapi>=0.100.0
+# Required by FastAPI for multipart uploads (the per-site image gallery).
+python-multipart>=0.0.9
 uvicorn[standard]>=0.22.0
 pydantic>=2.0.0
 python-dotenv>=1.0.0

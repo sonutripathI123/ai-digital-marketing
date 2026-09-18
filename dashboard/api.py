@@ -30,7 +30,7 @@ from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import FastAPI, HTTPException, Depends, Header, Query, Request
+from fastapi import FastAPI, File, Form, HTTPException, Depends, Header, Query, Request, UploadFile
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -1279,6 +1279,82 @@ def client_login(req: ClientLoginRequest):
             "create a password, then sign in with your email and password."
         ),
     )
+
+
+@app.get("/api/sites/{site_id}/gallery")
+def list_site_gallery(site_id: str, _viewer: Dict[str, Any] = Depends(require_viewer)):
+    """The images this website uses for its social posts."""
+    from config.site_image_gallery import gallery_summary, list_images
+
+    resolve_existing_site(site_id)
+    return {
+        "status": "success",
+        "site_id": site_id,
+        "images": list_images(site_id),
+        "summary": gallery_summary(site_id),
+    }
+
+
+@app.post("/api/sites/{site_id}/gallery")
+async def upload_site_gallery_image(
+    site_id: str,
+    file: UploadFile = File(...),
+    caption: str = Form(""),
+    _admin: Dict[str, Any] = Depends(require_admin),
+):
+    """Add one image to this website's gallery."""
+    from config.site_image_gallery import add_image, gallery_summary
+
+    resolve_existing_site(site_id)
+    content = await file.read()
+    try:
+        record = add_image(
+            site_id=site_id,
+            filename=file.filename or "",
+            content=content,
+            content_type=file.content_type or "",
+            caption=caption,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    return {
+        "status": "success",
+        "message": f"Added {record['original_name']}.",
+        "image": record,
+        "summary": gallery_summary(site_id),
+    }
+
+
+@app.delete("/api/sites/{site_id}/gallery/{image_id}")
+def delete_site_gallery_image(
+    site_id: str, image_id: str, _admin: Dict[str, Any] = Depends(require_admin)
+):
+    from config.site_image_gallery import delete_image, gallery_summary
+
+    resolve_existing_site(site_id)
+    if not delete_image(site_id, image_id):
+        raise HTTPException(status_code=404, detail="That image is not in this gallery.")
+    return {"status": "success", "summary": gallery_summary(site_id)}
+
+
+@app.get("/api/sites/{site_id}/gallery/{image_id}/file")
+def serve_site_gallery_image(
+    site_id: str, image_id: str, _viewer: Dict[str, Any] = Depends(require_viewer)
+):
+    """Serve one image.
+
+    Deliberately an endpoint rather than a mounted static directory: a mount
+    would serve every site's images to anyone who guessed a path, while this
+    passes through the same site check as the rest of the API.
+    """
+    from config.site_image_gallery import image_path
+
+    resolve_existing_site(site_id)
+    path = image_path(site_id, image_id)
+    if not path:
+        raise HTTPException(status_code=404, detail="Image not found.")
+    return FileResponse(str(path))
 
 
 @app.get("/api/portal/invite-status")
