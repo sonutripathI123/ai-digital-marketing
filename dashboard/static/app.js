@@ -6969,6 +6969,134 @@ async function loadSocialSettingsForSite(siteId) {
   }
 }
 
+/* --- Campaign images and schedule ------------------------------------- */
+
+function toggleScheduleMode() {
+  const manual = document.querySelector('input[name="social-schedule-mode"]:checked')?.value === 'manual';
+  const picker = document.getElementById('social-slot-picker');
+  const cadence = document.getElementById('social-frequency-select');
+  if (picker) picker.style.display = manual ? 'block' : 'none';
+  // The cadence and the picker answer the same question, so only one is live.
+  if (cadence) cadence.disabled = manual;
+  if (manual && !document.querySelectorAll('#social-slot-rows .slot-row').length) {
+    const wanted = parseInt(cadence?.value) || 2;
+    for (let i = 0; i < wanted; i++) addScheduleSlot();
+  }
+}
+
+function addScheduleSlot() {
+  const rows = document.getElementById('social-slot-rows');
+  if (!rows) return;
+
+  // Default to the next few days rather than today: a slot in the past is
+  // refused, and today's morning slot usually already is one.
+  const when = new Date();
+  when.setDate(when.getDate() + 2 + rows.children.length * 2);
+  const date = when.toISOString().slice(0, 10);
+
+  const row = document.createElement('div');
+  row.className = 'slot-row';
+  row.style.cssText = 'display:flex; gap:8px; align-items:center; margin-bottom:8px;';
+  row.innerHTML = `
+    <input type="date" class="form-control slot-date" value="${date}" min="${new Date().toISOString().slice(0, 10)}"
+           style="flex:1 1 150px; font-size:12px; padding:8px 10px;" />
+    <input type="time" class="form-control slot-time" value="09:30"
+           style="flex:0 0 110px; font-size:12px; padding:8px 10px;" />
+    <button type="button" onclick="this.closest('.slot-row').remove()" class="btn btn-secondary btn-sm"
+            title="Remove this day" style="flex:0 0 auto; padding:7px 10px; font-size:11px;">
+      <i class="fa-solid fa-xmark"></i>
+    </button>`;
+  rows.appendChild(row);
+}
+
+function collectScheduleSlots() {
+  const manual = document.querySelector('input[name="social-schedule-mode"]:checked')?.value === 'manual';
+  if (!manual) return null;
+  const slots = [];
+  document.querySelectorAll('#social-slot-rows .slot-row').forEach(row => {
+    const date = row.querySelector('.slot-date')?.value;
+    const time = row.querySelector('.slot-time')?.value;
+    if (date && time) slots.push({ date, time });
+  });
+  return slots.length ? slots : null;
+}
+
+async function loadSiteGallery(siteId) {
+  const grid = document.getElementById('social-gallery-grid');
+  const note = document.getElementById('social-gallery-note');
+  if (!grid) return;
+  grid.innerHTML = '';
+  try {
+    const res = await fetch(`/api/sites/${encodeURIComponent(siteId)}/gallery`, { headers: getAuthHeaders() });
+    const data = await res.json();
+    const images = data.images || [];
+    if (!images.length) {
+      note.innerHTML = 'No images yet. Add some and they will be used one after another, '
+        + 'so the same photo does not open every post. Without any, posts use your '
+        + 'website\'s own images when your blog is connected.';
+      return;
+    }
+    note.innerHTML = `<strong style="color:#fff;">${images.length}</strong> image${images.length === 1 ? '' : 's'} `
+      + '&mdash; used in this order, one per post.';
+    images.forEach((img, i) => {
+      const cell = document.createElement('div');
+      cell.style.cssText = 'position:relative; aspect-ratio:1; border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,0.12);';
+      cell.innerHTML = `
+        <img src="/social-gallery/${encodeURIComponent(siteId)}/${encodeURIComponent(img.id)}"
+             alt="${escapeHtml(img.original_name || '')}" loading="lazy"
+             style="width:100%; height:100%; object-fit:cover;" />
+        <span style="position:absolute; top:3px; left:3px; background:rgba(2,6,23,0.8); color:#67e8f9; font-size:9.5px; font-weight:800; padding:1px 5px; border-radius:5px;">${i + 1}</span>
+        <button type="button" title="Remove" onclick="deleteGalleryImage('${siteId}','${img.id}')"
+                style="position:absolute; top:3px; right:3px; background:rgba(2,6,23,0.8); border:none; color:#fca5a5; cursor:pointer; font-size:10px; padding:2px 5px; border-radius:5px;">
+          <i class="fa-solid fa-trash"></i>
+        </button>`;
+      grid.appendChild(cell);
+    });
+  } catch (err) {
+    if (note) note.textContent = `Could not load the gallery: ${err.message}`;
+  }
+}
+
+async function uploadGalleryImages(event) {
+  const siteId = document.getElementById('social-campaign-site-select')?.value || currentSiteId;
+  const status = document.getElementById('social-gallery-status');
+  const files = Array.from(event.target.files || []);
+  if (!files.length) return;
+
+  let added = 0;
+  for (const file of files) {
+    if (status) status.textContent = `Uploading ${file.name}...`;
+    const body = new FormData();
+    body.append('file', file);
+    try {
+      const res = await fetch(`/api/sites/${encodeURIComponent(siteId)}/gallery`, {
+        method: 'POST', headers: getAuthHeaders(), body
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        if (status) status.textContent = data.detail || `Could not add ${file.name}.`;
+        break;
+      }
+      added += 1;
+    } catch (err) {
+      if (status) status.textContent = `Upload failed: ${err.message}`;
+      break;
+    }
+  }
+  if (added && status) status.textContent = `Added ${added} image${added === 1 ? '' : 's'}.`;
+  event.target.value = '';
+  await loadSiteGallery(siteId);
+}
+
+async function deleteGalleryImage(siteId, imageId) {
+  if (!confirm('Remove this image from the gallery?')) return;
+  try {
+    await fetch(`/api/sites/${encodeURIComponent(siteId)}/gallery/${encodeURIComponent(imageId)}`,
+                { method: 'DELETE', headers: getAuthHeaders() });
+  } catch (err) {}
+  await loadSiteGallery(siteId);
+}
+
 function openAddSocialCampaignModal(siteId) {
   if (!requireAdminAction('create and schedule social campaigns')) return;
   const siteSelect = document.getElementById('social-campaign-site-select');
@@ -6985,6 +7113,12 @@ function openAddSocialCampaignModal(siteId) {
   const textarea = document.getElementById('social-keywords-textarea');
   if (textarea) textarea.value = '';
   updateSocialKeywordCounter();
+  loadSiteGallery(siteId || currentSiteId);
+  const rows = document.getElementById('social-slot-rows');
+  if (rows) rows.innerHTML = '';
+  const autoRadio = document.querySelector('input[name="social-schedule-mode"][value="auto"]');
+  if (autoRadio) autoRadio.checked = true;
+  toggleScheduleMode();
   openModal('modal-add-social-campaign');
   loadSocialSettingsForSite(siteSelect ? siteSelect.value : activeSite);
   prefillSocialKeywordsFromPool();
@@ -7285,7 +7419,8 @@ async function handleSaveSocialCampaign(e) {
         keywords: rawKeywords,
         platforms: platforms,
         posts_per_week: frequency,
-        auto_schedule: true
+        auto_schedule: true,
+        slots: collectScheduleSlots()
       })
     });
     

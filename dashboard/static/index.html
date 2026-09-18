@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="/static/styles.css?v=12.1.0">
+  <link rel="stylesheet" href="/static/styles.css?v=12.2.0">
 </head>
 <body>
   <!-- Full-Screen Ambient Luxury Background Overlay -->
@@ -1361,6 +1361,49 @@
           <div id="social-cadence-hint" style="margin-top: 6px; font-size: 11px; color: var(--text-secondary); line-height: 1.5;"></div>
         </div>
 
+        <!-- When each post goes out -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+            <i class="fa-solid fa-calendar-day" style="color:var(--accent-cyan);"></i> When should these go out?
+          </label>
+          <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+            <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-secondary); cursor:pointer;">
+              <input type="radio" name="social-schedule-mode" value="auto" checked onchange="toggleScheduleMode()" style="accent-color:var(--accent-purple);" />
+              Spread them out for me
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-secondary); cursor:pointer;">
+              <input type="radio" name="social-schedule-mode" value="manual" onchange="toggleScheduleMode()" style="accent-color:var(--accent-purple);" />
+              I'll pick the days and times
+            </label>
+          </div>
+          <div id="social-slot-picker" style="display:none; background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px;">
+            <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px; line-height:1.5;">
+              These repeat every week. Pick one row per post you want in a week &mdash;
+              three rows means three posts a week, on those days, at those times (Melbourne time).
+            </div>
+            <div id="social-slot-rows"></div>
+            <button type="button" onclick="addScheduleSlot()" class="btn btn-secondary btn-sm" style="font-size:11.5px; padding:6px 12px; margin-top:8px;">
+              <i class="fa-solid fa-plus"></i> Add another day
+            </button>
+          </div>
+        </div>
+
+        <!-- Pictures -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+            <i class="fa-solid fa-images" style="color:var(--accent-cyan);"></i> Your image gallery
+          </label>
+          <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px;">
+            <div id="social-gallery-note" style="font-size:11.5px; color:var(--text-muted); margin-bottom:10px; line-height:1.55;"></div>
+            <div id="social-gallery-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(84px, 1fr)); gap:8px; margin-bottom:10px;"></div>
+            <input type="file" id="social-gallery-file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="uploadGalleryImages(event)" />
+            <button type="button" onclick="document.getElementById('social-gallery-file').click()" class="btn btn-secondary btn-sm" style="font-size:11.5px; padding:6px 12px;">
+              <i class="fa-solid fa-upload"></i> Add images
+            </button>
+            <span id="social-gallery-status" style="font-size:11px; color:var(--text-muted); margin-left:8px;"></span>
+          </div>
+        </div>
+
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
           <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-social-campaign')">Cancel</button>
           <button type="submit" class="btn btn-primary" id="btn-save-social-campaign" style="background: linear-gradient(135deg, var(--accent-purple), #ec4899); border: none; font-weight: 700;">
@@ -1979,7 +2022,7 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=12.1.0"></script>
+  <script src="/static/app.js?v=12.2.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
