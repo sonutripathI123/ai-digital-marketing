@@ -628,6 +628,12 @@ class AddBlogTopicsRequest(BaseModel):
     auto_schedule: bool = True
 
 
+class CampaignSlot(BaseModel):
+    """One posting time the operator chose: 2026-09-22 at 18:30."""
+    date: str
+    time: str
+
+
 class AddSocialCampaignRequest(BaseModel):
     site: str = "ccm"
     keywords: str
@@ -635,6 +641,9 @@ class AddSocialCampaignRequest(BaseModel):
     # None means "use this website's own saved cadence" rather than a global default.
     posts_per_week: Optional[int] = None
     auto_schedule: bool = True
+    # Explicit slots replace the derived schedule. Each repeats weekly on its
+    # own weekday and time until every post has a place.
+    slots: Optional[List[CampaignSlot]] = None
 
 
 class SocialSettingsRequest(BaseModel):
@@ -911,6 +920,58 @@ def session_site(payload: Optional[Dict[str, Any]], site_id: Optional[str] = Non
     if "*" in (payload.get("allowed_sites") or []):
         return None
     return allowed[0] if len(allowed) == 1 else None
+
+
+def _parse_campaign_slots(slots) -> List[Any]:
+    """Validate the operator's chosen slots into datetimes, earliest first.
+
+    A slot in the past is refused rather than quietly moved: a post scheduled
+    for yesterday would be retired unpublished the moment the publisher saw it,
+    which looks like the system losing the post.
+    """
+    if not slots:
+        return []
+
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    melbourne = ZoneInfo("Australia/Melbourne")
+    now = datetime.now(melbourne)
+    parsed = []
+    for slot in slots:
+        raw = f"{(slot.date or '').strip()} {(slot.time or '').strip()}"
+        try:
+            when = datetime.strptime(raw, "%Y-%m-%d %H:%M").replace(tzinfo=melbourne)
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail=f"'{raw.strip()}' is not a valid date and time. Use the pickers to choose one.",
+            )
+        if when <= now:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"{when.strftime('%a %d %b at %I:%M %p')} has already passed. "
+                    f"Choose a time in the future, or the post would be retired unpublished."
+                ),
+            )
+        parsed.append(when)
+
+    parsed.sort()
+    return parsed
+
+
+def _slot_occurrence(slots: List[Any], occurrence: int):
+    """The Nth posting time: the chosen slots, repeating weekly.
+
+    Returns the same (formatted Melbourne string, week number) shape the
+    derived schedule produces, so everything downstream is unchanged.
+    """
+    from datetime import timedelta
+
+    week = occurrence // len(slots)
+    base = slots[occurrence % len(slots)] + timedelta(weeks=week)
+    return base.strftime("%a %d %b %Y at %I:%M %p (Melbourne Time)"), week + 1
 
 
 def fetch_wordpress_media(site_id: str, count: int) -> List[Dict[str, Any]]:
@@ -4186,11 +4247,19 @@ def add_social_campaign(req: AddSocialCampaignRequest, _admin: Dict[str, Any] = 
         post_time = PLATFORM_TIMES[platform_index % len(PLATFORM_TIMES)]
         return day.strftime(f"%a %d %b %Y at {post_time} (Melbourne Time)"), week + 1
 
+    chosen_slots = _parse_campaign_slots(req.slots)
+
     # Keyword x platform, grouped so each platform's occurrences count up cleanly.
     raw_posts = []
     for platform_index, platform in enumerate(platforms):
         for occurrence, kw in enumerate(lines):
-            sched_time_str, week_num = slot_for(platform_index, occurrence)
+            if chosen_slots:
+                # Every platform posts at the slot the operator picked. The
+                # derived schedule staggered platforms by a per-platform hour,
+                # which is the right default but not a rule anyone chose.
+                sched_time_str, week_num = _slot_occurrence(chosen_slots, occurrence)
+            else:
+                sched_time_str, week_num = slot_for(platform_index, occurrence)
             raw_posts.append((kw, platform.capitalize(), sched_time_str, week_num))
 
     # Pictures for this campaign, in order of what actually belongs to the site.
